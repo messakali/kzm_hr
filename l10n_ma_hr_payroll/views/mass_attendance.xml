@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+      <!-- Main menu of Mass Attendance -->
+      <menuitem id="menu_hr_pointage_periodique"
+        parent="hr.menu_hr_root"
+        sequence="11"
+        name="Pointage périodique"
+        groups="l10n_ma_hr_payroll.group_hr_menu_mass_attendance"/>
+      <!-- Structure -->
+        <record id="view_hr_employee_mass_attendance_run_tree" model="ir.ui.view">
+            <field name="name">hr.employee.mass.attendance.run.tree</field>
+            <field name="model">hr.employee.mass.attendance.run</field>
+            <field name="type">tree</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree colors="grey:state=='done' ; blue:state=='draft' "
+                    string="Lots de pointage en masse">
+                    <field name="name"/>
+                    <field name="company_id"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_employee_mass_attendance_run_form" model="ir.ui.view">
+            <field name="name">hr.employee.mass.attendance.run.form</field>
+            <field name="model">hr.employee.mass.attendance.run</field>
+            <field name="type">form</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Lot de saisie">
+                    <header>
+                        <button name="generate" states="draft" string="Générer"
+                            type="object"/>
+                        <button class="oe_highlight" name="set_done" states="draft" string="Fermer"
+                            type="object"/>
+                        <button name="set_draft" states="done" string="Reset" type="object"/>
+                        <field name="state" statusbar_visible="draft,done" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group col="8" colspan="4">
+                            <group colspan="4">
+                                <field attrs="{'readonly': [('state','=', 'done')]}" name="fiscalyear_id"
+                                    widget="selection"/>
+                                <field attrs="{'readonly': [('state','=', 'done')]}"
+                                    domain="[('type_id.name','=',time.strftime('%Y')),('active','=',True)]" name="period_id" widget="selection"/>
+                                <field attrs="{'readonly': [('state','=', 'done')]}" name="date_from"
+                                    required="1"/>
+                                <field attrs="{'readonly': [('state','=', 'done')]}" name="date_to" required="1"/>
+                            </group>
+                            <group colspan="4">
+                                <field name="name"/>
+                                <field attrs="{'readonly': [('state','=', 'done')]}" name="company_id"
+                                    widget="selection"/>
+                                <field attrs="{'readonly': [('state','=', 'done')]}"
+                                    groups="l10n_ma_hr_payroll.group_paie_interface_department" name="departments_id" widget="many2many_checkboxes"/>
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Lignes">
+                                <field attrs="{'readonly':[('state','=','done')]}" colspan="4" name="line_ids"
+                                    nolabel="1">
+                                    <tree colors="grey:state=='done' ; blue:state=='draft'" editable="top"
+                                        string="Pointage en masse">
+                                        <field name="employee_id"/>
+                                        <field name="contract_id"/>
+                                        <field name="based_on"/>
+                                        <field name="company_id"/>
+                                        <field name="date_from"/>
+                                        <field name="date_to"/>
+                                        <field
+                                            attrs="{'required': [('based_on','not in', ['fixed_days','worked_days','attended_days'])]}" name="hours" sum="Total"/>
+                                        <field attrs="{'required': [('based_on','in', ['fixed_days','worked_days','attended_days'])]}"
+                                            name="days" sum="Total"/>
+                                        <field invisible="1" name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_employee_mass_attendance_run_search" model="ir.ui.view">
+            <field name="name">hr.employee.mass.attendance.run.search</field>
+            <field name="model">hr.employee.mass.attendance.run</field>
+            <field name="type">search</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Lot de Pointage en masse">
+                    <field name="company_id" select="True"/>
+                    <field name="state" select="True"/>
+                    <filter domain="[('date_from','like',time.strftime('%%Y-%%m-'))]"
+                        name="this_month" string="Ce mois"/>
+                    <filter domain="[('date_from','like',time.strftime('%%Y-'))]" name="this_year"
+                        string="Cette année"/>
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by':'company_id'}" domain="[]" icon="terp-folder-orange"
+                            string="Société"/>
+                        <filter context="{'group_by':'state'}" domain="[]" icon="terp-folder-orange"
+                            string="État"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_hr_employee_mass_attendance_run_view"
+            model="ir.actions.act_window">
+            <field name="name">Lots de pointage en masse</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.mass.attendance.run</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_this_month' : 1}</field>
+        </record>
+        <record id="act_open_hr_employee_mass_attendance_run_view_form"
+            model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="act_open_hr_employee_mass_attendance_run_view"/>
+            <field eval="20" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_hr_employee_mass_attendance_run_form"/>
+        </record>
+        <record id="act_open_hr_employee_mass_attendance_run_view_tree"
+            model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="act_open_hr_employee_mass_attendance_run_view"/>
+            <field eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_hr_employee_mass_attendance_run_tree"/>
+        </record>
+        <menuitem action="act_open_hr_employee_mass_attendance_run_view" id="menu_hr_employee_mass_attendance_run" parent="menu_hr_pointage_periodique" sequence="50"/>
+        <!-- Mass Attendance -->
+        <record id="view_hr_employee_mass_attendance_tree" model="ir.ui.view">
+            <field name="name">hr.employee.mass.attendance.tree</field>
+            <field name="model">hr.employee.mass.attendance</field>
+            <field name="type">tree</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree colors="grey:state=='done' ; blue:state=='draft'" editable="top"
+                    string="Pointage en masse">
+                    <field attrs="{'readonly': [('state','=', 'done')]}" name="run_id"
+                        widget="selection"/>
+                    <field attrs="{'readonly': [('state','=', 'done')]}" name="employee_id"/>
+                    <field attrs="{'readonly': [('state','=', 'done')]}" name="contract_id"/>
+                    <field attrs="{'readonly': [('state','=', 'done')]}" name="based_on"/>
+                    <field attrs="{'readonly': [('state','=', 'done')]}" name="company_id"/>
+                    <field attrs="{'readonly': [('state','=', 'done')]}" name="date_from"/>
+                    <field attrs="{'readonly': [('state','=', 'done')]}" name="date_to"/>
+                    <field
+                        attrs="{'readonly': [('state','=', 'done')], 'required': [('based_on','not in',
+                        ['fixed_days','fixed_hours'])]}" name="hours" sum="Total"/>
+                    <field
+                        attrs="{'readonly': [('state','=', 'done')],'required': [('based_on','in',
+                        ['fixed_days','fixed_hours'])]}" name="days" sum="Total"/>
+                    <field invisible="1" name="month"/>
+                    <field invisible="1" name="year"/>
+                    <field invisible="0" name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_employee_mass_attendance_search" model="ir.ui.view">
+            <field name="name">hr.employee.mass.attendance.search</field>
+            <field name="model">hr.employee.mass.attendance</field>
+            <field name="type">search</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Pointage en masse">
+                    <field name="employee_id" select="True"/>
+                    <field name="contract_id" select="True"/>
+                    <field name="company_id" select="True"/>
+                    <field name="based_on" select="True"/>
+                    <field name="state" select="True"/>
+                    <field name="month" select="True"/>
+                    <field name="year" select="True"/>
+                    <filter domain="[('date_from','like',time.strftime('%%Y-%%m-'))]"
+                        name="this_month" string="Ce mois"/>
+                    <filter domain="[('date_from','like',time.strftime('%%Y-'))]" name="this_year"
+                        string="Cette année"/>
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by':'employee_id'}" domain="[]" icon="terp-partner"
+                            string="Employé"/>
+                        <filter context="{'group_by':'contract_id'}" domain="[]" icon="terp-folder-orange"
+                            string="Month"/>
+                        <filter context="{'group_by':'based_on'}" domain="[]" icon="terp-folder-orange"
+                            string="Based On"/>
+                        <filter context="{'group_by':'company_id'}" domain="[]" icon="terp-folder-orange"
+                            string="Société"/>
+                        <filter context="{'group_by':'state'}" domain="[]" icon="terp-folder-orange"
+                            string="État"/>
+                        <filter context="{'group_by':'month'}" domain="[]"
+                            icon="terp-stock_effects-object-colorize" string="Mois"/>
+                        <filter context="{'group_by':'year'}" domain="[]"
+                            icon="terp-stock_effects-object-colorize" string="Année"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- All -->
+        <record id="act_open_hr_employee_mass_attendance_view"
+            model="ir.actions.act_window">
+            <field name="name">Pointage en masse</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.mass.attendance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_employee_mass_attendance_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_this_month' : 1}</field>
+        </record>
+        <record id="act_open_hr_employee_mass_attendance_view_tree"
+            model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="act_open_hr_employee_mass_attendance_view"/>
+            <field eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_hr_employee_mass_attendance_tree"/>
+        </record>
+        <menuitem action="act_open_hr_employee_mass_attendance_view"
+             id="menu_hr_employee_mass_attendance" parent="menu_hr_pointage_periodique"
+            sequence="60"/>
+        <!-- Context -->
+        <record id="act_open_hr_employee_mass_attendance_view_context"
+            model="ir.actions.act_window">
+            <field name="name">Pointage en masse</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.mass.attendance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_employee_mass_attendance_search"/>
+            <field name="domain">[('employee_id','=',active_id)]</field> <field
+                name="context">{'search_default_employee_id': [active_id],
+                'default_employee_id': active_id}</field>
+        </record>
+        <record id="act_open_hr_employee_mass_attendance_view_tree"
+            model="ir.actions.act_window.view">
+            <field name="act_window_id"
+                ref="act_open_hr_employee_mass_attendance_view_context"/>
+            <field eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_hr_employee_mass_attendance_tree"/>
+        </record>
+    </data>
+</openerp>

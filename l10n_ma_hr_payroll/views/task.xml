@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_hr_employee_task_tree" model="ir.ui.view">
+            <field name="name">hr.employee.task.tree</field>
+            <field name="model">hr.employee.task</field>
+            <field name="type">tree</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Tâches" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_employee_task_search" model="ir.ui.view">
+            <field name="name">hr.employee.task.search</field>
+            <field name="model">hr.employee.task</field>
+            <field name="type">search</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Tâches">
+                    <field name="name" select="True"/>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_hr_employee_task_view" model="ir.actions.act_window">
+            <field name="name">Tâches</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.task</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_employee_task_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <record id="act_open_hr_employee_task_view_tree"
+            model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="act_open_hr_employee_task_view"/>
+            <field eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_hr_employee_task_tree"/>
+        </record>
+        <menuitem action="act_open_hr_employee_task_view" id="menu_hr_employee_task"
+            parent="hr.menu_human_resources_configuration" sequence="13"/>
+    </data>
+</openerp>

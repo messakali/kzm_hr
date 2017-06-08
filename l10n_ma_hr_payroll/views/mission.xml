@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="view_hr_mission_tree" model="ir.ui.view">
+            <field name="name">hr.employee.mission.tree</field>
+            <field name="model">hr.employee.mission</field>
+            <field name="type">tree</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree colors="grey:state=='done' ; blue:state=='draft' " string="Missions">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="date"/>
+                    <field name="based_on"/>
+                    <field name="hours" sum="Total"/>
+                    <field name="days" sum="Total"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_mission_form" model="ir.ui.view">
+            <field name="name">hr.employee.mission.form</field>
+            <field name="model">hr.employee.mission</field>
+            <field name="type">form</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Missions">
+                    <header>
+                        <button class="oe_highlight" name="set_done" states="draft" string="Confirmer" type="object" groups="hr.group_hr_user"/>
+                        <button  name="set_draft" states="done" string="Remettre en brouillon" type="object" groups="hr.group_hr_user"/>
+                        <field name="state" statusbar_visible="draft,done" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group name="general" string="Général">
+                                <field name="name"/>
+                                <field name="employee_id"/>
+                                <field name="contract_id"/>
+                                <field name="based_on"/>
+                                <field name="based_on_days" invisible="1" />
+                                <field name="date"/>
+                            </group>
+                            <group name="params" string="Valeurs">
+                                <label for="hours" string="Heures"/>
+                                <div>
+                                  <field name="hours" class="oe_inline" attrs="{'required': [('based_on_days','=', False)]}"/>
+                                  heures.
+                                </div>
+                                <label for="days" string="Jours"/>
+                                <div>
+                                  <field name="days" class="oe_inline" attrs="{'required': [('based_on_days','=', True)]}"/>
+                                  jours.
+                                </div>
+                            </group>
+                            <separator string="Notes" colspan="4"/>
+                            <field name="notes" colspan="4" nolabel="1" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_mission_search" model="ir.ui.view">
+            <field name="name">hr.employee.mission.search</field>
+            <field name="model">hr.employee.mission</field>
+            <field name="type">search</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Missions">
+                    <field name="name" select="True"/>
+                    <field name="employee_id" select="True"/>
+                    <field name="based_on" select="True"/>
+                    <field name="date" select="True"/>
+                    <newline/>
+                    <filter domain="[('state','=', 'draft')]" name="draft" string="Brouillon"/>
+                    <filter domain="[('state','=', 'done')]" name="confirm" help="Terminé"/>
+                    <newline/>
+                    <filter name="this_month" domain="[('date','like',time.strftime('%%Y-%%m-'))]" string="Ce mois" />
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by':'employee_id'}" domain="[]" icon="terp-partner" string="Employé"/>
+                        <filter context="{'group_by':'state'}" domain="[]" icon="terp-stock_effects-object-colorize" string="État"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+<!-- All -->
+        <record id="act_open_hr_mission_view_all" model="ir.actions.act_window">
+            <field name="name">Missions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.mission</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{'default_search_this_month' : 1}</field>
+        </record>
+        <record id="act_open_hr_mission_view_context" model="ir.actions.act_window">
+            <field name="name">Missions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.mission</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('employee_id','in', context.get('active_ids',[]))]</field>
+            <field name="context">{'default_employee_id' : context.get('active_id', False)}</field>
+        </record>
+        <menuitem action="act_open_hr_mission_view_all" groups="l10n_ma_hr_payroll.group_hr_menu_mission"
+            id="menu_open_mission_all_employees" parent="menu_hr_main_administration" sequence="50"/>
+    </data>
+</openerp>

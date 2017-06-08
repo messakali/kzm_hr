@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data noupdate="1">
+        <record id="document_attestion_travail" model="hr.document.type">
+            <field name="name">Attestation de travail</field>
+        </record>
+        <record id="document_bulletin_paie" model="hr.document.type">
+            <field name="name">Bulletin de paie</field>
+        </record>
+        <record id="document_attestation_stage" model="hr.document.type">
+            <field name="name">Attestation de stage</field>
+        </record>
+        <record id="document_autree" model="hr.document.type">
+            <field name="name">Autre</field>
+        </record>
+    </data>
+</openerp>

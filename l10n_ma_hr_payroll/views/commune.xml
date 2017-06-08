@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <menuitem action="kzm_base.act_open_l10n_ma_commune_view" id="menu_l10n_ma_commune"
+            parent="hr_payroll.menu_hr_payroll_configuration" sequence="40"/>
+    </data>
+</openerp>

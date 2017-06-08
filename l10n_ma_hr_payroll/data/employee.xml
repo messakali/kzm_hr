@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="hr.employee" model="hr.employee">
+            <field name="name">Administrateur du système</field>
+            <field name="nom">du système</field>
+            <field name="prenom">Administrateur</field>
+        </record>
+        <!-- Archivage -->
+        <record id="action_archive_employee" model="ir.actions.server">
+            <field name="name">Archiver les employés</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="state">code</field>
+            <field name="code">
+                if context.get('active_model') == 'hr.employee' and context.get('active_ids'):
+                for id in context['active_ids']: self.write(cr, uid, id, {'active' : False,})
+            </field>
+        </record>
+        <record id="ir_archive_employee" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'hr.employee'" name="model"/>
+            <field name="name">Archiver les employés</field>
+            <field eval="'ir.actions.server,%d'%action_archive_employee" name="value"/>
+        </record>
+        <!-- Réactivation -->
+        <record id="action_unarchive_employee" model="ir.actions.server">
+            <field name="name">Réactiver les employés</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="state">code</field>
+            <field name="code">
+                if context.get('active_model') == 'hr.employee' and context.get('active_ids'):
+                for id in context['active_ids']: self.write(cr, uid, id, {'active' : True,})
+            </field>
+        </record>
+        <record id="ir_unarchive_employee" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'hr.employee'" name="model"/>
+            <field name="name">Réactiver les employés</field>
+            <field eval="'ir.actions.server,%d'%action_unarchive_employee" name="value"/>
+        </record>
+    </data>
+</openerp>

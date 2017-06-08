@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <template id="report_anciennete">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t  t-set="data_lines" t-value="lines(p,['ANCIENNETE','ANCIENNETE_BASE'],['name','birthday'],['otherid'])"/>
+                    <t t-call="kzm_base.kzm_page_layout">
+                        <div class="page">
+                            <h4 style="text-align: center;">Ancienneté
+                                <br/>
+                                La période de
+                                <span  options="{'format' : '%d/%m/%Y'}" t-field="p.date_from"/>
+                                à
+                                <span  options="{'format' : '%d/%m/%Y'}" t-field="p.date_to"/>
+                            </h4>
+                            <table class="table table-condensed payroll-table-bordered table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Matricule</th>
+                                        <th style="text-align: center">Nom et prénom</th>
+                                        <th style="text-align: center">Date de naissance</th>
+                                        <th style="text-align: center">Age</th>
+                                        <th style="text-align: center">Ancienneté</th>
+                                        <th style="text-align: center">Base</th>
+                                        <th style="text-align: center">Taux</th>
+                                        <th style="text-align: center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-as="line" t-foreach="data_lines">
+                                        <td style="text-align: left">
+                                            <span  t-esc="line['payslip'].get('otherid','')"/>
+                                        </td>
+                                        <td style="text-align: left">
+                                            <span  t-esc="line['employee'].get('name','')"/>
+                                        </td>
+                                        <td style="text-align: center">
+                                            <span  t-esc="line['employee'].get('birthday','') and formatLang(line['employee'].get('birthday',''), date=True) or ''"/>
+                                        </td>
+                                        <td style="text-align: center">
+                                            <span  t-esc="formatLang(line['inputs'].get('AGE'))"/>
+                                        </td>
+                                        <td style="text-align: center">
+                                            <span  t-esc="formatLang(line['inputs'].get('ANCIENNETE'))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(line['cumul'].get('ANCIENNETE_BASE'))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(line['inputs'].get('ANCIENNETE_TAUX'))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(line['cumul'].get('ANCIENNETE'))"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="7" style="text-align: left">
+                                            Total
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(sum([line['cumul'].get('ANCIENNETE') for line in data_lines]))"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

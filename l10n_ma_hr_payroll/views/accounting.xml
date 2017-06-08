@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <menuitem  id="menu_hr_main_accounting" name="Comptabilité" parent="hr.menu_hr_root" sequence="32"/>
+        <record id="view_hr_payslip_account_tree" model="ir.ui.view">
+            <field name="name">hr.payslip.account.tree</field>
+            <field name="model">hr.payslip.account</field>
+            <field name="type">tree</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree colors="grey:state in ['cancel','done'] ;blue:state in ['draft','confirm'] " string="Comptabilité">
+                    <field  name="date_from"/>
+                    <field  name="date_to"/>
+                    <field  name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_payslip_account_form" model="ir.ui.view">
+            <field name="name">hr.payslip.account.form</field>
+            <field name="model">hr.payslip.account</field>
+            <field name="type">form</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Comptabilité">
+                    <header>
+                        <button  class="oe_highlight" name="generate" states="draft" string="Générer" type="object"/>
+                        <button  class="oe_highlight" name="account_confirm" states="draft" string="Confirmer" type="workflow"/>
+                        <button  name="account_cancel1" states="draft" string="Annuler" type="workflow"/>
+                        <button  class="oe_highlight" name="account_done" states="confirm" string="Valider" type="workflow"/>
+                        <button  name="account_cancel2" states="confirm" string="Annuler" type="workflow"/>
+                        <button  name="account_cancel3" states="done" string="Annuler" type="workflow"/>
+                        <button  attrs="{'invisible': [('move_id','=',False)]}" name="action_print" string="Imprimer" type="object"/>
+                        <field  name="state" statusbar_visible="draft,confirm,done" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <group colspan="2" name="general">
+                                <field  groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="fiscalyear_id" widget="selection"/>
+                                <field  groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="period_id" required="0" widget="selection"/>
+                                <field  name="date_from" required="1"/>
+                                <field  name="date_to" required="1"/>
+                                <field  groups="l10n_ma_hr_payroll.group_paie_interface_state" name="payslip_state"/>
+                            </group>
+                            <group colspan="2" name="params">
+                                <field  groups="base.group_multi_company" name="company_child" required="0"/>
+                                <field  groups="base.group_multi_company" name="company_parent" required="0"/>
+                            </group>
+                            <group colspan="2" groups="l10n_ma_hr_payroll.group_paie_interface_department" name="department">
+                                <div class="style_department">
+                                    <separator  string="Limiter les départements"/>
+                                    <field  name="departments_id" widget="many2many_checkboxes"/>
+                                </div>
+                            </group>
+                            <group colspan="2" name="accounting" string="Comptabilité">
+                                <field  name="date"/>
+                                <field  name="journal_id" widget="selection"/>
+                                <field  name="account_debit_id"/>
+                                <field  name="account_credit_id"/>
+                                <field  name="move_id"/>
+                            </group>
+                            <group colspan="4" groups="base.group_multi_company">
+                                <div class="style_company">
+                                    <separator  colspan="4" string="Sociétés"/>
+                                    <field  colspan="4" name="company_ids" nolabel="1" widget="many2many_tags"/>
+                                </div>
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Payslips">
+                                <field  colspan="4" name="payslip_ids" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_payslip_account_search" model="ir.ui.view">
+            <field name="name">hr.payslip.account.search</field>
+            <field name="model">hr.payslip.account</field>
+            <field name="type">search</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Comptabilité">
+                    <field  name="fiscalyear_id" select="True"/>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_hr_payslip_account_view" model="ir.actions.act_window">
+            <field name="name">Comptabilité</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.payslip.account</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field  name="search_view_id" ref="view_hr_payslip_account_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <record id="act_open_hr_payslip_account_view_form" model="ir.actions.act_window.view">
+            <field  name="act_window_id" ref="act_open_hr_payslip_account_view"/>
+            <field  eval="20" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field  name="view_id" ref="view_hr_payslip_account_form"/>
+        </record>
+        <record id="act_open_hr_payslip_account_view_tree" model="ir.actions.act_window.view">
+            <field  name="act_window_id" ref="act_open_hr_payslip_account_view"/>
+            <field  eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field  name="view_id" ref="view_hr_payslip_account_tree"/>
+        </record>
+        <menuitem  action="act_open_hr_payslip_account_view" groups="l10n_ma_hr_payroll.group_hr_menu_accounting"
+            id="menu_hr_payslip_account" parent="menu_hr_main_accounting" sequence="20"/>
+    </data>
+</openerp>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        <record id="wkf_avantage" model="workflow">
+            <field name="name">hr.avantage.line.basic</field>
+            <field name="osv">hr.avantage.line</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <!-- Activity -->
+        <record id="avantage_act_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_avantage" />
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">set_draft()</field>
+        </record>
+        <record id="avantage_act_confirm" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_avantage" />
+            <field name="name">confirm</field>
+            <field name="kind">function</field>
+            <field name="action">set_confirm()</field>
+        </record>
+
+        <record id="avantage_act_validate" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_avantage" />
+            <field name="name">validate</field>
+            <field name="kind">function</field>
+            <field name="action">set_validate()</field>
+        </record>
+        <record id="avantage_act_done" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_avantage" />
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">set_done()</field>
+        </record>
+        <record id="avantage_act_refuse" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_avantage" />
+            <field name="flow_stop">True</field>
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">set_cancel()</field>
+        </record>
+        <!-- Transistion -->
+        <record id="avantage_trans_draft_confirm" model="workflow.transition">
+            <field name="act_from" ref="avantage_act_draft" />
+            <field name="act_to" ref="avantage_act_confirm" />
+            <field name="signal">avantage_confirm</field>
+        </record>
+        <record id="avantage_trans_draft_refuse" model="workflow.transition">
+            <field name="act_from" ref="avantage_act_draft" />
+            <field name="act_to" ref="avantage_act_refuse" />
+            <field name="signal">avantage_refuse1</field>
+            <field name="group_id" ref="hr.group_hr_user" />
+
+        </record>
+        <record id="avantage_trans_confirm_validate" model="workflow.transition">
+            <field name="act_from" ref="avantage_act_confirm" />
+            <field name="act_to" ref="avantage_act_validate" />
+            <field name="signal">avantage_validate</field>
+            <field name="group_id" ref="hr.group_hr_user" />
+
+        </record>
+        <record id="avantage_trans_confirm_refuse" model="workflow.transition">
+            <field name="act_from" ref="avantage_act_confirm" />
+            <field name="act_to" ref="avantage_act_refuse" />
+            <field name="signal">avantage_refuse2</field>
+        </record>
+        <record id="avantage_trans_validate_done" model="workflow.transition">
+            <field name="act_from" ref="avantage_act_validate" />
+            <field name="act_to" ref="avantage_act_done" />
+            <field name="signal">avantage_done</field>
+            <field name="group_id" ref="hr.group_hr_manager" />
+            <field name="group_id" ref="hr.group_hr_user" />
+        </record>
+        <record id="avantage_trans_validate_refuse" model="workflow.transition">
+            <field name="act_from" ref="avantage_act_validate" />
+            <field name="act_to" ref="avantage_act_refuse" />
+            <field name="signal">avantage_refuse3</field>
+        </record>
+        <record id="avantage_trans_done_draft" model="workflow.transition">
+            <field name="act_from" ref="avantage_act_done" />
+            <field name="act_to" ref="avantage_act_draft" />
+            <field name="signal">avantage_reset_draft</field>
+            <field name="group_id" ref="hr.group_hr_manager" />
+        </record>
+    </data>
+</openerp>

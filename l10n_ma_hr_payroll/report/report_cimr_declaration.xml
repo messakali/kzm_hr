@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <template id="report_cimr_declaration">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t t-set="data_lines" t-value="lines(p,['CIMR','BRUT_IMPOSABLE'],['name'],['otherid'])"/>
+                    <t t-call="kzm_base.kzm_page_layout">
+                        <div class="page">
+                            <h4 style="text-align: center;">Etat CIMR
+                                <br/>
+                                De
+                                <span options="{'format' : '%d/%m/%Y'}" t-field="p.date_from"/>
+                                à
+                                <span options="{'format' : '%d/%m/%Y'}" t-field="p.date_to"/>
+                            </h4>
+                            <table class="table table-condensed payroll-table-bordered table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Matricule</th>
+                                        <th>Nom et prénom</th>
+                                        <th>Montant du revenu brut imposable</th>
+                                        <th>Montant de la cotisation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-as="line" t-foreach="data_lines">
+                                        <td>
+                                            <span t-esc="line['payslip'].get('otherid','')"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['employee'].get('name')"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(line['cumul'].get('BRUT_IMPOSABLE'))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(line['cumul'].get('CIMR'))"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2">
+                                            Total
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(sum([line['cumul'].get('BRUT_IMPOSABLE') for line in data_lines]))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(sum([line['cumul'].get('CIMR') for line in data_lines]))"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

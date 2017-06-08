@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data noupdate="1">
+        <record id="avance_cession" model="hr.avance">
+            <field name="name">Cession de salaire</field>
+            <field name="code">CESSION_SALAIRE</field>
+            <field eval="0" name="plafond_salariale"/>
+            <field eval="0" name="plafond_patronale"/>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="is_retained"/>
+            <field eval="False" name="instant_move"/>
+            <field name="active" eval="False"/>
+            <field name="export_ok" eval="False"/>
+        </record>
+        <record id="avance_opposition" model="hr.avance">
+            <field name="name">Opposition sur le salaire</field>
+            <field name="code">OPPOSITION_SALAIRE</field>
+            <field eval="0" name="plafond_salariale"/>
+            <field eval="0" name="plafond_patronale"/>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="is_retained"/>
+            <field eval="False" name="instant_move"/>
+          <field name="active" eval="False"/>
+            <field name="export_ok" eval="False"/>
+        </record>
+        <record id="avance_avance" model="hr.avance">
+            <field name="name">Avance sur le salaire</field>
+            <field name="code">AVANCE_SALAIRE</field>
+            <field eval="0" name="plafond_salariale"/>
+            <field eval="0" name="plafond_patronale"/>
+            <field eval="False" name="can_reset"/>
+            <field eval="True" name="can_request"/>
+            <field eval="False" name="is_retained"/>
+            <field eval="True" name="instant_move"/>
+            <field model="account.account" name="account_credit"
+                search="[('code','like','3431')]"/>
+            <field name="active" eval="True"/>
+            <field name="export_ok" eval="False"/>
+        </record>
+        <record id="avance_interet" model="hr.avance">
+            <field name="name">Intérêts</field>
+            <field name="code">INTERET</field>
+            <field eval="10" name="interest_rate"/>
+            <field eval="0" name="plafond_salariale"/>
+            <field eval="0" name="plafond_patronale"/>
+            <field eval="False" name="can_reset"/>
+            <field eval="True" name="can_request"/>
+            <field eval="True" name="is_retained"/>
+            <field eval="False" name="instant_move"/>
+            <field name="active" eval="True"/>
+            <field name="export_ok" eval="False"/>
+        </record>
+        <!-- Mail subtypes -->
+        <record id="mt_avance_line_confirmed" model="mail.message.subtype">
+            <field name="name">À valider</field>
+            <field name="res_model">hr.avance.line</field>
+            <field name="description">Demande confirmée et en attente de validation</field>
+        </record>
+        <record id="mt_holidays_validated" model="mail.message.subtype">
+            <field name="name">Validée</field>
+            <field name="res_model">hr.avance.line</field>
+            <field name="description">Demande validée et en attente d'approbation</field>
+        </record>
+        <record id="mt_avance_line_done" model="mail.message.subtype">
+            <field name="name">Validée et approuvée</field>
+            <field name="res_model">hr.avance.line</field>
+            <field name="description">Demande validée et approuvée</field>
+        </record>
+        <record id="mt_holidays_refused" model="mail.message.subtype">
+            <field name="name">Refusée</field>
+            <field name="res_model">hr.avance.line</field>
+            <field name="description">Demande est refusée</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <template id="report_salary_declaration">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                  <t t-set="index" t-value="0"/>
+
+                    <t t-as="item" t-foreach="lines_by_type(p, ['SALAIRE_BASE','EXONORE','TAXABLE','BRUT_IMPOSABLE','ASSURANCE_RETRAITE_SALARIALE','RETENU','NET_IMPOSABLE','NBR_JOURS','FP','INTERET','IR','NBR_REDUCTION','AVANTAGE'],['name','cin','carte_sejour','identification_id','cnss','date_ac','date_ph'],['otherid','marital','address_home'])">
+                      <t t-set="index" t-value="index+1"/>
+                        <t t-set="datas" t-value="item[0]"/>
+                        <t t-call="kzm_base.kzm_page_layout">
+                            <t t-if="index == 1">
+                                <div class="page">
+                                    <h4 style="text-align: center;">
+                                        <span t-esc="item[1]"/>
+                                    </h4>
+                                    <h4 style="text-align: center;">ANNEE
+                                        <span options="{'format' : '%Y'}" t-field="p.date_from"/>
+                                    </h4>
+                                    <table class="table table-condensed payroll-table-bordered table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">Numéro de matricule</th>
+                                                <th>Nom et prénom</th>
+                                                <th>N° C.N.I ou carte de séjour</th>
+                                                <th rowspan="2">N° d'identification fiscale</th>
+                                                <th rowspan="2">Situation familiale</th>
+                                                <th>Montant brut des traitements, salaires et émoluments</th>
+                                                <th>Montant des indémnités versées à titre de frais professionels</th>
+                                                <th rowspan="2">Montant de revenu brut imposable</th>
+                                                <th>Taux des frais professionels ou d'abbatement en %</th>
+                                                <th colspan="3">Montant des cotisations d'assurance retraite</th>
+                                                <th colspan="2">Montant des autres retenues</th>
+                                                <th>Montant du revenu net imposable</th>
+                                                <th>Période en jours</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Adresse personnelle</th>
+                                                <th>N° P.P.R ou CNSS</th>
+                                                <th>Montant des avantages en argent ou en nature</th>
+                                                <th>Montant des éléments éxonorés</th>
+                                                <th>Montant des frais professionels ou d'abattement</th>
+                                                <th colspan="2">Montant des échéances prélevées</th>
+                                                <th colspan="2">Date de l'AC</th>
+                                                <th>Date du PH</th>
+                                                <th>Montant de l'IR prélevé</th>
+                                                <th>Nombre de réductions pour charges de famille</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-as="line" t-foreach="datas">
+                                                <tr>
+                                                    <td rowspan="2">
+                                                        <span t-esc="line['payslip'].get('otherid','')"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="line['employee'].get('name','')"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="line['employee'].get('cin','') or line['employee'].get('carte_sejour','') or ''"/>
+                                                    </td>
+                                                    <td rowspan="2">
+                                                        <span t-esc="line['employee'].get('identification_id','')"/>
+                                                    </td>
+                                                    <td rowspan="2">
+                                                        <span t-esc="line['payslip'].get('marital','')"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE'))"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('TAXABLE'))"/>
+                                                    </td>
+                                                    <td rowspan="2" style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('BRUT_IMPOSABLE'))"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['inputs'].get('FP_TAUX'))"/>
+                                                    </td>
+                                                    <td colspan="3" style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE'))"/>
+                                                    </td>
+                                                    <td colspan="2" style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('RETENU') - line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE'))"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('NET_IMPOSABLE'))"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('NBR_JOURS'))"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span t-esc="line['payslip'].get('address_home','')"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="line['employee'].get('cnss','')"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('AVANTAGE'))"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('EXONORE'))"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('FP'))"/>
+                                                    </td>
+                                                    <td colspan="2" style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('INTERET'))"/>
+                                                    </td>
+                                                    <td colspan="2" style="text-align: right">
+                                                        <span t-esc="line['employee'].get('date_ac','')"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="line['employee'].get('date_ph','')"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('IR'))"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="line['cumul'].get('NBR_REDUCTION')"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="5" rowspan="2" style="text-align: center; vertical-align: text-middle">
+                                                    Total
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE') for line in datas]))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('TAXABLE') for line in datas]))"/>
+                                                </td>
+                                                <td rowspan="2" style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('BRUT_IMPOSABLE') for line in datas]))"/>
+                                                </td>
+                                                <td class="payroll-black" style="text-align: right"></td>
+                                                <td colspan="3" style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE') for line in datas]))"/>
+                                                </td>
+                                                <td colspan="2" style="text-align: right">
+                                                    <span
+                                                        t-esc="formatLang(sum([(line['cumul'].get('RETENU') - line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE'))for line in datas]))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('NET_IMPOSABLE') for line in datas]))"/>
+                                                </td>
+                                                <td class="payroll-black" style="text-align: right"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('AVANTAGE') for line in datas]))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('EXONORE') for line in datas]))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('FP') for line in datas]))"/>
+                                                </td>
+                                                <td colspan="2" style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('INTERET') for line in datas]))"/>
+                                                </td>
+                                                <td class="payroll-black" colspan="2" style="text-align: right"></td>
+                                                <td class="payroll-black" style="text-align: right"></td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('IR') for line in datas]))"/>
+                                                </td>
+                                                <td class="payroll-black" style="text-align: right"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </t>
+                            <t t-if="index == 2">
+                                <div class="page">
+                                    <h4 style="text-align: center;">
+                                        <span t-esc="item[1]"/>
+                                    </h4>
+                                    <h4 style="text-align: center;">ANNEE
+                                        <span options="{'format' : '%Y'}" t-field="p.date_from"/>
+                                    </h4>
+                                    <table class="table table-condensed payroll-table-bordered table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Nom et prénom</th>
+                                                <th>N° C.N.I ou carte de séjour</th>
+                                                <th>N° d'identification fiscale</th>
+                                                <th>Adresse personnelle</th>
+                                                <th>Profession</th>
+                                                <th>Montant brut des sommes payées</th>
+                                                <th>Montant de l’ir prélevé</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-as="line" t-foreach="datas">
+                                                <tr>
+                                                    <td>
+                                                        <span t-esc="line['employee'].get('name','')"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="line['employee'].get('cin','') or line['employee'].get('carte_sejour','') or ''"/>
+                                                    </td>
+                                                    <td >
+                                                        <span t-esc="line['employee'].get('identification_id','')"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="line['payslip'].get('address_home','')"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="line['payslip'].get('job_id',['',''])[1]"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('BRUT_IMPOSABLE'))"/>
+                                                    </td>
+                                                    <td style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('IR'))"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="5" style="text-align: center; vertical-align: text-middle">
+                                                    Total
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('BRUT_IMPOSABLE') for line in datas]))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('IR') for line in datas]))"/>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </t>
+                            <t t-if="index == 3">
+                                <div class="page">
+                                    <h4 style="text-align: center;">
+                                        <span t-esc="item[1]"/>
+                                    </h4>
+                                    <h4 style="text-align: center;">ANNEE
+                                        <span options="{'format' : '%Y'}" t-field="p.date_from"/>
+                                    </h4>
+                                    <table class="table table-condensed payroll-table-bordered table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Nom et prénom</th>
+                                                <th>N° C.N.I ou carte de séjour</th>
+                                                <th rowspan="2">N° d'identification fiscale</th>
+                                                <th rowspan="2">Montant brut des traitements, salaires et émoluments</th>
+                                                <th rowspan="2">Montant brut des indemntés payées en argent ou en nature </th>
+                                                <th rowspan="2">Montant des retenues opérées</th>
+                                                <th rowspan="2">Montant du revenu net imposable</th>
+                                                <th rowspan="2">Période en jours</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Adresse personnelle</th>
+                                                <th>N° P.P.R ou CNSS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-as="line" t-foreach="datas">
+                                                <tr>
+                                                    <td>
+                                                        <span t-esc="line['employee'].get('name','')"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="line['employee'].get('cin','') or line['employee'].get('carte_sejour','') or ''"/>
+                                                    </td>
+                                                    <td rowspan="2">
+                                                        <span t-esc="line['employee'].get('identification_id','')"/>
+                                                    </td>
+                                                    <td rowspan="2" style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE'))"/>
+                                                    </td>
+                                                    <td rowspan="2" style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('TAXABLE') + line['cumul'].get('AVANTAGE'))"/>
+                                                    </td>
+                                                    <td rowspan="2" style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('RETENU'))"/>
+                                                    </td>
+                                                    <td rowspan="2" style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('NET_IMPOSABLE'))"/>
+                                                    </td>
+                                                    <td rowspan="2" style="text-align: right">
+                                                        <span t-esc="formatLang(line['cumul'].get('NBR_JOURS'))"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span t-esc="line['payslip'].get('address_home','')"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="line['employee'].get('cnss','')"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" style="text-align: center; vertical-align: text-middle">
+                                                    Total
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE') for line in datas]))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('TAXABLE')+line['cumul'].get('AVANTAGE') for line in datas]))"/>
+                                                </td>
+                                                <td rowspan="2" style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('RETENU') for line in datas]))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(sum([line['cumul'].get('NET_IMPOSABLE') for line in datas]))"/>
+                                                </td>
+                                                <td class="payroll-black" style="text-align: right"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </t>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

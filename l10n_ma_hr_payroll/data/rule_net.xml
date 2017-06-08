@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <!-- Salaire net imposable -->
+        <record id="hr_rule_net_imosable" model="hr.salary.rule">
+            <field name="name">Salaire net imposable</field>
+            <field name="code">NET_IMPOSABLE</field>
+            <field name="sequence">3000</field>
+            <field name="show_on_payslip">never</field>
+            <field name="amount_select">code</field>
+            <field name="parent_rule_id" ref="rule_salary"/>
+            <field name="category_id" ref="category_net_imposable"/>
+            <field name="amount_python_compute">result = (categories.BRUT_IMPOSABLE -
+                categories.RETENU - categories.FP - categories.INTERET)</field>
+        </record>
+        <!-- Salaire net contractuel -->
+        <record id="hr_rule_net_contractuel" model="hr.salary.rule">
+            <field name="name">Salaire net contractuel</field>
+            <field name="code">NET_CONTRACTUEL</field>
+            <field name="sequence">5700</field>
+            <field name="show_on_payslip">never</field>
+            <field name="amount_select">code</field>
+            <field name="parent_rule_id" ref="rule_salary"/>
+            <field name="category_id" ref="category_net_contractuel"/>
+            <field name="amount_python_compute">result = (categories.BRUT -
+                categories.RETENU - categories.IR_NET)</field>
+        </record>
+        <!-- Contribution de solidarité -->
+        <record id="hr_rule_contribution_solidarite" model="hr.salary.rule">
+            <field name="name">Contribution de solidarité</field>
+            <field name="code">CONTRIBUTION_SOLIDARITE</field>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">5800</field>
+            <field eval="False" name="parent_rule_id"/>
+            <field name="category_id" ref="category_contribution_solidarity"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">cs(payslip, categories, categories.NET_CONTRACTUEL, 'NET_CONTRACTUEL')</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+        <!-- Salaire net -->
+        <record id="hr_rule_net_tmp" model="hr.salary.rule">
+            <field name="name">Salaire net non arrondi</field>
+            <field name="code">NET_NON_ARRONDI</field>
+            <field name="sequence">6000</field>
+            <field name="show_on_payslip">never</field>
+            <field name="amount_select">code</field>
+            <field name="parent_rule_id" ref="rule_salary"/>
+            <field name="category_id" ref="hr_payroll.NET"/>
+            <field name="amount_python_compute">result = (categories.BRUT -
+                categories.RETENU - categories.AVANCE  -
+                categories.INTERET  - categories.IR_NET +
+                categories.MAJORATION_NET - categories.RETENU_NET)</field>
+        </record>
+        <!-- Salaire net -->
+        <record id="hr_rule_net_arrondi" model="hr.salary.rule">
+            <field name="name">Arrondi</field>
+            <field name="code">ARRONDI</field>
+            <field name="sequence">7000</field>
+            <field name="show_on_payslip">always</field>
+            <field name="amount_select">code</field>
+            <field name="parent_rule_id" ref="rule_salary"/>
+            <field name="category_id" ref="hr_payroll.NET"/>
+            <field name="amount_python_compute">result = not payslip.without_arrondi and arrondi(categories.NET, 2, 1) or 0</field>
+        </record>
+        <!-- Salaire net -->
+        <record id="hr_payroll.hr_rule_net" model="hr.salary.rule">
+            <field name="name">Salaire net</field>
+            <field name="code">NET</field>
+            <field name="sequence">8000</field>
+            <field name="show_on_payslip">always</field>
+            <field name="amount_select">code</field>
+            <field name="parent_rule_id" ref="rule_salary"/>
+            <field name="category_id" ref="other_totals"/>
+            <field name="amount_python_compute">result = categories.NET</field>
+            <field model="account.account" name="account_credit"
+                search="[('code','like','4432')]"/>
+            <field name="register_id" ref="hr_payroll.contrib_register_employees"/>
+        </record>
+    </data>
+</openerp>

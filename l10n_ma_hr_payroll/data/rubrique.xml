@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data noupdate="1">
+        <record id="rubrique_rendement" model="hr.rubrique">
+            <field name="name">Prime de rendement</field>
+            <field name="code">PRIME_RENDEMENT</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_outillage" model="hr.rubrique">
+            <field name="name">Prime d'outillage</field>
+            <field name="code">PRIME_OUTILLAGE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="100"/>
+        </record>
+        <record id="rubrique_salissure" model="hr.rubrique">
+            <field name="name">Prime de salissure</field>
+            <field name="code">PRIME_SALISSURE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="200"/>
+        </record>
+        <record id="rubrique_usure_vetements" model="hr.rubrique">
+            <field name="name">Usure des vetements</field>
+            <field name="code">USURE_VETEMENTS</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="100"/>
+        </record>
+        <record id="rubrique_panier" model="hr.rubrique">
+            <field name="name">Prime de panier</field>
+            <field name="code">PRIME_PANIER</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">code</field>
+            <field name="code_python">plafond = smig * nombre_de_jours * 2</field>
+        </record>
+        <record id="rubrique_lait" model="hr.rubrique">
+            <field name="name">Indémnité de lait</field>
+            <field name="code">INDEMNITE_LAIT</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="150"/>
+        </record>
+        <record id="rubrique_utilisation_vehicule_personnel" model="hr.rubrique">
+            <field name="name">Utilisation de véhicule personnel</field>
+            <field name="code">UTILISATION_VEHICULE_PERSONNEL</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="150"/>
+        </record>
+        <record id="rubrique_demangement" model="hr.rubrique">
+            <field name="name">Indémnité de déménagement</field>
+            <field name="code">INDEMNITE_DEMENAGEMENT</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">code</field>
+            <field name="code_python">plafond = distance * 10</field>
+        </record>
+        <record id="rubrique_caisse" model="hr.rubrique">
+            <field name="name">Indémnité de la caisse</field>
+            <field name="code">INDEMNITE_CAISSE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="150"/>
+        </record>
+        <record id="rubrique_transport" model="hr.rubrique">
+            <field name="name">Indémnité de transport</field>
+            <field name="code">INDEMNITE_TRANSPORT</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">code</field>
+            <field name="code_python" >plafond = urbain and 500 or 750</field>
+        </record>
+        <record id="rubrique_tournee" model="hr.rubrique">
+            <field name="name">Prime de tournée</field>
+            <field name="code">PRIME_TOURNEE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="1500"/>
+        </record>
+        <record id="rubrique_aide_medical" model="hr.rubrique">
+            <field name="name">Aide médical</field>
+            <field name="code">AIDE_MEDICAL</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="1000"/>
+        </record>
+        <record id="rubrique_allocation_apprentissage" model="hr.rubrique">
+            <field name="name">Allocation d'apprentissage</field>
+            <field name="code">ALLOCATION_APPRENTISSAGE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="0"/>
+        </record>
+        <record id="rubrique_representation" model="hr.rubrique">
+            <field name="name">Indémnité de représentation</field>
+            <field name="code">INDEMNITE_REPRESENTATION</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">rate</field>
+            <field name="plafond_salariale" eval="10"/>
+        </record>
+        <record id="rubrique_kilometrique" model="hr.rubrique">
+            <field name="name">Indémnité kilométrique</field>
+            <field name="code">INDEMNITE_KILOMETRIQUE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="False" name="auto_compute"/>
+            <field name="plafond_salariale_type">code</field>
+            <field name="code_python">plafond = plafond_ind_kilometrique</field>
+        </record>
+        <record id="rubrique_rentree_scolaire" model="hr.rubrique">
+            <field name="name">Allocation rentrée scolaire</field>
+            <field name="code">ALLOCATION_RENTREE_SCOLAIRE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="1600"/>
+        </record>
+        <record id="rubrique_voyage_mecque" model="hr.rubrique">
+            <field name="name">Voyage à la mecque</field>
+            <field name="code">VOYAGE_MECQUE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="50000"/>
+        </record>
+        <record id="rubrique_jouets_achoura" model="hr.rubrique">
+            <field name="name">Jouêts pour Achoura</field>
+            <field name="code">JOUETS_ACHOURA</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="750"/>
+        </record>
+        <record id="rubrique_mouton" model="hr.rubrique">
+            <field name="name">Mouton de l'aid el kbir</field>
+            <field name="code">MOUTON_AID_ELKBIR</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="2000"/>
+        </record>
+        <record id="rubrique_portuaire" model="hr.rubrique">
+            <field name="name">Frais portuaires</field>
+            <field name="code">FRAIS_PORTUAIRES</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="0"/>
+        </record>
+        <record id="rubrique_manutention" model="hr.rubrique">
+            <field name="name">Frais manutension</field>
+            <field name="code">FRAIS_MANUTENSION</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="0"/>
+        </record>
+        <record id="rubrique_presence" model="hr.rubrique">
+            <field name="name">Jétons de présence</field>
+            <field name="code">JETONS_PRESENCE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="0"/>
+        </record>
+        <record id="rubrique_dons" model="hr.rubrique">
+            <field name="name">Dons</field>
+            <field name="code">DONS</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field name="plafond_salariale_type">fix</field>
+            <field name="plafond_salariale" eval="100"/>
+        </record>
+
+
+
+        <record id="rubrique_assiduite" model="hr.rubrique">
+            <field name="name">Prime d'assiduité</field>
+            <field name="code">PRIME_ASSIDUITE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_technicite" model="hr.rubrique">
+            <field name="name">Prime de technicité</field>
+            <field name="code">PRIME_TECHNICITE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_rendement" model="hr.rubrique">
+            <field name="name">Prime de rendement</field>
+            <field name="code">PRIME_RENDEMENT</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_informatique" model="hr.rubrique">
+            <field name="name">Prime informatique</field>
+            <field name="code">PRIME_INFORMATIQUE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_standard" model="hr.rubrique">
+            <field name="name">Prime de standard</field>
+            <field name="code">PRIME_STANDARD</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_production" model="hr.rubrique">
+            <field name="name">Prime de production</field>
+            <field name="code">PRIME_PRODUCTION</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_bilan" model="hr.rubrique">
+            <field name="name">Prime de bilan</field>
+            <field name="code">PRIME_BILAN</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_gratifications_fin_annee" model="hr.rubrique">
+            <field name="name">Gratifications de fin d'année</field>
+            <field name="code">GRATIFICATIONS_FIN_ANNEE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_voyage" model="hr.rubrique">
+            <field name="name">Frais de voyage</field>
+            <field name="code">FRAIS_VOYAGE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_vacance" model="hr.rubrique">
+            <field name="name">Prime de vacance</field>
+            <field name="code">PRIME_VACANCE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_residence" model="hr.rubrique">
+            <field name="name">Indémnité de résidence</field>
+            <field name="code">INDEMNITE_RESIDENCE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_responsabilite" model="hr.rubrique">
+            <field name="name">Indémnité de responsabilité</field>
+            <field name="code">INDEMNITE_RESPENSABILITE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_fonction" model="hr.rubrique">
+            <field name="name">Indémnité de fonction</field>
+            <field name="code">INDEMNITE_FONCTION</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_encadrement" model="hr.rubrique">
+            <field name="name">Indemnité d’encadrement</field>
+            <field name="code">INDEMNITE_ENCADREMENT</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_recherche" model="hr.rubrique">
+            <field name="name">Prime de recherche</field>
+            <field name="code">PRIME_RECHERCHE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_poste" model="hr.rubrique">
+            <field name="name">Indémnité de poste</field>
+            <field name="code">INDEMNITE_POSTE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_direction" model="hr.rubrique">
+            <field name="name">Indémnité de direction</field>
+            <field name="code">INDEMNITE_DIRECTION</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_presidence" model="hr.rubrique">
+            <field name="name">Indémnité de présidence</field>
+            <field name="code">INDEMNITE_PRESIDENCE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_rapatriement" model="hr.rubrique">
+            <field name="name">Indémnité de rapatriement</field>
+            <field name="code">INDEMNITE_RAPATRIEMENT</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_naissance" model="hr.rubrique">
+            <field name="name">Prime de naissance</field>
+            <field name="code">PRIME_NAISSANCE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_interimaire" model="hr.rubrique">
+            <field name="name">Prime d'intérimaire</field>
+            <field name="code">PRIME_INTERIMAIRE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_qualification" model="hr.rubrique">
+            <field name="name">Prime de qualification</field>
+            <field name="code">PRIME_QUALIFICATION</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_froid" model="hr.rubrique">
+            <field name="name">Prime de froid</field>
+            <field name="code">PRIME_FROID</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_profondeur" model="hr.rubrique">
+            <field name="name">Prime de profondeur</field>
+            <field name="code">PRIME_PROFONDEUR</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_sous_sol" model="hr.rubrique">
+            <field name="name">Prime de sous sol</field>
+            <field name="code">PRIME_SOUS_SOL</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_climatique" model="hr.rubrique">
+            <field name="name">Prime climatique</field>
+            <field name="code">PRIME_CLIMATIQUE</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_taravaux_dangereux" model="hr.rubrique">
+            <field name="name">Prime pour travaux dangereux</field>
+            <field name="code">PRIME_TRAVAUX_DANGEREUX</field>
+            <field name="rate_type">imp</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_deplacement" model="hr.rubrique">
+            <field name="name">Frais de déplacement</field>
+            <field name="code">FRAIS_DEPLACEMENT</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_telephone" model="hr.rubrique">
+            <field name="name">Dépenses téléphoniques</field>
+            <field name="code">DEPENSES_TELEPHONIQUES</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+        <record id="rubrique_prime_productivite"  model="hr.rubrique">
+            <field name="name">Prime de productivité</field>
+            <field name="code">PRIME_PRODUCTIVITE</field>
+            <field name="rate_type">exo</field>
+            <field eval="True" name="can_reset"/>
+            <field eval="False" name="can_request"/>
+            <field eval="True" name="active"/>
+            <field eval="True" name="export_ok"/>
+        </record>
+<!-- Mail subtypes -->
+        <record id="mt_rubrique_line_confirmed" model="mail.message.subtype">
+            <field name="name">À valider</field>
+            <field name="res_model">hr.rubrique.line</field>
+            <field name="description">Demande confirmée et en attenete de validation</field>
+        </record>
+        <record id="mt_holidays_validated" model="mail.message.subtype">
+            <field name="name">Validée</field>
+            <field name="res_model">hr.rubrique.line</field>
+            <field name="description">Demande validée et en attente d'approbation</field>
+        </record>
+        <record id="mt_rubrique_line_done" model="mail.message.subtype">
+            <field name="name">Validée et approuvée</field>
+            <field name="res_model">hr.rubrique.line</field>
+            <field name="description">Demande validée et approuvée</field>
+        </record>
+        <record id="mt_holidays_refused" model="mail.message.subtype">
+            <field name="name">Refusée</field>
+            <field name="res_model">hr.rubrique.line</field>
+            <field name="description">Demande est refusée</field>
+        </record>
+    </data>
+</openerp>

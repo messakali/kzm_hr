@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        <record id="hr_payslip_rule_view_form_l10n_ma_payroll" model="ir.ui.view">
+            <field name="name">hr.salary.rule.view.form.l10n.ma.payroll</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='name']" position="before">
+                    <field name="auto" invisible="1" />
+                    <group colspan="4" attrs="{'invisible': [('auto','=', False)]}">
+                        <div style="text-align: -webkit-center;">
+                            <h3>
+                                <font style="color: rgb(176, 105, 25);">Il ne faut pas modifier cette règle ici, car elle est gérée ailleurs</font>
+                            </h3>
+                            <br />
+                        </div>
+                    </group>
+                </xpath>
+                <xpath expr="//notebook/page[last()]" position="after">
+                    <page string="Autres informations">
+                        <group colspan="4" col="8">
+                            <group colspan="4">
+                                <field name="avance_id" />
+                                <field name="avantage_id" />
+                                <field name="rubrique_id" />
+                                <field name="cotisation_id" />
+                                <field name="holiday_status_id" />
+                                <field name="is_salary_item" />
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='appears_on_payslip']" position="replace">
+                    <field name="show_on_payslip" />
+                </xpath>
+                <xpath expr="//field[@name='quantity']" position="after">
+                    <newline />
+                    <field name="rate_val" attrs="{'invisible':[('amount_select','!=','flexible_percentage')], 'required': [('amount_select','=','flexible_percentage')]}" />
+                    <newline />
+                    <field name="base_val" attrs="{'invisible':[('amount_select','!=','flexible_percentage')], 'required': [('amount_select','=','flexible_percentage')]}" />
+                    <newline />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

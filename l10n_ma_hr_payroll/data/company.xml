@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="base.main_company" model="res.company">
+            <field name="initial">YC</field>
+            <field name="working_hours" ref="resource_calendar_hoursweek0"></field>
+            <field name="fp_id" search="[('rate','=',20)]" model="l10n.ma.fp"/>
+        </record>
+    </data>
+</openerp>

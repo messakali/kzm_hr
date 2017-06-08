@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="0">
+        <template id="report_mutuelle_declaration">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t t-set="data_lines" t-value="lines(p,['MUTUELLE','BRUT_IMPOSABLE','MUTUELLE_SALARIALE','MUTUELLE_PATRONALE'],['mutuelle','nom','prenom','hire_date','gender','birthday','marital'],['otherid'])"/>
+                    <t t-call="kzm_base.kzm_page_layout">
+                        <div class="page">
+                            <h4 style="text-align: center;">Etat MUTUELLE
+                                <br/>
+                                De
+                                <span options="{'format' : '%d/%m/%Y'}" t-field="p.date_from"/>
+                                à
+                                <span options="{'format' : '%d/%m/%Y'}" t-field="p.date_to"/>
+                            </h4>
+                            <br/>
+                            <table class="table table-condensed payroll-table-bordered table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Matricule</th>
+                                        <th>N° Mutuelle</th>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>Date d'ancienneté</th>
+                                        <th>Date de sortie</th>
+                                        <th>Sexe</th>
+                                        <th>Date de naissance</th>
+                                        <th>Situation familliale</th>
+                                        <th>Brut Assurance</th>
+                                        <th>Tx</th>
+                                        <th>Cotis PS</th>
+                                        <th>Tx</th>
+                                        <th>Cotis PP</th>
+                                        <th>Versement global</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-as="line" t-foreach="data_lines">
+                                        <td>
+                                            <span t-esc="line['payslip'].get('otherid','')"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['employee'].get('mutuelle')"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['employee'].get('nom')"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['employee'].get('prenom')"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="formatLang(line['employee'].get('hire_date'),date=True)"/>
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['employee'].get('gender')"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="formatLang(line['employee'].get('birthday'),date=True)"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['employee'].get('marital')"/>
+                                        </td>
+                                        
+                                        
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(line['cumul'].get('BRUT_IMPOSABLE'))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="line['tx'].get('MUTUELLE_SALARIALE')"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(line['cumul'].get('MUTUELLE_SALARIALE'))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="line['tx'].get('MUTUELLE_PATRONALE')"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(line['cumul'].get('MUTUELLE_PATRONALE'))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(line['cumul'].get('MUTUELLE'))"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="9">
+                                            Total
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(sum([line['cumul'].get('BRUT_IMPOSABLE') for line in data_lines]))"/>
+                                        </td>
+                                        <td colspan="4">
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span t-esc="formatLang(sum([line['cumul'].get('MUTUELLE') for line in data_lines]))"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

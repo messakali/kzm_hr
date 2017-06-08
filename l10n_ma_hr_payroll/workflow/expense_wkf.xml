@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+      <!-- Reporting to payroll -->
+        <record id="act_payroll_done" model="workflow.activity">
+            <field name="wkf_id" ref="hr_expense.wkf_expenses"/>
+            <field name="name">payroll_done</field>
+            <field name="kind">function</field>
+            <field name="action">reserve_payroll()</field>
+        </record>
+        <record id="payroll_t10" model="workflow.transition">
+            <field name="act_from" ref="hr_expense.act_accepted"/>
+            <field name="act_to" ref="act_payroll_done"/>
+            <field name="signal">payroll_done</field>
+            <field name="group_id" ref="hr.group_hr_user"/>
+        </record>
+        <!-- Force mark paid -->
+        <record id="act_force_done" model="workflow.activity">
+            <field name="wkf_id" ref="hr_expense.wkf_expenses"/>
+            <field name="name">expense_force_paid</field>
+            <field name="kind">function</field>
+            <field name="action">force_paid()</field>
+        </record>
+        <record id="payroll_tfp" model="workflow.transition">
+            <field name="act_from" ref="hr_expense.act_done"/>
+            <field name="act_to" ref="act_force_done"/>
+            <field name="signal">expense_force_paid</field>
+            <field name="group_id" ref="hr.group_hr_user"/>
+        </record>
+    </data>
+</openerp>

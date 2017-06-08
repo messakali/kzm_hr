@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="view_hr_avantage_tree" model="ir.ui.view">
+            <field name="name">hr.avantage.tree</field>
+            <field name="model">hr.avantage</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Avantages">
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="contribution_id"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_avantage_form" model="ir.ui.view">
+            <field name="name">hr.avantage.form</field>
+            <field name="model">hr.avantage</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Avantages">
+                    <group col="4" colspan="4">
+                        <group colspan="2">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="type"/>
+                            <field invisible="1" name="rate_type"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group colspan="2" groups="hr.group_hr_user">
+                            <field name="contribution_id"/>
+                            <field name="show_on_payslip"/>
+                            <field name="show_on_ledger"/>
+                            <field name="export_ok"/>
+                            <field name="active"/>
+                        </group>
+                        <group colspan="2" groups="hr.group_hr_user" invisible="1" string="Rate">
+                            <field name="rate_salariale" string="Rate"/>
+                            <field invisible="1" name="plafond_salariale_type"/>
+                            <field invisible="1" name="plafond_salariale"/>
+                        </group>
+                        <group colspan="2" groups="hr.group_hr_user" string="Workflow">
+                            <field name="can_reset"/>
+                            <field name="can_request"/>
+                        </group>
+                        <group colspan="4" groups="hr.group_hr_user" string="Comptabilité">
+                            <field name="account_debit"/>
+                            <field name="account_credit"/>
+                            <field name="analytic_account_id"/>
+                            <field name="account_tax_id"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_avantage_search" model="ir.ui.view">
+            <field name="name">hr.avantage.search</field>
+            <field name="model">hr.avantage</field>
+            <field name="type">search</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Avantages">
+                    <field name="name" select="True"/>
+                    <field name="code" select="True"/>
+                    <field name="contribution_id"/>
+                    <field name="active"/>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_hr_avantage_view" model="ir.actions.act_window">
+            <field name="name">Avantages</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.avantage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_hr_avantage_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{'active_test': False}</field>
+        </record>
+        <menuitem action="act_open_hr_avantage_view" id="menu_hr_avantage" parent="hr.menu_human_resources_configuration" sequence="20"/>
+    </data>
+</openerp>

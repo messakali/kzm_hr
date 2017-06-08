@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+      <!-- Partner -->
+      <record id="rule_res_partner_employee" model="ir.rule">
+          <field name="name">Partners Employee</field>
+          <field name="model_id" ref="base.model_res_partner"/>
+          <field name="domain_force">[(1, '=', 1)]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+      <!-- Employee Multi Company -->
+      <record id="rule_hr_employee_global" model="ir.rule">
+          <field name="name">Employee multi-company</field>
+          <field name="model_id" ref="model_hr_employee"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <!-- Contract Multi Company -->
+      <record id="rule_hr_contract_global" model="ir.rule">
+          <field name="name">Contract multi-company</field>
+          <field name="model_id" ref="model_hr_contract"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <!-- Payslip 
+      <record id="hr_payroll.property_rule_employee_payslip" model="ir.rule">
+          <field name="domain_force">[(1, '=', 1)]</field>
+      </record>-->
+      <record id="property_rule_employee_payslip" model="ir.rule">
+          <field name="name">Payslip Employee</field>
+          <field name="model_id" ref="model_hr_payslip"/>
+          <field name="domain_force">[('employee_id.user_id', '=', user.id),('state','in',['done'])]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+      <record id="property_rule_global_payslip" model="ir.rule">
+          <field name="name">Payslip Global</field>
+          <field name="model_id" ref="model_hr_payslip"/>
+          <field name="domain_force">[('company_id' ,'child_of',[user.company_id.id])]</field>
+      </record>
+      <!-- Rubrique -->
+      <record id="rule_hr_rubrique_line_global" model="ir.rule">
+          <field name="name">Rubrique Line multi-company</field>
+          <field name="model_id" ref="model_hr_rubrique_line"/>
+          <field name="domain_force">['|',('employee_id.company_id','=',False),('employee_id.company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <record id="rule_hr_rubrique_line_employee" model="ir.rule">
+          <field name="name">Rubrique Line employe</field>
+          <field name="model_id" ref="model_hr_rubrique_line"/>
+          <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+
+      <record id="rule_hr_rubrique_line_officier" model="ir.rule">
+          <field name="name">Rubrique Line officier</field>
+          <field name="model_id" ref="model_hr_rubrique_line"/>
+          <field name="domain_force">[(1,'=',1)]</field>
+          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+      </record>
+      <!-- Avantage -->
+      <record id="rule_hr_avantage_line_global" model="ir.rule">
+          <field name="name">Avantage Line multi-company</field>
+          <field name="model_id" ref="model_hr_avantage_line"/>
+          <field name="domain_force">['|',('employee_id.company_id','=',False),('employee_id.company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <record id="rule_hr_avantage_line_employee" model="ir.rule">
+          <field name="name">Avantage Line employe</field>
+          <field name="model_id" ref="model_hr_avantage_line"/>
+          <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+
+      <record id="rule_hr_avantage_line_officier" model="ir.rule">
+          <field name="name">Avantage Line officier</field>
+          <field name="model_id" ref="model_hr_avantage_line"/>
+          <field name="domain_force">[(1,'=',1)]</field>
+          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+      </record>
+      <!-- Avance et prêts -->
+      <record id="rule_hr_avance_line_global" model="ir.rule">
+          <field name="name">Avance Line multi-company</field>
+          <field name="model_id" ref="model_hr_avance_line"/>
+          <field name="domain_force">['|',('employee_id.company_id','=',False),('employee_id.company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <record id="rule_hr_avance_line_employee" model="ir.rule">
+          <field name="name">Avance Line employe</field>
+          <field name="model_id" ref="model_hr_avance_line"/>
+          <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+
+      <record id="rule_hr_avance_line_officier" model="ir.rule">
+          <field name="name">Avance Line officier</field>
+          <field name="model_id" ref="model_hr_avance_line"/>
+          <field name="domain_force">[(1,'=',1)]</field>
+          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+      </record>
+      <!-- Congés et Heures supp -->
+      <record id="rule_hr_holidays_global" model="ir.rule">
+          <field name="name">Congés et Heures supp Global</field>
+          <field name="model_id" ref="model_hr_holidays"/>
+          <field name="domain_force">['|',('employee_id.company_id','=',False),('employee_id.company_id', 'child_of', [user.company_id.id])]</field>
+      </record>
+      <!-- Voucher Order -->
+      <record id="rule_hr_voucher_order_global" model="ir.rule">
+          <field name="name">Voucher order Line multi-company</field>
+          <field name="model_id" ref="model_hr_voucher_order"/>
+          <field name="domain_force">[('company_ids','child_of',[user.company_id.id])]</field>
+      </record>
+      <!-- Common reports -->
+      <record id="rule_hr_common_report_global" model="ir.rule">
+          <field name="name">Common reports multi-company</field>
+          <field name="model_id" ref="model_hr_common_report"/>
+          <field name="domain_force">[('company_ids','child_of',[user.company_id.id])]</field>
+      </record>
+      <!-- Statistiques -->
+      <record id="rule_hr_payroll_statistics_report_global" model="ir.rule">
+          <field name="name">Statistiques multi-company</field>
+          <field name="model_id" ref="model_hr_payroll_statistics_report"/>
+          <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <!-- Rotation -->
+      <record id="rule_hr_employee_rotation_global" model="ir.rule">
+          <field name="name">Rotation multi-company</field>
+          <field name="model_id" ref="model_hr_employee_rotation"/>
+          <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <!-- Avertissmeents -->
+      <record id="rule_warning_global" model="ir.rule">
+          <field name="name">Avertissement multi-company</field>
+          <field name="model_id" ref="model_hr_employee_warning"/>
+          <field name="domain_force">['|',('employee_id.company_id','=',False),('employee_id.company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <record id="rule_warning_employee" model="ir.rule">
+          <field name="name">Avertissement employee</field>
+          <field name="model_id" ref="model_hr_employee_warning"/>
+          <field name="domain_force">[('state','in',['sent','received'])]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+      <!-- Documnets administratifs -->
+      <record id="rule_document_global" model="ir.rule">
+          <field name="name">Document Administratifs multi-company</field>
+          <field name="model_id" ref="model_hr_document"/>
+          <field name="domain_force">['|','|','|',('user_id.company_id','child_of',[user.company_id.id]),('company_id','=',False),('company_id','child_of',[user.company_id.id]),('employee_id.company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <record id="rule_document_employee" model="ir.rule">
+          <field name="name">Document Administratifs employee</field>
+          <field name="model_id" ref="model_hr_document"/>
+          <field name="domain_force">['|',('user_id','=',user.id),('employee_id.user_id','=',user.id)]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+
+      <record id="rule_document_officier" model="ir.rule">
+          <field name="name">Document Administratifs Officier</field>
+          <field name="model_id" ref="model_hr_document"/>
+          <field name="domain_force">[(1,'=',1)]</field>
+          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+      </record>
+      <!-- Kilometrage -->
+      <record id="rule_employee_km_global" model="ir.rule">
+          <field name="name">Kilométrage multi-company</field>
+          <field name="model_id" ref="model_hr_employee_km"/>
+          <field name="domain_force">[('employee_id.company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <record id="rule_employee_km_employee" model="ir.rule">
+          <field name="name">Kilométrage employee</field>
+          <field name="model_id" ref="model_hr_employee_km"/>
+          <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+      <record id="rule_employee_km_officier" model="ir.rule">
+          <field name="name">Kilométrage Officier</field>
+          <field name="model_id" ref="model_hr_employee_km"/>
+          <field name="domain_force">[(1,'=',1)]</field>
+          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+      </record>
+      <!-- Missions -->
+      <record id="rule_employee_mission_global" model="ir.rule">
+          <field name="name">Missions multi-company</field>
+          <field name="model_id" ref="model_hr_employee_mission"/>
+          <field name="domain_force">[('employee_id.company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <record id="rule_employee_mission_employee" model="ir.rule">
+          <field name="name">Missions employee</field>
+          <field name="model_id" ref="model_hr_employee_mission"/>
+          <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+      <record id="rule_employee_mission_officier" model="ir.rule">
+          <field name="name">Missions Officier</field>
+          <field name="model_id" ref="model_hr_employee_mission"/>
+          <field name="domain_force">[(1,'=',1)]</field>
+          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+      </record>
+      <!-- Saisie simplifiée -->
+      <record id="rule_saisie_run_global" model="ir.rule">
+          <field name="name">Saisie simplifiée multi-company</field>
+          <field name="model_id" ref="model_hr_saisie_run"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+      </record>
+
+      <record id="rule_saisie_run_officier" model="ir.rule">
+          <field name="name">Saisie simplifiée Officier</field>
+          <field name="model_id" ref="model_hr_saisie_run"/>
+          <field name="domain_force">[(1,'=',1)]</field>
+          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+      </record>
+      <!-- Lignes de Saisie simplifiée -->
+      <record id="rule_saisie_line_global" model="ir.rule">
+          <field name="name">Lignes de Saisie simplifiée multi-company</field>
+          <field name="model_id" ref="model_hr_saisie_line"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+      </record>
+      <record id="rule_saisie_line_employee" model="ir.rule">
+          <field name="name">Lignes de Saisie simplifiée employee</field>
+          <field name="model_id" ref="model_hr_saisie_line"/>
+          <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+      </record>
+
+      <record id="rule_saisie_line_officier" model="ir.rule">
+          <field name="name">Lignes de Saisie simplifiée Officier</field>
+          <field name="model_id" ref="model_hr_saisie_line"/>
+          <field name="domain_force">[(1,'=',1)]</field>
+          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+      </record>
+    </data>
+</openerp>

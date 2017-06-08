@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        <record id="wkf_saisie" model="workflow">
+            <field name="name">hr.saisie.run.basic</field>
+            <field name="osv">hr.saisie.run</field>
+            <field name="on_create">True</field>
+        </record>
+<!-- Activity -->
+        <record id="saisie_act_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_saisie"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">set_draft()</field>
+        </record>
+        <record id="saisie_act_csv" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_saisie"/>
+            <field name="name">csv</field>
+            <field name="kind">function</field>
+            <field name="action">set_csv()</field>
+        </record>
+        <record id="saisie_act_confirm" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_saisie"/>
+            <field name="name">confirm</field>
+            <field name="kind">function</field>
+            <field name="action">set_confirm()</field>
+        </record>
+        <record id="saisie_act_done" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_saisie"/>
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">set_done()</field>
+        </record>
+        <record id="saisie_act_refuse" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_saisie"/>
+            <field name="flow_stop">True</field>
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">set_cancel()</field>
+        </record>
+<!-- Transistion -->
+        <record id="saisie_trans_draft_csv" model="workflow.transition">
+            <field name="act_from" ref="saisie_act_draft"/>
+            <field name="act_to" ref="saisie_act_csv"/>
+            <field name="signal">saisie_csv</field>
+        </record>
+        <record id="saisie_trans_csv_confirm" model="workflow.transition">
+            <field name="act_from" ref="saisie_act_csv"/>
+            <field name="act_to" ref="saisie_act_confirm"/>
+            <field name="signal">saisie_confirm</field>
+        </record>
+        <record id="saisie_trans_csv_refuse" model="workflow.transition">
+            <field name="act_from" ref="saisie_act_csv"/>
+            <field name="act_to" ref="saisie_act_refuse"/>
+            <field name="signal">saisie_refuse0</field>
+        </record>
+        <record id="saisie_trans_draft_refuse" model="workflow.transition">
+            <field name="act_from" ref="saisie_act_draft"/>
+            <field name="act_to" ref="saisie_act_refuse"/>
+            <field name="signal">saisie_refuse1</field>
+        </record>
+        <record id="saisie_trans_confirm_done" model="workflow.transition">
+            <field name="act_from" ref="saisie_act_confirm"/>
+            <field name="act_to" ref="saisie_act_done"/>
+            <field name="signal">saisie_done</field>
+            <field name="group_id" ref="hr.group_hr_user"/>
+        </record>
+        <record id="saisie_trans_confirm_refuse" model="workflow.transition">
+            <field name="act_from" ref="saisie_act_confirm"/>
+            <field name="act_to" ref="saisie_act_refuse"/>
+            <field name="signal">saisie_refuse2</field>
+            <field name="group_id" ref="hr.group_hr_user"/>
+        </record>
+        <record id="saisie_trans_done_refuse" model="workflow.transition">
+            <field name="act_from" ref="saisie_act_done"/>
+            <field name="act_to" ref="saisie_act_refuse"/>
+            <field name="signal">saisie_refuse3</field>
+            <field name="group_id" ref="hr.group_hr_user"/>
+        </record>
+    </data>
+</openerp>

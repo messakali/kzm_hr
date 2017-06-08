@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_hr_payslip_edit_wizard_form" model="ir.ui.view">
+            <field name="name">hr.payslip.edit.wizard.form</field>
+            <field name="model">hr.payslip.edit.wizard</field>
+            <field name="type">form</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Edition en lot">
+                    <notebook colspan="4" groups="hr.group_hr_user">
+                        <page string="Pointage">
+                            <field colspan="4" name="work_ids" nolabel="1">
+                                <tree editable="bottom" string="Pointage" colors="red:erase_ok==True" fonts="bold:erase_ok==True" >
+                                    <field  name="erase_ok"/>
+                                    <field  name="name"/>
+                                    <field  name="code"/>
+                                    <field  name="number_of_days" attrs="{'readonly': [('erase_ok','=', False)]}"/>
+                                    <field  name="number_of_hours" attrs="{'readonly': [('erase_ok','=', False)]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Entrées">
+                            <field colspan="4" name="input_ids" nolabel="1">
+                                <tree editable="bottom" string="Entrées" colors="red:erase_ok==True" fonts="bold:erase_ok==True">
+                                    <field  name="erase_ok"/>
+                                    <field  name="name"/>
+                                    <field  name="code"/>
+                                    <field  name="amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Bulletins de paie">
+                            <field  colspan="4" name="payslip_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button  class="oe_highlight" name="apply" string="Appliquer" type="object"/>
+                        <button  class="oe_highlight" name="apply_compute" string="Appliquer et recalculer" type="object"/>
+                        <button  class="oe_highlight" name="apply_compute_confirm" string="Appliquer, recalculer et confirmer" type="object"/>
+                        ou
+                        <button  class="oe_link" special="cancel" string="Annuler" type="special"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_hr_payslip_edit_wizard_view" model="ir.actions.act_window">
+            <field name="name">Edition en lot</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.payslip.edit.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+        <record id="wizard_hr_payslip_edit_wizard" model="ir.values">
+            <field name="name">Edition en lot</field>
+            <field name="key">action</field>
+            <field name="key2">client_action_multi</field>
+            <field name="model">hr.payslip</field>
+            <field  eval="'ir.actions.act_window,' + str(ref('action_hr_payslip_edit_wizard_view'))" name="value"/>
+        </record>
+    </data>
+</openerp>

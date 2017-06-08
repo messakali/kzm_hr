@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="0">
+        <record id="common_report_type_cnss" model="hr.common.report.type">
+            <field name="name">CNSS et AMO</field>
+            <field name="code">cnss_amo</field>
+            <field eval="True" name="workflow"/>
+        </record>
+        <record id="common_report_type_audit" model="hr.common.report.type">
+            <field name="name">Audit</field>
+            <field name="code">audit</field>
+            <field eval="False" name="workflow"/>
+        </record>
+        <record id="common_report_type_ir" model="hr.common.report.type">
+            <field name="name">Impôt sur le revenu</field>
+            <field name="code">ir</field>
+            <field eval="True" name="workflow"/>
+        </record>
+        <record id="common_report_type_cs" model="hr.common.report.type">
+            <field name="name">Contribution de solidarité</field>
+            <field name="code">cs</field>
+            <field eval="True" name="workflow"/>
+        </record>
+        <record id="common_report_type_cimr" model="hr.common.report.type">
+            <field name="name">CIMR</field>
+            <field name="code">cimr</field>
+            <field eval="True" name="workflow"/>
+        </record>
+        <record id="common_report_type_mutuelle" model="hr.common.report.type">
+            <field name="name">MUTUELLE</field>
+            <field name="code">mutuelle</field>
+            <field eval="True" name="workflow"/>
+        </record>
+        <record id="common_report_type_annciennete" model="hr.common.report.type">
+            <field name="name">Ancienneté</field>
+            <field name="code">anciennete</field>
+            <field eval="False" name="workflow"/>
+        </record>
+    </data>
+</openerp>

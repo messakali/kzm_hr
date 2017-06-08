@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+      <!-- Action test_active -->
+      <record id="hr_holidays.open_view_holiday_status" model="ir.actions.act_window">
+        <field name="context">{'active_test': False}</field>
+      </record>
+        <!-- Status -->
+        <record id="view_hr_holidays_status_kzm_form" model="ir.ui.view">
+            <field name="name">hr.holidays.status.kzm.form</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//group[1]" position="inside">
+                    <group>
+                        <group colspan="4">
+                            <field name="sequence" />
+                            <field name="majoration" />
+                            <field name="majoration_rate" readonly="1"  />
+                            <!-- <field name="type" /> -->
+                            <field name="is_hs" />
+                            <field name="include_free"  />
+                            <field name="is_work"  />
+                            <field name="is_rappel"  />
+                            <field name="is_retained" />
+                            <field name="show_on_payslip" />
+                            <field name="show_on_ledger" />
+                            <field name="export_ok" />
+                        </group>
+                        <group colspan="4" string="Comptabilité">
+                            <field name="account_debit" />
+                            <field name="account_credit" />
+                            <field name="analytic_account_id" />
+                            <field name="account_tax_id" />
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="code" required="1" />
+                </xpath>
+            </field>
+        </record>
+        <record id="view_hr_holidays_status_kzm_tree" model="ir.ui.view">
+            <field name="name">hr.holidays.status.kzm.tree</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.view_holiday_status_normal_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="sequence" widget="handle" />
+                    <field name="code" />
+                </xpath>
+            </field>
+        </record>
+        <!-- Holidays -->
+        <record id="view_hr_holidays_kzm_form" model="ir.ui.view">
+            <field name="name">hr.holidays.kzm.form</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_new" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group[1]/group[1]/div[1]/div[2]" position="replace">
+                    <field name="number_of_days_temp" class="oe_inline" attrs="{'invisible': [('type','=', 'remove')]}" />
+                    <field name="number_of_hours_temp" class="oe_inline" invisible="1" />
+                    <field name="summary" attrs="{'invisible': [('type','!=', 'remove')]}" />
+                    <field name="holiday_status_code" invisible="1" />
+                </xpath>
+                <xpath expr="//field[@name='holiday_status_id']" position="attributes">
+                    <attribute name="widget">selection</attribute>
+                </xpath>
+                <xpath expr="//field[@name='holiday_status_id']" position="after">
+                    <field name="date" attrs="{'required': [('type','=', 'add')], 'invisible': [('type','!=', 'add')]}"/>
+                </xpath>
+                <!-- <xpath expr="//field[@name='date_from']" position="attributes">
+                    <attribute name="on_change">onchange_date_from(type, holiday_status_id, employee_id, date_to, date_from)</attribute>
+                </xpath>
+                <xpath expr="//field[@name='date_to']" position="attributes">
+                    <attribute name="on_change">onchange_date_to(type, holiday_status_id, employee_id, date_to, date_from)</attribute>
+                </xpath> -->
+                <xpath expr="//field[@name='notes']" position="before">
+                     <!-- TODO RemoveMe
+                    <button string="Flush"  type="object" name="flush"/>-->
+                    <field name="line_ids" colspan="4" invisible="1">
+                        <tree string="Lines" editable="top">
+                            <field name="date" />
+                            <field name="employee_id" />
+                            <field name="holiday_status_id" />
+                            <field name="hours" />
+                            <field name="days" />
+                            <field name="state" />
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_hr_holidays_kzm_tree" model="ir.ui.view">
+            <field name="name">hr.holidays.kzm.tree</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.view_holiday" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='number_of_days']" position="after">
+                    <field name="number_of_hours" sum="Total"/>
+                </xpath>
+            </field>
+        </record>
+        <!-- Holidays main menu -->
+        <record id="hr_holidays.menu_open_ask_holidays_new" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('group_hr_menu_old_leave')])]" />
+        </record>
+        <!-- New holidays main menu -->
+        <menuitem id="menu_new_main_holidays" parent="hr.menu_hr_root" sequence="20" name="Congés et Heures Supp." groups="l10n_ma_hr_payroll.group_hr_menu_leave"
+        />
+        <menuitem id="menu_new_holidays_given_menu" parent="menu_new_main_holidays" sequence="10" name="Congés et Heures Supp." action="hr_holidays.open_ask_holidays"
+        />
+        <menuitem id="menu_new_holidays_to_approve_menu" parent="menu_new_main_holidays" sequence="20" name="Demandes à valider" action="hr_holidays.request_approve_holidays"
+        />
+        <menuitem id="menu_new_holidays_summary_menu" parent="menu_new_main_holidays" sequence="60" name="Résumé Congés/Heures Supp." action="hr_holidays.open_company_allocation"
+        />
+        <!-- New Allocation main menu -->
+        <menuitem id="menu_new_main_holidays_allocation" parent="hr.menu_hr_root" sequence="21" name="Attribution Congés" groups="l10n_ma_hr_payroll.group_hr_menu_attribution"
+        />
+        <menuitem id="menu_new_holidays_allocation_given_menu" parent="menu_new_main_holidays_allocation" sequence="10" name="Attributions"
+        action="hr_holidays.open_allocation_holidays" />
+        <menuitem id="menu_new_holidays_allocation_to_approve_menu" parent="menu_new_main_holidays_allocation" sequence="20" name="Attributions à valider"
+        action="hr_holidays.request_approve_allocation" />
+    </data>
+</openerp>

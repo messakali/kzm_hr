@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <!-- Main Menu -->
+        <menuitem id="menu_hr_scale" parent="hr.menu_human_resources_configuration" sequence="18" name="Barèmes" />
+        <!-- Ancienneté -->
+        <record id="view_hr_scale_seniority_tree" model="ir.ui.view">
+            <field name="name">hr.scale.seniority.tree</field>
+            <field name="model">hr.scale.seniority</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Ancienneté" editable="bottom">
+                    <field name="age_from" />
+                    <field name="age_to" />
+                    <field name="rate" />
+                    <field name="deduction" invisible="1" />
+                    <field name="leave" />
+                    <field name="leave_year" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="act_open_hr_scale_seniority_view">
+            <field name="name">Ancienneté</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.scale.seniority</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem id="menu_hr_scale_seniority" parent="menu_hr_scale" sequence="10" action="act_open_hr_scale_seniority_view" />
+        <!-- IR -->
+        <record id="view_hr_scale_ir_tree" model="ir.ui.view">
+            <field name="name">hr.scale.ir.tree</field>
+            <field name="model">hr.scale.ir</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="IR" editable="bottom">
+                    <field name="amount_from" />
+                    <field name="amount_to" />
+                    <field name="rate" />
+                    <field name="deduction" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="act_open_hr_scale_ir_view">
+            <field name="name">IR</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.scale.ir</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem id="menu_hr_scale_ir" parent="menu_hr_scale" sequence="20" action="act_open_hr_scale_ir_view" />
+        <!-- Solidarity -->
+        <record id="view_hr_scale_solidarity_tree" model="ir.ui.view">
+            <field name="name">hr.scale.solidarity.tree</field>
+            <field name="model">hr.scale.solidarity</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Contribution de solidarité" editable="bottom">
+                    <field name="amount_from" />
+                    <field name="amount_to" />
+                    <field name="rate" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="act_open_hr_scale_solidarity_view">
+            <field name="name">Contribution de solidarité</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.scale.solidarity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem id="menu_hr_scale_solidarity" parent="menu_hr_scale" sequence="30" action="act_open_hr_scale_solidarity_view" />
+        <!-- Licenciement -->
+        <record id="view_hr_scale_licenciement_tree" model="ir.ui.view">
+            <field name="name">hr.scale.licenciement.tree</field>
+            <field name="model">hr.scale.licenciement</field>
+            <field name="arch" type="xml">
+                <tree string="Licenciement" editable="bottom">
+                    <field name="age_from" />
+                    <field name="age_to" />
+                    <field name="nbr_hour" />
+                    <field name="deduction" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="act_open_hr_scale_licenciement_view">
+            <field name="name">Licenciement</field>
+            <field name="res_model">hr.scale.licenciement</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem id="menu_hr_scale_licenciement" parent="menu_hr_scale" sequence="30" action="act_open_hr_scale_licenciement_view" groups="kzm_base.group_unused" />
+        <!-- Kilometrage -->
+        <record id="view_hr_scale_km_tree" model="ir.ui.view">
+            <field name="name">hr.scale.km.tree</field>
+            <field name="model">hr.scale.km</field>
+            <field name="arch" type="xml">
+                <tree string="Puissance fiscale" editable="bottom">
+                    <field name="cv_from" />
+                    <field name="cv_to" />
+                    <field name="value" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="act_open_hr_scale_km_view">
+            <field name="name">Puissance fiscale</field>
+            <field name="res_model">hr.scale.km</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem id="menu_hr_scale_km" parent="menu_hr_scale" sequence="30" action="act_open_hr_scale_km_view" />
+    </data>
+</openerp>

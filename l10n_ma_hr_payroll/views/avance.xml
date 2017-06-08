@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="view_hr_avance_tree" model="ir.ui.view">
+            <field name="name">hr.avance.tree</field>
+            <field name="model">hr.avance</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Avances / Prêts">
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="contribution_id"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_avance_form" model="ir.ui.view">
+            <field name="name">hr.avance.form</field>
+            <field name="model">hr.avance</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Avances / Prêts">
+                    <group col="4" colspan="4">
+                        <group colspan="2">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field invisible="1" name="rate_type"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group colspan="2" groups="hr.group_hr_user">
+                            <field name="contribution_id"/>
+                            <field name="show_on_payslip"/>
+                            <field name="show_on_ledger"/>
+                            <field name="export_ok"/>
+                            <field name="csv_erase"/>
+                            <field name="active"/>
+                        </group>
+                        <group colspan="2" groups="hr.group_hr_user" invisible="1" string="Exonération">
+                            <field name="plafond_salariale_type"/>
+                            <field name="plafond_salariale"/>
+                        </group>
+                        <group colspan="2" groups="hr.group_hr_user" invisible="1" string="Taxable">
+                            <field name="rate_patronale"/>
+                            <field name="plafond_patronale_type"/>
+                            <field name="plafond_patronale"/>
+                        </group>
+                        <group colspan="2" groups="hr.group_hr_user" string="Information">
+                            <field invisible="1" name="rate_salariale" string="Rate"/>
+                            <field name="interest_rate"/>
+                            <field name="is_retained"/>
+                        </group>
+                        <group colspan="2" groups="hr.group_hr_user" string="Workflow">
+                            <field name="instant_move"/>
+                            <field name="can_reset"/>
+                            <field name="can_request"/>
+                        </group>
+                        <group colspan="4" groups="hr.group_hr_user" string="Comptabilité">
+                            <field name="account_debit"/>
+                            <field name="account_credit"/>
+                            <field name="analytic_account_id"/>
+                            <field name="account_tax_id"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_avance_search" model="ir.ui.view">
+            <field name="name">hr.avance.search</field>
+            <field name="model">hr.avance</field>
+            <field name="type">search</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Avances / Prêts">
+                    <field name="name" select="True"/>
+                    <field name="code" select="True"/>
+                    <field name="contribution_id"/>
+                    <field name="active"/>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_hr_avance_view" model="ir.actions.act_window">
+            <field name="name">Avances / Prêts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.avance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_hr_avance_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{'active_test': False}</field>
+        </record>
+        <menuitem action="act_open_hr_avance_view" id="menu_hr_avance" parent="hr.menu_human_resources_configuration" sequence="23"/>
+    </data>
+</openerp>

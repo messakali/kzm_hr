@@ -1,0 +1,955 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* kzm_ma_base
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0-20150401\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-09-01 09:47+0000\n"
+"PO-Revision-Date: 2015-09-01 10:56-0000\n"
+"Last-Translator: Anonym <chermed@gmail.com>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.5.4\n"
+
+#. module: kzm_ma_base
+#: field:res.company,code_digits:0
+msgid "# digits"
+msgstr "Chiffres après la virgule"
+
+#. module: kzm_ma_base
+#: field:res.company,code_digits_min:0
+msgid "# digits min"
+msgstr "Chiffres minimum après la virgule"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/tax_code.py:119
+#, python-format
+msgid ""
+"#Format est result = XXX\n"
+"#Utiliser la variable self qui est la declaration\n"
+"#Utiliser la variable T.get()\n"
+"#NB: quand vous fetes get il faut specifier la valeur par defaut qui est "
+"0.0\n"
+"#Exemple : T.get('10',{}).get('ht',0.0)\n"
+"#self.get_account_value('6147300000','balance') #Utiliser aussi credit/debit"
+msgstr ""
+"#Format est result = XXX\n"
+"#Utiliser la variable self qui est la declaration\n"
+"#Utiliser la variable T.get()\n"
+"#NB: quand vous fetes get il faut specifier la valeur par defaut qui est "
+"0.0\n"
+"#Exemple : T.get('10',{}).get('ht',0.0)\n"
+"#self.get_account_value('6147300000','balance') #Utiliser aussi credit/debit"
+
+#. module: kzm_ma_base
+#: view:website:kzm_ma_base.kzm_footer
+msgid "&bull;"
+msgstr ""
+
+#. module: kzm_ma_base
+#: view:res.company:kzm_ma_base.view_res_company_kzm_base_inherit_form
+msgid "(Fix Alias)"
+msgstr "(Fix Alias)"
+
+#. module: kzm_ma_base
+#: view:res.company:kzm_ma_base.view_res_company_kzm_base_inherit_form
+msgid "(Fix Lang)"
+msgstr "(Fix la langue française)"
+
+#. module: kzm_ma_base
+#: view:res.company:kzm_ma_base.view_res_company_kzm_base_inherit_form
+msgid "(Fix reconciliation)"
+msgstr "(Fixer la réconciliation des comptes)"
+
+#. module: kzm_ma_base
+#: view:res.company:kzm_ma_base.view_res_company_kzm_base_inherit_form
+msgid "- Le min est"
+msgstr "- Le min est"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_account_move
+msgid "Account Entry"
+msgstr "Pièce comptable"
+
+#. module: kzm_ma_base
+#: field:kzm.partner.account.wizard,property_account_payable:0
+msgid "Account Payable"
+msgstr "Compte fournisseur"
+
+#. module: kzm_ma_base
+#: field:kzm.partner.account.wizard,property_account_receivable:0
+msgid "Account Receivable"
+msgstr "Compte client"
+
+#. module: kzm_ma_base
+#: field:kzm.partner.account.wizard,payable_name:0
+#: help:kzm.partner.account.wizard,payable_name:0
+#: field:kzm.partner.account.wizard,receivable_name:0
+#: help:kzm.partner.account.wizard,receivable_name:0
+msgid "Account name"
+msgstr "Nom du compte"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_account_period
+msgid "Account period"
+msgstr "Période"
+
+#. module: kzm_ma_base
+#: model:ir.actions.act_window,name:kzm_ma_base.act_open_kzm_partner_account_wizard_view
+#: view:kzm.partner.account.wizard:kzm_ma_base.view_kzm_partner_account_wizard_form
+msgid "Account wizard for partners"
+msgstr "Assistant des comptes des partenaires"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,active:0 field:account.tax.code.template,active:0
+msgid "Active"
+msgstr "Active"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_web:0
+msgid "Activer les fonctionnalités web"
+msgstr "Activer les fonctionnalités web"
+
+#. module: kzm_ma_base
+#: field:res.company,activity:0 help:res.company,activity:0
+msgid "Activity"
+msgstr "Activité"
+
+#. module: kzm_ma_base
+#: selection:account.tax.code,type_tax_use:0
+#: selection:account.tax.code.template,type_tax_use:0
+msgid "All"
+msgstr "Tous"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,type_tax_use:0
+#: field:account.tax.code.template,type_tax_use:0
+msgid "Application de la taxe"
+msgstr "Application de la taxe"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Apply"
+msgstr "Appliquer"
+
+#. module: kzm_ma_base
+#: selection:account.tax.code,compute_type:0
+#: selection:account.tax.code.template,compute_type:0
+msgid "Aucune"
+msgstr "Aucune"
+
+#. module: kzm_ma_base
+#: selection:account.tax.code,type:0
+#: selection:account.tax.code.template,type:0
+msgid "Autre"
+msgstr "Autre"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_res_partner_bank
+msgid "Bank Accounts"
+msgstr "Comptes bancaires"
+
+#. module: kzm_ma_base
+#: field:res.company,cimr:0 help:res.company,cimr:0
+msgid "CIMR"
+msgstr "CIMR"
+
+#. module: kzm_ma_base
+#: field:res.company,cnss:0 help:res.company,cnss:0
+msgid "CNSS"
+msgstr "CNSS"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+#: view:kzm.partner.account.wizard:kzm_ma_base.view_kzm_partner_account_wizard_form
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,code_digit:0 field:l10n.ma.commune,code:0
+#: field:res.company.forme.juridique,code:0
+msgid "Code"
+msgstr "Code"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,compute_start:0
+#: field:account.tax.code.template,compute_start:0
+msgid "Code de debut"
+msgstr "Code de début"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,compute_stop:0
+#: field:account.tax.code.template,compute_stop:0
+msgid "Code de fin"
+msgstr "Code de fin"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,compute_python:0
+#: selection:account.tax.code,compute_type:0
+#: field:account.tax.code.template,compute_python:0
+#: selection:account.tax.code.template,compute_type:0
+msgid "Code python"
+msgstr "Code python"
+
+#. module: kzm_ma_base
+#: model:ir.actions.act_window,name:kzm_ma_base.act_open_l10n_ma_commune_view
+#: model:ir.model,name:kzm_ma_base.model_l10n_ma_commune
+#: view:l10n.ma.commune:kzm_ma_base.view_l10n_ma_commune_form
+#: view:l10n.ma.commune:kzm_ma_base.view_l10n_ma_commune_search
+#: view:l10n.ma.commune:kzm_ma_base.view_l10n_ma_commune_tree
+#: field:res.company,commune_id:0
+msgid "Commune"
+msgstr "Commune"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Comptabilité"
+msgstr "Comptabilité"
+
+#. module: kzm_ma_base
+#: view:kzm.partner.account.wizard:kzm_ma_base.view_kzm_partner_account_wizard_form
+msgid "Compte client"
+msgstr "Compte client"
+
+#. module: kzm_ma_base
+#: view:kzm.partner.account.wizard:kzm_ma_base.view_kzm_partner_account_wizard_form
+msgid "Compte fournisseur"
+msgstr "Compte fournisseur"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,compute_sequence:0
+#: field:account.tax.code.template,compute_sequence:0
+msgid "Compute Sequence"
+msgstr "Calcul de la séquence"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_kzm_ma_config_settings
+msgid "Configuration de la localisation"
+msgstr "Configuration de la localisation"
+
+#. module: kzm_ma_base
+#: model:ir.actions.act_window,name:kzm_ma_base.action_kzm_ma_config
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Configure Localization"
+msgstr "Configurer la Localisation"
+
+#. module: kzm_ma_base
+#: view:kzm.partner.account.wizard:kzm_ma_base.view_kzm_partner_account_wizard_form
+msgid "Confirmer"
+msgstr "Confirmer"
+
+#. module: kzm_ma_base
+#: field:l10n.ma.commune,create_uid:0 field:l10n.ma.fp,create_uid:0
+#: field:kzm.ma.config.settings,create_uid:0
+#: field:kzm.partner.account.wizard,create_uid:0
+#: field:publisher_warranty.contract,create_uid:0
+#: field:res.company.forme.juridique,create_uid:0
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: kzm_ma_base
+#: field:l10n.ma.commune,create_date:0 field:l10n.ma.fp,create_date:0
+#: field:kzm.ma.config.settings,create_date:0
+#: field:kzm.partner.account.wizard,create_date:0
+#: field:publisher_warranty.contract,create_date:0
+#: field:res.company.forme.juridique,create_date:0
+msgid "Created on"
+msgstr "Créé sur"
+
+#. module: kzm_ma_base
+#: field:kzm.partner.account.wizard,payable_custom:0
+#: field:kzm.partner.account.wizard,receivable_custom:0
+msgid "Custom account"
+msgstr "Compte personnalisé"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_l10n_ma_hr_payroll_demo:0
+msgid "Data of demonstration"
+msgstr "Données de la démonstration"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_system:0
+msgid "Database monitor"
+msgstr "Surveillance de la base de données"
+
+#. module: kzm_ma_base
+#: selection:res.company,based_on:0
+msgid "Debit"
+msgstr "Débit"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_tax:0
+msgid "Declaration TVA"
+msgstr "Déclaration TVA"
+
+#. module: kzm_ma_base
+#: field:res.company,cnss_day_limit:0
+msgid "Dernier jour de la regularisation"
+msgstr "Dernier jour de la régularisation"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Divers"
+msgstr "Divers"
+
+#. module: kzm_ma_base
+#: view:website:kzm_ma_base.kzm_footer
+msgid "Email:"
+msgstr "Email:"
+
+#. module: kzm_ma_base
+#: selection:res.company,based_on:0
+msgid "Encaissement"
+msgstr "Encaissement"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Entrepôt"
+msgstr "Entrepôt"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/partner.py:46
+#: code:addons/kzm_ma_base/models/partner.py:60
+#: code:addons/kzm_ma_base/models/partner.py:80
+#: code:addons/kzm_ma_base/models/partner.py:206
+#, python-format
+msgid "Error"
+msgstr "Erreur"
+
+#. module: kzm_ma_base
+#: sql_constraint:kzm.partner.account.wizard:0
+msgid "Error ! the sequence should be great than 0."
+msgstr "Erreur ! la séquence doit être supérieur à 0."
+
+#. module: kzm_ma_base
+#: view:res.company:kzm_ma_base.view_res_company_kzm_base_inherit_form
+msgid "Execute"
+msgstr "Exécuter"
+
+#. module: kzm_ma_base
+#: model:res.groups,name:kzm_ma_base.group_expert_comptable_reader
+msgid "Expert Comptable / Consultation"
+msgstr "Expert Comptable / Consultation"
+
+#. module: kzm_ma_base
+#: model:res.groups,name:kzm_ma_base.group_expert_comptable_writer
+msgid "Expert Comptable / Intervention"
+msgstr "Expert Comptable / Intervention"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,extra_ok:0
+#: field:account.tax.code.template,extra_ok:0
+msgid "Extra"
+msgstr "Extra"
+
+#. module: kzm_ma_base
+#: view:website:kzm_ma_base.kzm_footer
+msgid "Fax:"
+msgstr "Fax :"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_account_fiscalyear
+msgid "Fiscal Year"
+msgstr "Exercice"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Fonctionnalités"
+msgstr "Fonctionnalités"
+
+#. module: kzm_ma_base
+#: field:res.company,forme_juridique_id:0
+msgid "Forme juridique"
+msgstr "Forme juridique"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_res_company_forme_juridique
+msgid "Formes juridiques"
+msgstr "Formes juridiques"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_l10n_ma_fp
+msgid "Frais professionels"
+msgstr "Frais professionnels"
+
+#. module: kzm_ma_base
+#: model:ir.actions.act_window,name:kzm_ma_base.act_open_l10n_ma_fp_view
+#: view:l10n.ma.fp:kzm_ma_base.view_l10n_ma_fp_form
+#: view:l10n.ma.fp:kzm_ma_base.view_l10n_ma_fp_search
+#: view:l10n.ma.fp:kzm_ma_base.view_l10n_ma_fp_tree
+msgid "Frais professionnels"
+msgstr "Frais professionnels"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_asset:0
+msgid "Gestion des immobilisations"
+msgstr "Gestion des immobilisations"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_l10n_ma_hr_payroll_gamification:0
+msgid "Gestion des objectifs"
+msgstr "Gestion des objectifs"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_l10n_ma_hr_payroll_pret:0
+#: field:kzm.ma.config.settings,module_kzm_ma_pret:0
+msgid "Gestion des prets"
+msgstr "Gestion des prêts"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_provision:0
+msgid "Gestion des provisions"
+msgstr "Gestion des provisions"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_l10n_ma_hr_payroll_teledeclaration:0
+msgid "Gestion des teledeclarations CNSS, Salaires et l'IR"
+msgstr "Gestion des télédéclarations CNSS, Salaires et l'IR"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_btp:0
+msgid "Gestion des travaux divers"
+msgstr "Gestion des travaux divers"
+
+#. module: kzm_ma_base
+#: selection:account.tax.code,type:0
+#: selection:account.tax.code.template,type:0
+msgid "HT"
+msgstr "HT"
+
+#. module: kzm_ma_base
+#: field:l10n.ma.commune,id:0 field:l10n.ma.fp,id:0
+#: field:kzm.ma.config.settings,id:0 field:kzm.partner.account.wizard,id:0
+#: field:res.company.forme.juridique,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: kzm_ma_base
+#: view:res.company:kzm_ma_base.view_res_company_kzm_base_inherit_form
+msgid "Identifiant Fiscal"
+msgstr "Identifiant Fiscal"
+
+#. module: kzm_ma_base
+#: field:res.company,identifiant_tp:0
+msgid "Identifiant TP"
+msgstr "Identifiant TP"
+
+#. module: kzm_ma_base
+#: view:res.company:kzm_ma_base.view_res_company_kzm_base_inherit_form
+#: field:res.company,initial:0
+msgid "Initial"
+msgstr "Initial"
+
+#. module: kzm_ma_base
+#: field:l10n.ma.commune,write_uid:0 field:l10n.ma.fp,write_uid:0
+#: field:kzm.ma.config.settings,write_uid:0
+#: field:kzm.partner.account.wizard,write_uid:0
+#: field:publisher_warranty.contract,write_uid:0
+#: field:res.company.forme.juridique,write_uid:0
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: kzm_ma_base
+#: field:l10n.ma.commune,write_date:0 field:l10n.ma.fp,write_date:0
+#: field:kzm.ma.config.settings,write_date:0
+#: field:kzm.partner.account.wizard,write_date:0
+#: field:publisher_warranty.contract,write_date:0
+#: field:res.company.forme.juridique,write_date:0
+msgid "Last Updated on"
+msgstr "Dernière mise à jour sur"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/company.py:171
+#, python-format
+msgid "Le nombre de chiffre doitre superieur a %s"
+msgstr "Le nombre de chiffre doit être supérieur à %s"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/company.py:168
+#, python-format
+msgid "Le taux doit etre compris entre 0 et 100"
+msgstr "Le taux doit être compris entre 0 et 100"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_lf:0
+msgid "Liasse fiscale"
+msgstr "Liasse fiscale"
+
+#. module: kzm_ma_base
+#: model:ir.ui.menu,name:kzm_ma_base.menu_kzm_ma_config
+msgid "Localisation"
+msgstr "Localisation"
+
+#. module: kzm_ma_base
+#: model:ir.module.category,name:kzm_ma_base.module_kzm_ma
+msgid "Localisation marocaine"
+msgstr "Localisation marocaine"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_mt:0
+msgid "Manage databases"
+msgstr "Gérer les bases de données"
+
+#. module: kzm_ma_base
+#: selection:res.company,declaration_type:0
+msgid "Mensuelle"
+msgstr "Mensuelle"
+
+#. module: kzm_ma_base
+#: field:account.period,mois:0
+msgid "Mois"
+msgstr "Mois"
+
+#. module: kzm_ma_base
+#: selection:account.tax.code,compute_type:0
+#: selection:account.tax.code.template,compute_type:0
+msgid "Montant Fix"
+msgstr "Montant Fix"
+
+#. module: kzm_ma_base
+#: field:res.company,af1_amount:0
+msgid "Montant des allocations familiales (1ere tranche)"
+msgstr "Montant des allocations familiales (1ère tranche)"
+
+#. module: kzm_ma_base
+#: field:res.company,af2_amount:0
+msgid "Montant des allocations familiales (2eme tranche)"
+msgstr "Montant des allocations familiales (2ème tranche)"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,compute_fix:0
+#: field:account.tax.code.template,compute_fix:0
+msgid "Montant fixe"
+msgstr "Montant fixe"
+
+#. module: kzm_ma_base
+#: field:res.company,cf_amount:0
+msgid "Montant pour une charge familiale"
+msgstr "Montant pour une charge familiale"
+
+#. module: kzm_ma_base
+#: field:l10n.ma.commune,name:0 field:l10n.ma.fp,name:0
+#: field:kzm.partner.account.wizard,name:0
+#: help:kzm.partner.account.wizard,name:0
+#: field:res.company.forme.juridique,name:0
+msgid "Name"
+msgstr "Nom"
+
+#. module: kzm_ma_base
+#: help:kzm.partner.account.wizard,length:0
+msgid "Nb of digits"
+msgstr "Nombre de chiffres"
+
+#. module: kzm_ma_base
+#: selection:account.move,engine_type:0
+msgid "None"
+msgstr "Aucun"
+
+#. module: kzm_ma_base
+#: view:website:kzm_ma_base.kzm_footer view:website:kzm_ma_base.kzm_page
+msgid "Page:"
+msgstr "Page:"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_l10n_ma_hr_payroll:0
+msgid "Paie"
+msgstr "Paie"
+
+#. module: kzm_ma_base
+#: field:kzm.partner.account.wizard,property_account_payable_parent:0
+msgid "Parent Account Payable"
+msgstr "Compte Fournisseur parent"
+
+#. module: kzm_ma_base
+#: field:kzm.partner.account.wizard,property_account_receivable_parent:0
+msgid "Parent Account Receivable"
+msgstr "Compte client parent"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_res_partner
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_kzm_partner_account_wizard
+msgid "Partner Account Wizard"
+msgstr "Assistant des comptes des partenaires"
+
+#. module: kzm_ma_base
+#: field:res.company,patente:0 help:res.company,patente:0
+msgid "Patente"
+msgstr "Patente"
+
+#. module: kzm_ma_base
+#: selection:account.move,engine_type:0
+msgid "Payment Purchase"
+msgstr "Règlement des achats"
+
+#. module: kzm_ma_base
+#: selection:account.move,engine_type:0
+msgid "Payment Sale"
+msgstr "Règlement des ventes"
+
+#. module: kzm_ma_base
+#: view:website:kzm_ma_base.kzm_footer
+msgid "Phone:"
+msgstr "Téléphone :"
+
+#. module: kzm_ma_base
+#: field:res.company,nbr_af1_plafond:0
+msgid "Plafond de nombre des allocations familiales (1ere tranche)"
+msgstr "Plafond de nombre des allocations familiales (1ère tranche)"
+
+#. module: kzm_ma_base
+#: field:res.company,nbr_af2_plafond:0
+msgid "Plafond de nombre des allocations familiales (2eme tranche)"
+msgstr "Plafond de nombre des allocations familiales (2ème tranche)"
+
+#. module: kzm_ma_base
+#: field:res.company,af_plafond:0 field:res.company,cf_plafond:0
+msgid "Plafond des charges familiales"
+msgstr "Plafond des charges familiales"
+
+#. module: kzm_ma_base
+#: field:res.company,fp_plafond:0
+msgid "Plafond des frais professionels"
+msgstr "Plafond des frais professionels"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Point de vente"
+msgstr "Point de vente"
+
+#. module: kzm_ma_base
+#: view:res.company:kzm_ma_base.view_res_company_kzm_base_inherit_form
+msgid "Process code digits"
+msgstr "Traiter le nombre de chiffres"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,prorata:0 help:account.tax.code,prorata:0
+#: field:account.tax.code,prorata_str:0
+#: field:account.tax.code.template,prorata:0
+#: help:account.tax.code.template,prorata:0
+msgid "Prorata"
+msgstr "Prorata"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/tax_code.py:47
+#: code:addons/kzm_ma_base/models/tax_code.py:133
+#, python-format
+msgid "Prorata doit etre entre 0 et 1"
+msgstr "Prorata doit être entre 0 et 1"
+
+#. module: kzm_ma_base
+#: selection:account.move,engine_type:0
+#: selection:account.tax.code,type_tax_use:0
+#: selection:account.tax.code.template,type_tax_use:0
+msgid "Purchase"
+msgstr "Achats"
+
+#. module: kzm_ma_base
+#: field:l10n.ma.fp,rate:0
+msgid "Rate"
+msgstr "Rate"
+
+#. module: kzm_ma_base
+#: field:res.company,based_on:0
+msgid "Regime"
+msgstr "Régime"
+
+#. module: kzm_ma_base
+#: view:res.company:kzm_ma_base.view_res_company_kzm_base_inherit_form
+msgid "Registre de commerce"
+msgstr "Registre de commerce"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_regularisation:0
+msgid "Regularisation des comptes de charges et produits"
+msgstr "Régularisation des comptes de charges et produits"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Ressources humaines"
+msgstr "Ressources humaines"
+
+#. module: kzm_ma_base
+#: selection:account.move,engine_type:0
+#: selection:account.tax.code,type_tax_use:0
+#: selection:account.tax.code.template,type_tax_use:0
+msgid "Sale"
+msgstr "Vente"
+
+#. module: kzm_ma_base
+#: field:kzm.partner.account.wizard,payable_sequence:0
+#: field:kzm.partner.account.wizard,receivable_sequence:0
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: kzm_ma_base
+#: help:kzm.partner.account.wizard,payable_sequence:0
+#: help:kzm.partner.account.wizard,receivable_sequence:0
+msgid "Sequence of account"
+msgstr "Séquence du compte"
+
+#. module: kzm_ma_base
+#: selection:account.tax.code,compute_type:0
+#: selection:account.tax.code.template,compute_type:0
+msgid "Somme"
+msgstr "Somme"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_stock_security:0
+msgid "Stock security"
+msgstr "Sécurité des opérations de l'entrepôt"
+
+#. module: kzm_ma_base
+#: selection:account.tax.code,type:0
+#: selection:account.tax.code.template,type:0
+msgid "TVA"
+msgstr "TVA"
+
+#. module: kzm_ma_base
+#: field:account.tax,taux_str:0 field:account.tax.code,taux:0
+#: field:account.tax.code,taux_str:0 field:account.tax.code.template,taux:0
+msgid "Taux"
+msgstr "Taux"
+
+#. module: kzm_ma_base
+#: help:account.move,taux_declared:0
+msgid "Taux declare"
+msgstr "Taux déclaré"
+
+#. module: kzm_ma_base
+#: field:account.move,taux_declared:0 field:account.move,taux_declared_str:0
+msgid "Taux declared"
+msgstr "Taux déclaré"
+
+#. module: kzm_ma_base
+#: field:res.company,fp_id:0 field:res.company,fp_taux:0
+#: field:res.company,fp_taux_str:0
+msgid "Taux des frais professionels"
+msgstr "Taux des frais professionels"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/tax_code.py:49
+#: code:addons/kzm_ma_base/models/tax_code.py:135
+#, python-format
+msgid "Taux doit etre entre 0 et 1"
+msgstr "Taux doit être entre 0 et 1"
+
+#. module: kzm_ma_base
+#: field:account.move,taux_to_declare:0 help:account.move,taux_to_declare:0
+msgid "Taux to declare"
+msgstr "Taux à déclarer"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_account_tax
+msgid "Tax"
+msgstr "Taxes"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_account_tax_code
+msgid "Tax Code"
+msgstr "Code de taxe"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_account_tax_code_template
+msgid "Tax Code Template"
+msgstr "Modèle de code de taxe"
+
+#. module: kzm_ma_base
+#: field:account.fiscalyear,tax_report:0
+msgid "Tax Report"
+msgstr "Rapport de la déclaration TVA"
+
+#. module: kzm_ma_base
+#: help:account.fiscalyear,tax_report:0
+msgid "Tax report"
+msgstr "Rapport de la déclaration TVA"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Technical"
+msgstr "Technique"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_account_chart_template
+msgid "Templates for Account Chart"
+msgstr "Modèles de plan comptable"
+
+#. module: kzm_ma_base
+#: model:ir.model,name:kzm_ma_base.model_account_account_template
+msgid "Templates for Accounts"
+msgstr "Modèles de comptes"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/partner.py:60
+#: code:addons/kzm_ma_base/models/partner.py:80
+#, python-format
+msgid "The code [%s] is already exists"
+msgstr "Le code [%s] existe déjà"
+
+#. module: kzm_ma_base
+#: sql_constraint:res.company:0
+msgid "The initial of the company must be unique !"
+msgstr "Initial de la société doit être unique !"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/bank.py:16
+#, python-format
+msgid "The length sould be 24 number not %s"
+msgstr "La longueur doit être 24 nombre (pas %s)"
+
+#. module: kzm_ma_base
+#: help:kzm.partner.account.wizard,property_account_payable_parent:0
+#: help:kzm.partner.account.wizard,property_account_receivable_parent:0
+msgid "This account will be used as parent of the custom account"
+msgstr "Ce compte doit être parent pour le compte personnalisé"
+
+#. module: kzm_ma_base
+#: help:kzm.partner.account.wizard,property_account_payable:0
+msgid ""
+"This account will be used instead of the default one as the payable account "
+"for the current partner"
+msgstr "Ce compte sera utilisé comme compte fournisseur de ce partenaire"
+
+#. module: kzm_ma_base
+#: help:kzm.partner.account.wizard,property_account_receivable:0
+msgid ""
+"This account will be used instead of the default one as the receivable "
+"account for the current partner"
+msgstr "Ce compte sera utilisé comme compte client de ce partenaire"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Travaux Divers"
+msgstr "Travaux Divers"
+
+#. module: kzm_ma_base
+#: field:account.period,trimestre:0
+msgid "Trimestre"
+msgstr "Trimestre"
+
+#. module: kzm_ma_base
+#: selection:res.company,declaration_type:0
+msgid "Trimestrielle"
+msgstr "Trimestrielle"
+
+#. module: kzm_ma_base
+#: field:account.move,engine_type:0
+msgid "Type"
+msgstr "Type"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,type:0 field:account.tax.code.template,type:0
+msgid "Type TVA/HT"
+msgstr "Type TVA/HT"
+
+#. module: kzm_ma_base
+#: field:account.tax.code,compute_type:0
+#: field:account.tax.code.template,compute_type:0
+msgid "Type de calcul"
+msgstr "Type de calcul"
+
+#. module: kzm_ma_base
+#: field:res.company,declaration_type:0
+msgid "Type de la declaration"
+msgstr "Type de la déclaration"
+
+#. module: kzm_ma_base
+#: field:kzm.partner.account.wizard,property_payable_user_type:0
+#: field:kzm.partner.account.wizard,property_receivable_user_type:0
+msgid "Type of account"
+msgstr "Type de compte"
+
+#. module: kzm_ma_base
+#: model:res.groups,name:kzm_ma_base.group_unused
+msgid "Unused"
+msgstr "Non utilisé"
+
+#. module: kzm_ma_base
+#: help:kzm.partner.account.wizard,payable_custom:0
+#: help:kzm.partner.account.wizard,receivable_custom:0
+msgid "Use a custom account"
+msgstr "Utiliser un compte personnalisé"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+msgid "Web"
+msgstr "Web"
+
+#. module: kzm_ma_base
+#: view:website:kzm_ma_base.kzm_footer
+msgid "Website:"
+msgstr "Site web:"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/partner.py:206
+#, python-format
+msgid "You should select some partner"
+msgstr "Vous devez sélectionner quelques partenaires"
+
+#. module: kzm_ma_base
+#: code:addons/kzm_ma_base/models/partner.py:46
+#, python-format
+msgid "You should select some partners"
+msgstr "You should select some partners"
+
+#. module: kzm_ma_base
+#: view:account.move:kzm_ma_base.view_account_move_kzm_inherit_form
+msgid "account.group_account_invoice,kzm_ma_base.group_expert_comptable_writer"
+msgstr "account.group_account_invoice,kzm_ma_base.group_expert_comptable_writer"
+
+#. module: kzm_ma_base
+#: field:kzm.partner.account.wizard,length:0
+msgid "nb of digits"
+msgstr "Nombre de chiffres"
+
+#. module: kzm_ma_base
+#: view:kzm.ma.config.settings:kzm_ma_base.view_kzm_ma_config_settings
+#: view:kzm.partner.account.wizard:kzm_ma_base.view_kzm_partner_account_wizard_form
+msgid "or"
+msgstr "ou"
+
+#. module: kzm_ma_base
+#: field:kzm.ma.config.settings,module_kzm_ma_pos:0
+msgid "point de vente adapte pour restaurant et paiement a la livraison"
+msgstr "point de vente adapté pour le restaurant et paiement à la livraison"
+
+#~ msgid "Groupement d'interet economique"
+#~ msgstr "Groupement d'intérêt économique"
+
+#~ msgid "SARL"
+#~ msgstr "SARL"
+
+#~ msgid "SARL AU"
+#~ msgstr "SARL AU"
+
+#~ msgid "Societe Anonyme"
+#~ msgstr "Société Anonyme"
+
+#~ msgid "Societe Anonyme Simplifiee"
+#~ msgstr "Société Anonyme Simplifiée"
+
+#~ msgid "Societe en Commandite Simple"
+#~ msgstr "Société en Commandite Simple"
+
+#~ msgid "Societe en Commandite par Actions"
+#~ msgstr "Société en Commandite par Actions"
+
+#~ msgid "Societe en Participation"
+#~ msgstr "Société en Participation"
+
+#~ msgid "Societe en nom collectif"
+#~ msgstr "Société en nom collectif"

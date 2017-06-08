@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        <record id="view_kzm_context_run_form" model="ir.ui.view">
+            <field name="name">hr.payslip.run.form.inherit</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_account.hr_payslip_run_form_inherit"/>
+            <field name="arch" type="xml">
+                <!-- <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="after">
+	                  <field name="state2" widget="statusbar" />
+                </xpath> -->
+                <xpath expr="//sheet/h1[1]" position="after">
+                    <div class="oe_right oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-list" name="%(act_open_hr_payslip_by_run_context)d" type="action">
+                            <field name="slip_count" string="Fiches de paie" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-list" name="open_audit_action" type="object">
+                            <field name="audit_count" string="Audits" widget="statinfo"/>
+                        </button>
+                    </div>
+                </xpath>
+                <xpath expr="//button[2]" position="attributes">
+                    <attribute name="context">{'date_start' : date_start, 'date_end' : date_end}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='credit_note']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='close_payslip_run']" position="attributes">
+                    <attribute name="states">confirm</attribute>
+                    <attribute name="string">Clôturer</attribute>
+                </xpath>
+                <xpath expr="//button[2]" position="attributes">
+                    <attribute name="string">Séléctionner les employés</attribute>
+                    <attribute name="states">draft</attribute>
+                </xpath>
+                <xpath expr="//button[2]" position="after">
+                    <button name="marquer_lot_charge" string="Marquer le lot chargé" type="object" states="draft"/>
+                    <button class="oe_highlight" name="confirm_slips" states="charged" string="Confirmer les bulletins" type="object"/>
+                    <button name="cancel_slips" states="charged,confirm" string="Annuler les bulletins" type="object"/>
+                    <button name="reset_slips" states="cancel" string="Remettre les bulletins en brouillon" type="object"/>
+                    <button name="re_compute_sheets" states="charged" string="Recalculer les bulletins" type="object" confirm="Cette opération va reclaculer l'ensemble des bulletins, êtes-vous sur de vouloir continuer ?"/>
+                    <button name="re_reset_params" states="charged" string="Réinitialiser les paramètres" type="object" confirm="Cette opération va réinitialiser les paramètres d'entrée de l'ensemble des bulletins, vous devez à la suite recalculer les bulletins, êtes-vous sur de vouloir continuer ?"/>
+<!--<button name="re_compute_sheets" string="Re-compute sheets" type="object"/>-->
+                    <button name="print_slips" string="Imprimer les bulletins" type="object" states="confirm,charged,done"/>
+                    <button  name="create_account_moves" string="Comptabiliser les bulletins" states="done" type="object" groups="l10n_ma_hr_payroll.group_hr_menu_accounting"/>
+                </xpath>
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='credit_note']" position="after">
+                    <newline/>
+                    <field colspan="4" name="summary" readonly="1"/>
+                </xpath>
+                <xpath expr="//label[@for='date_start']" position="before">
+                    <label for="fiscalyear_id" groups="l10n_ma_hr_payroll.group_paie_interface_helper" string="Période"/>
+                    <div>
+                        <field class="oe_inline" groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="fiscalyear_id" widget="selection"/>
+                        -
+                        <field class="oe_inline" domain="[('type_id.name','=',time.strftime('%Y')),('active','=',True)]"
+                            groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="period_id" widget="selection"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

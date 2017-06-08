@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data noupdate="1">
+        <!-- Base salariale -->
+        <record id="hr_rule_base_salariale" model="hr.salary.rule">
+            <field name="name">Base salariale</field>
+            <field name="code">BASE_SALARIALE</field>
+            <field name="sequence">100</field>
+            <field name="category_id" ref="category_base_salariale"/>
+            <field eval="rule_salary" name="parent_rule_id"/>
+            <field name="show_on_payslip">never</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = (categories.GAIN + categories.AUTRE_GAIN - categories.PERTE - categories.PRIME_ANCIENNETE - categories.HS)</field>
+        </record>
+        <!-- Base salariale -->
+        <!-- <record id="hr_rule_base_salariale_min" model="hr.salary.rule">
+            <field name="name">Base salariale minimale</field>
+            <field name="code">BASE_SALARIALE_MINIMALE</field>
+            <field name="sequence">100</field>
+            <field name="category_id" ref="category_base_salariale_minimale"/>
+            <field eval="rule_salary" name="parent_rule_id"/>
+            <field name="show_on_payslip">never</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = (categories.GAIN - categories.PERTE - categories.PRIME_ANCIENNETE - categories.HS)</field>
+        </record> -->
+        <!-- Ancienneté -->
+        <record id="hr_rule_prime_anciennete" model="hr.salary.rule">
+            <field name="name">Prime d'ancienneté</field>
+            <field name="code">PRIME_ANCIENNETE</field>
+            <field name="sequence">99</field>
+            <field name="category_id" ref="category_prime_anncienete"/>
+            <field eval="False" name="parent_rule_id"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">categories.GAIN + categories.AUTRE_GAIN - categories.PERTE</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">inputs.ANCIENNETE_TAUX.amount</field>
+        </record>
+        <!-- Licenciement -->
+        <record id="hr_rule_prime_licenciement" model="hr.salary.rule">
+            <field name="name">Prime de licenciement</field>
+            <field name="code">PRIME_LICENCIEMENT</field>
+            <field name="sequence">500</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field eval="rule_salary" name="parent_rule_id"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.PRIME_LICENCIEMENT.amount</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+        <!-- Préavis -->
+        <record id="hr_rule_prime_preavis" model="hr.salary.rule">
+            <field name="name">Prime de préavis</field>
+            <field name="code">PRIME_PREAVIS</field>
+            <field name="sequence">500</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field eval="rule_salary" name="parent_rule_id"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.PRIME_PREAVIS.amount</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <template id="report_contract">
+            <t t-call="report.html_container">
+                    <t t-as="c" t-foreach="docs">
+                <t t-call="report.external_layout">
+                            <t t-set="root_company" t-value="c.company_id.main_company_id"/>
+                            <t t-set="current_company" t-value="c.company_id"/>
+                            <t t-set="check_result" t-value="check(c)"/>
+                            <t t-set="permanent" t-value="c.type_id.type.startswith('p')"/>
+                            <t t-set="occasional" t-value="c.type_id.type.startswith('o')"/>
+                            <t t-set="trainee" t-value="c.type_id.type.startswith('t')"/>
+                            <div class="page">
+                                <t t-if="permanent">
+                                    <h4>
+                                        <center>Contrat de Travail à Durée Indéterminée</center>
+                                    </h4>
+                                </t>
+                                <t t-if="occasional">
+                                    <h4>
+                                        <center>Contrat de Travail Temporaire</center>
+                                    </h4>
+                                </t>
+                                <t t-if="trainee">
+                                    <h4>
+                                        <center>Contrat de Travail à Durée Déterminée</center>
+                                    </h4>
+                                </t>
+                                <p>Entre les soussignés:</p>
+
+                                <p>
+                                    <strong><span t-field="root_company.name"/></strong>
+                                    <span t-field="root_company.forme_juridique_id.code"/>, immatriculée à la CNSS sous le numéro
+                                    <strong><span t-field="root_company.cnss"/></strong>, ayant son siège social à
+                                    <span t-esc="root_company.partner_id.contact_address.strip().replace('\n',',')"/>, représentée par
+                                    <strong><span t-field="root_company.manager_id.name"/></strong>, en sa qualité de
+                                    <strong><span t-field="root_company.manager_id.job_id.name"/></strong>.
+                                </p>
+                                <p>D’une part</p>
+                                <p>Et
+                                    <strong><span t-field="c.employee_id.name"/></strong>
+                                    portant la CIN numéro
+                                    <strong><span t-field="c.employee_id.cin"/></strong>
+                                    <t t-if="c.employee_id.cnss">
+                                        Immatriculé à la CNSS sous le numéro
+                                        <strong><span t-field="c.employee_id.cnss"/></strong>
+                                    </t>
+                                </p>
+                                <p>D’autre part</p>
+                                <p>Il a été convenu de ce qui suit :</p>
+
+                                <t t-if="permanent">
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : La société
+                                        <strong><span t-field="root_company.name"/></strong>
+                                        engage à compter du
+                                        <span t-field="c.date_start"/>
+                                        <span t-field="c.employee_id.full_name"/>
+                                        dans le cadre d'un contrat à durée indéterminée
+                                        <t t-if="c.task_id">afin d'aider la société à réaliser la tâche suivante :
+                                            <span t-field="c.task_id.name"/></t>, en qualité de
+                                        <span t-field="c.job_id.name"/>
+                                        , au sein de la société
+                                        <strong><span t-field="company.name"/></strong>
+                                        domiciliée à
+                                        <span t-esc="company.partner_id.inline_address"/>.</p>
+                                    <t t-if="c.trial_days">
+
+                                        <p>
+                                            <strong>Article
+                                                <span t-esc="int_to_roman(index())"/></strong>
+                                            : Durant la période probatoire de
+                                            <span t-esc="text(c.trial_days,'mois','jour',True)"/>, à compter du
+                                            <span t-field="c.date_start"/>,
+                                            <t t-if="c.preavis_nbr_renew">et qui ne pourra être renouvelée que
+                                                <span t-esc="text(c.preavis_nbr_renew,'fois','',True)"/>,
+                                            </t>le présent contrat pourra être résilié par chacune des parties contractantes,
+                                            <t t-if="c.observation_preavis_duration">moyennant l’observation d’un préavis de
+                                                <span t-esc="text(c.observation_preavis_duration,'jour','',True)"/>.
+                                            </t>Au delà d’un mois et demi et après votre confirmation dans vos fonctions, le délai de préavis passera à PreavisDuration mois.</p>
+                                    </t>
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : En contre partie de son travail,
+                                        <span t-field="c.employee_id.full_name"/>
+                                        percevra un salaire ainsi constitué :</p>
+                                    <p>
+                                        <center>
+                                            <strong><span t-esc="formuleSalaire(c)"/></strong>
+                                        </center>
+                                    </p>
+                                    <br/>
+                                    <t t-if="c.nb_holidays_by_month">
+
+                                        <p>
+                                            <strong>Article
+                                                <span t-esc="int_to_roman(index())"/></strong>
+                                            :
+                                            <span t-field="c.employee_id.full_name"/>
+                                            bénéficiera d’un congé payé de
+                                            <span t-esc="text(c.nb_holidays_by_month,'jour','',True)"/>
+                                            par mois de travail.</p>
+                                    </t>
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        :
+                                        <span t-field="c.employee_id.full_name"/>
+                                        s’engage à respecter le secret professionnel et le règlement de la société
+                                        <span t-field="company.name"/>, qu’il déclare en avoir été informé.</p>
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : Les parties se réservent le droit de mettre fin au contrat moyennant un préavis de
+                                        <span t-esc="text(c.preavis_duration,'mois','jour',True,30)"/>
+                                        qu’elles s’engagent à respecter.</p>
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : Toutefois en cas de faute grave commise par
+                                        <span t-field="c.employee_id.full_name"/>
+                                        la société
+                                        <span t-field="root_company.name"/>
+                                        se réserve le droit de mettre fin au contrat sans préavis ni indemnités.</p>
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        :
+                                        <span t-field="c.employee_id.full_name"/>
+                                        bénéficiera de la couverture sociale des régimes obligatoires :</p>
+                                    <p>1) Les prestations servies par la Caisse Nationale de la Sécurité Sociale.</p>
+                                    <p>2) Les prestations servies dans le cadre de l’assurance des accidents de travail et maladies professionnelles.</p>
+                                    <p>3) Assurance AMO</p>
+                                    <br/>
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : Pendant la durée du présent contrat, je m’engage à respecter les clauses particulières en m’abstenant à effectuer tous travaux
+                                        de quelque nature que ce soit, pour le compte d’une autre société dont les activités se rapportent au domaine
+                                        <span t-field="company.activity"/>
+                                        et /ou à mon activité professionnelle, sauf accord préalable de la société
+                                        <span t-field="company.name"/>.</p>
+
+                                </t>
+
+                                <t t-if="occasional">
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : La société
+                                        <span t-field="root_company.name"/>
+                                        engage à compter du
+                                        <span t-field="c.date_start"/>
+                                        <span t-field="c.employee_id.full_name"/>
+                                        dans le cadre d'un contrat à durée déterminée
+                                        <t t-if="c.task_id">
+                                            afin d'aider la société à réaliser la tâche suivante :
+                                            <span t-field="c.task_id.name"/></t>, en qualité de
+                                        <span t-field="c.job_id.name"/>
+                                        , au sein de la société
+                                        <span t-field="company.name"/>
+                                        domiciliée à
+                                        <span t-field="company.partner_id.inline_address"/>.</p>
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : Le présent contrat qui prend effet le
+                                        <span t-field="c.date_start"/>
+                                        est conclu pour une durée minimale de
+                                        <span t-esc="text(c.minimal_duration,'mois','jours',True,30)"/>, si la saison se prolonge au delà de cette durée minimale, le
+                                            contrat se poursuivra jusqu’à l’achèvement de la saison qui constituera son terme.</p>
+
+                                    <p><span t-field="c.employee_id.full_name"/>
+                                        exécutera la tâche ci-dessus mentionnée sur le poste de travail suivant :
+                                        <span t-field="c.job_id.name"/>,
+                                        <t t-if="c.qualif_id">avec la qualification de
+                                            <span t-field="c.qualif_id.name"/>
+                                        </t>au sein de la société
+                                        <span t-field="company.name"/>
+                                        domiciliée à
+                                        <span t-field="company.partner_id.inline_address"/>.</p>
+                                    <t t-if="c.trial_days">
+
+                                        <p>
+                                            <strong>Article
+                                                <span t-esc="int_to_roman(index())"/></strong>
+                                            : Le présent contrat ne sera effectif qu’à l’expiration d’une période d’essai de
+                                            <span t-esc="text(c.trial_days,'jour','',True)"/>.</p>
+                                    </t>
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : En contre partie de son travail,
+                                        <span t-field="c.employee_id.full_name"/>
+                                        percevra un salaire ainsi constitué :
+                                    </p>
+                                    <p>
+                                        <center>
+                                            <strong><span t-esc="formuleSalaire(c)"/></strong>
+                                        </center>
+                                    </p>
+                                    <br/>
+                                    <t t-if="c.nb_holidays_by_month">
+
+                                        <p>
+                                            <strong>Article
+                                                <span t-esc="int_to_roman(index())"/></strong>
+                                            :
+                                            <span t-field="c.employee_id.full_name"/>
+                                            bénéficiera d’un congé payé de
+                                            <span t-esc="text(c.nb_holidays_by_month,'jour','',True)"/>
+                                            par mois de travail.</p>
+                                    </t>
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        :
+                                        <span t-field="c.employee_id.full_name"/>
+                                        s’engage à respecter les conditions de travail, le règlement intérieur de la société et les règles de sécurité . Faute de quoi il
+                                        sera passible de sanction pouvant aller jusqu’au licenciement. La faute grave telle que stipulée dans l’article 39 du code de
+                                        travail peut provoquer le licenciement du salarié. Des sanctions disciplinaires (article 37) sont également applicables pour faute
+                                        non grave.
+                                    </p>
+                                </t>
+
+                                <t t-if="trainee">
+
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : La société
+                                        <span t-field="root_company.name"/>
+                                        engage à compter du
+                                        <span t-field="c.date_start"/>
+                                        <span t-field="c.employee_id.full_name"/>
+                                        dans le cadre d'un contrat à durée déterminée
+                                        <t t-if="c.task_id">
+                                            afin d'aider la société à réaliser la tâche suivante :
+                                            <span t-field="c.task_id.name"/></t>, en qualité de
+                                        <span t-field="c.job_id.name"/>
+                                        , au sein de la société
+                                        <span t-field="company.name"/>
+                                        domiciliée à
+                                        <span t-field="company.partner_id.inline_address"/>.</p>
+                                    <t t-if="c.minimal_duration">
+
+                                        <p>
+                                            <strong>Article
+                                                <span t-esc="int_to_roman(index())"/></strong>
+                                            : Le présent contrat qui prend effet le
+                                            <span t-field="c.date_start"/>
+                                            est conclu pour une durée minimale de
+                                            <span t-esc="text(c.minimal_duration,'mois','jours',True,30)"/>, si la saison se prolonge au delà de cette durée minimale, le
+                                                contrat se poursuivra jusqu’à l’achèvement de la saison qui constituera son terme.</p>
+                                    </t>
+
+                                    <p><span t-field="c.employee_id.full_name"/>
+                                        exécutera la tâche ci-dessus mentionnée sur le poste de travail suivant :
+                                        <span t-field="c.job_id.name"/>,
+                                        <t t-if="c.qualif_id">avec la qualification de
+                                            <span t-field="c.qualif_id.name"/>
+                                        </t>au sein de la société
+                                        <span t-field="company.name"/>
+                                        domiciliée à
+                                        <span t-field="company.partner_id.inline_address"/>.</p>
+                                    <t t-if="c.trial_days">
+
+                                        <p>
+                                            <strong>Article
+                                                <span t-esc="int_to_roman(index())"/></strong>
+                                            : Le présent contrat ne sera effectif qu’à l’expiration d’une période d’essai de
+                                            <span t-esc="text(c.trial_days,'jour','',True)"/>.</p>
+
+                                    </t>
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        : En contre partie de son travail,
+                                        <span t-field="c.employee_id.full_name"/>
+                                        percevra un salaire ainsi constitué :
+                                    </p>
+                                    <p>
+                                        <center>
+                                            <strong><span t-esc="formuleSalaire(c)"/></strong>
+                                        </center>
+                                    </p>
+                                    <br/>
+                                    <t t-if="c.nb_holidays_by_month">
+
+                                        <p>
+                                            <strong>Article
+                                                <span t-esc="int_to_roman(index())"/></strong>
+                                            :
+                                            <span t-field="c.employee_id.full_name"/>
+                                            bénéficiera d’un congé payé de
+                                            <span t-esc="text(c.nb_holidays_by_month,'jour','',True)"/>
+                                            par mois de travail.</p>
+                                    </t>
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        :
+                                        <span t-field="c.employee_id.full_name"/>
+                                        s’engage à respecter les conditions de travail, le règlement intérieur de la société et les règles de sécurité . Faute de quoi il
+                                        sera passible de sanction pouvant aller jusqu’au licenciement. La faute grave telle que stipulée dans l’article 39 du code de
+                                        travail peut provoquer le licenciement du salarié. Des sanctions disciplinaires (article 37) sont également applicables pour faute
+                                        non grave.
+                                    </p>
+                                </t>
+                                <t t-as="article" t-foreach="c.article_ids">
+                                    <p>
+                                        <strong>Article
+                                            <span t-esc="int_to_roman(index())"/></strong>
+                                        :
+                                        <span t-field="article.name"/></p>
+                                </t>
+
+                                <p>Nous vous souhaitons la bienvenue dans la société
+                                    <span t-field="company.name"/>
+                                    et vous prions pour la bonne règle, de nous confirmer votre accord par retour du présent contrat, revêtu de votre signature,
+                                    précédée de la mention « lu et approuvée ».</p>
+                                <br/>
+                                <p style="width: 100%; text-align:right">Fait à
+                                    <span t-field="c.city_signature"/>, le
+                                    <span t-field="c.date_signature"/></p>
+                                <br/>
+                                <br/>
+                                <br/>
+
+                            </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

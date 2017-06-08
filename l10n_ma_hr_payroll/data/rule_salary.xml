@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+<!-- Salaires de base -->
+        <record id="rule_salary" model="hr.salary.rule">
+            <field name="name">Salaires</field>
+            <field name="code">SALAIRES</field>
+            <field name="sequence">1</field>
+            <field  name="category_id" ref="other_totals"/>
+            <field  eval="False" name="parent_rule_id"/>
+            <field name="show_on_payslip">never</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">fix</field>
+        </record>
+        <record id="hr_rule_base_fixed_days" model="hr.salary.rule">
+            <field name="name">Salaire de base</field>
+            <field name="code">BASE_FIXED_DAYS</field>
+            <field  name="category_id" ref="category_base_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on == 'fixed_days')</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_JOUR.amount</field>
+            <field name="quantity">worked_days.DECLARED.number_of_days + worked_days.RETENU.number_of_days</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+        <record id="hr_payroll.hr_rule_basic" model="hr.salary.rule">
+            <field name="name">Salaire de base</field>
+            <field name="code">BASE_WORKED_DAYS</field>
+            <field  name="category_id" ref="category_base_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on == 'worked_days')</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_JOUR.amount</field>
+            <field name="quantity">worked_days.ATTENDANCE.number_of_days + worked_days.RETENU.number_of_days</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+<!-- Juste pour recuperer la periode en jours -->
+        <record id="hr_rule_periode_jours" model="hr.salary.rule">
+            <field name="name">Période en jours</field>
+            <field name="code">PERIODE_JOURS</field>
+            <field  name="category_id" ref="category_periode_jours"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">never</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = ( (contract.based_on=='fixed_days' and (worked_days.CONTRACT.number_of_days -
+                worked_days.RETENU.number_of_days)) or (contract.based_on=='fixed_hours' and
+                (worked_days.CONTRACT.number_of_hours/contract.default_hours_on_worked_day - worked_days.RETENU.number_of_days)) or
+                (contract.based_on=='worked_days' and (worked_days.ATTENDANCE_WITH_HOLIDAYS.number_of_days - worked_days.RETENU.number_of_days)) or
+                (contract.based_on=='worked_hours' and (worked_days.ATTENDANCE_WITH_HOLIDAYS.number_of_days - worked_days.RETENU.number_of_days)) or
+                (contract.based_on=='attended_days' and (worked_days.ATTENDANCE.number_of_days - worked_days.RETENU.number_of_days)) or
+                (contract.based_on=='attended_hours' and (worked_days.ATTENDANCE.number_of_days - worked_days.RETENU.number_of_days)) or
+                (contract.based_on=='timesheet_hours' and (worked_days.TIMESHEET.number_of_days - worked_days.RETENU.number_of_days)) or
+                (contract.based_on=='timesheet_days' and (worked_days.TIMESHEET.number_of_days - worked_days.RETENU.number_of_days)) or 0)</field>
+        </record>
+<!-- Juste pour recuperer la periode en heures -->
+        <record id="hr_rule_periode_heures" model="hr.salary.rule">
+            <field name="name">Période en heures</field>
+            <field name="code">PERIODE_HEURES</field>
+            <field  name="category_id" ref="category_periode_heures"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">never</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = ( ( contract.based_on=='fixed_days' and (worked_days.CONTRACT.number_of_days *
+                contract.default_hours_on_worked_day - worked_days.RETENU.number_of_hours)) or ( contract.based_on=='fixed_hours' and
+                (worked_days.CONTRACT.number_of_hours - worked_days.RETENU.number_of_hours)) or ( contract.based_on=='worked_days' and
+                (worked_days.ATTENDANCE_WITH_HOLIDAYS.number_of_hours - worked_days.RETENU.number_of_hours)) or ( contract.based_on=='worked_hours' and
+                (worked_days.ATTENDANCE_WITH_HOLIDAYS.number_of_hours - worked_days.RETENU.number_of_hours)) or ( contract.based_on=='attended_days' and
+                (worked_days.ATTENDANCE.number_of_hours - worked_days.RETENU.number_of_hours)) or ( contract.based_on=='attended_hours' and
+                (worked_days.ATTENDANCE.number_of_hours - worked_days.RETENU.number_of_hours)) or ( contract.based_on=='timesheet_days' and
+                (worked_days.TIMESHEET.number_of_hours - worked_days.RETENU.number_of_hours)) or ( contract.based_on=='timesheet_hours' and
+                (worked_days.TIMESHEET.number_of_hours - worked_days.RETENU.number_of_hours)) or 0)</field>
+        </record>
+        <record id="hr_rule_base_fixed_hours" model="hr.salary.rule">
+            <field name="name">Salaire de base</field>
+            <field name="code">BASE_FIXED_HOURS</field>
+            <field  name="category_id" ref="category_base_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on == 'fixed_hours')</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_HEURE.amount</field>
+            <field name="quantity">worked_days.DECLARED.number_of_hours + worked_days.RETENU.number_of_hours</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+        <record id="hr_rule_base_worked_hours" model="hr.salary.rule">
+            <field name="name">Salaire de base</field>
+            <field name="code">BASE_WORKED_HOURS</field>
+            <field  name="category_id" ref="category_base_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on == 'worked_hours')</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_HEURE.amount</field>
+            <field name="quantity">worked_days.ATTENDANCE.number_of_hours + worked_days.RETENU.number_of_hours</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+        <record id="hr_rule_base_attended_days" model="hr.salary.rule">
+            <field name="name">Salaire de base</field>
+            <field name="code">BASE_ATTENDED_DAYS</field>
+            <field  name="category_id" ref="category_base_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on == 'attended_days')</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_JOUR.amount</field>
+            <field name="quantity">worked_days.ATTENDANCE.number_of_days + worked_days.RETENU.number_of_days</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+        <record id="hr_rule_base_attended_hours" model="hr.salary.rule">
+            <field name="name">Salaire de base</field>
+            <field name="code">BASE_ATTENDED_HOURS</field>
+            <field  name="category_id" ref="category_base_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on == 'attended_hours')</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_HEURE.amount</field>
+            <field name="quantity">worked_days.ATTENDANCE.number_of_hours + worked_days.RETENU.number_of_hours</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+        <record id="hr_rule_base_timesheet_days" model="hr.salary.rule">
+            <field name="name">Salaire de base</field>
+            <field name="code">BASE_TIMESHEET_DAYS</field>
+            <field  name="category_id" ref="category_base_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on == 'timesheet_days')</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_JOUR.amount</field>
+            <field name="quantity">worked_days.TIMESHEET.number_of_days + worked_days.RETENU.number_of_days</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+        <record id="hr_rule_base_timesheet_hours" model="hr.salary.rule">
+            <field name="name">Salaire de base</field>
+            <field name="code">BASE_TIMESHEET_HOURS</field>
+            <field  name="category_id" ref="category_base_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">2</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on == 'timesheet_hours')</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_HEURE.amount</field>
+            <field name="quantity">worked_days.TIMESHEET.number_of_hours + worked_days.RETENU.number_of_hours</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+<!-- Jours fériés -->
+        <record id="hr_rule_jours_feries_worked_days" model="hr.salary.rule">
+            <field name="name">Jours fériés</field>
+            <field name="code">FERIE_WORKED_DAYS</field>
+            <field  name="category_id" ref="category_base_autres_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">3</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on in ['fixed_days','worked_days'])</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_JOUR.amount</field>
+            <field name="quantity">worked_days.FERIES.number_of_days</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+        <record id="hr_rule_jours_feries_worked_hours" model="hr.salary.rule">
+            <field name="name">Jours fériés</field>
+            <field name="code">FERIE_WORKED_HOURS</field>
+            <field  name="category_id" ref="category_base_autres_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">3</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on in ['fixed_hours','worked_hours'])</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_HEURE.amount</field>
+            <field name="quantity">worked_days.FERIES.number_of_hours</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+<!-- REMAINING_LEAVES -->
+        <record id="hr_rule_reamaining_leaves_jours"  model="hr.salary.rule">
+            <field name="name">Reste des congés payés</field>
+            <field name="code">REMAINING_LEAVES_DAYS</field>
+            <field  name="category_id" ref="category_base_autres_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">10</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on in ['fixed_days','worked_days','attended_days','timesheet_days'])</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_JOUR.amount</field>
+            <field name="quantity">worked_days.RESTE_CONGES_PAYES.number_of_days</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+        <record id="hr_rule_reamaining_leaves_heures"  model="hr.salary.rule">
+            <field name="name">Reste des congés payés</field>
+            <field name="code">REMAINING_LEAVES_HOURS</field>
+            <field  name="category_id" ref="category_base_autres_gain"/>
+            <field  name="parent_rule_id" ref="rule_salary"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">10</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (contract.based_on in ['fixed_hours','worked_hours','attended_hours','timesheet_hours'])</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">inputs.SALAIRE_PAR_HEURE.amount</field>
+            <field name="quantity">worked_days.RESTE_CONGES_PAYES.number_of_hours</field>
+            <field  eval="True" name="is_salary_item"/>
+        </record>
+<!-- Allocation Familiales -->
+        <record id="hr_rule_allocation_familiale" model="hr.salary.rule">
+            <field name="name">Allocation familiale</field>
+            <field name="code">ALLOCATION_FAMILIALE</field>
+            <field  name="category_id" ref="hr_payroll.DED"/>
+            <field  eval="False" name="parent_rule_id"/>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">500</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">af(employee)[1]</field>
+            <field name="quantity">af(employee)[0]</field>
+            <field name="rate_val">100</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="module_paie_menu" model="ir.module.category">
+            <field name="name">Ressources humaines (Menus et liens)</field>
+            <field name="sequence">105</field>
+        </record>
+        <record id="group_hr_menu_employee" model="res.groups">
+            <field name="name">Employés</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_contract" model="res.groups">
+            <field name="name">Contrats</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_archive" model="res.groups">
+            <field name="name">Archive</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="hr.group_hr_attendance" model="res.groups">
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_document" model="res.groups">
+            <field name="name">Documents Administratifs</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_kilometrage" model="res.groups">
+            <field name="name">Kilometrage</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_mission" model="res.groups">
+            <field name="name">Missions</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_warning" model="res.groups">
+            <field name="name">Avertissements</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_timesheet" model="res.groups">
+            <field name="name">Feuille de temps</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_expense" model="res.groups">
+            <field name="name">Notes de frais</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_avance" model="res.groups">
+            <field name="name">Avances</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_avantage" model="res.groups">
+            <field name="name">Avantages</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_element" model="res.groups">
+            <field name="name">Eléments de salaire</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_old_leave" model="res.groups">
+            <field name="name">Gestion des congés (Ancien menu)</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_leave" model="res.groups">
+            <field name="name">Congés et heures supp.</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_attribution" model="res.groups">
+            <field name="name">Attribution des congés</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_saisie" model="res.groups">
+            <field name="name">Saisie simplifiée</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_payslip" model="res.groups">
+            <field name="name">Bulletins de paie</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_payslip_run" model="res.groups">
+            <field name="name">Lot des bulletins de paie</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_voucher" model="res.groups">
+            <field name="name">Règlements</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_board_rh" model="res.groups">
+            <field name="name">Tableau de bord RH</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_board_statistics" model="res.groups">
+            <field name="name">Statistiques sur la paie</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_board_rotation" model="res.groups">
+            <field name="name">Analyse de la rotation</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_audit" model="res.groups">
+            <field name="name">Audit</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_report" model="res.groups">
+            <field name="name">Rapports</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_configuration" model="res.groups">
+            <field name="name">Configuration</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_mass_attendance" model="res.groups">
+            <field name="name">Pointage périodique</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_csv" model="res.groups">
+            <field name="name">Import/Export CSV</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_hr_menu_accounting" model="res.groups">
+            <field name="name">Comptabilité</field>
+            <field name="category_id" ref="module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+    </data>
+</openerp>

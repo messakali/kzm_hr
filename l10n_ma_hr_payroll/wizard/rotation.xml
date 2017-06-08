@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_res_company_nbr_employees_tree" model="ir.ui.view">
+            <field name="name">res.company.tree</field>
+            <field name="model">res.company</field>
+            <field name="type">tree</field>
+            <field eval="900" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Employés">
+                    <field name="name"/>
+                    <field  name="nbr_employees_permanent" string="Nb. des permanents"/>
+                    <field  name="nbr_employees_occasional" string="Nb. des occasionnels"/>
+                    <field  name="nbr_employees_trainees" string="Nb. des stagiaires"/>
+                    <field  name="nbr_employees" string="Total des employés"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_employee_current_form" model="ir.ui.view">
+            <field name="name">hr.employee.current.wizard.form</field>
+            <field name="model">hr.employee.current.wizard</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form col="4" string="Employés courants">
+                    <group colspan="2">
+                        <field name="date"/>
+                    </group>
+                    <footer>
+                        <button  special="cancel" string="Annuler" type="special" class="oe_link"/>
+                        ou
+                        <button name="action_open_window" string="Ouvrir" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="hr_employee_current_wizard_action" model="ir.actions.act_window">
+            <field name="name">Employés courants</field>
+            <field name="res_model">hr.employee.current.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem action="hr_employee_current_wizard_action" groups="l10n_ma_hr_payroll.group_hr_menu_board_rotation"
+            id="hr_employee_current_wizard_menu" parent="menu_board_paie" sequence="20"/>
+    </data>
+</openerp>

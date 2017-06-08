@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="contract_base_fixed_days" model="hr.contract.base">
+            <field name="code">fixed_days</field>
+            <field name="name">Salaire fixe (en jours)</field>
+        </record>
+        <record id="contract_base_fixed_hours" model="hr.contract.base">
+            <field name="code">fixed_hours</field>
+            <field name="name">Salaire fixe (en heures)</field>
+        </record>
+        <record id="contract_base_worked_days" model="hr.contract.base">
+            <field name="code">worked_days</field>
+            <field name="name">Jours travaillés</field>
+        </record>
+        <record id="contract_base_worked_hours" model="hr.contract.base">
+            <field name="code">worked_hours</field>
+            <field name="name">Heures travaillées</field>
+        </record>
+        <record id="contract_base_attended_days" model="hr.contract.base">
+            <field name="code">attended_days</field>
+            <field name="name">Pointage journalier</field>
+        </record>
+        <record id="contract_base_attended_hours" model="hr.contract.base">
+            <field name="code">attended_hours</field>
+            <field name="name">Pointage horaire</field>
+        </record>
+        <record id="contract_base_timesheet_days" model="hr.contract.base">
+            <field name="code">timesheet_days</field>
+            <field name="name">Feuille de temps (en jours)</field>
+        </record>
+        <record id="contract_base_timesheet_hours" model="hr.contract.base">
+            <field name="code">timesheet_hours</field>
+            <field name="name">Feuille de temps (en heures)</field>
+        </record>
+    </data>
+</openerp>

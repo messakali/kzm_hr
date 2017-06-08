@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data noupdate="1">
+        <record forcecreate="True" id="decimal_ir" model="decimal.precision">
+            <field name="name">IR</field>
+            <field name="digits">2</field>
+        </record>
+        <record forcecreate="True" id="decimal_seniority" model="decimal.precision">
+            <field name="name">Seniority</field>
+            <field name="digits">2</field>
+        </record>
+        <record forcecreate="True" id="decimal_licenciement" model="decimal.precision">
+            <field name="name">Licenciement</field>
+            <field name="digits">2</field>
+        </record>
+        <record forcecreate="True" id="decimal_salary" model="decimal.precision">
+            <field name="name">Salary</field>
+            <field name="digits">2</field>
+        </record>
+        <record forcecreate="True" id="decimal_salary_rate" model="decimal.precision">
+            <field name="name">Salary Rate</field>
+            <field name="digits">5</field>
+        </record>
+        <record forcecreate="True" id="decimal_holiday" model="decimal.precision">
+            <field name="name">Holiday</field>
+            <field name="digits">2</field>
+        </record>
+        <record forcecreate="True" id="decimal_hour" model="decimal.precision">
+            <field name="name">Hour</field>
+            <field name="digits">2</field>
+        </record>
+        <record forcecreate="True" id="decimal_day" model="decimal.precision">
+            <field name="name">Day</field>
+            <field name="digits">2</field>
+        </record>
+        <record forcecreate="True" id="decimal_solidarity" model="decimal.precision">
+            <field name="name">Solidarity</field>
+            <field name="digits">2</field>
+        </record>
+    </data>
+</openerp>

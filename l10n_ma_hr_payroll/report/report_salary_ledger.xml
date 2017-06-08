@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <template id="report_salary_ledger">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t t-as="period" t-foreach="periods(p)">
+                        <t t-set="firstlines" t-value="headers(p, period)"/>
+                        <t t-set="data_lines"
+                            t-value="lines(p, ['SALAIRE_BASE','BRUT','ASSURANCE_RETRAITE_SALARIALE','NET','NBR_JOURS','NBR_HEURES','BRUT_IMPOSABLE','NET_IMPOSABLE','MAJORATION_NET','CONTRIBUTION_SOLIDARITE','FP','IR','RETENU_NET','ANCIENNETE'],['id','birthday','name','cin','carte_sejour','cnss'],['nbr_person_charged','job_id','otherid','hire_date','marital','children'],period=period)"/>
+                        <t t-set="cotisation_ledgers" t-value="firstlines.get('cotisation_ledgers',[])"/>
+                        <t t-set="cotisation_ledger_step" t-value="int(math.ceil(len(cotisation_ledgers)/3.))"/>
+                        <t t-set="avances" t-value="firstlines.get('avances',[])"/>
+                        <t t-set="avance_step" t-value="int(math.ceil(len(avances)/3.))"/>
+                        <t t-set="rubriques" t-value="firstlines.get('rubriques',[])"/>
+                        <t t-set="rubrique_step" t-value="int(math.ceil(len(rubriques)/3.))"/>
+                        <t t-set="avantages" t-value="firstlines.get('avantages',[])"/>
+                        <t t-set="avantage_step" t-value="int(math.ceil(len(avantages)/3.))"/>
+                        <t t-set="holidays" t-value="firstlines.get('holidays',[])"/>
+                        <t t-set="holiday_step" t-value="int(math.ceil(len(holidays)/3.))"/>
+                        <t t-call="kzm_base.kzm_page_layout">
+                            <div class="page">
+                                <table class="table table-condensed ">
+                                    <thead>
+                                        <tr>
+                                            <td style="text-align: left; width: 33%;">Livre de paie</td>
+                                            <td style="text-align: center; width: 33%;">
+                                                <span t-esc="res_company.name"/>
+                                            </td>
+                                            <td style="text-align: right; width: 33%;">De
+                                                <span t-esc="time.strftime('%d/%m/%Y',time.strptime(period[0],'%Y-%m-%d %H:%M:%S'))"/>
+                                                à
+                                                <span t-esc="time.strftime('%d/%m/%Y',time.strptime(period[1],'%Y-%m-%d %H:%M:%S'))"/>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table class="table table-condensed payroll-table-bordered3 table-bordered" style="font-size: 10px;">
+                                    <thead>
+                                        <tr>
+<!-- HEADER LINE 1 -->
+                                            <th>Numéro de matricule</th>
+                                            <th>Date de naissance</th>
+                                            <th>Date d'embauche</th>
+                                            <th>Salaire de base</th>
+                                            <th>Nombre de jours</th>
+                                            <t t-as="index" t-foreach="range(0, holiday_step)">
+                                                <th t-att-class="index &gt;= len(holidays) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(holidays)">
+                                                        <span t-esc="holidays[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(0, rubrique_step)">
+                                                <th t-att-class="index &gt;= len(rubriques) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(rubriques)">
+                                                        <span t-esc="rubriques[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(0, avantage_step)">
+                                                <th t-att-class="index &gt;= len(avantages) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avantages)">
+                                                        <span t-esc="avantages[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <th>Salaire brut</th>
+                                            <t t-if="p.cotisation == 'g'">
+                                                <t t-as="index" t-foreach="range(0, cotisation_ledger_step)">
+                                                    <th t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span t-esc="cotisation_ledgers[index].get('name')"/>
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['s','sp']">
+
+                                                <t t-as="index" t-foreach="range(0, cotisation_ledger_step)">
+                                                    <th t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span t-esc="cotisation_ledgers[index].get('name')"/>
+                                                            <span t-esc="'P.S'"/>
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['p','sp']">
+                                                <t t-as="index" t-foreach="range(0, cotisation_ledger_step)">
+                                                    <th t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span t-esc="cotisation_ledgers[index].get('name')"/>
+                                                            <span t-esc="'P.P'"/>
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(0, avance_step)">
+                                                <th t-att-class="index &gt;= len(avances) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avances)">
+                                                        <span t-esc="avances[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <th>Assurance</th>
+                                            <th class="payroll-black"></th>
+                                            <th>Salaire net</th>
+                                        </tr>
+                                        <tr>
+<!-- HEADER LINE 2 -->
+                                            <th>Nom et prénom</th>
+                                            <th>Fonction</th>
+                                            <th>Taux d'ancienneté</th>
+                                            <th>Nombre de jours de travail</th>
+                                            <th>Nombre d'heures</th>
+                                            <t t-as="index" t-foreach="range(holiday_step, holiday_step*2)">
+                                                <th t-att-class="index &gt;= len(holidays) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(holidays)">
+                                                        <span t-esc="holidays[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(rubrique_step, rubrique_step*2)">
+                                                <th t-att-class="index &gt;= len(rubriques) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(rubriques)">
+                                                        <span t-esc="rubriques[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(avantage_step, avantage_step*2)">
+                                                <th t-att-class="index &gt;= len(avantages) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avantages)">
+                                                        <span t-esc="avantages[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <th>Salaire brut imposable</th>
+                                            <t t-if="p.cotisation == 'g'">
+
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step, cotisation_ledger_step*2)">
+                                                    <th t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span t-esc="cotisation_ledgers[index].get('name')"/>
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['s','sp']">
+
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step, cotisation_ledger_step*2)">
+                                                    <th t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span t-esc="cotisation_ledgers[index].get('name')"/>
+                                                            <span t-esc="'P.S'"/>
+
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['p','sp']">
+
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step, cotisation_ledger_step*2)">
+                                                    <th t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span t-esc="cotisation_ledgers[index].get('name')"/>
+                                                            <span t-esc="'P.P'"/>
+
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(avance_step, avance_step*2)">
+                                                <th t-att-class="index &gt;= len(avances) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avances)">
+                                                        <span t-esc="avances[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <th>Net imposable</th>
+                                            <th>Majoration sur le net</th>
+                                            <th>Contribution de solidarité</th>
+                                        </tr>
+                                        <tr>
+<!-- HEADER LINE 3 -->
+                                            <th>N° C.N.I ou carte de séjour</th>
+                                            <th style="text-align: center">SF ENF DED</th>
+                                            <th>Ancienneté</th>
+                                            <th>N° P.P.R ou CNSS</th>
+                                            <th>Taux horaire</th>
+                                            <t t-as="index" t-foreach="range(holiday_step*2, holiday_step*3)">
+                                                <th t-att-class="index &gt;= len(holidays) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(holidays)">
+                                                        <span t-esc="holidays[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(rubrique_step*2, rubrique_step*3)">
+                                                <th t-att-class="index &gt;= len(rubriques) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(rubriques)">
+                                                        <span t-esc="rubriques[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(avantage_step*2, avantage_step*3)">
+                                                <th t-att-class="index &gt;= len(avantages) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avantages)">
+                                                        <span t-esc="avantages[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <th>Frais professionnels</th>
+                                            <t t-if="p.cotisation == 'g'">
+
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step*2, cotisation_ledger_step*3)">
+                                                    <th t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span t-esc="cotisation_ledgers[index].get('name')"/>
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['s','sp']">
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step*2, cotisation_ledger_step*3)">
+                                                    <th t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span t-esc="cotisation_ledgers[index].get('name')"/>
+                                                            <span t-esc="'P.S'"/>
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['p','sp']">
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step*2, cotisation_ledger_step*3)">
+                                                    <th t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span t-esc="cotisation_ledgers[index].get('name')"/>
+                                                            <span t-esc="'P.P'"/>
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(avance_step*2, avance_step*3)">
+                                                <th t-att-class="index &gt;= len(avances) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avances)">
+                                                        <span t-esc="avances[index].get('name')"/>
+                                                    </t>
+                                                </th>
+                                            </t>
+                                            <th>IR</th>
+                                            <th>Déduction sur le net</th>
+                                            <th class="payroll-black"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-as="line" t-foreach="data_lines">
+                                            <tr>
+<!-- BODY LINE 1 -->
+                                                <td style="text-align: left">
+                                                    <span t-esc="line['payslip'].get('otherid','')"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <t t-if="line['employee'].get('birthday','')">
+                                                        <span t-esc="formatLang(line['employee'].get('birthday',''), date=True)"/>
+                                                    </t>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <t t-if="line['payslip'].get('hire_date','')">
+                                                        <span t-esc="formatLang(line['payslip'].get('hire_date',''), date=True)"/>
+                                                    </t>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('SALAIRE_BASE'))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['extra'].get('DAYS'))"/>
+                                                </td>
+                                                <t t-as="index" t-foreach="range(0, holiday_step)">
+                                                    <td style="text-align: right">
+                                                        <t t-if="index &lt; len(holidays)">
+                                                            <span t-esc="formatLang(get_holiday(p, period, line['employee'].get('id'),holidays[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <t t-as="index" t-foreach="range(0, rubrique_step)">
+                                                    <td style="text-align: right">
+                                                        <t t-if="index &lt; len(rubriques)">
+                                                            <span t-esc="formatLang(get_rubrique(p, period, line['employee'].get('id'),rubriques[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <t t-as="index" t-foreach="range(0, avantage_step)">
+                                                    <td style="text-align: right">
+                                                        <t t-if="index &lt; len(avantages)">
+                                                            <span t-esc="formatLang(get_avantage(p, period, line['employee'].get('id'),avantages[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('BRUT'))"/>
+                                                </td>
+                                                <t t-if="p.cotisation == 'g'">
+                                                    <t t-as="index" t-foreach="range(0, cotisation_ledger_step)">
+                                                        <td style="text-align: right">
+                                                            <t t-if="index &lt; len(cotisation_ledgers)">
+                                                                <span t-esc="formatLang(get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'g'))"/>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                                <t t-if="p.cotisation in ['s','sp']">
+                                                    <t t-as="index" t-foreach="range(0, cotisation_ledger_step)">
+                                                        <td style="text-align: right">
+                                                            <t t-if="index &lt; len(cotisation_ledgers)">
+                                                                <span t-esc="formatLang(get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'s'))"/>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                                <t t-if="p.cotisation in ['p','sp']">
+                                                    <t t-as="index" t-foreach="range(0, cotisation_ledger_step)">
+                                                        <td style="text-align: right">
+                                                            <t t-if="index &lt; len(cotisation_ledgers)">
+                                                                <span t-esc="formatLang(get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'p'))"/>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                                <t t-as="index" t-foreach="range(0, avance_step)">
+                                                    <td style="text-align: right">
+                                                        <t t-if="index &lt; len(avances)">
+                                                            <span t-esc="formatLang(get_avance(p, period, line['employee'].get('id'),avances[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE'))"/>
+                                                </td>
+                                                <td class="payroll-black" style="text-align: right"></td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('NET'))"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+<!-- BODY LINE 2 -->
+                                                <td style="text-align: left">
+                                                    <span t-esc="line['employee'].get('name','')"/>
+                                                </td>
+                                                <td style="text-align: center">
+                                                    <t t-if="line['payslip'].get('job_id',False)">
+                                                        <span t-esc="line['payslip'].get('job_id')[1]"/>
+                                                    </t>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['inputs'].get('ANCIENNETE_TAUX'))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('NBR_JOURS'))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['extra'].get('HOURS'))"/>
+                                                </td>
+                                                <t t-as="index" t-foreach="range(holiday_step, holiday_step*2)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(holidays) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(holidays)">
+                                                            <span t-esc="formatLang(get_holiday(p, period, line['employee'].get('id'),holidays[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <t t-as="index" t-foreach="range(rubrique_step, rubrique_step*2)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(rubriques) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(rubriques)">
+                                                            <span t-esc="formatLang(get_rubrique(p, period, line['employee'].get('id'),rubriques[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <t t-as="index" t-foreach="range(avantage_step, avantage_step*2)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(avantages) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(avantages)">
+                                                            <span t-esc="formatLang(get_avantage(p, period, line['employee'].get('id'),avantages[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('BRUT_IMPOSABLE'))"/>
+                                                </td>
+                                                <t t-if="p.cotisation == 'g'">
+                                                    <t t-as="index" t-foreach="range(cotisation_ledger_step, cotisation_ledger_step*2)">
+                                                        <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                            <t t-if="index &lt; len(cotisation_ledgers)">
+                                                                <span t-esc="formatLang(get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'g'))"/>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                                <t t-if="p.cotisation in ['s','sp']">
+                                                    <t t-as="index" t-foreach="range(cotisation_ledger_step, cotisation_ledger_step*2)">
+                                                        <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                            <t t-if="index &lt; len(cotisation_ledgers)">
+                                                                <span t-esc="formatLang(get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'s'))"/>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                                <t t-if="p.cotisation in ['p','sp']">
+                                                    <t t-as="index" t-foreach="range(cotisation_ledger_step, cotisation_ledger_step*2)">
+                                                        <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                            <t t-if="index &lt; len(cotisation_ledgers)">
+                                                                <span t-esc="formatLang(get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'p'))"/>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                                <t t-as="index" t-foreach="range(avance_step, avance_step*2)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(avances) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(avances)">
+                                                            <span t-esc="formatLang(get_avance(p, period, line['employee'].get('id'),avances[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('NET_IMPOSABLE'))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('MAJORATION_NET'))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('CONTRIBUTION_SOLIDARITE'))"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+<!-- BODY LINE 3 -->
+                                                <td style="text-align: left">
+                                                    <span t-esc="line['employee'].get('cin','') or line['employee'].get('carte_sejour','') or ''"/>
+                                                </td>
+                                                <td style="text-align: center">
+                                                    <span t-esc="line['payslip'].get('marital','')"/>
+                                                    <span t-esc="' - '"/>
+                                                    <span t-esc="line['payslip'].get('children','')"/>
+                                                    <span t-esc="' - '"/>
+                                                    <span t-esc="line['payslip'].get('nbr_person_charged','')"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('ANCIENNETE'))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="line['employee'].get('cnss','')"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['extra'].get('TH'))"/>
+                                                </td>
+                                                <t t-as="index" t-foreach="range(holiday_step*2, holiday_step*3)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(holidays) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(holidays)">
+                                                            <span t-esc="formatLang(get_holiday(p, period, line['employee'].get('id'),holidays[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <t t-as="index" t-foreach="range(rubrique_step*2, rubrique_step*3)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(rubriques) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(rubriques)">
+                                                            <span t-esc="formatLang(get_rubrique(p, period, line['employee'].get('id'),rubriques[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <t t-as="index" t-foreach="range(avantage_step*2, avantage_step*3)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(avantages) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(avantages)">
+                                                            <span t-esc="formatLang(get_avantage(p, period, line['employee'].get('id'),avantages[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('FP'))"/>
+                                                </td>
+                                                <t t-if="p.cotisation == 'g'">
+                                                    <t t-as="index" t-foreach="range(cotisation_ledger_step*2, cotisation_ledger_step*3)">
+                                                        <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                            <t t-if="index &lt; len(cotisation_ledgers)">
+                                                                <span t-esc="formatLang(get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'g'))"/>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                                <t t-if="p.cotisation in ['s','sp']">
+                                                    <t t-as="index" t-foreach="range(cotisation_ledger_step*2, cotisation_ledger_step*3)">
+                                                        <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                            <t t-if="index &lt; len(cotisation_ledgers)">
+                                                                <span t-esc="formatLang(get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'s'))"/>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                                <t t-if="p.cotisation in ['p','sp']">
+                                                    <t t-as="index" t-foreach="range(cotisation_ledger_step*2, cotisation_ledger_step*3)">
+                                                        <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                            <t t-if="index &lt; len(cotisation_ledgers)">
+                                                                <span t-esc="formatLang(get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'p'))"/>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                                <t t-as="index" t-foreach="range(avance_step*2, avance_step*3)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(avances) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(avances)">
+                                                            <span t-esc="formatLang(get_avance(p, period, line['employee'].get('id'),avances[index].get('id')))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('IR'))"/>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <span t-esc="formatLang(line['cumul'].get('RETENU_NET'))"/>
+                                                </td>
+                                                <td class="payroll-black" style="text-align: right"></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+<!-- FOOTER LINE 1 -->
+                                            <td colspan="2" rowspan="3" style="text-align: left">
+                                                Total
+                                            </td>
+                                            <td class="payroll-black"></td>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('SALAIRE_BASE') for line in data_lines]))"/>
+                                            </td>
+                                            <td class="payroll-black" style="text-align: right"></td>
+                                            <t t-as="index" t-foreach="range(0, holiday_step)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(holidays) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(holidays)">
+                                                        <span
+                                                            t-esc="formatLang(sum([get_holiday(p, period, line['employee'].get('id'),holidays[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(0, rubrique_step)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(rubriques) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(rubriques)">
+                                                        <span
+                                                            t-esc="formatLang(sum([get_rubrique(p, period, line['employee'].get('id'),rubriques[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(0, avantage_step)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(avantages) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avantages)">
+                                                        <span
+                                                            t-esc="formatLang(sum([get_avantage(p, period, line['employee'].get('id'),avantages[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('BRUT') for line in data_lines]))"/>
+                                            </td>
+                                            <t t-if="p.cotisation == 'g'">
+                                                <t t-as="index" t-foreach="range(0, cotisation_ledger_step)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span
+                                                                t-esc="formatLang(sum([get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'), 'g') for line in data_lines]))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['s','sp']">
+                                                <t t-as="index" t-foreach="range(0, cotisation_ledger_step)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span
+                                                                t-esc="formatLang(sum([get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'), 's') for line in data_lines]))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['p','sp']">
+                                                <t t-as="index" t-foreach="range(0, cotisation_ledger_step)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span
+                                                                t-esc="formatLang(sum([get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'), 'p') for line in data_lines]))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(0, avance_step)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(avances) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avances)">
+                                                        <span t-esc="formatLang(sum([get_avance(p, period, line['employee'].get('id'),avances[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE') for line in data_lines]))"/>
+                                            </td>
+                                            <td class="payroll-black" style="text-align: right"></td>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('NET') for line in data_lines]))"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+<!-- FOOTER LINE 2 -->
+                                            <td class="payroll-black" style="text-align: right"></td>
+                                            <td class="payroll-black" style="text-align: right"></td>
+                                            <td class="payroll-black" style="text-align: right"></td>
+                                            <t t-as="index" t-foreach="range(holiday_step, holiday_step*2)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(holidays) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(holidays)">
+                                                        <span
+                                                            t-esc="formatLang(sum([get_holiday(p, period, line['employee'].get('id'),holidays[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(rubrique_step, rubrique_step*2)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(rubriques) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(rubriques)">
+                                                        <span
+                                                            t-esc="formatLang(sum([get_rubrique(p, period, line['employee'].get('id'),rubriques[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(avantage_step, avantage_step*2)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(avantages) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avantages)">
+                                                        <span
+                                                            t-esc="formatLang(sum([get_avantage(p, period, line['employee'].get('id'),avantages[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('BRUT_IMPOSABLE') for line in data_lines]))"/>
+                                            </td>
+                                            <t t-if="p.cotisation == 'g'">
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step, cotisation_ledger_step*2)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span
+                                                                t-esc="formatLang(sum([get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'), 'g') for line in data_lines]))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['s','sp']">
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step, cotisation_ledger_step*2)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span
+                                                                t-esc="formatLang(sum([get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'), 's') for line in data_lines]))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['p','sp']">
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step, cotisation_ledger_step*2)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span
+                                                                t-esc="formatLang(sum([get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'), 'p') for line in data_lines]))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(avance_step, avance_step*2)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(avances) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avances)">
+                                                        <span t-esc="formatLang(sum([get_avance(p, period, line['employee'].get('id'),avances[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('NET_IMPOSABLE') for line in data_lines]))"/>
+                                            </td>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('MAJORATION_NET') for line in data_lines]))"/>
+                                            </td>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('CONTRIBUTION_SOLIDARITE') for line in data_lines]))"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+<!-- FOOTER LINE 3 -->
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('ANCIENNETE') for line in data_lines]))"/>
+                                            </td>
+                                            <td class="payroll-black" style="text-align: right"></td>
+                                            <td class="payroll-black" style="text-align: right"></td>
+                                            <t t-as="index" t-foreach="range(holiday_step*2, holiday_step*3)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(holidays) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(holidays)">
+                                                        <span
+                                                            t-esc="formatLang(sum([get_holiday(p, period, line['employee'].get('id'),holidays[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(rubrique_step*2, rubrique_step*3)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(rubriques) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(rubriques)">
+                                                        <span
+                                                            t-esc="formatLang(sum([get_rubrique(p, period, line['employee'].get('id'),rubriques[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(avantage_step*2, avantage_step*3)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(avantages) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avantages)">
+                                                        <span
+                                                            t-esc="formatLang(sum([get_avantage(p, period, line['employee'].get('id'),avantages[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('FP') for line in data_lines]))"/>
+                                            </td>
+                                            <t t-if="p.cotisation == 'g'">
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step*2, cotisation_ledger_step*3)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span
+                                                                t-esc="formatLang(sum([get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'g') for line in data_lines]))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['s','sp']">
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step*2, cotisation_ledger_step*3)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span
+                                                                t-esc="formatLang(sum([get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'s') for line in data_lines]))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-if="p.cotisation in ['p','sp']">
+                                                <t t-as="index" t-foreach="range(cotisation_ledger_step*2, cotisation_ledger_step*3)">
+                                                    <td style="text-align: right" t-att-class="index &gt;= len(cotisation_ledgers) and 'payroll-black' or ''">
+                                                        <t t-if="index &lt; len(cotisation_ledgers)">
+                                                            <span
+                                                                t-esc="formatLang(sum([get_cotisation_ledger(p, period, line['employee'].get('id'),cotisation_ledgers[index].get('id'),'p') for line in data_lines]))"/>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-as="index" t-foreach="range(avance_step*2, avance_step*3)">
+                                                <td style="text-align: right" t-att-class="index &gt;= len(avances) and 'payroll-black' or ''">
+                                                    <t t-if="index &lt; len(avances)">
+                                                        <span t-esc="formatLang(sum([get_avance(p, period, line['employee'].get('id'),avances[index].get('id')) for line in data_lines]))"/>
+                                                    </t>
+                                                </td>
+
+                                            </t>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('IR') for line in data_lines]))"/>
+                                            </td>
+                                            <td style="text-align: right">
+                                                <span t-esc="formatLang(sum([line['cumul'].get('RETENU_NET') for line in data_lines]))"/>
+                                            </td>
+                                            <td class="payroll-black" style="text-align: right"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data noupdate="1">
+<!-- Holidays Status -->
+        <record id="holiday_status_heures_sup_25" model="hr.holidays.status">
+            <field name="name">Heures Supp à 25%</field>
+            <field name="limit">True</field>
+            <field name="color_name">lightblue</field>
+            <field name="code">HEURES_SUPP_25</field>
+            <field eval="25" name="majoration"/>
+            <field eval="5" name="sequence"/>
+            <field eval="True" name="is_hs"/>
+        </record>
+        <record id="holiday_status_heures_sup_50" model="hr.holidays.status">
+            <field name="name">Heures Supp à 50%</field>
+            <field name="limit">True</field>
+            <field name="color_name">lightblue</field>
+            <field name="code">HEURES_SUPP_50</field>
+            <field eval="50" name="majoration"/>
+            <field eval="6" name="sequence"/>
+            <field eval="True" name="is_hs"/>
+        </record>
+        <record id="holiday_status_heures_sup_100" model="hr.holidays.status">
+            <field name="name">Heures Supp à 100%</field>
+            <field name="limit">True</field>
+            <field name="color_name">lightblue</field>
+            <field name="code">HEURES_SUPP_100</field>
+            <field eval="100" name="majoration"/>
+            <field eval="7" name="sequence"/>
+            <field eval="True" name="is_hs"/>
+        </record>
+        <!-- <record id="holiday_status_heures_supferie216" model="hr.holidays.status">
+            <field name="name">Heures Supp Férié 21h->6h</field>
+            <field name="limit">True</field>
+            <field name="color_name">lightblue</field>
+            <field name="code">H_SUP_FERIE_21H_6H</field>
+            <field eval="75" name="majoration"/>
+            <field eval="8" name="sequence"/>
+            <field eval="True" name="is_hs"/>
+        </record> -->
+        <record id="holiday_status_worked_on" model="hr.holidays.status">
+            <field name="name">Jours fériés travaillés</field>
+            <field name="limit">True</field>
+            <field name="color_name">black</field>
+            <field name="code">HJ_FERIE_TRAVAILLE</field>
+            <field eval="100" name="majoration"/>
+            <field eval="9" name="sequence"/>
+            <field eval="False" name="is_hs"/>
+            <field eval="True" name="include_free"/>
+            <field eval="True" name="is_work"/>
+        </record>
+        <record id="holiday_status_chomage_technique" model="hr.holidays.status">
+            <field name="name">Jours chomage technique à 50 %</field>
+            <field name="limit">True</field>
+            <field name="color_name">black</field>
+            <field name="code">CHOMAGE_TECHNIQUE</field>
+            <field eval="-50" name="majoration"/>
+            <field eval="9" name="sequence"/>
+            <field eval="False" name="is_hs"/>
+            <field eval="False" name="include_free"/>
+            <field eval="True" name="is_work"/>
+        </record>
+        <record id="holiday_status_rappel" model="hr.holidays.status">
+            <field name="name">Rappel</field>
+            <field name="limit">True</field>
+            <field name="color_name">black</field>
+            <field name="code">RAPPEL_HJ</field>
+            <field eval="0" name="majoration"/>
+            <field eval="10" name="sequence"/>
+            <field eval="False" name="is_hs"/>
+            <field eval="False" name="include_free"/>
+            <field eval="True" name="is_rappel"/>
+        </record>
+        <record id="hr_holidays.holiday_status_cl" model="hr.holidays.status">
+            <field name="name">Congé légal</field>
+            <field name="code">CONGE_LEGAL</field>
+            <field eval="1" name="sequence"/>
+        </record>
+        <record id="hr_holidays.holiday_status_sl" model="hr.holidays.status">
+            <field name="name">Maladie</field>
+            <field name="code">MALADIE</field>
+            <field eval="2" name="sequence"/>
+        </record>
+        <record id="hr_holidays.holiday_status_comp" model="hr.holidays.status">
+            <field name="name">Compensation</field>
+            <field name="code">COMPENSATION</field>
+            <field eval="3" name="sequence"/>
+            <field name="active" eval="False"/>
+        </record>
+        <record id="hr_holidays.holiday_status_unpaid" model="hr.holidays.status">
+            <field name="name">Absences</field>
+            <field name="code">ABSENCE</field>
+            <field eval="True" name="is_retained"/>
+            <field eval="4" name="sequence"/>
+        </record>
+    </data>
+</openerp>

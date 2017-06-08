@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <template id="report_cs_declaration">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t  t-set="data_lines" t-value="lines(p,['NET_CONTRACTUEL','CONTRIBUTION_SOLIDARITE'],['name'],['otherid'])"/>
+                    <t t-call="kzm_base.kzm_page_layout">
+                        <div class="page">
+                            <h4 style="text-align: center;">Contribution de solidarité
+                                <br/>
+                                De
+                                <span  options="{'format' : '%d/%m/%Y'}" t-field="p.date_from"/>
+                                à
+                                <span  options="{'format' : '%d/%m/%Y'}" t-field="p.date_to"/>
+                            </h4>
+                            <table class="table table-condensed payroll-table-bordered table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Matricule</th>
+                                        <th>Nom et prénom</th>
+                                        <th>Salaire net contractuel</th>
+                                        <th>Montant de la contribution</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-as="line" t-foreach="data_lines">
+                                        <td>
+                                            <span  t-esc="line['payslip'].get('otherid','')"/>
+                                        </td>
+                                        <td>
+                                            <span  t-esc="line['employee'].get('name')"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(line['cumul'].get('NET_CONTRACTUEL'))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(line['cumul'].get('CONTRIBUTION_SOLIDARITE'))"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2">
+                                            Total
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(sum([line['cumul'].get('NET_CONTRACTUEL') for line in data_lines]))"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(sum([line['cumul'].get('CONTRIBUTION_SOLIDARITE') for line in data_lines]))"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <template id="report_cs_declaration_versement">
+            <t t-as="p" t-foreach="docs">
+                <div class="page">
+                    <img  src="l10n_ma_hr_payroll/static/img/CS1.jpg"
+                        style="display: block; margin: 0px; padding: 0px; position: absolute; top: 0px; left: 0px; z-index: 4; width: 941px; height: 1332px"/>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 374px; left: 392px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.date_from[5:7][1]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 375px; left: 361px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.date_from[5:7][0]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 373px; left: 598px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.date_from[:4][3]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 373px; left: 567px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.date_from[:4][2]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 373px; left: 537px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.date_from[:4][1]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 373px; left: 506px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.date_from[:4][0]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 456px; left: 247px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="vat(p)[0]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 456px; left: 265px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="vat(p)[1]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 456px; left: 287px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="vat(p)[2]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 456px; left: 311px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="vat(p)[3]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 456px; left: 333px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="vat(p)[4]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 456px; left: 357px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="vat(p)[5]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 456px; left: 376px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="vat(p)[6]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 456px; left: 398px; width: 29px; height: 13px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="vat(p)[7]"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 504px; left: 62px; width: 830px; height: 60px; z-index:30; text-align: left; vertical-align:middle; font-weight: bold; font-size: 14px; text-indent: 530px; line-height: 25px;"><span  t-esc="main_company(p).partner_id.contact_address.strip().replace('\n',', ')"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 534px; left: 655px; width: 232px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="main_company(p).city or ''"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 482px; left: 520px; width: 367px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="main_company(p).name"/></div>
+
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 682px; left: 297px; width: 181px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.cs_penalite)"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 682px; left: 720px; width: 181px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.cs_total)"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 682px; left: 76px; width: 181px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.cs_principal)"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 682px; left: 512px; width: 181px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.cs_majoration)"/></div>
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 711px; left: 59px; width: 832px; height: 58px; z-index:30; text-align: left; vertical-align:middle; font-weight: bold; font-size: 14px; text-indent: 370px; line-height: 23px;"><span  t-esc="text(p.cs_total)"/></div>
+
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 776px; left: 576px; width: 164px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.edition_city"/></div>
+
+                    <div
+                        style="margin: 0px; padding: 0px; position: absolute; top: 778px; left: 771px; width: 158px; height: 21px; z-index:30; text-align: left; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.edition_date, date=True)"/></div>
+                </div>
+                <div class="page">
+                    <img  src="l10n_ma_hr_payroll/static/img/CS2.jpg"
+                        style="display: block; margin: 0px; padding: 0px; position: absolute; top: 0px; left: 0px; z-index: 4; width: 941px; height: 1332px"/>
+                </div>
+            </t>
+        </template>
+    </data>
+</openerp>

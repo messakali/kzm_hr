@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="0">
+        <template id="report_cotisation">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t  t-set="data_lines" t-value="register_lines(p)"/>
+                    <t t-call="kzm_base.kzm_page_layout">
+                        <div class="page">
+                            <h4 style="text-align: center;">Registre des contributions
+                                <br/>
+                                La période de
+                                <span  options="{'format' : '%d/%m/%Y'}" t-field="p.date_from"/>
+                                à
+                                <span  options="{'format' : '%d/%m/%Y'}" t-field="p.date_to"/>
+                            </h4>
+                            <table class="table table-condensed payroll-table-bordered table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left">Nom</th>
+                                        <th style="text-align: center">Montant</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-as="line" t-foreach="data_lines">
+                                        <td style="text-align: left">
+                                            <span  t-esc="line[1]"/>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(line[2])"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td  style="text-align: left">
+                                            Total
+                                        </td>
+                                        <td style="text-align: right">
+                                            <span  t-esc="formatLang(sum([x[2] for x in data_lines]))"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

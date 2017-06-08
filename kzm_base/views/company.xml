@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="view_res_company_kzm_base_inherit_form" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field  name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='name']" position="after">
+                        <h4>
+                            <field  name="initial" placeholder="Initial" required="1"/>
+                        </h4>
+                    </xpath>
+                    <field name="company_registry" position="attributes">
+                        <attribute name="string">Registre de commerce</attribute>
+                    </field>
+                    <field name="vat" position="attributes">
+                        <attribute name="string">Identifiant Fiscal</attribute>
+                    </field>
+                    <field name="company_registry" position="after">
+                        <field  name="identifiant_tp"/>
+                        <field  name="patente"/>
+                        <field  name="cnss"/>
+                        <field  name="cimr"/>
+                        <field  name="forme_juridique_id"/>
+                        <field  name="activity"/>
+                        <field  name="commune_id"/>
+                       <!-- <field  attrs="{'required': [('parent_id','=', False)], 'invisible': [('parent_id','!=', False)]}" name="fp_id"/> -->
+                    </field>
+                    <field name="currency_id" position="after">
+                        <field  name="declaration_type"/>
+                        <field  name="based_on"/>
+                       <!-- <label  for="code_digits" string="Process code digits"/>
+                        <div>
+                            <field  class="oe_inline" name="code_digits" required="1"/>
+                            - Le min est
+                            <field  class="oe_inline" name="code_digits_min"/>
+                            <button  class="oe_inline" icon="STOCK_EXECUTE" name="process_code_digits" string="Execute" type="object"/>
+                        </div>
+                        <button  class="oe_link" groups="base.group_erp_manager" name="fix_accounts_reconciliation" string="(Fix reconciliation)"
+                            type="object"/>
+                        <button  class="oe_link" groups="base.group_erp_manager" name="fix_fr_lang" string="(Fix Lang)" type="object"/>
+                        <button  class="oe_link" groups="base.group_erp_manager" name="fix_config_general" string="(Fix Alias)" type="object"/> -->
+                    </field>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>

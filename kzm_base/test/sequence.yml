@@ -1,0 +1,16 @@
+- 
+  Create A new Sequence for year3
+-
+  !record {model : ir.sequence, id : seq_year3 }:
+    name : Year3
+    prefix : F%(year3)s
+    
+-
+  Test returned Value
+-
+  !python {model : ir.sequence}: |
+    import time
+    seq_obj = self.pool.get('ir.sequence')
+    val = 'F0'+time.strftime('%Y')[2:4]
+    result = seq_obj._next(cr, uid, [ref('seq_year3')])[:4]
+    assert val == result, "The value should be [%s] but we get [%s]" % (val, result,)

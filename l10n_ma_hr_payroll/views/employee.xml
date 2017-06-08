@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+<!-- Employee Form Inherit -->
+        <record id="view_hr_employee_kzm_form" model="ir.ui.view">
+            <field name="name">hr.employee.kzm.form</field>
+            <field name="model">hr.employee</field>
+            <field  name="inherit_id" ref="hr_payroll.payroll_hr_employee_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[3]" position="after">
+                    <page groups="l10n_ma_hr_payroll.group_paie_interface_rotation" string="Rotation">
+                        <field colspan="4" name="rotation_ids" nolabel="1" readonly="1">
+                            <tree string="Rotations">
+                                <field  name="company_id" groups="base.group_multi_company" />
+                                <field  name="date"/>
+                                <field  name="action"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+                <xpath expr="//notebook/page[3]" position="attributes">
+                    <attribute name="groups">l10n_ma_hr_payroll.group_paie_interface_hr_employee_settings</attribute>
+                </xpath>
+                <xpath expr="//field[@name='country_id']" position="replace"/>
+                <xpath  expr="//field[@name='mobile_phone']" position="replace"/>
+                <xpath  expr="//field[@name='work_phone']" position="replace"/>
+                <!-- <xpath  expr="//label[@for='work_phone']" position="replace"/> -->
+                <xpath  expr="//field[@name='work_email']" position="replace"/>
+                <!-- <xpath  expr="//label[@for='work_email']" position="replace"/> -->
+                <xpath expr="//notebook/page[1]" position="attributes">
+                    <attribute name="groups">l10n_ma_hr_payroll.group_paie_interface_public</attribute>
+                </xpath>
+                <xpath expr="//notebook/page[1]/group[1]" position="before">
+                    <group>
+                        <group string="Adresse">
+                            <label for="street" string="Adresse"/>
+                            <div>
+                                <field name="street" placeholder="Rue..." />
+                                <field name="street2"  />
+                                <div class="address_format">
+                                    <field name="city2" placeholder="Ville" style="width: 40%"  />
+                                    <field name="state_id" class="oe_no_button" placeholder="Province" style="width: 35%" options="{'no_open': True}"  />
+                                    <field name="zip" placeholder="Code postal" style="width: 20%"  />
+                                </div>
+                                <field name="country_id" placeholder="Pays" class="oe_no_button" options="{'no_open': True, 'no_create': True}"  />
+                            </div>
+                            <field name="website" widget="url" placeholder="ex : www.exemple.com" />
+                        </group>
+                        <group string="Contact">
+                            <field name="work_email" widget="email" />
+                            <field name="mobile_phone" />
+                            <field name="work_phone" />
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//notebook/page[2]" position="attributes">
+                    <attribute name="groups">l10n_ma_hr_payroll.group_paie_interface_personnal</attribute>
+                </xpath>
+                <xpath expr="//field[@name='category_ids']" position="replace">
+                </xpath>
+                <xpath expr="//sheet/div[@class='oe_title']" position="replace">
+                    <div class="oe_title">
+                        <label for="title" class="oe_edit_only" string="Titre : "/>
+                        <h4>
+                        	<field name="title" options="{'no_create': true, 'no_open': true}" />
+                        </h4>
+                        <label for="prenom" class="oe_edit_only" string="Prénom : "/>
+                        <h1>
+                        	<field name="prenom" required="1"/>
+                        </h1>
+                        <label for="nom" class="oe_edit_only" string="Nom : "/>
+                        <h1>
+                        	<field name="nom" required="1"/>
+                        </h1>
+                        <label for="category_ids" class="oe_edit_only"/>
+                        <field name="category_ids" widget="many2many_tags" placeholder="i.e. Temps partiel" modifiers="{}"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='marital']" position="after">
+                    <field  attrs="{'invisible': [('marital','!=', 'M')],'required': [('marital','=', 'M')]}" name="wife_situation"/>
+                    <field  name="poids"/>
+                    <field  name="taille"/>
+                </xpath>
+                <xpath expr="//field[@name='leaves_count']/.." position="attributes">
+                    <attribute name="groups">l10n_ma_hr_payroll.group_hr_menu_leave,l10n_ma_hr_payroll.group_hr_menu_old_leave</attribute>
+                </xpath>
+                <xpath expr="//field[@name='contracts_count']/.." position="attributes">
+                    <attribute name="groups">l10n_ma_hr_payroll.group_hr_menu_contract</attribute>
+                </xpath>
+                <xpath expr="//field[@name='timesheet_count']/.." position="attributes">
+                    <attribute name="groups">l10n_ma_hr_payroll.group_hr_menu_timesheet</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payslip_count']/.." position="attributes">
+                    <attribute name="groups">l10n_ma_hr_payroll.group_hr_menu_payslip,l10n_ma_hr_payroll.group_hr_menu_payslip_run</attribute>
+                </xpath>
+                <xpath expr="//field[@name='user_id']/.." position="attributes">
+                    <attribute name="string">Informations spécifiques</attribute>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_expense" icon="fa-money"
+                        name="%(act_open_hr_expense_view_context)d" type="action">
+                        <field  name="expense_count" string="Notes de frais" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_warning" icon="fa-exclamation-triangle"
+                        name="%(act_open_hr_warning_view_context)d" type="action">
+                        <field  name="warning_count" string="Avertissements" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_mass_attendance" icon="fa-clock-o"
+                        name="%(act_open_hr_employee_mass_attendance_view_context)d" type="action">
+                        <field  name="attendance_count" string="Pointage en masse" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_document" icon="fa-file-text-o"
+                        name="%(act_open_hr_document_view_context)d" type="action">
+                        <field  name="document_count" string="Documents" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_avantage" icon="fa-money"
+                        name="%(act_open_hr_avantage_line_view_context)d" type="action">
+                        <field  name="avantage_count" string="Avantages" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_avance" icon="fa-money"
+                        name="%(act_open_hr_avance_line_view_context)d" type="action">
+                        <field  name="avance_count" string="Avances/Cessions" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_element" icon="fa-money"
+                        name="%(act_open_hr_rubrique_line_view_context)d" type="action">
+                        <field  name="rubrique_count" string="Éléments de salaire" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_saisie" icon="fa-list"
+                        name="%(act_open_hr_saisie_line_view_context)d" type="action">
+                        <field  name="saisie_line_count" string="Lignes de saisie" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_kilometrage" icon="fa-car"
+                        name="%(act_open_hr_km_view_context)d" type="action">
+                        <field  name="km_count"  widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_mission" icon="fa-arrow-circle-o-right"
+                        name="%(act_open_hr_mission_view_context)d" type="action">
+                        <field  name="mission_count"  widget="statinfo"/>
+                    </button>
+                </xpath>
+                <!-- <xpath expr="//group[@string='Contract']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath> -->
+                <xpath expr="//field[@name='company_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                    <attribute name="widget">selection</attribute>
+                </xpath>
+                <xpath expr="//field[@name='identification_id']" position="before">
+                	<field  name="cin"/>
+                    <field  name="cnss"/>
+                    <field  name="cimr"/>
+                    <field  attrs="{'invisible': [('cimr','=', False)]}" name="cimr_date"/>
+                    <field  attrs="{'invisible': [('cimr','=', False)]}" name="cimr_category"/>
+                    <field  name="mutuelle"/>
+                    <field  name="carte_sejour"/>
+                </xpath>
+                <xpath expr="//field[@name='address_home_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='address_home_id']" position="after">
+                  <field name="habitation_type"/>
+                  <label for="distance_home" string="Distance avec le lieu d'affectation"/>
+                  <div>
+                    <field  name="distance_home" class="oe_inline"/>
+                    km.
+                  </div>
+                  <field  name="date_ac"/>
+                  <field  name="date_ph"/>
+                  <field  name="ppr"/>
+                </xpath>
+                <!-- <xpath expr="//group[@string='Contact Information']" position="replace" /> -->
+                <xpath expr="//group[@name='active_group']" position="after">
+                    <group string="Contrat">
+                        <field  name="update_contract_state_update" readonly="1"/>
+                        <field  name="current_contract_id" readonly="1"/>
+                        <field  name="first_contract_id" readonly="1"/>
+                        <field  name="working_hours"/>
+                        <field  name="task_id"/>
+                        <field  name="qualif_id"/>
+                    </group>
+                    <group string="Paie">
+                        <field  name="hire_date"/>
+                        <label  for="seniority"/>
+                        <div>
+                            <field  class="oe_inline" name="seniority" readonly="1"/>
+                            année(s)
+                        </div>
+                        <field  name="cnss_ok"/>
+                        <field  name="cimr_ok"/>
+                        <field  name="assurance_ok"/>
+                        <field  name="nbr_person_charged"/>
+                        <field  name="nbr_children_charged"/>
+                        <field  name="nbr_children_af"/>
+                    </group>
+                    <group attrs="{'invisible': [('marital','=', 'C')]}" colspan="4" string="Enfants">
+                        <field colspan="4" name="children_ids" nolabel="1">
+                            <tree editable="bottom" string="Children">
+                                <field  name="name"/>
+                                <field  name="a_charge"/>
+                                <field  invisible="1" name="af"/>
+                                <field  name="sexe"/>
+                                <field  name="birthday"/>
+                                <field  name="age"/>
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+                <!-- <xpath expr="//group[@name='active_group']/group[1]" position="before">
+                    <field  name="attendance_id"/>
+                </xpath>
+                <xpath expr="//group[@name='active_group']/group[1]" position="attributes">
+                    <attribute name="colspan">4</attribute>
+                    <attribute name="col">4</attribute>
+                </xpath> -->
+                <xpath expr="//group[@name='active_group']" position="inside">
+                    <div colspan="2">
+                      Autoriser à l'employé de dépasser le solde des congés légaux :
+                        <field  name="holiday_force_remove" class="oe_inline"/>
+                    </div>
+                    <div colspan="2">
+                      Dernière mise à jour de l'allocation automatique des congés légaux :
+                        <field  name="last_remaining_leaves_update" class="oe_inline"/>
+                    </div>
+                    <div colspan="2">
+                      Dernier nombre de jour alloué :
+                        <field  name="last_remaining_leaves_addition" class="oe_inline"/>
+                    </div>
+                </xpath>
+                <xpath expr="//group[@name='active_group']" position="after">
+                    <group string="Niveau d'étude">
+                        <separator  colspan="4" string="Formation"/>
+                        <field colspan="4" name="formation_ids" nolabel="1">
+                            <tree editable="bottom" string="Formation">
+                                <field  name="date_from"/>
+                                <field  name="date_to"/>
+                                <field  name="formation"/>
+                                <field  name="school"/>
+                                <field  name="diplome"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Permis de conduire">
+                        <field  colspan="4" name="drive_ids" nolabel="1" widget="many2many_checkboxes"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_hr_employee_kzm_tree" model="ir.ui.view">
+            <field name="name">hr.employee.kzm.tree</field>
+            <field name="model">hr.employee</field>
+            <field  name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field  name="otherid" string="Immatriculation"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field  invisible="1" name="is_contract_valid"/>
+                </xpath>
+                <!-- <xpath expr="//field[@name='job_id']" position="after">
+                    <field  groups="base.group_multi_company" name="company_id"/>
+                </xpath> -->
+            </field>
+        </record>
+        <record id="view_hr_employee_kzm_filter" model="ir.ui.view">
+            <field name="name">hr.employee.kzm.filter</field>
+            <field name="model">hr.employee</field>
+            <field  name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="filter_domain">['|','|',('cin','ilike',self),('name','ilike',self),('otherid','ilike',self)]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='category_ids']" position="after">
+                    <filter  context="{}" domain="[('is_contract_valid','=', True)]" icon="terp-personal" name="valid_contract"
+                        string="Avec contrat valide"/>
+                    <filter  context="{}" domain="[('is_contract_valid','=', False)]" icon="terp-personal" name="invalid_contract"
+                        string="Sans contrat valide"/>
+                    <newline/>
+                    <filter  context="{}" domain="[('category_ref','=', 'employee_categ_ouvrier')]" icon="terp-personal" name="ouvrier"
+                        string="Ouvriers"/>
+                    <filter  context="{}" domain="[('category_ref','=', 'employee_categ_cadre')]" icon="terp-personal" name="cadre"
+                        string="Cadres"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_hr_employee_kzm_kanban" model="ir.ui.view">
+            <field name="name">hr.employee.kzm.kanban</field>
+            <field name="model">hr.employee</field>
+            <field  name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <br/>
+                    <field  name="otherid"/>
+                    <br/>
+                </xpath>
+                <xpath expr="//div[@class='o_kanban_button']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//div[@class='o_employee_summary_icons']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//div[@class='o_employee_summary_icons']" position="before">
+                    <div groups="base.group_multi_company">
+                        <field  name="company_id"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="replace">
+                  <field name="full_name"/>
+                </xpath>
+            </field>
+        </record>
+<!-- Archive des employés -->
+        <record id="open_view_archive_employee_list_my" model="ir.actions.act_window">
+            <field name="name">Archives</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('active','=',False)]</field>
+            <field name="context">{}</field>
+            <field  eval="False" name="view_id"/>
+        </record>
+        <menuitem  action="open_view_archive_employee_list_my" groups="l10n_ma_hr_payroll.group_hr_menu_archive"
+            id="menu_open_archive_view_employee_list_my" parent="hr.menu_hr_main" sequence="30"/>
+    </data>
+</openerp>

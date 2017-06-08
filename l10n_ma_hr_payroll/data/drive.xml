@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="drive_a" model="hr.employee.drive.type">
+            <field name="name">A</field>
+        </record>
+        <record id="drive_a1" model="hr.employee.drive.type">
+            <field name="name">A1</field>
+        </record>
+        <record id="drive_b" model="hr.employee.drive.type">
+            <field name="name">B</field>
+        </record>
+        <record id="drive_c" model="hr.employee.drive.type">
+            <field name="name">C</field>
+        </record>
+        <record id="drive_d" model="hr.employee.drive.type">
+            <field name="name">D</field>
+        </record>
+        <record id="drive_eb" model="hr.employee.drive.type">
+            <field name="name">EB</field>
+        </record>
+        <record id="drive_ec" model="hr.employee.drive.type">
+            <field name="name">EC</field>
+        </record>
+        <record id="drive_ed" model="hr.employee.drive.type">
+            <field name="name">ED</field>
+        </record>
+    </data>
+</openerp>

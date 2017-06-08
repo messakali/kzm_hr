@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="view_hr_cotisation_tree" model="ir.ui.view">
+            <field name="name">hr.cotisation.tree</field>
+            <field name="model">hr.cotisation</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Cotisations">
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="contribution_id"/>
+                    <field name="group_id"/>
+                    <field name="ledger_id"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_cotisation_form" model="ir.ui.view">
+            <field name="name">hr.cotisation.form</field>
+            <field name="model">hr.cotisation</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Cotisations">
+                    <group col="4" colspan="4">
+                        <group colspan="2">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group colspan="2">
+                            <field name="group_id"/>
+                            <field name="ledger_id"/>
+                            <field name="type_cotisation"/>
+                            <field name="contribution_id"/>
+                            <field name="show_on_payslip"/>
+                        </group>
+                        <group colspan="2" string="Part salariale">
+                            <field name="rate_salariale"/>
+                            <field name="rate_salariale_inline" invisible="1" />
+                            <field name="plafond_salariale"/>
+                        </group>
+                        <group colspan="2" string="Part patronale">
+                            <field name="rate_patronale"/>
+                            <field name="plafond_patronale"/>
+                        </group>
+                        <group colspan="4" string="Comptabilité">
+                            <field name="account_debit"/>
+                            <field name="account_credit"/>
+                            <field name="analytic_account_id"/>
+                            <field name="account_tax_id"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_cotisation_search" model="ir.ui.view">
+            <field name="name">hr.cotisation.search</field>
+            <field name="model">hr.cotisation</field>
+            <field name="type">search</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Cotisations">
+                    <field name="name" select="True"/>
+                    <field name="code" select="True"/>
+                    <field name="contribution_id"/>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_hr_cotisation_view" model="ir.actions.act_window">
+            <field name="name">Cotisations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.cotisation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_hr_cotisation_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem action="act_open_hr_cotisation_view" id="menu_hr_cotisation" parent="hr_payroll.menu_hr_payroll_configuration" sequence="20"/>
+        <!-- Menu Group des cotisation -->
+        <menuitem name="Groups des cotisations" id="menu_hr_cotisation_groups" parent="hr_payroll.menu_hr_payroll_configuration" sequence="19"/>
+        <!-- Groupe cotisation des bulletins -->
+        <record id="view_hr_cotisation_group_tree" model="ir.ui.view">
+          <field name="name">hr.cotisation.group.tree</field>
+          <field name="model">hr.cotisation.group</field>
+          <field name="type">tree</field>
+          <field name="priority" eval="8"/>
+          <field name="arch" type="xml">
+          <tree string="Bulletin de paie">
+            <field name="sequence" widget="handle"/>
+            <field name="name"/>
+            <field name="code"/>
+                    </tree>
+          </field>
+        </record>
+        <record id="view_hr_cotisation_group_form" model="ir.ui.view">
+          <field name="name">hr.cotisation.group.form</field>
+          <field name="model">hr.cotisation.group</field>
+          <field name="type">form</field>
+          <field name="priority" eval="8"/>
+          <field name="arch" type="xml">
+          <form string="Bulletin de paie">
+            <group colspan="4">
+              <field name="name"/>
+              <field name="code"/>
+              <field name="sequence"/>
+            </group>
+
+          </form>
+          </field>
+        </record>
+        <record id="view_hr_cotisation_group_search" model="ir.ui.view">
+          <field name="name">hr.cotisation.group.search</field>
+          <field name="model">hr.cotisation.group</field>
+          <field name="type">search</field>
+          <field name="priority" eval="8"/>
+          <field name="arch" type="xml">
+          <search string="Bulletin de paie">
+            <field name="name" select="True"/>
+            <field name="code" select="True"/>
+          </search>
+          </field>
+        </record>
+        <record model="ir.actions.act_window" id="act_open_hr_cotisation_group_view">
+          <field name="name">Bulletin de paie</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">hr.cotisation.group</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+          <field name="search_view_id" ref="view_hr_cotisation_group_search"/>
+          <field name="domain">[]</field>
+          <field name="context">{}</field>
+        </record>
+        <record model="ir.actions.act_window.view" id="act_open_hr_cotisation_group_view_form">
+          <field name="act_window_id" ref="act_open_hr_cotisation_group_view"/>
+          <field name="sequence" eval="20"/>
+          <field name="view_mode">form</field>
+          <field name="view_id" ref="view_hr_cotisation_group_form"/>
+        </record>
+        <record model="ir.actions.act_window.view" id="act_open_hr_cotisation_group_view_tree">
+          <field name="act_window_id" ref="act_open_hr_cotisation_group_view"/>
+          <field name="sequence" eval="10"/>
+          <field name="view_mode">tree</field>
+          <field name="view_id" ref="view_hr_cotisation_group_tree"/>
+        </record>
+        <menuitem id="menu_hr_cotisation_group"
+          parent="menu_hr_cotisation_groups"
+          sequence="1"
+          action="act_open_hr_cotisation_group_view"/>
+        <!-- Groupe cotisation de livre de paie -->
+        <record id="view_hr_cotisation_ledger_tree" model="ir.ui.view">
+          <field name="name">hr.cotisation.ledger.tree</field>
+          <field name="model">hr.cotisation.ledger</field>
+          <field name="type">tree</field>
+          <field name="priority" eval="8"/>
+          <field name="arch" type="xml">
+          <tree string="Livre de paie">
+            <field name="sequence" widget="handle"/>
+            <field name="name"/>
+            <field name="code"/>
+            <field name="show_on_ledger"/>
+                    </tree>
+          </field>
+        </record>
+        <record id="view_hr_cotisation_ledger_form" model="ir.ui.view">
+          <field name="name">hr.cotisation.ledger.form</field>
+          <field name="model">hr.cotisation.ledger</field>
+          <field name="type">form</field>
+          <field name="priority" eval="8"/>
+          <field name="arch" type="xml">
+          <form string="Livre de paie">
+            <group colspan="4">
+              <field name="name"/>
+              <field name="code"/>
+              <field name="sequence"/>
+              <field name="show_on_ledger"/>
+            </group>
+
+          </form>
+          </field>
+        </record>
+        <record id="view_hr_cotisation_ledger_search" model="ir.ui.view">
+          <field name="name">hr.cotisation.ledger.search</field>
+          <field name="model">hr.cotisation.ledger</field>
+          <field name="type">search</field>
+          <field name="priority" eval="8"/>
+          <field name="arch" type="xml">
+          <search string="Livre de paie">
+            <field name="name" select="True"/>
+            <field name="code" select="True"/>
+          </search>
+          </field>
+        </record>
+        <record model="ir.actions.act_window" id="act_open_hr_cotisation_ledger_view">
+          <field name="name">Livre de paie</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">hr.cotisation.ledger</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+          <field name="search_view_id" ref="view_hr_cotisation_ledger_search"/>
+          <field name="domain">[]</field>
+          <field name="context">{}</field>
+        </record>
+        <record model="ir.actions.act_window.view" id="act_open_hr_cotisation_ledger_view_form">
+          <field name="act_window_id" ref="act_open_hr_cotisation_ledger_view"/>
+          <field name="sequence" eval="20"/>
+          <field name="view_mode">form</field>
+          <field name="view_id" ref="view_hr_cotisation_ledger_form"/>
+        </record>
+        <record model="ir.actions.act_window.view" id="act_open_hr_cotisation_ledger_view_tree">
+          <field name="act_window_id" ref="act_open_hr_cotisation_ledger_view"/>
+          <field name="sequence" eval="10"/>
+          <field name="view_mode">tree</field>
+          <field name="view_id" ref="view_hr_cotisation_ledger_tree"/>
+        </record>
+        <menuitem id="menu_hr_cotisation_ledger"
+          parent="menu_hr_cotisation_groups"
+          sequence="2"
+          action="act_open_hr_cotisation_ledger_view"/>
+    </data>
+</openerp>

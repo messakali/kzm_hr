@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="fj_sarl" model="res.company.forme.juridique">
+            <field name="name">Société A Responsabilité Limitée</field>
+            <field name="code">SARL</field>
+        </record>
+        <record id="fj_sa" model="res.company.forme.juridique">
+            <field name="name">Société Anonyme</field>
+            <field name="code">SA</field>
+        </record>
+    </data>
+</openerp>

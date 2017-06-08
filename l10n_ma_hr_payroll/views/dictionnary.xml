@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="view_hr_dictionnary_form" model="ir.ui.view">
+            <field name="name">hr.dictionnary.form</field>
+            <field name="model">hr.dictionnary</field>
+            <field name="type">form</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Dictionnaire">
+                    <group col="8" colspan="4">
+                        <group colspan="4" string="Général">
+                            <field attrs="{'readonly': [('is_fixed','=', True)]}" name="name"/>
+                            <field name="type" required="1"/>
+                            <field name="based_on"/>
+                            <field name="operator"/>
+                            <field name="force_not_null"/>
+                            <field invisible="1" name="is_fixed"/>
+                        </group>
+                        <group colspan="4" string="Description">
+                            <field colspan="4" name="description" nolabel="1"/>
+                        </group>
+                        <group colspan="8" string="Add values from">
+                            <field attrs="{'invisible': [('based_on','=', 'category')]}" colspan="4" name="add_rule_ids" nolabel="1"/>
+                            <field attrs="{'invisible': [('based_on','=', 'rule')]}" colspan="4" name="add_category_ids" nolabel="1"/>
+                        </group>
+                        <group colspan="8" string="Remove values from">
+                            <field attrs="{'invisible': [('based_on','=', 'category')]}" colspan="4" name="remove_rule_ids" nolabel="1"/>
+                            <field attrs="{'invisible': [('based_on','=', 'rule')]}" colspan="4" name="remove_category_ids" nolabel="1"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_dictionnary_tree" model="ir.ui.view">
+            <field name="name">hr.dictionnary.tree</field>
+            <field name="model">hr.dictionnary</field>
+            <field name="type">tree</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Dictionnaire">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="based_on"/>
+                    <field name="operator"/>
+                    <field name="force_not_null"/>
+                    <field name="is_fixed"/>
+                </tree>
+            </field>
+        </record>
+        <record id="act_open_hr_dictionnary_view" model="ir.actions.act_window">
+            <field name="name">Dictionnaire</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.dictionnary</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem action="act_open_hr_dictionnary_view" id="menu_hr_dictionnary" parent="hr_payroll.menu_hr_payroll_configuration" sequence="30"/>
+    </data>
+</openerp>

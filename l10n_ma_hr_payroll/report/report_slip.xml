@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+<!-- Modèle standard -->
+        <template id="report_slip">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t t-call="kzm_base.kzm_page_layout">
+                        <t  t-set="company" t-value="p.company_id.main_company_id"/>
+                        <t  t-set="data_lines" t-value="lines(p, group=False, patronal=True, group_rubrique=False)"/>
+                        <div class="page">
+                            <table border="1" class="table table-condensed">
+                                <tbody>
+                                    <tr>
+                                        <td style="width : 50%; text-align : center">
+                                            <div style="font-size: 20px;">
+                                                <strong>
+                                                    Société :
+                                                    <span  t-field="company.name"/>
+                                                </strong>
+                                            </div>
+                                            <br/>
+                                            <img  style="max-width: 100px;" t-att-src="'data:image/png;base64,%s' % company.logo" t-if="company.logo"/>
+                                        </td>
+                                        <td style="width : 50%; text-align : center">
+                                            <div style="font-size: 20px;">
+                                                <strong>BULLETIN DE PAIE</strong>
+                                            </div>
+                                            <br/>
+                                            Période de
+                                            <span  t-field="p.date_from"/>
+                                            à
+                                            <span  t-field="p.date_to"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width : 50%; text-align : left">
+                                            Numéro de CNSS :
+                                            <span  t-field="p.employee_id.cnss"/>
+                                            <br/>
+                                            Matricule :
+                                            <span  t-field="p.otherid"/>
+                                        </td>
+                                        <td style="width : 50%; text-align : left">
+                                            Mode de versement :
+                                            <span  t-field="p.voucher_mode"/>
+                                            <br/>
+                                            Date de versement :
+                                            <span  t-field="p.voucher_date"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width : 50%; text-align : left">
+                                            <span t-if="p.employee_id.cin">CIN :
+                                                <span  t-field="p.employee_id.cin"/>
+                                                <br/>
+                                            </span>
+                                            <span t-if="p.department_id">Département :
+                                                <span  t-field="p.department_id.name"/>
+                                                <br/>
+                                            </span>
+                                            <span t-if="p.hire_date">Date d'entrée :
+                                                <span  t-field="p.hire_date"/>
+                                                <br/>
+                                            </span>
+                                            <span t-if="p.job_id">Poste :
+                                                <span  t-field="p.job_id.name"/>
+                                                <br/>
+                                            </span>
+                                            <span t-if="p.marital">Situation familiale :
+                                                <span  t-field="p.marital"/>
+                                                <br/>
+                                            </span>
+                                            <span t-if="p.nbr_person_charged">Nombre de charge :
+                                                <span  t-field="p.nbr_person_charged"/>
+                                                <br/>
+                                            </span>
+                                            <span t-if="p.employee_id.birthday">Date de naissance :
+                                                <span  t-field="p.employee_id.birthday"/>
+                                                <br/>
+                                            </span>
+                                        </td>
+                                        <td style="width : 50%">
+                                            <div  style="border: 1px" t-field="p.address_home"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-condensed table-bordered payroll-table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Libellé</th>
+                                        <th rowspan="2" style="text-align : left">Base</th>
+                                        <th rowspan="2" style="text-align : left">Taux</th>
+                                        <th rowspan="2" style="text-align : left">Gains</th>
+                                        <th rowspan="2" style="text-align : left">Retenues</th>
+                                        <th colspan="3" style="text-align : center">Charges patronales</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align : left">Base</th>
+                                        <th style="text-align : left">Taux</th>
+                                        <th style="text-align : left">Retenues</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-as="line" t-foreach="data_lines.get('lines',[])">
+                                        <td style="text-align : left;">
+                                            <span  t-esc="line[0]"/>
+                                        </td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="line[2] != 0 and formatLang(line[2]) or ''"/>
+                                        </td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="line[3] != 0 and formatLang(line[3]) or ''"/>
+                                        </td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="line[4] != 0 and formatLang(line[4]) or ''"/>
+                                        </td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="line[5] != 0 and formatLang(line[5]) or ''"/>
+                                        </td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="line[6] != 0 and formatLang(line[6]) or ''"/>
+                                        </td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="line[7] != 0 and formatLang(line[7]) or ''"/>
+                                        </td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="line[8] != 0 and formatLang(line[8]) or ''"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr style="font-weight: bold;">
+                                        <td colspan="3" style="text-align : left;">Total</td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[2])"/>
+                                        </td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[3])"/>
+                                        </td>
+                                        <td colspan="2">
+                                            <span></span>
+                                        </td>
+                                        <td style="text-align : right;">
+                                            <span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[6])"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="font-weight: bold;">
+                                        <td  colspan="5" rowspan="2"/>
+                                        <td colspan="3" style="text-align : center;">
+                                            <span>Net à payer</span>
+                                        </td>
+                                    </tr>
+                                    <tr style="font-weight: bold;">
+                                        <td colspan="3" style="text-align : center;">
+                                            <span t-esc="formatLang(data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3])"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-condensed table-bordered payroll-table-bordered">
+                                <thead>
+<!-- <tr>
+                                        <th colspan="8" style="text-align: center;">Cumuls</th>
+                                    </tr> -->
+                                    <tr style="text-align: center;">
+                                        <th></th>
+                                        <th>Nbre Jours</th>
+                                        <th>Salaire de base</th>
+                                        <th>Brut</th>
+                                        <th>CNSS</th>
+                                        <th>AMO</th>
+                                        <th>Net Imposable</th>
+                                        <th>IR</th>
+                                        <th>NET</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align : left">
+                                            Mensuel
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="current(p, 'NBR_JOURS')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="current(p, 'SALAIRE_BASE')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="current(p, 'BRUT')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="current(p, 'CNSS')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="current(p, 'AMO')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="current(p, 'NET_IMPOSABLE')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="current(p, 'IR')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="current(p, 'NET')"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align : left">
+                                            Cumuls
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="cumul(p, 'NBR_JOURS')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="cumul(p, 'SALAIRE_BASE')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="cumul(p, 'BRUT')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="cumul(p, 'CNSS')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="cumul(p, 'AMO')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="cumul(p, 'NET_IMPOSABLE')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="cumul(p, 'IR')"/>
+                                        </td>
+                                        <td style="text-align : center">
+                                            <span  t-esc="cumul(p, 'NET')"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+<!-- Modèle Simplifié -->
+        <template id="report_slip_simple">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t t-call="kzm_base.kzm_page_layout">
+                        <t  t-set="company" t-value="p.company_id.main_company_id"/>
+                        <t  t-set="data_lines" t-value="lines(p, group=True, patronal=False, group_rubrique=True)"/>
+                        <div class="page">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td
+                                        style="width: 47%; text-align:center; background-color:#CCC; border: 1px solid #333; padding: 6px 10px 6px 10px; font-size: 12px;">
+                                        <strong>EMPLOYEUR</strong>
+                                    </td>
+                                    <td style="width: 1%;"></td>
+                                    <td style="width: 47%; text-align:center; padding: 6px 10px 6px 10px; font-size: 12px;">
+                                        <strong>BULLETIN DE PAIE</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" height="100" style="border: 1px solid #333; padding: 6px 10px 6px 10px" valign="top">
+                                        <p>
+                                            <strong><span  t-field="company.name"/></strong>
+                                        </p>
+                                        <p><span  t-field="company.partner_id.contact_address"/></p>
+                                    </td>
+                                    <td style="width: 1%;"></td>
+                                    <td align="left" style="border: 1px solid #333; padding: 6px 10px 6px 10px" valign="top">
+                                        <p>
+                                            <strong><span  t-field="p.employee_id.name"/></strong>
+                                        </p>
+                                        <p><span  t-field="p.address_home"/></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #333; text-align:center; padding: 6px 10px 6px 10px">N° CNSS :
+                                        <span  t-field="company.cnss"/></td>
+                                    <td style="width: 1%;"></td>
+                                    <td style="border: 1px solid #333; text-align:center; padding: 6px 10px 6px 10px">N° CNSS :
+                                        <span  t-field="p.employee_id.cnss"/></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="15%">MAT</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="17%">D.ENTREE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="21%">D. NAISS</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="20%">CIN</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="24%">SF ENF DED</td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.otherid"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.hire_date"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.employee_id.birthday"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.employee_id.cin"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-esc="p.marital and p.marital[0] or ''"/> -
+                                        <span  t-esc="p.children"/> -
+                                        <span  t-esc="p.nbr_person_charged"/></td>
+                                </tr>
+                            </table>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="14%">CONG. REST. N-1</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="17%">ACQUIS EN COURS N.</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="10%">CONG. PRIS.</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="12%">SOLDE CONGÉ</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="20%">FONCTION</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="20%">DEPARTEMENT</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="7%">PERIODE</td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.leave_restant_n1_legal"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.leave_holidays_allocation_n_legal"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.leave_pris_n_legal"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.leave_left_legal"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.job_id.name"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.department_id.name"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-esc="p.date_from[5:7]"/>/<span  t-esc="p.date_from[:4]"/></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="47%">RUBRIQUE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px " width="15%">BASE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="12%">TAUX</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="14%">GAIN</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="12%">RETENUE</td>
+                                </tr>
+                                <tr t-as="line" t-foreach="data_lines.get('lines',[])">
+                                    <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[0]"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[2] != 0 and formatLang(line[2]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[3] != 0 and formatLang(line[3]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[4] != 0 and formatLang(line[4]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[5] != 0 and formatLang(line[5]) or ''"/></td>
+
+                                </tr>
+                                <tr t-as="tmp" t-foreach="range(22-len(data_lines.get('lines',[])))">
+                                    <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><br/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                </tr>
+                            </table>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px;" width="74%">TOTAL</td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="14%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[2])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="12%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[3])"/></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:right; padding-right: 6px">NET A PAYER :
+                                        <strong><span  t-esc="formatLang(data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3])"/></strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:left; padding: 2px">CUMUL / ANNEE</td>
+                                </tr>
+                            </table>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="9%">JOURS</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px " width="17%">REVENU BRUT</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="16%">BRUT IMPOSABLE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="18%">NET IMPOSABLE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="13%">AMO</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="12%">CNSS</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="15%">IR</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NBR_JOURS'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT_IMPOSABLE'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NET_IMPOSABLE'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'AMO_SALARIALE'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'CNSS_SALARIALE'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'IR'))"/></td>
+                                </tr>
+
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0"
+                                style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px; margin-left:auto" width="20%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px">PAYE PAR</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-field="p.voucher_mode"/></td>
+
+                                </tr>
+
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0"
+                                style="font-family:Verdana, Geneva, sans-serif; font-size:11px; margin-left:auto" width="20%">
+                                <tr>
+                                    <td style="text-align:left;">Signature</td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+<!-- Modèle avec Parts patronales -->
+        <template id="report_slip_patronal">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t t-call="kzm_base.kzm_page_layout">
+                        <t  t-set="company" t-value="p.company_id.main_company_id"/>
+                        <t  t-set="data_lines" t-value="lines(p, group=True, patronal=True, group_rubrique=True)"/>
+                        <div class="page">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td
+                                        style="width: 47%; text-align:center; background-color:#CCC; border: 1px solid #333; padding: 6px 10px 6px 10px; font-size: 12px;">
+                                        <strong>EMPLOYEUR</strong>
+                                    </td>
+                                    <td style="width: 1%;"></td>
+                                    <td style="width: 47%; text-align:center; padding: 6px 10px 6px 10px; font-size: 12px;">
+                                        <strong>BULLETIN DE PAIE</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" height="100" style="border: 1px solid #333; padding: 6px 10px 6px 10px" valign="top">
+                                        <p>
+                                            <strong><span  t-field="company.name"/></strong>
+                                        </p>
+                                        <p><span  t-field="company.partner_id.contact_address"/></p>
+                                    </td>
+                                    <td style="width: 1%;"></td>
+                                    <td align="left" style="border: 1px solid #333; padding: 6px 10px 6px 10px" valign="top">
+                                        <p>
+                                            <strong><span  t-field="p.employee_id.name"/></strong>
+                                        </p>
+                                        <p><span  t-field="p.address_home"/></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #333; text-align:center; padding: 6px 10px 6px 10px">N° CNSS :
+                                        <span  t-field="company.cnss"/></td>
+                                    <td style="width: 1%;"></td>
+                                    <td style="border: 1px solid #333; text-align:center; padding: 6px 10px 6px 10px">N° CNSS :
+                                        <span  t-field="p.employee_id.cnss"/></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="9%">MAT</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px " width="9%">D.ENTREE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="10%">D. NAISS</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="11%">CIN</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="13%">SF ENF DED</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="22%">FONCTION</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="19%">DEPARTEMENT</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="7%">PERIODE</td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.otherid"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.hire_date"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.employee_id.birthday"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.employee_id.cin"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-esc="p.marital and p.marital[0] or ''"/> -
+                                        <span  t-esc="p.children"/> -
+                                        <span  t-esc="p.nbr_person_charged"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.job_id.name"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.department_id.name"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-esc="p.date_from[5:7]"/>/<span  t-esc="p.date_from[:4]"/></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="1" cellpadding="2" cellspacing="0"
+                                style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px; margin-left:auto;" width="22%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px; width: 100%">PART PATRONAL</td>
+                                </tr>
+
+                            </table>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="37%">RUBRIQUE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px " width="12%">BASE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="9%">TAUX</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="11%">GAIN</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="9%">RETENUE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="10%">TAUX</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="12%">RETENUE</td>
+                                </tr>
+                                <tr t-as="line" t-foreach="data_lines.get('lines',[])">
+                                    <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[0]"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[2] != 0 and formatLang(line[2]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[3] != 0 and formatLang(line[3]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[4] != 0 and formatLang(line[4]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[5] != 0 and formatLang(line[5]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[7] != 0 and formatLang(line[7]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[8] != 0 and formatLang(line[8]) or ''"/></td>
+                                </tr>
+                                <tr t-as="tmp" t-foreach="range(26-len(data_lines.get('lines',[])))">
+                                    <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><br/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+
+                                </tr>
+
+                            </table>
+
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px;" width="58%">TOTAL</td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="11%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[2])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="9%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[3])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="10%"></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="12%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[6])"/></td>
+
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:right; padding-right: 6px">NET A PAYER :
+                                        <strong><span  t-esc="formatLang(data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3])"/></strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:left; padding: 2px">CUMUL / ANNEE</td>
+                                </tr>
+                            </table>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="9%">JOURS</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px " width="17%">REVENU BRUT</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="16%">BRUT IMPOSABLE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="18%">NET IMPOSABLE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="13%">AMO</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="12%">CNSS</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="15%">IR</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NBR_JOURS'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT_IMPOSABLE'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NET_IMPOSABLE'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'AMO'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'CNSS'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'IR'))"/></td>
+                                </tr>
+
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0"
+                                style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px; margin-left:auto" width="20%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px">PAYE PAR</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-field="p.voucher_mode"/></td>
+
+                                </tr>
+
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0"
+                                style="font-family:Verdana, Geneva, sans-serif; font-size:11px; margin-left:auto" width="20%">
+                                <tr>
+                                    <td style="text-align:left;">Signature</td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+<!-- Modèle IR Brut -->
+        <template id="report_slip_ir_brut">
+            <t t-call="report.html_container">
+                <t t-as="p" t-foreach="docs">
+                    <t t-call="kzm_base.kzm_page_layout">
+                        <t  t-set="company" t-value="p.company_id.main_company_id"/>
+                        <t  t-set="data_lines" t-value="lines(p, group=True, patronal=True, group_rubrique=True, rename={'IR_BRUT': 'Retenue IR'}, includes=['IR_BRUT'], excludes=['IR_NET'])"/>
+                        <div class="page">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td
+                                        style="width: 47%; text-align:center; background-color:#CCC; border: 1px solid #333; padding: 6px 10px 6px 10px; font-size: 12px;">
+                                        <strong>EMPLOYEUR</strong>
+                                    </td>
+                                    <td style="width: 1%;"></td>
+                                    <td style="width: 47%; text-align:center; padding: 6px 10px 6px 10px; font-size: 12px;">
+                                        <strong>BULLETIN DE PAIE</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" height="100" style="border: 1px solid #333; padding: 6px 10px 6px 10px" valign="top">
+                                        <p>
+                                            <strong><span  t-field="company.name"/></strong>
+                                        </p>
+                                        <p><span  t-field="company.partner_id.contact_address"/></p>
+                                    </td>
+                                    <td style="width: 1%;"></td>
+                                    <td align="left" style="border: 1px solid #333; padding: 6px 10px 6px 10px" valign="top">
+                                        <p>
+                                            <strong><span  t-field="p.employee_id.name"/></strong>
+                                        </p>
+                                        <p><span  t-field="p.address_home"/></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #333; text-align:center; padding: 6px 10px 6px 10px">N° CNSS :
+                                        <span  t-field="company.cnss"/></td>
+                                    <td style="width: 1%;"></td>
+                                    <td style="border: 1px solid #333; text-align:center; padding: 6px 10px 6px 10px">N° CNSS :
+                                        <span  t-field="p.employee_id.cnss"/></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="9%">MAT</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px " width="9%">D.ENTREE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="10%">D. NAISS</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="11%">CIN</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="13%">SF ENF DED</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="22%">FONCTION</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="19%">DEPARTEMENT</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="7%">PERIODE</td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.otherid"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.hire_date"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.employee_id.birthday"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.employee_id.cin"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-esc="p.marital and p.marital[0] or ''"/> -
+                                        <span  t-esc="p.children"/> -
+                                        <span  t-esc="p.nbr_person_charged"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.job_id.name"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-field="p.department_id.name"/></td>
+                                    <td align="center" style="text-align:center; border: 1px solid #333; padding: 2px 0px 2px 0px" valign="middle"><span  t-esc="p.date_from[5:7]"/>/<span  t-esc="p.date_from[:4]"/></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="1" cellpadding="2" cellspacing="0"
+                                style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px; margin-left:auto;" width="22%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px; width: 100%">PART PATRONAL</td>
+                                </tr>
+
+                            </table>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="37%">RUBRIQUE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px " width="12%">BASE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="9%">TAUX</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="11%">GAIN</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="9%">RETENUE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="10%">TAUX</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="12%">RETENUE</td>
+                                </tr>
+                                <tr t-as="line" t-foreach="data_lines.get('lines',[])">
+                                    <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[0]"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[2] != 0 and formatLang(line[2]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[3] != 0 and formatLang(line[3]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[4] != 0 and formatLang(line[4]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[5] != 0 and formatLang(line[5]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[7] != 0 and formatLang(line[7]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[8] != 0 and formatLang(line[8]) or ''"/></td>
+                                </tr>
+                                <tr t-as="tmp" t-foreach="range(26-len(data_lines.get('lines',[])))">
+                                    <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><br/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"></td>
+
+                                </tr>
+
+                            </table>
+
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px;" width="58%">TOTAL</td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="11%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[2])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="9%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[3])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="10%"></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="12%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[6])"/></td>
+
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:right; padding-right: 6px">NET A PAYER :
+                                        <strong><span  t-esc="formatLang(data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3])"/></strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:left; padding: 2px">CUMUL / ANNEE</td>
+                                </tr>
+                            </table>
+                            <table border="0" cellpadding="2" cellspacing="0" style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px"
+                                width="100%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="9%">JOURS</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px " width="17%">REVENU BRUT</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="16%">BRUT IMPOSABLE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="18%">NET IMPOSABLE</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="13%">AMO</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="12%">CNSS</td>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="15%">IR</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NBR_JOURS'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT_IMPOSABLE'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NET_IMPOSABLE'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'AMO'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'CNSS'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'IR'))"/></td>
+                                </tr>
+
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0"
+                                style="color:#333; font-family:Verdana, Geneva, sans-serif; font-size:11px; margin-left:auto" width="20%">
+                                <tr>
+                                    <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px">PAYE PAR</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-field="p.voucher_mode"/></td>
+
+                                </tr>
+
+                            </table>
+                            <br/>
+                            <table border="0" cellpadding="2" cellspacing="0"
+                                style="font-family:Verdana, Geneva, sans-serif; font-size:11px; margin-left:auto" width="20%">
+                                <tr>
+                                    <td style="text-align:left;">Signature</td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="view_hr_avantage_run_form" model="ir.ui.view">
+            <field name="name">hr.avantage.run.form</field>
+            <field name="model">hr.avantage.run</field>
+            <field name="type">form</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Lot des avantages">
+                    <group>
+                        <group>
+                            <group>
+                                <field  name="name"/>
+                                <field  name="allocation_mode"/>
+                                <field  attrs="{'invisible': [('allocation_mode','!=', 'employee')], 'required': [('allocation_mode','=', 'employee')]}"
+                                    name="employee_ids" widget="many2many_tags"/>
+                                <field  attrs="{'invisible': [('allocation_mode','!=', 'category')], 'required': [('allocation_mode','=', 'category')]}"
+                                    name="category_ids" widget="many2many_tags"/>
+                                <label  for="date_start" string="Durée"/>
+                                <div>
+                                    <group col="3">
+                                        <field  class="oe_inline" name="date_start" nolabel="1"/>
+                                        <label  class="oe_inline" string="-"/>
+                                        <field  class="oe_inline" name="date_end" nolabel="1"/>
+                                    </group>
+                                </div>
+                            </group>
+                            <group>
+                                <field  name="state" required="1"/>
+                                <field  name="avantage_id" widget="selection"/>
+                                <field  name="amount"/>
+                            </group>
+                        </group>
+                        <field  colspan="4" name="notes" nolabel="1" placeholder="Ajouter un motif..."/>
+                    </group>
+                    <footer>
+                        <button  class="oe_highlight" confirm="Êtes-vous sur vous voulez continuer ?" name="generate" string="Générer" type="object"/>
+                        ou
+                        <button  class="oe_link" special="cancel" string="Annuler" type="special"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="act_open_hr_avantage_run_view" model="ir.actions.act_window">
+            <field name="name">Lot des avantages</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.avantage.run</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem  action="act_open_hr_avantage_run_view" groups="l10n_ma_hr_payroll.group_hr_menu_avantage" id="menu_hr_avantage_run"
+            parent="menu_hr_main_kzm_misc" sequence="35"/>
+    </data>
+</openerp>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <!-- Frais professionels -->
+        <record id="hr_rule_fp" model="hr.salary.rule">
+            <field name="name">Frais professionels</field>
+            <field name="code">FP</field>
+            <field name="show_on_payslip">never</field>
+            <field name="sequence">1000</field>
+            <field name="parent_rule_id" eval="False" />
+            <field name="category_id" ref="category_fp" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">fp(inputs, categories.BRUT_IMPOSABLE - categories.AVANTAGE)</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+        <!-- Les cotisations -->
+        <!-- ils sont générées automatiquement (sequence = 2000) -->
+
+
+        <!-- Avances, Oppositions et Cession
+        sequence 5000
+        -->
+        <!-- Impôt sur le revenu -->
+        <record id="hr_rule_ir" model="hr.salary.rule">
+            <field name="name">Impôt sur le revenu</field>
+            <field name="code">IR</field>
+            <field name="show_on_payslip">never</field>
+            <field name="sequence">4000</field>
+            <field name="parent_rule_id" eval="False" />
+            <field name="category_id" ref="other_totals" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">fix</field>
+            <field name="quantity">1</field>
+            <field name="amount_fix" eval="0" />
+        </record>
+        <record id="hr_rule_ir_brut" model="hr.salary.rule">
+            <field name="name">Impôt sur le revenu brut</field>
+            <field name="code">IR_BRUT</field>
+            <field name="show_on_payslip">never</field>
+            <field name="sequence">4100</field>
+            <field name="parent_rule_id" ref="hr_rule_ir" />
+            <field name="category_id" ref="category_ir_brut" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">ir(payslip, categories, categories.NET_IMPOSABLE, 'NET_IMPOSABLE')</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+        <record id="hr_rule_cf" model="hr.salary.rule">
+            <field name="name">Charges familiales</field>
+            <field name="code">CF</field>
+            <field name="show_on_payslip">never</field>
+            <field name="sequence">4200</field>
+            <field name="parent_rule_id" ref="hr_rule_ir" />
+            <field name="category_id" ref="category_cf" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">cf(inputs, employee)</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+        <!-- Hors de calcul, juste avoir une regle avec nombre de reduction en quantitité -->
+        <record id="hr_rule_nbr_reduction" model="hr.salary.rule">
+            <field name="name">Nombre des réductions pour CF</field>
+            <field name="code">NBR_REDUCTION</field>
+            <field name="show_on_payslip">never</field>
+            <field name="sequence">4200</field>
+            <field name="parent_rule_id" ref="rule_salary"/>
+            <field name="category_id" ref="other_totals"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">0</field>
+            <field name="quantity">inputs.NBR_PERSONNE_CHARGE.amount</field>
+            <field name="rate_val">0</field>
+        </record>
+        <record id="hr_rule_ir_net_precedent_report" model="hr.salary.rule">
+            <field name="name">Report précédent de l'impôt sur le revenu</field>
+            <field name="code">IR_NET_PRECEDENT_REPORT</field>
+            <field name="show_on_payslip">never</field>
+            <field name="sequence">4300</field>
+            <field name="parent_rule_id" ref="hr_rule_ir" />
+            <field name="category_id" ref="category_ir_net_precedent_report" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">ir_report(payslip)</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+        <record id="hr_rule_ir_net" model="hr.salary.rule">
+            <field name="name">Impôt sur le revenu</field>
+            <field name="code">IR_NET</field>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">4300</field>
+            <field name="parent_rule_id" ref="hr_rule_ir" />
+            <field name="category_id" ref="category_ir_net" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">(categories.IR_BRUT - categories.CF - categories.IR_NET_PRECEDENT_REPORT) &gt; 0 and (categories.IR_BRUT - categories.CF - categories.IR_NET_PRECEDENT_REPORT) or 0</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+            <field name="register_id" ref="contrib_register_etat_ir" />
+            <field name="account_credit" model="account.account" search="[('code','like','44525')]" />
+        </record>
+        <record id="hr_rule_ir_net_report" model="hr.salary.rule">
+            <field name="name">Report de l'impôt sur le revenu</field>
+            <field name="code">IR_NET_REPORT</field>
+            <field name="show_on_payslip">never</field>
+            <field name="sequence">4400</field>
+            <field name="parent_rule_id" ref="hr_rule_ir" />
+            <field name="category_id" ref="category_ir_net_report" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">(categories.IR_BRUT - categories.CF - categories.IR_NET_PRECEDENT_REPORT) &lt; 0 and abs(categories.IR_BRUT - categories.CF - categories.IR_NET_PRECEDENT_REPORT) or 0</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+        <!--
+        Majoration et retenu sur le net -->
+        <record id="hr_rule_majoration_net" model="hr.salary.rule">
+            <field name="name">Majoration sur le net</field>
+            <field name="code">MAJORATION_NET</field>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">5000</field>
+            <field name="parent_rule_id" ref="rule_salary" />
+            <field name="category_id" ref="category_majoration_net" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">majoration_net(payslip) + inputs.AUTRE_MAJORATION_NET.amount</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+        <record id="hr_rule_autre_majoration_net_input" model="hr.rule.input">
+            <field name="name">Autre majoration sur le net</field>
+            <field name="code">AUTRE_MAJORATION_NET</field>
+            <field name="input_id" ref="hr_rule_majoration_net"/>
+        </record>
+        <record id="hr_rule_retenu_net" model="hr.salary.rule">
+            <field name="name">Retenu sur le net</field>
+            <field name="code">RETENU_NET</field>
+            <field name="show_on_payslip">ifnotnull</field>
+            <field name="sequence">5000</field>
+            <field name="parent_rule_id" ref="rule_salary" />
+            <field name="category_id" ref="category_retenu_net" />
+            <field name="condition_select">none</field>
+            <field name="amount_select">flexible_percentage</field>
+            <field name="base_val">retenu_net(payslip) + inputs.AUTRE_RETENU_NET.amount</field>
+            <field name="quantity">1</field>
+            <field name="rate_val">100</field>
+        </record>
+        <record id="hr_rule_autre_retenu_net_input" model="hr.rule.input">
+            <field name="name">Autre retenu sur le net</field>
+            <field name="code">AUTRE_RETENU_NET</field>
+            <field name="input_id" ref="hr_rule_retenu_net"/>
+        </record>
+    </data>
+</openerp>

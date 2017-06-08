@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="view_hr_rubrique_line_tree" model="ir.ui.view">
+            <field name="name">hr.rubrique.line.tree</field>
+            <field name="model">hr.rubrique.line</field>
+            <field name="type">tree</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree colors="grey:state in ['done','cancel'] ; blue:state=='draft'" fonts="bold:message_unread==True"
+                    string="Eléments de salaire">
+                    <field  name="name"/>
+                    <field  name="rubrique_id"/>
+                    <field  name="employee_id"/>
+                    <field  name="date_start"/>
+                    <field  name="date_end"/>
+                    <field  name="amount" sum="Total"/>
+                    <field  name="state"/>
+                    <field  invisible="1" name="message_unread"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_rubrique_line_form" model="ir.ui.view">
+            <field name="name">hr.rubrique.line.form</field>
+            <field name="model">hr.rubrique.line</field>
+            <field name="type">form</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Eléments de salaire">
+                    <field  invisible="1" name="can_reset"/>
+                    <header>
+                        <button  class="oe_highlight" name="should_be_done" states="draft,confirm,validate" string="Valider" type="object" groups="l10n_ma_hr_payroll.group_hr_simple_validation"/>
+                        <button  name="should_be_cancel" states="draft,confirm,validate" string="Annuler" type="object" groups="l10n_ma_hr_payroll.group_hr_simple_validation"/>
+                        <button  class="oe_highlight" name="rubrique_confirm" states="draft" string="Confirmer" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  name="rubrique_refuse1" states="draft" string="Refuser" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  class="oe_highlight" name="rubrique_validate" states="confirm" string="Valider" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  name="rubrique_refuse2" states="confirm" string="Refuser" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  class="oe_highlight" name="rubrique_done" states="validate" string="Approuver" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  name="rubrique_refuse3" states="validate" string="Refuser" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  attrs="{'invisible': ['|', ('can_reset', '=', False), ('state', 'not in', ['done', 'cancel'])]}"
+                            name="rubrique_reset_draft" string="Remettre en brouillon" type="workflow"/>
+                        <field  name="state" statusbar_visible="draft,confirm,validate,done" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field  name="name"/>
+                                <label  for="date_start" string="Durée"/>
+                                <div>
+                                    <group col="3">
+                                        <field  class="oe_inline" name="date_start" nolabel="1"/>
+                                        <label  class="oe_inline" string="-"/>
+                                        <field  class="oe_inline" name="date_end" nolabel="1"/>
+                                    </group>
+                                </div>
+                            </group>
+                            <group>
+                                <field  name="rubrique_id" options="{'no_create': true, 'no_open': true}"  domain="[('auto_compute','=',  False ) ]"/>
+                                <field  name="employee_id" options="{'no_create': true, 'no_open': true}" required="1" />
+                                <field  name="amount"/>
+                            </group>
+                        </group>
+                        <field  colspan="4" name="notes" nolabel="1" placeholder="Ajouter un motif..."/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field  name="message_follower_ids" widget="mail_followers"/>
+                        <field  name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_rubrique_line_form_domain" model="ir.ui.view">
+            <field name="name">hr.rubrique.line.form</field>
+            <field name="model">hr.rubrique.line</field>
+            <field name="type">form</field>
+            <field  eval="4" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Eléments de salaire">
+                    <field  invisible="1" name="can_reset"/>
+                    <header>
+                        <button  class="oe_highlight" name="should_be_done" states="draft,confirm,validate" string="Valider" type="object" groups="l10n_ma_hr_payroll.group_hr_simple_validation"/>
+                        <button  name="should_be_cancel" states="draft,confirm,validate" string="Annuler" type="object" groups="l10n_ma_hr_payroll.group_hr_simple_validation"/>
+                        <button  class="oe_highlight" name="rubrique_confirm" states="draft" string="Confirmer" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  name="rubrique_refuse1" states="draft" string="Refuser" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  class="oe_highlight" name="rubrique_validate" states="confirm" string="Valider" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  name="rubrique_refuse2" states="confirm" string="Refuser" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  class="oe_highlight" name="rubrique_done" states="validate" string="Approuver" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  name="rubrique_refuse3" states="validate" string="Refuser" type="workflow" groups="l10n_ma_hr_payroll.group_hr_advanced_workflow"/>
+                        <button  attrs="{'invisible': ['|', ('can_reset', '=', False), ('state', 'not in', ['done', 'cancel'])]}"
+                            name="rubrique_reset_draft" string="Remettre en brouillon" type="workflow"/>
+                        <field  name="state" statusbar_visible="draft,confirm,validate,done" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field  name="name"/>
+                                <label  for="date_start" string="Durée"/>
+                                <div>
+                                    <group col="3">
+                                        <field  class="oe_inline" name="date_start" nolabel="1"/>
+                                        <label  class="oe_inline" string="-"/>
+                                        <field  class="oe_inline" name="date_end" nolabel="1"/>
+                                    </group>
+                                </div>
+                            </group>
+                            <group>
+                                <field  domain="[('can_request','=',True),('auto_compute','=',  False )]" name="rubrique_id" options="{'no_create': true, 'no_open': true}" />
+                                <field  domain="[('user_id','=', uid)]" name="employee_id" options="{'no_create': true, 'no_open': true}" required="1" />
+                                <field  name="amount"/>
+                            </group>
+                        </group>
+                        <field  colspan="4" name="notes" nolabel="1" placeholder="Ajouter un motif..."/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field  name="message_follower_ids" widget="mail_followers"/>
+                        <field  name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_rubrique_line_search" model="ir.ui.view">
+            <field name="name">hr.rubrique.line.search</field>
+            <field name="model">hr.rubrique.line</field>
+            <field name="type">search</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Eléments de salaire">
+                    <field  name="name" select="True"/>
+                    <field  name="rubrique_id" select="True"/>
+                    <field  name="employee_id" select="True"/>
+                    <filter  domain="[('state','=', 'draft')]" name="draft" string="Brouillon"/>
+                    <filter  domain="[('state','in', ['confirm','validate'])]" name="to_approve" string="À approuver"/>
+                    <filter  domain="[('state','=', 'cancel')]" name="cancel" help="Annulé"/>
+                    <filter  domain="[('state','=', 'done')]" name="done" help="Terminé"/>
+                    <newline/>
+                    <filter  domain="[('employee_id.user_id','=', uid)]" help="Mes demandes" name="my_requests" string="Mes demandes"/>
+                    <filter  domain="[('message_unread','=', True)]" name="unread" string="Messages non lus"/>
+                    <filter  domain="['|',('date_start','ilike',time.strftime('%%Y-%%m-')),('date_start','ilike',time.strftime('%%Y-%%m-'))]"
+                        name="this_month" string="Ce mois"/>
+                    <group expand="0" string="Group By">
+                        <filter  context="{'group_by':'employee_id'}" domain="[]" icon="terp-partner" string="Employé"/>
+                        <filter  context="{'group_by':'rubrique_id'}" domain="[]" icon="terp-folder-orange" string="Type"/>
+                        <filter  context="{'group_by':'state'}" domain="[]" icon="terp-stock_effects-object-colorize" string="État"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_hr_rubrique_line_view" model="ir.actions.act_window">
+            <field name="name">Eléments de salaire</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.rubrique.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field  name="search_view_id" ref="view_hr_rubrique_line_search"/>
+            <field  name="search_view_id" ref="view_hr_rubrique_line_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <record id="act_open_hr_rubrique_line_view_form" model="ir.actions.act_window.view">
+            <field  name="act_window_id" ref="act_open_hr_rubrique_line_view"/>
+            <field  eval="20" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field  name="view_id" ref="view_hr_rubrique_line_form"/>
+        </record>
+        <record id="act_open_hr_rubrique_line_view_tree" model="ir.actions.act_window.view">
+            <field  name="act_window_id" ref="act_open_hr_rubrique_line_view"/>
+            <field  eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field  name="view_id" ref="view_hr_rubrique_line_tree"/>
+        </record>
+        <record id="act_open_hr_rubrique_line_view_context" model="ir.actions.act_window">
+            <field name="name">Eléments de salaire</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.rubrique.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field  name="search_view_id" ref="view_hr_rubrique_line_search"/>
+            <field name="domain">[('employee_id','=',active_id)]</field>
+            <field name="context">{'search_default_employee_id': [active_id], 'default_employee_id': active_id}</field>
+        </record>
+        <record id="act_open_hr_rubrique_line_view_form_context" model="ir.actions.act_window.view">
+            <field  name="act_window_id" ref="act_open_hr_rubrique_line_view_context"/>
+            <field  eval="20" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field  name="view_id" ref="view_hr_rubrique_line_form"/>
+        </record>
+        <record id="act_open_hr_rubrique_line_view_tree_context" model="ir.actions.act_window.view">
+            <field  name="act_window_id" ref="act_open_hr_rubrique_line_view_context"/>
+            <field  eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field  name="view_id" ref="view_hr_rubrique_line_tree"/>
+        </record>
+        <menuitem  action="act_open_hr_rubrique_line_view" groups="l10n_ma_hr_payroll.group_hr_menu_element" id="menu_hr_rubrique_line"
+            parent="menu_hr_main_kzm_misc" sequence="1"/>
+    </data>
+</openerp>

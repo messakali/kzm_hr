@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+<menuitem id="menu_hr_configuration_contract" name="Contrat" parent="hr.menu_human_resources_configuration"
+            sequence="20"/>
+<!-- Contract -->
+        <record id="view_hr_contract_kzm_struct_form" model="ir.ui.view">
+            <field name="name">hr.contract.kzm.form</field>
+            <field name="model">hr.contract</field>
+            <field  name="inherit_id" ref="hr_payroll.hr_contract_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='information']/group/group[@name='salary_and_advantages']/field[@name='struct_id']"
+                    position="attributes">
+                    <attribute name="widget">selection</attribute>
+                </xpath>
+                <xpath expr="//field[@name='schedule_pay']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_hr_contract_kzm_form" model="ir.ui.view">
+            <field name="name">hr.contract.kzm.form</field>
+            <field name="model">hr.contract</field>
+            <field  name="inherit_id" ref="hr_payroll_account.hr_contract_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <div class="oe_right oe_button_box" name="button_box">
+                        <button  class="oe_link" name="create_template" string="Créer un modèle" type="object"/>
+                        <label string=" or " attrs="{'invisible': [('template_id','=', False)]}"/>
+                        <button  class="oe_link" name="update_template" string="Update the template" type="object" attrs="{'invisible': [('template_id','=', False)]}"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='type_id']" position="after">
+                    <field  invisible="1" name="is_contract_valid"/>
+                    <field  name="task_id" string="Tâche"/>
+                    <field  name="qualif_id" string="Qualification" widget="selection"/>
+                    <field  name="next_id" string="Dernier contrat"/>
+                    <field  name="previous_id" string="Contrat suivant"/>
+                </xpath>
+                <xpath expr="//field[@name='type_id']" position="attributes">
+                    <attribute name="widget">selection</attribute>
+                </xpath>
+                <xpath expr="//field[@name='advantages']" position="replace">
+                    <div colspan="2"
+                        style="color: rgb(0, 137, 7); ; font-weight: bold;background: antiquewhite;padding-left: 5px;padding-right: 5px;border: 1px solid rgb(253, 190, 106);">
+                        <field  colspan="2" name="advantages" nolabel="1" placeholder="Description de la structure..." readonly="1"/>
+                        <label  for="cnss_ok" string="CNSS"/>
+                        <field  name="cnss_ok"/>
+                        <label  for="cimr_ok" string="CIMR"/>
+                        <field  name="cimr_ok"/>
+                        <label  for="assurance_ok" string="Assurance retraite"/>
+                        <field  name="assurance_ok"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='wage']" position="attributes">
+                    <attribute name="attrs">{'invisible' : [('based_on','not in',['fixed_days','fixed_hours'])],'required' :
+                        [('based_on','in',['fixed_days','fixed_hours'])]}</attribute>
+                    <attribute name="string">Salaire de base</attribute>
+                </xpath>
+                <xpath expr="//notebook/page[@name='information']/group/group[@name='salary_and_advantages']/field[@name='wage']"
+                    position="before">
+                    <field  name="based_on_ids" invisible="1" />
+                    <!--<field  domain="[('id','in', based_on_ids and based_on_ids[0] and based_on_ids[0][2] or False)]" name="based_on_id" widget="selection"/>-->
+                    <field name="based_on_id" widget="selection"/>
+                    <field  name="based_on" invisible="1" />
+                    <field  attrs="{'invisible': [('based_on','not in', ['fixed_days','worked_days'])],'required': [('based_on','in', ['fixed_days','worked_days'])]}"
+                        name="nbr_days_declared"/>
+                    <field  attrs="{'invisible': ['|','|',('date_start','=',False),('working_hours','=',False),('based_on','not in', ['fixed_days','worked_days'])],'required': [('based_on','in', ['fixed_days','worked_days'])]}"
+                        name="nbr_days_declared_first_month"/>
+                    <field
+                        attrs="{'invisible': [('based_on','not in', ['fixed_hours','worked_hours'])],'required': [('based_on','in', ['fixed_hours','worked_hours'])]}"
+                        name="nbr_hours_declared"/>
+                    <field
+                        attrs="{'invisible': ['|','|',('date_start','=',False),('working_hours','=',False),('based_on','not in', ['fixed_hours','worked_hours'])],'required': [('based_on','in', ['fixed_hours','worked_hours'])]}"
+                        name="nbr_hours_declared_first_month"/>
+                    <field
+                        attrs="{'invisible': [('based_on','not in', ['fixed_days','worked_days','attended_days', 'timesheet_days'])],'required': [('based_on','in', ['fixed_days','worked_days','attended_days', 'timesheet_days'])]}"
+                        name="salary_by_day"/>
+                    <field
+                        attrs="{'invisible': [('based_on','not in', ['fixed_hours','fixed_days','worked_hours','worked_days','attended_hours','attended_days','timesheet_hours','timesheet_days'])],'required': [('based_on','in', ['fixed_hours','fixed_days','worked_hours','worked_days','attended_hours','attended_days','timesheet_hours','timesheet_days'])]}"
+                        name="salary_by_hour"/>
+                </xpath>
+                <xpath expr="//notebook/page[@name='information']/group/group[@name='salary_and_advantages']/field[@name='wage']" position="after">
+                    <field
+                        attrs="{'invisible': [('based_on','not in', ['fixed_days','fixed_hours','worked_days','worked_hours'])],'required': [('based_on','in', ['fixed_days','fixed_hours','worked_days','worked_hours'])]}"
+                        name="salary_net_effectif"/>
+                    <field  name="default_hours_on_worked_day" required="1" groups="l10n_ma_hr_payroll.group_advanced_options"/>
+                    <field  name="default_hours_on_holiday" required="1" groups="l10n_ma_hr_payroll.group_advanced_options"/>
+                    <field  name="default_hours_on_leave" required="1" groups="l10n_ma_hr_payroll.group_advanced_options" invisible="1" />
+                </xpath>
+                <xpath expr="//notebook/page[@name='information']/group/group[@name='duration_group']" position="replace">
+                    <group name="duration_group" string="Durée">
+                        <label  for="date_start" string="Date from (Duration)"/>
+                        <div>
+                            <field  attrs="{'invisible': [('show_field_start','=', False)],'required': [('required_field_start','=', True)]}"
+                                class="oe_inline" name="date_start"/>
+                            <field  attrs="{'invisible': [('show_field_stop','=', False)],'required': [('required_field_stop','=', True)]}" class="oe_inline"
+                                name="date_end"/>
+                        </div>
+                        <field  name="working_hours" required="True" widget="selection"/>
+                        <group attrs="{'invisible': [('based_on','not in', ['fixed_days','fixed_hours','worked_days','worked_hours'])]}" colspan="4" string="Congés">
+                            <div colspan="4">
+                              Méthode d'attribution automatique de nombre de jours du congé légal :
+                                <field  name="holiday_allocation_type" attrs="{'required': [('based_on','in', ['fixed_days','fixed_hours','worked_days','worked_hours'])]}" class="oe_inline"/>
+                            </div>
+                            <div colspan="4" attrs="{'invisible': [('holiday_allocation_type','not in', ['contract','scale'])]}">
+                                Le jour ou le système va commencer à allouer automatiquement des congés légaux à l'employé :
+                                <field  attrs="{'required': [('holiday_allocation_type','in', ['contract','scale']),('based_on','in', ['fixed_days','fixed_hours','worked_days','worked_hours']),('nb_holidays_by_month','>', 0)]}"
+                                    name="date_start_cron" class="oe_inline"/>
+                                </div>
+                            <div colspan="4" attrs="{'invisible': [('holiday_allocation_type','!=', 'contract')]}">
+                              Nombre de jour (congé légal) à allouer par mois :
+                                <field  name="nb_holidays_by_month" attrs="{'required': [('holiday_allocation_type','=', 'contract'),('based_on','in', ['fixed_days','fixed_hours','worked_days','worked_hours'])]}" class="oe_inline"/>
+                            </div>
+                            <div colspan="4">
+                              Le jour ou l'employé peut commencer à demander les congés légaux dans le système :
+                                <field  name="date_begin_holiday" attrs="{'required': [('based_on','in', ['fixed_days','fixed_hours','worked_days','worked_hours']),('nb_holidays_by_month','>', 0)]}" class="oe_inline"/>
+                            </div>
+                        </group>
+                        <group colspan="4" string="Périodes">
+                            <label  for="trial_date_start" string="Periode d'essai"/>
+                            <div>
+                                <field  class="oe_inline" name="trial_date_start"/>
+                                <label  class="oe_inline" string=" - "/>
+                                <field  class="oe_inline" name="trial_date_end"/>
+                                <label  class="oe_inline" string=" => "/>
+                                <field  class="oe_inline" name="trial_days"/>
+                                <label  class="oe_inline" string=" days."/>
+                            </div>
+                            <label  for="observation_preavis_duration" string="Durée d'observation de préavis "/>
+                            <div>
+                                <field  class="oe_inline" name="observation_preavis_duration"/>
+                                <label  class="oe_inline" string=" jours."/>
+                            </div>
+                            <label  for="preavis_duration" string="Durée de préavis"/>
+                            <div>
+                                <field  class="oe_inline" name="preavis_duration"/>
+                                <label  class="oe_inline" string=" mois."/>
+                            </div>
+                            <label  for="minimal_duration" string="Durée minimale"/>
+                            <div>
+                                <field  class="oe_inline" name="minimal_duration"/>
+                                <label  class="oe_inline" string=" mois."/>
+                            </div>
+                            <field  name="city_signature" required="1"/>
+                            <field  name="date_signature" required="1"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//notebook/page[2]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='analytic_account_id']" position="before">
+                    <field  groups="base.group_multi_company" name="company_id" required="1" widget="selection"/>
+                    <field  name="voucher_mode"/>
+                </xpath>
+                <xpath expr="//notebook/page[2]" position="after">
+                    <page string="Rubriques">
+                        <field  colspan="4" name="rubrique_ids" nolabel="1" >
+                            <tree string="Rubriques" editable="bottom" colors="green:state=='done'; red:state!='done' ">
+                                <field name="name"/>
+                                <field name="rubrique_id" options="{'no_create': true, 'no_open': true}" />
+                                <field name="amount"/>
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                                <field name="code" invisible="1" />
+                                <field name="can_reset" invisible="1" />
+                                <field name="state" invisible="1" />
+                                <button string="Valider" states="draft,confirm,validate" type="object" icon="STOCK_YES" name="should_be_done"/>
+                                <button string="Réinitialiser" states="done" type="object" icon="STOCK_CLOSE"  name="should_be_draft"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Autres articles">
+                        <field  colspan="4" name="article_ids" nolabel="1"/>
+                    </page>
+                    <page string="Simulation et clôture">
+                        <group col="8" colspan="4">
+                            <group colspan="4" string="Simulation" style="background-color: beige; padding: 7px;">
+                                <div colspan="4">Calcul du salaire net.</div>
+                                <newline/>
+                                <label  for="salary_net" string="Base -> Net"/>
+                                <div>
+                                    <button  class="oe_link" icon="gtk-execute" name="simulate_salary_net_inverse" string="Simulate" type="object"/>
+                                    <field  class="oe_inline" name="salary_net_inverse"/>
+                                </div>
+                                <div colspan="4">Pour calculer le salaire de base, il faut séléctionner le type de contract et le nombre de jour/heure déclaré.
+                                    <br/>
+                                    La structure salariale à utiliser :
+                                    <field  class="oe_inline" name="simulate_struct_id" widget="selection"/>
+                                    <br/>
+                                    Inclure les éléments de salaire dans la simulation :
+                                    <field  class="oe_inline" name="simulate_elements_ok" />
+                                    <br/>
+                                    Utiliser la date d'embauche pour la simulation :
+                                    <field  class="oe_inline" name="simulate_hire_date_ok" />
+                                </div>
+                                <newline/>
+                                <label  for="salary_net" string="Net -> Base"/>
+                                <div>
+                                    <field  class="oe_inline" name="salary_net"/>
+                                    <button  class="oe_link" icon="gtk-execute" name="simulate_salary_net" string="Simulate" type="object"/>
+                                </div>
+                                <label  for="salary_brut" string="Brut -> Base"/>
+                                <div>
+                                    <field  class="oe_inline" name="salary_brut"/>
+                                    <button  class="oe_link" icon="gtk-execute" name="simulate_salary_brut" string="Simulate" type="object"/>
+                                </div>
+                                <label  for="salary_brut_imposable" string="Brut imposable -> Base"/>
+                                <div>
+                                    <field  class="oe_inline" name="salary_brut_imposable"/>
+                                    <button  class="oe_link" icon="gtk-execute" name="simulate_salary_brut_imposable" string="Simulate" type="object"/>
+                                </div>
+                                <label  for="salary_net_imposable" string="Net imposable -> Base"/>
+                                <div>
+                                    <field  class="oe_inline" name="salary_net_imposable"/>
+                                    <button  class="oe_link" icon="gtk-execute" name="simulate_salary_net_imposable" string="Simulate" type="object"/>
+                                </div>
+                                <label  for="salary_net_contractuel" string="Net contractuel -> Base"/>
+                                <div>
+                                    <field  class="oe_inline" name="salary_net_contractuel"/>
+                                    <button  class="oe_link" icon="gtk-execute" name="simulate_salary_net_contractuel" string="Simulate" type="object"/>
+                                </div>
+                                <separator  colspan="4" string="Results"/>
+                                <field  attrs="{'invisible': [('based_on','not in', ['fixed_days'])]}" name="simulate_salary_by_day"/>
+                                <field  name="simulate_salary_by_hour"/>
+                                <field  name="simulate_wage"/>
+                                <field  name="simulate_found_salary_brut"/>
+                                <field  name="simulate_found_salary_net"/>
+                                <field  name="last_simulation_date"/>
+                                <field  name="number_of_iteration"/>
+                                <button  class="oe_link" icon="gtk-execute" name="use_simulated_data" string="Use data" type="object"/>
+                            </group>
+                            <group colspan="4" string="Autres information" style="background-color: antiquewhite; padding: 7px;">
+                                <field  name="date_lic"/>
+                                <field  name="motif"/>
+                                <field  name="solde_tout_compte"/>
+                                <field  name="stc_worked_days" readonly="1" attrs="{'invisible': ['|',('based_on','=','fixed_hours'),('solde_tout_compte','=', False)]}"/>
+                                <field  name="stc_worked_hours" readonly="1" attrs="{'invisible': ['|',('based_on','=','fixed_days'),('solde_tout_compte','=', False)]}"/>
+                                <field  name="remaining_leaves" readonly="1" attrs="{'invisible': [('solde_tout_compte','=', False)]}"/>
+                                <field  name="prime_preavis" readonly="1" attrs="{'invisible': [('solde_tout_compte','=', False)]}"/>
+                                <field  name="prime_licenciement" readonly="1" attrs="{'invisible': [('solde_tout_compte','=', False)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='employee_id']" position="before">
+                    <label for="template_id" string="Modèle"/>
+                    <div>
+                      <field  name="template_id" class="oe_inline"/>
+                      <newline/>
+                      <label for="auto_change_template" string="Appliquer à nouveau" class="oe_inline oe_edit_only"/>
+                      <field name="auto_change_template" string="Appliquer à nouveau" class="oe_inline oe_edit_only"/>
+                    </div>
+                    <field  invisible="1" name="show_field_start"/>
+                    <field  invisible="1" name="required_field_start"/>
+                    <field  invisible="1" name="show_field_stop"/>
+                    <field  invisible="1" name="required_field_stop"/>
+                </xpath>
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field  name="message_follower_ids" widget="mail_followers"/>
+                        <field  name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_hr_contract_kzm_tree" model="ir.ui.view">
+            <field name="name">hr.contract.kzm.tree</field>
+            <field name="model">hr.contract</field>
+            <field  name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='wage']" position="after">
+                    <field  invisible="1" name="is_contract_valid"/>
+                </xpath>
+                <xpath expr="//field[@name='wage']" position="attributes">
+                  <attribute name="invisible">0</attribute>
+                  <attribute name="string">Salaire de base</attribute>
+                </xpath>
+                <xpath expr="//field[@name='working_hours']" position="attributes">
+                  <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='wage']" position="before">
+                  <field name="based_on"/>
+                  <field name="struct_id"/>
+                </xpath>
+                <xpath expr="//field[@name='date_end']" position="after">
+                    <field  groups="base.group_multi_company" name="company_id"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_hr_contract_kzm_search" model="ir.ui.view">
+            <field name="name">hr.contract.kzm.search</field>
+            <field name="model">hr.contract</field>
+            <field  name="inherit_id" ref="hr_contract.hr_contract_view_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='employee_id']" position="after">
+                    <filter  context="{}" domain="[('is_contract_valid','=', True)]" icon="terp-personal" name="valid_contract" string="Valid"/>
+                    <filter  context="{}" domain="[('is_contract_valid','=', False)]" icon="terp-personal" name="invalid_contract" string="Invalid"/>
+                    <newline/>
+                    <filter  context="{}"
+                        domain="[('date_end', '!=', False), ('date_end', '&lt;=', (context_today() + datetime.timedelta(30)).strftime('%%Y-%%m-%%d') )]"
+                        icon="terp-personal" name="expiration_30d" string="Expire dans 30 jours"/>
+                    <filter  context="{}"
+                        domain="[('date_end', '!=', False), ('date_end', '&lt;=', (context_today() + datetime.timedelta(5)).strftime('%%Y-%%m-%%d') )]"
+                        icon="terp-personal" name="expiration_5d" string="Expiration dans 5 jours"/>
+                    <filter  context="{}"
+                        domain="[('trial_date_end', '&lt;=', time.strftime('%Y-%m-%d')),('trial_date_end', '&gt;=', (datetime.date.today() + datetime.timedelta(days=-5)).strftime('%Y-%m-%d'))]"
+                        icon="terp-personal" name="trial_expiration_5d" string="Fin d'essai dans 5 jours"/>
+                </xpath>
+                <xpath expr="//group//filter[1]" position="after">
+                    <filter  context="{'group_by':'company_id'}" domain="[]" icon="terp-personal" string="Société"/>
+                </xpath>
+            </field>
+        </record>
+<!-- Template of the contract -->
+        <record id="view_hr_contract_template_tree" model="ir.ui.view">
+            <field name="name">hr.contract.template.tree</field>
+            <field name="model">hr.contract.template</field>
+            <field name="type">tree</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Modèles des contrats">
+                    <field  name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_contract_template_form" model="ir.ui.view">
+            <field name="name">hr.contract.template.form</field>
+            <field name="model">hr.contract.template</field>
+            <field name="type">form</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Modèles des contrats">
+                    <group col="8" colspan="4">
+                        <field  colspan="4" name="name"/>
+                        <newline/>
+                        <group colspan="4" string="Général">
+                            <field  name="job_id"/>
+                            <field  name="type_id"/>
+                            <field  name="based_on_id" widget="selection"/>
+                            <field  name="working_hours"/>
+                            <field  name="voucher_mode"/>
+                            <field  name="analytic_account_id"/>
+                        </group>
+                        <group colspan="4" string="Autres">
+                            <field  name="nbr_days_declared"/>
+                            <field  name="nbr_hours_declared"/>
+                            <field  name="salary_by_day"/>
+                            <field  name="salary_by_hour"/>
+                            <field  name="wage"/>
+                            <field  name="salary_net_effectif"/>
+                            <field  name="default_hours_on_worked_day" groups="l10n_ma_hr_payroll.group_advanced_options"/>
+                            <field  name="default_hours_on_holiday" groups="l10n_ma_hr_payroll.group_advanced_options"/>
+                            <field  name="default_hours_on_leave" groups="l10n_ma_hr_payroll.group_advanced_options" invisible="1" />
+                            <field  name="nb_holidays_by_month"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_contract_template_search" model="ir.ui.view">
+            <field name="name">hr.contract.template.search</field>
+            <field name="model">hr.contract.template</field>
+            <field name="type">search</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Modèles des contrats">
+                    <field  name="name" select="True"/>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_hr_contract_template_view" model="ir.actions.act_window">
+            <field name="name">Modèles des contrats</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.contract.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field  name="search_view_id" ref="view_hr_contract_template_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <record id="act_open_hr_contract_template_view_form" model="ir.actions.act_window.view">
+            <field  name="act_window_id" ref="act_open_hr_contract_template_view"/>
+            <field  eval="20" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field  name="view_id" ref="view_hr_contract_template_form"/>
+        </record>
+        <record id="act_open_hr_contract_template_view_tree" model="ir.actions.act_window.view">
+            <field  name="act_window_id" ref="act_open_hr_contract_template_view"/>
+            <field  eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field  name="view_id" ref="view_hr_contract_template_tree"/>
+        </record>
+        <menuitem  action="act_open_hr_contract_template_view" id="menu_hr_contract_template" parent="menu_hr_configuration_contract"
+            sequence="20"/>
+<!-- Articles -->
+        <record id="view_hr_contract_article_tree" model="ir.ui.view">
+            <field name="name">hr.contract.article.tree</field>
+            <field name="model">hr.contract.article</field>
+            <field name="type">tree</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Articles">
+                    <field  name="sequence" widget="handle"/>
+                    <field  name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hr_contract_article_form" model="ir.ui.view">
+            <field name="name">hr.contract.article.form</field>
+            <field name="model">hr.contract.article</field>
+            <field name="type">form</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Articles">
+                    <group colspan="4">
+                        <field  name="sequence"/>
+                        <newline/>
+                        <field  colspan="4" name="name"/>
+
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_contract_article_search" model="ir.ui.view">
+            <field name="name">hr.contract.article.search</field>
+            <field name="model">hr.contract.article</field>
+            <field name="type">search</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Articles">
+                    <field  name="name" select="True"/>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_hr_contract_article_view" model="ir.actions.act_window">
+            <field name="name">Articles</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.contract.article</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field  name="search_view_id" ref="view_hr_contract_article_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem  action="act_open_hr_contract_article_view" id="menu_hr_contract_article" parent="menu_hr_configuration_contract" sequence="30"/>
+<!-- Contract Type -->
+        <record id="view_hr_contract_type_kzm_form" model="ir.ui.view">
+            <field name="name">hr.contract.type.form</field>
+            <field name="model">hr.contract.type</field>
+            <field  name="inherit_id" ref="hr_contract.hr_contract_type_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field  name="type" required="1"/>
+                    <group col="8" colspan="4">
+                        <group colspan="4" groups="base.group_no_one" string="Date début">
+                            <field  name="show_field_start"/>
+                            <field  name="required_field_start"/>
+                            <field  name="empty_field_start"/>
+                        </group>
+                        <group colspan="4" groups="base.group_no_one" string="Date fin">
+                            <field  name="show_field_stop"/>
+                            <field  name="required_field_stop"/>
+                            <field  name="empty_field_stop"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

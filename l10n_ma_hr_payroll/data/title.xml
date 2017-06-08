@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="base.res_partner_title_madam" model="res.partner.title">
+            <field eval="True" name="employee"/>
+            <field name="gender">female</field>
+            <field name="shortcut">Mme.</field>
+        </record>
+        <record id="base.res_partner_title_mister" model="res.partner.title">
+            <field eval="True" name="employee"/>
+            <field name="gender">male</field>
+            <field name="shortcut">Mr.</field>
+        </record>
+    </data>
+</openerp>
