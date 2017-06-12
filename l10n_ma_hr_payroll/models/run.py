@@ -122,7 +122,7 @@ class hr_pasylip_run(models.Model):
     @api.one
     def confirm_slips(self):
         for slip in self.slip_ids:
-            # slip.compute_sheet()
+            slip.compute_sheet()
             slip.process_sheet()
         if self.slip_ids:
             self.state = 'confirm'

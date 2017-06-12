@@ -72,7 +72,7 @@ class hr_payslip(models.Model):
             if slip.solde_tout_compte_id:
                 slip.solde_tout_compte_id.should_be_refused()
         self.write({'voucher_ok' : False})
-        super(hr_payslip, self).cancel_sheet()
+#         super(hr_payslip, self).cancel_sheet()
 
     @api.multi
     def compute_sheet(self):
@@ -183,7 +183,7 @@ class hr_payslip(models.Model):
         start_time = time.time()
         res = super(hr_payslip, self).onchange_employee_id(date_from, date_to, employee_id=employee_id, contract_id=contract_id)
         employee = self.env['hr.employee'].browse(employee_id)
-        contract = contract_id
+        contract = self.env['hr.contract'].browse(contract_id)
         if employee:
             res['value'][
                 'department_id'] = employee.department_id and employee.department_id.id or False
@@ -213,8 +213,10 @@ class hr_payslip(models.Model):
     @api.depends("date_from", "date_to")
     def _get_slip_period_fiscalyear(self):
         if self.date_to:
-            self.slip_period_id = self.env[
+            slip_period_id = self.env[
             'date.range'].search([('date_start', '<=' ,self.date_to), ('date_end', '>=', self.date_to)])
+            if slip_period_id:
+                self.slip_period_id = slip_period_id
         if not self.slip_period_id:
             raise Warning('There is no period defined for this date: '+ str(self.date_to) +'.\nPlease go to Configuration/Periods and configure a fiscal year.')
         self.slip_fiscalyear_id = self.slip_period_id.type_id

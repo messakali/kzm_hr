@@ -86,7 +86,7 @@ class hr_holidays(models.Model):
 
     @api.onchange('holiday_status_code')
     def _onchange_holiday_status_code(self):
-        print self.holiday_status_code
+#         print self.holiday_status_code
         if self.holiday_status_code:
             return {
                 'domain': {

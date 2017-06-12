@@ -13,7 +13,7 @@
             <field eval="'hr.contract'" name="model"/>
             <field eval="'update_contract_state'" name="function"/>
             <field eval="time.strftime('%Y-%m-%d')+' 00:00:00'" name="nextcall"/>
-            <field name="args">([], False, True, )</field>
+            <field name="args">(False, True, )</field>
         </record>
         <!-- Attendance -->
         <record forcecreate="True" id="ir_cron_attendance_signoutall" model="ir.cron">

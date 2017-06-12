@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import fp
 import contract_base
 import company
 import employee
@@ -44,4 +45,3 @@ import title
 import accounting
 import kilometrage
 import mission
-import fp

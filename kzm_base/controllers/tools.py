@@ -8,6 +8,8 @@ def fiscal_year_for(contract_date, current_date, n=0):
     if current_date < contract_date :
         raise UserError(_('La date %d doit être supérieur à %s' % (current_date, contract_date)))
     dt_start = fields.Date.from_string(contract_date)
+    print contract_date
+    print current_date
     dt_stop = dt_start + relativedelta(years=1, days=-1)
     dt_current = fields.Date.from_string(current_date)
     while True:

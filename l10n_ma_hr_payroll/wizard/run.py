@@ -24,8 +24,8 @@ class hr_payslip_employees(osv.osv_memory):
                                      'date_start', 'date_end', 'credit_note'])[0]
         from_date = run_data.get('date_start', False)
         to_date = run_data.get('date_end', False)
-        print from_date
-        print to_date
+#         print from_date
+#         print to_date
         credit_note = run_data.get('credit_note', False)
         if not data['employee_ids']:
             raise osv.except_osv(
@@ -35,6 +35,7 @@ class hr_payslip_employees(osv.osv_memory):
                 from_date, to_date, emp.id, contract_id=False)
             contract = contract_pool.browse(
                 slip_data['value'].get('contract_id', False))
+#             print contract
             res = {
                 'employee_id': emp.id,
                 'name': slip_data['value'].get('name', False),

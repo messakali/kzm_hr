@@ -45,6 +45,8 @@ class hr_salary_rule(models.Model):
     @api.one
     @api.constrains('code', 'avance_id', 'avantage_id', 'rubrique_id', 'cotisation_id')
     def _check_code(self):
+        print self
+        print self.code
         if self.search_count([('code', '=', self.code)]) > 1:
             raise Warning(
                 _('The code [%s] is already exist') % self.code.replace(PARENT, ''))
@@ -83,11 +85,11 @@ class hr_salary_rule(models.Model):
                     return 0.0
             somme = 0.0
             # Notes de frais
-            line_obj = self.pool.get('hr.expense.line')
+            line_obj = self.env['hr.expense']
             domain = [
-                ('expense_id.state', '=', 'paid'),
+                ('state', '=', 'paid'),
                 ('payroll_type', '=', 'majoration_net'),
-                ('expense_id.employee_id', '=', p.employee_id),
+                ('employee_id', '=', p.employee_id),
                 ('payroll_date', '<=', p.date_to),
                 ('payroll_date', '>=', p.date_from),
             ]
@@ -102,11 +104,11 @@ class hr_salary_rule(models.Model):
                     return 0.0
             somme = 0.0
             # Notes de frais
-            line_obj = self.pool.get('hr.expense.line')
+            line_obj = self.env['hr.expense']
             domain = [
-                ('expense_id.state', '=', 'paid'),
+                ('state', '=', 'paid'),
                 ('payroll_type', '=', 'retenu_net'),
-                ('expense_id.employee_id', '=', p.employee_id),
+                ('employee_id', '=', p.employee_id),
                 ('payroll_date', '<=', p.date_to),
                 ('payroll_date', '>=', p.date_from),
             ]
@@ -121,19 +123,19 @@ class hr_salary_rule(models.Model):
                     return 0.0
             somme = 0.0
             # Rubrique
-            line_obj = self.pool.get('hr.rubrique.line')
+            line_obj = self.env['hr.rubrique.line']
             # Domain linked to saisie.py
             domain = line_obj.get_domain(employee_id=p.employee_id, state='done', code=code, date_start=p.date_from, date_end=p.date_to)
-            lines = line_obj.browse(line_obj.search(domain))
+            lines = line_obj.search(domain)
             for line in lines:
                 somme += line.amount
                 # FIXME RELATE ME TO SAISIE.PY AND TRANSLATE ALL TO DOMAIN
             # Notes de frais
-            line_obj = self.pool.get('hr.expense.line')
+            line_obj = self.env['hr.expense']
             domain = [
-                ('expense_id.state', '=', 'paid'),
+                ('state', '=', 'paid'),
                 ('rubrique_id.code', '=', code),
-                ('expense_id.employee_id', '=', p.employee_id),
+                ('employee_id', '=', p.employee_id),
                 ('payroll_date', '<=', p.date_to),
                 ('payroll_date', '>=', p.date_from),
             ]
@@ -163,7 +165,7 @@ class hr_salary_rule(models.Model):
                 plafond = result
             somme = 0.0
             # Avances
-            line_obj = self.pool.get('hr.avance.line.line')
+            line_obj = self.env['hr.avance.line.line']
             # Domain linked to saisie.py
             domain = [
                 ('state', '=', 'done'),
@@ -180,11 +182,11 @@ class hr_salary_rule(models.Model):
                 rate = line.avance_line_id.avance_id.interest_rate
                 break
             # Notes de frais
-            line_obj = self.pool.get('hr.expense.line')
+            line_obj = self.env['hr.expense']
             domain = [
-                ('expense_id.state', '=', 'paid'),
+                ('state', '=', 'paid'),
                 ('avance_id.code', '=', code),
-                ('expense_id.employee_id', '=', p.employee_id),
+                ('employee_id', '=', p.employee_id),
                 ('payroll_date', '<=', p.date_to),
                 ('payroll_date', '>=', p.date_from),
             ]
@@ -201,7 +203,7 @@ class hr_salary_rule(models.Model):
                 if not p.simulate_elements_ok:
                     return 0.0
             somme = 0.0
-            line_obj = self.pool.get('hr.avantage.line')
+            line_obj = self.env['hr.avantage.line']
             # Domain linked to Saisie.py
             domain = [
                 ('state', '=', 'done'),
@@ -223,11 +225,11 @@ class hr_salary_rule(models.Model):
             lines = line_ids
             somme += sum([x.amount for x in lines])
             # Notes de frais
-            line_obj = self.pool.get('hr.expense.line')
+            line_obj = self.env['hr.expense']
             domain = [
-                ('expense_id.state', '=', 'paid'),
+                ('state', '=', 'paid'),
                 ('avantage_id.code', '=', code),
-                ('expense_id.employee_id', '=', p.employee_id),
+                ('employee_id', '=', p.employee_id),
                 ('payroll_date', '<=', p.date_to),
                 ('payroll_date', '>=', p.date_from),
             ]
@@ -272,7 +274,7 @@ class hr_salary_rule(models.Model):
                 p.date_from, "%Y-%m-%d") + m1months
             last_slip_date_to = last_slip_date_to.strftime("%Y-%m-%d")
             last_slip_date_from = last_slip_date_from.strftime("%Y-%m-%d")
-            return self.pool.get('hr.dictionnary').compute_value(
+            return self.env['hr.dictionnary'].compute_value(
                     code="IR_NET_REPORT",
                     year_of_date=last_slip_date_to,
                     date_start=last_slip_date_from,
@@ -284,17 +286,17 @@ class hr_salary_rule(models.Model):
 
         def get_ir(p, categories, base, base_code):
             if p.contract_id.type_id.type == 'occasional':
-                occasionel_ir = self.pool.get('ir.config_parameter').get_param(
+                occasionel_ir = self.env['ir.config_parameter'].get_param(
                     'ir_occasionel', '0')
                 occasionel_ir_taux = float(occasionel_ir)/100
                 if occasionel_ir_taux:
                     return occasionel_ir_taux * categories.BRUT_IMPOSABLE
-            reg_ok = self.pool.get('ir.config_parameter').get_param(
+            reg_ok = self.env['ir.config_parameter'].get_param(
                 'ir_reg', '0') == '1' and True or False
             if not reg_ok or p.simulation_ok:
-                return self.pool.get('hr.scale.ir').get_ir(base, 1)
+                return self.env['hr.scale.ir'].get_ir(base, 1)
             based_on_days = p.contract_id.based_on_days
-            nbr = self.pool.get('hr.payslip').search_count([
+            nbr = self.env['hr.payslip'].search_count([
                 ('state', '=', 'done'),
                 ('employee_id', '=', p.employee_id),
                 ('date_from', '>=', p.date_from[:4] + '-01-01'),
@@ -302,19 +304,19 @@ class hr_salary_rule(models.Model):
                 ('company_id', '=', p.company_id.id)
             ]) * 1.0 + 1
             if nbr == 1:
-                return self.pool.get('hr.scale.ir').get_ir(base, 1)
+                return self.env['hr.scale.ir'].get_ir(base, 1)
             m1days = timedelta(days=-1)
             last_slip_date_to = datetime.strptime(
                 p.date_from, "%Y-%m-%d") + m1days
             last_slip_date_to = last_slip_date_to.strftime("%Y-%m-%d")
-            cumul_ir_value = self.pool.get('hr.dictionnary').compute_value(
+            cumul_ir_value = self.env['hr.dictionnary'].compute_value(
                 code="IR_BRUT",
                 year_of_date=last_slip_date_to,
                 date_stop=last_slip_date_to,
                 employee_id=p.employee_id,
                 company_id=p.company_id.id
             )
-            cumul_net_imposable_value = self.pool.get('hr.dictionnary').compute_value(
+            cumul_net_imposable_value = self.env['hr.dictionnary'].compute_value(
                 code=base_code,
                 year_of_date=last_slip_date_to,
                 date_stop=last_slip_date_to,
@@ -322,7 +324,7 @@ class hr_salary_rule(models.Model):
                 company_id=p.company_id.id
             )
             if based_on_days:
-                cumul_worked_days = self.pool.get('hr.dictionnary').compute_value(
+                cumul_worked_days = self.env['hr.dictionnary'].compute_value(
                     code="NBR_JOURS",
                     year_of_date=last_slip_date_to,
                     date_stop=last_slip_date_to,
@@ -332,12 +334,12 @@ class hr_salary_rule(models.Model):
                 nbr_days_declared = p.company_id.main_company_id.nbr_days_declared
                 cumul_fullfill = cumul_worked_days > 0 and (base + cumul_net_imposable_value) * \
                     (nbr_days_declared * 12) / cumul_worked_days or 0.0
-                required_ir_value = self.pool.get(
-                    'hr.scale.ir').get_ir(cumul_fullfill, nbr=12)
+                required_ir_value = self.env[
+                    'hr.scale.ir'].get_ir(cumul_fullfill, nbr=12)
                 required_ir_value *= cumul_worked_days / \
                     (nbr_days_declared * 12)
             else:
-                cumul_worked_hours = self.pool.get('hr.dictionnary').compute_value(
+                cumul_worked_hours = self.env['hr.dictionnary'].compute_value(
                     code="NBR_HEURES",
                     year_of_date=last_slip_date_to,
                     date_stop=last_slip_date_to,
@@ -347,20 +349,20 @@ class hr_salary_rule(models.Model):
                 nbr_hours_declared = p.company_id.main_company_id.nbr_hours_declared
                 cumul_fullfill = cumul_worked_hours > 0 and (base + cumul_net_imposable_value) * \
                     (nbr_hours_declared * 12) / cumul_worked_hours or 0.0
-                required_ir_value = self.pool.get(
-                    'hr.scale.ir').get_ir(cumul_fullfill, nbr=12)
+                required_ir_value = self.env[
+                    'hr.scale.ir'].get_ir(cumul_fullfill, nbr=12)
                 required_ir_value *= cumul_worked_hours / \
                     (nbr_hours_declared * 12)
             computed_ir_value = required_ir_value - cumul_ir_value
             return computed_ir_value
 
         def get_cs(p, categories, base, base_code):
-            reg_ok = self.pool.get('ir.config_parameter').get_param(
+            reg_ok = self.env['ir.config_parameter'].get_param(
                 'css_reg', '0') == '1' and True or False
             if not reg_ok:
-                return self.pool.get('hr.scale.solidarity').get_solidarity(base, 1)
+                return self.env['hr.scale.solidarity'].get_solidarity(base, 1)
             based_on_days = p.contract_id.based_on_days
-            nbr = self.pool.get('hr.payslip').search_count([
+            nbr = self.env['hr.payslip'].search_count([
                 ('state', '=', 'done'),
                 ('employee_id', '=', p.employee_id),
                 ('date_from', '>=', p.date_from[:4] + '-01-01'),
@@ -368,12 +370,12 @@ class hr_salary_rule(models.Model):
                 ('company_id', '=', p.company_id.id)
             ]) * 1.0 + 1
             if nbr == 1:
-                return self.pool.get('hr.scale.solidarity').get_solidarity(base, nbr)
+                return self.env['hr.scale.solidarity'].get_solidarity(base, nbr)
             m1days = timedelta(days=-1)
             last_slip_date_to = datetime.strptime(
                 p.date_from, "%Y-%m-%d") + m1days
             last_slip_date_to = last_slip_date_to.strftime("%Y-%m-%d")
-            cumul_solidarity_value = self.pool.get('hr.dictionnary').compute_value(
+            cumul_solidarity_value = self.env['hr.dictionnary'].compute_value(
                 code="CONTRIBUTION_SOLIDARITE",
                 year_of_date=p.date_from,
                 date_start=p.date_from[:4] + '-01-01',
@@ -381,7 +383,7 @@ class hr_salary_rule(models.Model):
                 employee_id=p.employee_id,
                 company_id=p.company_id.id
             )
-            cumul_net_contractuel = self.pool.get('hr.dictionnary').compute_value(
+            cumul_net_contractuel = self.env['hr.dictionnary'].compute_value(
                 code=base_code,
                 year_of_date=p.date_from,
                 date_start=p.date_from[:4] + '-01-01',
@@ -390,7 +392,7 @@ class hr_salary_rule(models.Model):
                 company_id=p.company_id.id
             )
             if based_on_days:
-                cumul_worked_days = self.pool.get('hr.dictionnary').compute_value(
+                cumul_worked_days = self.env['hr.dictionnary'].compute_value(
                     code="NBR_JOURS",
                     year_of_date=last_slip_date_to,
                     date_stop=last_slip_date_to,
@@ -400,12 +402,12 @@ class hr_salary_rule(models.Model):
                 nbr_days_declared = p.company_id.main_company_id.nbr_days_declared
                 cumul_fullfill = cumul_worked_days > 0 and (base + cumul_net_contractuel) * \
                     (nbr_days_declared * 12) / cumul_worked_days or 0.0
-                required_cs_value = self.pool.get(
-                    'hr.scale.solidarity').get_solidarity(cumul_fullfill, nbr=12)
+                required_cs_value = self.env[
+                    'hr.scale.solidarity'].get_solidarity(cumul_fullfill, nbr=12)
                 required_cs_value *= cumul_worked_days / \
                     (nbr_days_declared * 12)
             else:
-                cumul_worked_hours = self.pool.get('hr.dictionnary').compute_value(
+                cumul_worked_hours = self.env['hr.dictionnary'].compute_value(
                     code="NBR_HEURES",
                     year_of_date=last_slip_date_to,
                     date_stop=last_slip_date_to,
@@ -415,8 +417,8 @@ class hr_salary_rule(models.Model):
                 nbr_hours_declared = p.company_id.main_company_id.nbr_hours_declared
                 cumul_fullfill = cumul_worked_hours > 0 and (base + cumul_net_contractuel) * \
                     (nbr_hours_declared * 12) / cumul_worked_hours or 0
-                required_cs_value = self.pool.get(
-                    'hr.scale.solidarity').get_solidarity(cumul_fullfill, nbr=12)
+                required_cs_value = self.env[
+                    'hr.scale.solidarity'].get_solidarity(cumul_fullfill, nbr=12)
                 required_cs_value *= cumul_worked_hours / \
                     (nbr_hours_declared * 12)
             computed_cs_value = required_cs_value - cumul_solidarity_value
@@ -435,10 +437,10 @@ class hr_salary_rule(models.Model):
 
         def get_plafond_ind_kilometrique(payslip):
             plafond = 0
-            cvs = self.pool.get('hr.employee.km').get_cvs(payslip.employee_id, payslip.date_from, payslip.date_to)
+            cvs = self.env['hr.employee.km'].get_cvs(payslip.employee_id, payslip.date_from, payslip.date_to)
             for cv in cvs:
-                rate = self.pool.get('hr.scale.km').get_km_rate(cv)
-                km, tmp = self.pool.get('hr.employee.km').get_km_cv(payslip.employee_id, payslip.date_from, payslip.date_to, cv=cv)
+                rate = self.env['hr.scale.km'].get_km_rate(cv)
+                km, tmp = self.env['hr.employee.km'].get_km_cv(payslip.employee_id, payslip.date_from, payslip.date_to, cv=cv)
                 plafond += km * rate
             return plafond
 
@@ -475,18 +477,21 @@ class hr_salary_rule(models.Model):
 
         if rule.amount_select == 'flexible_percentage':
             try:
+#                 print "flexible_percentage",rule.base_val
                 return eval(rule.base_val, localdict), eval(rule.quantity, localdict), eval(rule.rate_val, localdict)
             except:
                 raise Warning(
                     _('Erreur dans l\'expression python défini pour la règle de salaire %s (%s).') % (rule.name, rule.code))
         elif rule.amount_select == 'fix':
             try:
+#                 print "fix"
                 return rule.amount_fix, float(eval(rule.quantity, localdict)), 100.0
             except:
                 raise Warning(
                 _('Erreur dans la quantité défini pour la règle de salaire %s (%s).')% (rule.name, rule.code))
         elif rule.amount_select == 'percentage':
             try:
+#                 print "percentage"
                 return (float(eval(rule.amount_percentage_base, localdict)),
                         float(eval(rule.quantity, localdict)),
                         rule.amount_percentage)
@@ -495,6 +500,7 @@ class hr_salary_rule(models.Model):
                 _('Erreur de pourcentage de base ou la quantité défini pour la règle de salaire %s (%s).')% (rule.name, rule.code))
         else:
             try:
+#                 print "kokokok",rule.amount_python_compute
                 eval(rule.amount_python_compute, localdict, mode='exec', nocopy=True)
                 return float(localdict['result']), 'result_qty' in localdict and localdict['result_qty'] or 1.0, 'result_rate' in localdict and localdict['result_rate'] or 100.0
             except:

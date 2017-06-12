@@ -72,15 +72,15 @@ class hr_expense_expense(models.Model):
 #         return res
 # 
 # 
-# class hr_expense_line(models.Model):
-#     _inherit = 'hr.expense.line'
-# 
-#     rubrique_id = fields.Many2one('hr.rubrique', string=u'Rubrique',)
-#     avance_id = fields.Many2one('hr.avance', string=u'Avance',)
-#     avantage_id = fields.Many2one('hr.avantage', string=u'Avantage',)
-#     payroll_type = fields.Selection([
-#         ('majoration_net', 'Majoration sur le salaire net'),
-#         ('retenu_net', 'Retenu sur le salaire net'),
-#     ], string=u'Operation on the net',)
+class hr_expense_line(models.Model):
+    _inherit = 'hr.expense'
+ 
+    rubrique_id = fields.Many2one('hr.rubrique', string=u'Rubrique',)
+    avance_id = fields.Many2one('hr.avance', string=u'Avance',)
+    avantage_id = fields.Many2one('hr.avantage', string=u'Avantage',)
+    payroll_type = fields.Selection([
+        ('majoration_net', 'Majoration sur le salaire net'),
+        ('retenu_net', 'Retenu sur le salaire net'),
+    ], string=u'Operation on the net',)
 #     payroll_date = fields.Date(
 #         string=u'Date', related='expense_id.payroll_date', store=True)
