@@ -4,13 +4,13 @@
         <menuitem id="menu_hr_main_administration"
             name="Administration" parent="hr.menu_hr_root" sequence="1"/>
         <menuitem  id="menu_hr_main_kzm_misc"
-            name="Salaires et Avances" parent="hr.menu_hr_root" sequence="19"/>
+            name="Salaires et Avances" parent="hr_payroll.menu_hr_payroll_root" sequence="19"/>
         <menuitem  id="menu_hr_main_reports" name="Rapports"
-            parent="hr.menu_hr_root" sequence="30"/>
+            parent="hr_payroll.menu_hr_payroll_root" sequence="30"/>
         <menuitem  id="menu_hr_main_teledeclaration"
-            name="Télédéclaration" parent="hr.menu_hr_root" sequence="31"/>
+            name="Télédéclaration" parent="hr_payroll.menu_hr_payroll_root" sequence="31"/>
         <menuitem  id="menu_hr_saisie_main"
-            name="Saisie simplifiée" parent="hr.menu_hr_root" sequence="29"/>
+            name="Saisie simplifiée" parent="hr_payroll.menu_hr_payroll_root" sequence="29"/>
         <!-- Contract menu Security -->
         <record id="hr_contract.hr_menu_contract" model="ir.ui.menu">
             <field eval="[(6, 0, [ref('group_hr_menu_contract')])]" name="groups_id"/>

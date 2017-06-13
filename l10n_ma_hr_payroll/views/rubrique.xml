@@ -91,6 +91,6 @@
             <field name="context">{'active_test': False}</field>
         </record>
 
-        <menuitem id="menu_hr_rubrique" parent="hr.menu_human_resources_configuration" sequence="22" action="act_open_hr_rubrique_view" />
+        <menuitem id="menu_hr_rubrique" parent="hr_payroll.menu_hr_payroll_configuration" sequence="22" action="act_open_hr_rubrique_view" />
     </data>
 </openerp>

@@ -45,8 +45,8 @@ class hr_salary_rule(models.Model):
     @api.one
     @api.constrains('code', 'avance_id', 'avantage_id', 'rubrique_id', 'cotisation_id')
     def _check_code(self):
-        print self
-        print self.code
+#         print self
+#         print self.code
         if self.search_count([('code', '=', self.code)]) > 1:
             raise Warning(
                 _('The code [%s] is already exist') % self.code.replace(PARENT, ''))
@@ -474,10 +474,13 @@ class hr_salary_rule(models.Model):
             else:
                 eval(rule.amount_python_compute, localdict, mode='exec', nocopy=True)
                 return float(localdict['result']), 'result_qty' in localdict and localdict['result_qty'] or 1.0, 'result_rate' in localdict and localdict['result_rate'] or 100.0
-
+        
         if rule.amount_select == 'flexible_percentage':
             try:
+#                 print "koko",localdict['inputs'].SALAIRE_PAR_JOUR
 #                 print "flexible_percentage",rule.base_val
+#                 print "flexible_percentage",rule.quantity,localdict['worked_days'].DECLARED
+#                 print "flexible_percentage",rule.rate_val,eval(rule.rate_val, localdict)
                 return eval(rule.base_val, localdict), eval(rule.quantity, localdict), eval(rule.rate_val, localdict)
             except:
                 raise Warning(

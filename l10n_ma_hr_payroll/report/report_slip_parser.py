@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import time
+from . import abstract_report_xlsx
 from odoo import models, fields, api, _
 from odoo.report import report_sxw
 
+class slip_report(abstract_report_xlsx.AbstractReportXslx):
 
-class slip_report(report_sxw.rml_parse):
-
-    def __init__(self, cr, uid, name, context):
-        super(slip_report, self).__init__(cr, uid, name, context=context)
+    def __init__(self, name, table, rml=False, parser=False, header=True,
+                 store=False):
+        super(slip_report, self).__init__(name, table, rml, parser, header, store)
         self.localcontext.update({
             'time': time,
             'lines': self.get_lines,
@@ -32,8 +33,7 @@ class slip_report(report_sxw.rml_parse):
         return res
 
     def get_cumul(self, p, code):
-        return self.pool.get('hr.dictionnary').compute_value(
-            self.cr, self.uid,
+        return self.env['hr.dictionnary'].compute_value(
             code=code,
             year_of_date=p.date_from,
             date_start=False,
@@ -43,8 +43,7 @@ class slip_report(report_sxw.rml_parse):
         )
 
     def get_current(self, p, code):
-        return self.pool.get('hr.dictionnary').compute_value(
-            self.cr, self.uid,
+        return self.env['hr.dictionnary'].compute_value(
             code=code,
             year_of_date=p.date_from,
             date_start=p.date_from,
@@ -80,3 +79,9 @@ class report_slip_ir_brut(models.AbstractModel):
     _inherit = 'report.abstract_report'
     _template = 'l10n_ma_hr_payroll.report_slip_ir_brut'
     _wrapped_report_class = slip_report
+    
+# slip_report(
+#     'report.account_financial_report_qweb.report_aged_partner_balance_xlsx',
+#     'report_aged_partner_balance_qweb',
+#     parser=report_sxw.rml_parse
+# )

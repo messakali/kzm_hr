@@ -27,10 +27,10 @@ class voucher_order(report_sxw.rml_parse):
     def get_lines(self, p):
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', p.date_from),
             ('date_to', '<=', p.date_to),
@@ -42,10 +42,8 @@ class voucher_order(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.state != 'all':
             payslip_domain.append(('state', '=', p.state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
-        payslips = self.pool.get('hr.payslip').browse(
-            self.cr, self.uid, payslip_ids)
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
+        payslips = self.env['hr.payslip'].browse(payslip_ids)
         employees = list(set([x.employee_id for x in payslips]))
         employees = sorted(employees, key=lambda x: x.otherid)
         tab = []
@@ -61,8 +59,8 @@ class voucher_order(report_sxw.rml_parse):
                     'name': emp.bank_account_id.bank_name or '',
                     'rib': emp.bank_account_id.acc_number or '',
                 })
-            fields_got = self.pool.get(
-                'hr.employee').fields_get(self.cr, self.uid)
+            fields_got = self.env[
+                'hr.employee'].fields_get()
             for name, field in fields_got.iteritems():
                 try:
                     line['employee'][name] = getattr(emp, name)
@@ -72,12 +70,9 @@ class voucher_order(report_sxw.rml_parse):
                 'address_home_id'] = emp.address_home_id and emp.address_home_id.contact_address.replace('\n', ', ') or ''
             line['employee'][
                 'address_id'] = emp.address_id and emp.address_id.contact_address.replace('\n', ', ') or ''
-            dict_keys = self.pool.get('hr.dictionnary').search_read(
-                self.cr, self.uid, [], ['name'])
+            dict_keys = self.env['hr.dictionnary'].search_read([], ['name'])
             for code in dict_keys:
-                line['cumul'][code.get('name')] = self.pool.get('hr.dictionnary').compute_value(
-                    self.cr,
-                    self.uid,
+                line['cumul'][code.get('name')] = self.env['hr.dictionnary'].compute_value(
                     code=code.get('name'),
                     date_start=p.date_from,
                     date_stop=p.date_to,
@@ -93,7 +88,7 @@ class voucher_order(report_sxw.rml_parse):
         if p.company_ids:
             return [x.id for x in p.company_ids]
         else:
-            return self.pool.get('res.company').search(self.cr, self.uid, [])
+            return self.env['res.company'].search([])
 
 
 class report_slipqweb(models.AbstractModel):
@@ -126,10 +121,10 @@ class voucher_order_global(report_sxw.rml_parse):
     def get_lines(self, p):
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', p.date_from),
             ('date_to', '<=', p.date_to),
@@ -141,10 +136,8 @@ class voucher_order_global(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.state != 'all':
             payslip_domain.append(('state', '=', p.state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
-        payslips = self.pool.get('hr.payslip').browse(
-            self.cr, self.uid, payslip_ids)
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
+        payslips = self.env['hr.payslip'].browse(payslip_ids)
         employees = list(set([x.employee_id for x in payslips]))
         employees = sorted(employees, key=lambda x: x.otherid)
         tab = []
@@ -160,8 +153,8 @@ class voucher_order_global(report_sxw.rml_parse):
                     'name': emp.bank_account_id.bank_name or '',
                     'rib': emp.bank_account_id.acc_number or '',
                 })
-            fields_got = self.pool.get(
-                'hr.employee').fields_get(self.cr, self.uid)
+            fields_got = self.env[
+                'hr.employee'].fields_get()
             for name, field in fields_got.iteritems():
                 try:
                     line['employee'][name] = getattr(emp, name)
@@ -171,12 +164,9 @@ class voucher_order_global(report_sxw.rml_parse):
                 'address_home_id'] = emp.address_home_id and emp.address_home_id.contact_address.replace('\n', ', ') or ''
             line['employee'][
                 'address_id'] = emp.address_id and emp.address_id.contact_address.replace('\n', ', ') or ''
-            dict_keys = self.pool.get('hr.dictionnary').search_read(
-                self.cr, self.uid, [], ['name'])
+            dict_keys = self.env['hr.dictionnary'].search_read([], ['name'])
             for code in dict_keys:
-                line['cumul'][code.get('name')] = self.pool.get('hr.dictionnary').compute_value(
-                    self.cr,
-                    self.uid,
+                line['cumul'][code.get('name')] = self.env['hr.dictionnary'].compute_value(
                     code=code.get('name'),
                     date_start=p.date_from,
                     date_stop=p.date_to,
@@ -192,7 +182,7 @@ class voucher_order_global(report_sxw.rml_parse):
         if p.company_ids:
             return [x.id for x in p.company_ids]
         else:
-            return self.pool.get('res.company').search(self.cr, self.uid, [])
+            return self.env['res.company'].search([])
 
 
 class report_slipqweb_global(models.AbstractModel):

@@ -24,10 +24,9 @@ class warning(report_sxw.rml_parse):
         v += re.findall(r'(\$\{[\w\s.]+\})', payload)
         v = list(set(v))
         employee = w.employee_id
-        contract_id = self.pool.get('hr.contract').search(self.cr, self.uid, [
+        contract_id = self.env['hr.contract'].search([
             ('employee_id', '=', employee.id), ('is_contract_valid_by_context', '=', w.action_date)])
-        contract = contract_id and self.pool.get('hr.contract').browse(
-            self.cd, self.uid, contract_id[0]) or False
+        contract = contract_id and self.env['hr.contract'].browse(contract_id[0]) or False
         company = contract and contract.company_id or employee.company_id
         for element in v:
             localdict = {

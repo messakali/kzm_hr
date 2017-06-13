@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
-        <menuitem  id="menu_hr_main_accounting" name="Comptabilité" parent="hr.menu_hr_root" sequence="32"/>
+        <menuitem  id="menu_hr_main_accounting" name="Comptabilité" parent="hr_payroll.menu_hr_payroll_root" sequence="32"/>
         <record id="view_hr_payslip_account_tree" model="ir.ui.view">
             <field name="name">hr.payslip.account.tree</field>
             <field name="model">hr.payslip.account</field>

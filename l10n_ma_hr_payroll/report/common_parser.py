@@ -18,9 +18,9 @@ from datetime import timedelta
 
 class common_parser(report_sxw.rml_parse):
 
-    def __init__(self, cr, uid, name, context):
-        super(common_parser, self).__init__(
-            cr, uid, name, context=context)
+    def __init__(self, name, table, rml=False, parser=False, header=True,
+                 store=False):
+        super(common_parser, self).__init__(name, table, rml, parser, header, store)
         self.localcontext.update({
             'time': time,
             'math': math,
@@ -51,10 +51,10 @@ class common_parser(report_sxw.rml_parse):
     def get_register_lines(self, p):
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', p.date_from),
             ('date_to', '<=', p.date_to),
@@ -64,10 +64,9 @@ class common_parser(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.payslip_state != 'all':
             payslip_domain.append(('state', '=', p.payslip_state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
-        payslips = self.pool.get('hr.payslip').browse(self.cr, self.uid, payslip_ids)
-        registers = self.pool.get('hr.contribution.register').search_read(self.cr, self.uid, [],['name'])
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
+        payslips = self.env['hr.payslip'].browse(payslip_ids)
+        registers = self.env['hr.contribution.register'].search_read([],['name'])
         registers = [[x.get('id'), x.get('name'), 0] for x in registers]
         for slip in payslips:
             for line in slip.details_by_salary_rule_category:
@@ -166,10 +165,10 @@ class common_parser(report_sxw.rml_parse):
             df = period[1][:10]
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', dd),
             ('date_to', '<=', df),
@@ -182,10 +181,8 @@ class common_parser(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.payslip_state != 'all':
             payslip_domain.append(('state', '=', p.payslip_state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
-        payslips = self.pool.get('hr.payslip').browse(
-            self.cr, self.uid, payslip_ids)
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
+        payslips = self.env['hr.payslip'].browse(payslip_ids)
         employees = list(set([x.employee_id for x in payslips]))
         employees = sorted(employees, key=lambda x: x.otherid)
         tab = []
@@ -215,9 +212,7 @@ class common_parser(report_sxw.rml_parse):
             line['employee'][
                 'address_id'] = emp.address_id and emp.address_id.contact_address.strip().replace('\n', ', ') or ''
             for code in dict_keys:
-                line['cumul'][code] = self.pool.get('hr.dictionnary').compute_value(
-                    self.cr,
-                    self.uid,
+                line['cumul'][code] = self.env['hr.dictionnary'].compute_value(
                     code=code,
                     date_start=dd,
                     date_stop=df,
@@ -226,14 +221,12 @@ class common_parser(report_sxw.rml_parse):
                     department_ids=p.departments_id and department_ids or False,
                     state=p.payslip_state
                 )
-                dict_id = self.pool.get('hr.salary.rule').search(self.cr, self.uid, [('code','=',str(code))])
+                dict_id = self.env['hr.salary.rule'].search([('code','=',str(code))])
                 if dict_id:
-                    line['tx'][code] = self.pool.get('hr.salary.rule').browse(self.cr, self.uid, dict_id).rate_val
+                    line['tx'][code] = self.env['hr.salary.rule'].browse(dict_id).rate_val
                 else:
                     line['tx'][code] = ''
-            line['extra']['DAYS'] = self.pool.get('hr.dictionnary').compute_value(
-                self.cr,
-                self.uid,
+            line['extra']['DAYS'] = self.env['hr.dictionnary'].compute_value(
                 category_code='GAIN',
                 date_start=dd,
                 date_stop=df,
@@ -243,9 +236,7 @@ class common_parser(report_sxw.rml_parse):
                 based_on='days',
                 department_ids=p.departments_id and department_ids or False,
                 state=p.payslip_state
-            ) + self.pool.get('hr.dictionnary').compute_value(
-                self.cr,
-                self.uid,
+            ) + self.env['hr.dictionnary'].compute_value(
                 category_code='AUTRE_GAIN',
                 date_start=dd,
                 date_stop=df,
@@ -256,9 +247,7 @@ class common_parser(report_sxw.rml_parse):
                 department_ids=p.departments_id and department_ids or False,
                 state=p.payslip_state
             )
-            line['extra']['HOURS'] = self.pool.get('hr.dictionnary').compute_value(
-                self.cr,
-                self.uid,
+            line['extra']['HOURS'] = self.env['hr.dictionnary'].compute_value(
                 category_code='GAIN',
                 date_start=dd,
                 date_stop=df,
@@ -268,9 +257,7 @@ class common_parser(report_sxw.rml_parse):
                 based_on='hours',
                 department_ids=p.departments_id and department_ids or False,
                 state=p.payslip_state
-            ) + self.pool.get('hr.dictionnary').compute_value(
-                self.cr,
-                self.uid,
+            ) + self.env['hr.dictionnary'].compute_value(
                 category_code='AUTRE_GAIN',
                 date_start=dd,
                 date_stop=df,
@@ -304,17 +291,17 @@ class common_parser(report_sxw.rml_parse):
         if p.company_ids:
             return [x.id for x in p.company_ids]
         else:
-            return self.pool.get('res.company').search(self.cr, self.uid, [])
+            return self.env['res.company'].search([])
 
     def get_holiday(self, p, period, emp_id, holiday_id):
         dd = period[0][:10]
         df = period[1][:10]
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', dd),
             ('date_to', '<=', df),
@@ -325,11 +312,8 @@ class common_parser(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.payslip_state != 'all':
             payslip_domain.append(('state', '=', p.payslip_state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
-        return self.pool.get('hr.dictionnary').compute_value(
-            self.cr,
-            self.uid,
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
+        return self.env['hr.dictionnary'].compute_value(
             code=False,
             date_start=dd,
             date_stop=df,
@@ -346,10 +330,10 @@ class common_parser(report_sxw.rml_parse):
         df = period[1][:10]
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', dd),
             ('date_to', '<=', df),
@@ -360,11 +344,8 @@ class common_parser(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.payslip_state != 'all':
             payslip_domain.append(('state', '=', p.payslip_state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
-        return self.pool.get('hr.dictionnary').compute_value(
-            self.cr,
-            self.uid,
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
+        return self.env['hr.dictionnary'].compute_value(
             code=False,
             date_start=dd,
             date_stop=df,
@@ -381,10 +362,10 @@ class common_parser(report_sxw.rml_parse):
         df = period[1][:10]
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', dd),
             ('date_to', '<=', df),
@@ -395,11 +376,8 @@ class common_parser(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.payslip_state != 'all':
             payslip_domain.append(('state', '=', p.payslip_state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
-        return self.pool.get('hr.dictionnary').compute_value(
-            self.cr,
-            self.uid,
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
+        return self.env['hr.dictionnary'].compute_value(
             code=False,
             date_start=dd,
             date_stop=df,
@@ -416,10 +394,10 @@ class common_parser(report_sxw.rml_parse):
         df = period[1][:10]
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', dd),
             ('date_to', '<=', df),
@@ -430,11 +408,8 @@ class common_parser(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.payslip_state != 'all':
             payslip_domain.append(('state', '=', p.payslip_state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
-        return self.pool.get('hr.dictionnary').compute_value(
-            self.cr,
-            self.uid,
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
+        return self.env['hr.dictionnary'].compute_value(
             code=False,
             date_start=dd,
             date_stop=df,
@@ -451,10 +426,10 @@ class common_parser(report_sxw.rml_parse):
         df = period[1][:10]
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', dd),
             ('date_to', '<=', df),
@@ -465,16 +440,13 @@ class common_parser(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.payslip_state != 'all':
             payslip_domain.append(('state', '=', p.payslip_state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
         category_type = False
         if cotisation=='p':
             category_type='rp'
         if cotisation=='s':
             category_type='rs'
-        return self.pool.get('hr.dictionnary').compute_value(
-            self.cr,
-            self.uid,
+        return self.env['hr.dictionnary'].compute_value(
             date_start=dd,
             date_stop=df,
             employee_id=emp_id,
@@ -493,10 +465,10 @@ class common_parser(report_sxw.rml_parse):
         ctx.update({'active_test': False, })
         department_ids = [x.id for x in p.departments_id]
         if not department_ids:
-            department_ids = self.pool.get(
-                'hr.department').search(self.cr, self.uid, [])
-        department_ids = self.pool.get(
-            'hr.department').search(self.cr, self.uid, [('id', 'child_of', department_ids)])
+            department_ids = self.env[
+                'hr.department'].search([])
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
         payslip_domain = [
             ('date_to', '>=', dd),
             ('date_to', '<=', df),
@@ -506,16 +478,13 @@ class common_parser(report_sxw.rml_parse):
             payslip_domain.append(('department_id', 'in', department_ids),)
         if p.payslip_state != 'all':
             payslip_domain.append(('state', '=', p.payslip_state),)
-        payslip_ids = self.pool.get('hr.payslip').search(
-            self.cr, self.uid, payslip_domain)
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
         # Rubriques
         rubriques = []
-        for rubrique in self.pool.get('hr.rubrique').search_read(self.cr, self.uid, [], ['name','show_on_ledger'], order='sequence asc', context=ctx):
+        for rubrique in self.env['hr.rubrique'].search_read([], ['name','show_on_ledger'], order='sequence asc'):
             if rubrique.get('show_on_ledger', False) == 'never':
                 continue
-            if rubrique.get('show_on_ledger', False) == 'always' or self.pool.get('hr.dictionnary').compute_value(
-                self.cr,
-                self.uid,
+            if rubrique.get('show_on_ledger', False) == 'always' or self.env['hr.dictionnary'].compute_value(
                 code=False,
                 date_start=dd,
                 date_stop=df,
@@ -529,12 +498,10 @@ class common_parser(report_sxw.rml_parse):
                 rubriques.append(rubrique)
         # Avantages
         avantages = []
-        for avantage in self.pool.get('hr.avantage').search_read(self.cr, self.uid, [], ['name','show_on_ledger'], order='sequence asc', context=ctx):
+        for avantage in self.env['hr.avantage'].search_read([], ['name','show_on_ledger'], order='sequence asc'):
             if avantage.get('show_on_ledger', False) == 'never':
                 continue
-            if avantage.get('show_on_ledger', False) == 'always' or self.pool.get('hr.dictionnary').compute_value(
-                self.cr,
-                self.uid,
+            if avantage.get('show_on_ledger', False) == 'always' or self.env['hr.dictionnary'].compute_value(
                 code=False,
                 date_start=dd,
                 date_stop=df,
@@ -548,12 +515,10 @@ class common_parser(report_sxw.rml_parse):
                 avantages.append(avantage)
         # Avances
         avances = []
-        for avance in self.pool.get('hr.avance').search_read(self.cr, self.uid, [], ['name','show_on_ledger'], order='sequence asc', context=ctx):
+        for avance in self.env['hr.avance'].search_read([], ['name','show_on_ledger'], order='sequence asc'):
             if avance.get('show_on_ledger', False) == 'never':
                 continue
-            if avance.get('show_on_ledger', False) == 'always' or self.pool.get('hr.dictionnary').compute_value(
-                self.cr,
-                self.uid,
+            if avance.get('show_on_ledger', False) == 'always' or self.env['hr.dictionnary'].compute_value(
                 code=False,
                 date_start=dd,
                 date_stop=df,
@@ -567,13 +532,11 @@ class common_parser(report_sxw.rml_parse):
                 avances.append(avance)
         # Cotisations
         cotisation_ledgers = []
-        for cotisation_ledger in self.pool.get('hr.cotisation.ledger').search_read(self.cr, self.uid, [], ['name','show_on_ledger'], order='sequence asc', context=ctx):
+        for cotisation_ledger in self.env['hr.cotisation.ledger'].search_read([], ['name','show_on_ledger'], order='sequence asc'):
             if cotisation_ledger.get('show_on_ledger', False) == 'never':
                 continue
             if p.cotisation in ['g','sp']:
-                if cotisation_ledger.get('show_on_ledger', False) == 'always' or self.pool.get('hr.dictionnary').compute_value(
-                    self.cr,
-                    self.uid,
+                if cotisation_ledger.get('show_on_ledger', False) == 'always' or self.env['hr.dictionnary'].compute_value(
                     code=False,
                     date_start=dd,
                     date_stop=df,
@@ -586,9 +549,7 @@ class common_parser(report_sxw.rml_parse):
                 ):
                     cotisation_ledgers.append(cotisation_ledger)
             if p.cotisation == 's':
-                if cotisation_ledger.get('show_on_ledger', False) == 'always' or self.pool.get('hr.dictionnary').compute_value(
-                    self.cr,
-                    self.uid,
+                if cotisation_ledger.get('show_on_ledger', False) == 'always' or self.env['hr.dictionnary'].compute_value(
                     code=False,
                     date_start=dd,
                     date_stop=df,
@@ -602,9 +563,7 @@ class common_parser(report_sxw.rml_parse):
                 ):
                     cotisation_ledgers.append(cotisation_ledger)
             if p.cotisation == 'p':
-                if cotisation_ledger.get('show_on_ledger', False) == 'always' or self.pool.get('hr.dictionnary').compute_value(
-                    self.cr,
-                    self.uid,
+                if cotisation_ledger.get('show_on_ledger', False) == 'always' or self.env['hr.dictionnary'].compute_value(
                     code=False,
                     date_start=dd,
                     date_stop=df,
@@ -619,12 +578,10 @@ class common_parser(report_sxw.rml_parse):
                     cotisation_ledgers.append(cotisation_ledger)
         # Status
         holidays = []
-        for holiday in self.pool.get('hr.holidays.status').search_read(self.cr, self.uid, [('is_hs','=',True)], ['name','show_on_ledger'], order='sequence asc', context=ctx):
+        for holiday in self.env['hr.holidays.status'].search_read([('is_hs','=',True)], ['name','show_on_ledger'], order='sequence asc'):
             if holiday.get('show_on_ledger', False) == 'never':
                 continue
-            if holiday.get('show_on_ledger', False) == 'always' or self.pool.get('hr.dictionnary').compute_value(
-                self.cr,
-                self.uid,
+            if holiday.get('show_on_ledger', False) == 'always' or self.env['hr.dictionnary'].compute_value(
                 code=False,
                 date_start=dd,
                 date_stop=df,

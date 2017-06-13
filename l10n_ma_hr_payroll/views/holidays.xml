@@ -106,7 +106,7 @@
             <field name="groups_id" eval="[(6, 0, [ref('group_hr_menu_old_leave')])]" />
         </record>
         <!-- New holidays main menu -->
-        <menuitem id="menu_new_main_holidays" parent="hr.menu_hr_root" sequence="20" name="Congés et Heures Supp." groups="l10n_ma_hr_payroll.group_hr_menu_leave"
+        <menuitem id="menu_new_main_holidays" parent="hr_holidays.menu_hr_holidays_root" sequence="20" name="Congés et Heures Supp." groups="l10n_ma_hr_payroll.group_hr_menu_leave"
         />
         <menuitem id="menu_new_holidays_given_menu" parent="menu_new_main_holidays" sequence="10" name="Congés et Heures Supp." action="hr_holidays.open_ask_holidays"
         />
@@ -115,7 +115,7 @@
         <menuitem id="menu_new_holidays_summary_menu" parent="menu_new_main_holidays" sequence="60" name="Résumé Congés/Heures Supp." action="hr_holidays.open_company_allocation"
         />
         <!-- New Allocation main menu -->
-        <menuitem id="menu_new_main_holidays_allocation" parent="hr.menu_hr_root" sequence="21" name="Attribution Congés" groups="l10n_ma_hr_payroll.group_hr_menu_attribution"
+        <menuitem id="menu_new_main_holidays_allocation" parent="hr_holidays.menu_hr_holidays_root" sequence="21" name="Attribution Congés" groups="l10n_ma_hr_payroll.group_hr_menu_attribution"
         />
         <menuitem id="menu_new_holidays_allocation_given_menu" parent="menu_new_main_holidays_allocation" sequence="10" name="Attributions"
         action="hr_holidays.open_allocation_holidays" />

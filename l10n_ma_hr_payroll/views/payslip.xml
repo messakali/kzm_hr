@@ -42,7 +42,10 @@
                 <xpath expr="//button[@name='action_payslip_cancel']" position="after">
                     <button  name="reset_params" states="draft" string="Réinitialiser les paramètres" type="object"/>
                 </xpath>
-<!-- <xpath expr="//button[@name='refund_sheet']" position="after">
+<!--                 <xpath expr="//button[@name='contract_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+<xpath expr="//button[@name='refund_sheet']" position="after">
                             <button string="Cancel Payslip" name="cancel_payslip" states="done" type="object"/>
                         </xpath> -->
                 <xpath expr="//field[@name='struct_id']" position="after">
@@ -101,6 +104,19 @@
                 </xpath>
             </field>
         </record>
+        
+        <record id="view_hr_payslip_form" model="ir.ui.view">
+            <field name="name">hr.payslip.form</field>
+            <field name="model">hr.payslip</field>
+            <field  name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='contract_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        
 <!-- Payslip Tree -->
         <record id="view_hr_payslip_state2_tree" model="ir.ui.view">
             <field name="name">hr.payslip.tree</field>

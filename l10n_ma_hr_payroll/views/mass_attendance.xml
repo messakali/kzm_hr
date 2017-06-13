@@ -3,7 +3,7 @@
     <data>
       <!-- Main menu of Mass Attendance -->
       <menuitem id="menu_hr_pointage_periodique"
-        parent="hr.menu_hr_root"
+        parent="hr_attendance.menu_hr_attendance_root"
         sequence="11"
         name="Pointage périodique"
         groups="l10n_ma_hr_payroll.group_hr_menu_mass_attendance"/>

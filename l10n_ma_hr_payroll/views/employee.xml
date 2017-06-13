@@ -320,5 +320,23 @@
         </record>
         <menuitem  action="open_view_archive_employee_list_my" groups="l10n_ma_hr_payroll.group_hr_menu_archive"
             id="menu_open_archive_view_employee_list_my" parent="hr.menu_hr_main" sequence="30"/>
+        
+		<menuitem
+            id="hr.menu_hr_main"
+            name="Employés"
+            parent="hr.menu_hr_root"
+            sequence="0"/>
+		<menuitem
+            id="hr_contract.hr_menu_contract"
+            name="Contracts"
+            action="hr_contract.action_hr_contract"
+            parent="hr.menu_hr_main"
+            sequence="4"
+            groups="hr.group_hr_manager"/>
+		<menuitem
+            id="hr.menu_open_view_employee_list_my"
+            action="hr.open_view_employee_list_my"
+            parent="hr.menu_hr_main"
+            sequence="3"/>
     </data>
 </openerp>

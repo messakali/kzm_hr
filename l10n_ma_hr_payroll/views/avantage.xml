@@ -80,6 +80,6 @@
             <field name="domain">[]</field>
             <field name="context">{'active_test': False}</field>
         </record>
-        <menuitem action="act_open_hr_avantage_view" id="menu_hr_avantage" parent="hr.menu_human_resources_configuration" sequence="20"/>
+        <menuitem action="act_open_hr_avantage_view" id="menu_hr_avantage" parent="hr_payroll.menu_hr_payroll_configuration" sequence="20"/>
     </data>
 </openerp>

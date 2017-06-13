@@ -57,9 +57,9 @@
                 </xpath>
                 <xpath expr="//notebook/page[@name='information']/group/group[@name='salary_and_advantages']/field[@name='wage']"
                     position="before">
-                    <!-- <field  name="based_on_ids" invisible="1" />-->
+                    <field  name="based_on_ids" invisible="1" />
                     <field  domain="[('id','in', based_on_ids and based_on_ids[0] and based_on_ids[0][2] or False)]" name="based_on_id" widget="selection"/>
-                    <field name="based_on_id" widget="selection"/>
+                   <!-- <field name="based_on_id" widget="selection"/> -->
                     <field  name="based_on" invisible="1" />
                     <field  attrs="{'invisible': [('based_on','not in', ['fixed_days','worked_days'])],'required': [('based_on','in', ['fixed_days','worked_days'])]}"
                         name="nbr_days_declared"/>
