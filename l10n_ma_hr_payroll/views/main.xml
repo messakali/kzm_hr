@@ -20,12 +20,10 @@
             <field eval="[(6, 0, [ref('group_hr_menu_employee')])]" name="groups_id"/>
         </record>
         <!-- Payslip menu Security -->
-        <record id="hr_payroll.menu_department_tree" model="ir.ui.menu">
-            <field eval="[(6, 0, [ref('group_hr_menu_payslip')])]" name="groups_id"/>
-        </record>
-        <record id="hr_payroll.menu_hr_payslip_run" model="ir.ui.menu">
-            <field eval="[(6, 0, [ref('group_hr_menu_payslip_run')])]" name="groups_id"/>
-        </record>
+		<menuitem action="hr_payroll.action_view_hr_payslip_form" id="hr_payroll.menu_department_tree" parent="l10n_ma_hr_payroll.menu_hr_main_accounting" groups="l10n_ma_hr_payroll.group_hr_menu_payslip"/>
+        
+        <menuitem action="hr_payroll.action_hr_payslip_run_tree" id="hr_payroll.menu_hr_payslip_run" parent="l10n_ma_hr_payroll.menu_hr_main_accounting" groups="group_hr_menu_payslip_run"/>	        
+
         <!-- Paye reporting Security
         <record id="hr_payroll.menu_hr_payroll_reporting" model="ir.ui.menu">
             <field eval="[(6, 0, [ref('group_hr_menu_board_statistics')])]" name="groups_id"/>
