@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <openerp>
     <data>
+    	<menuitem  id="menu_hr_main_accounting" name="Paie" parent="hr_payroll.menu_hr_payroll_root" sequence="2"/>
+        
         <menuitem id="menu_hr_main_administration"
             name="Administration" parent="hr.menu_hr_root" sequence="1"/>
         <menuitem  id="menu_hr_main_kzm_misc"
