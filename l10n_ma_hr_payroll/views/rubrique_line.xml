@@ -47,9 +47,9 @@
                                 <field  name="name"/>
                                 <label  for="date_start" string="Durée"/>
                                 <div>
-                                    <group col="3">
+                                    <group>
                                         <field  class="oe_inline" name="date_start" nolabel="1"/>
-                                        <label  class="oe_inline" string="-"/>
+                                        <label  class="oe_inline" string="-" nolabel="1"/>
                                         <field  class="oe_inline" name="date_end" nolabel="1"/>
                                     </group>
                                 </div>

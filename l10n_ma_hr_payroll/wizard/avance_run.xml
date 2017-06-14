@@ -10,35 +10,33 @@
                 <form string="Lots Avances / Prêts">
                     <group>
                         <group>
-                            <group>
-                                <field  name="name"/>
-                                <field  name="allocation_mode"/>
-                                <field  attrs="{'invisible': [('allocation_mode','!=', 'employee')], 'required': [('allocation_mode','=', 'employee')]}"
-                                    name="employee_ids" widget="many2many_tags"/>
-                                <field  attrs="{'invisible': [('allocation_mode','!=', 'category')], 'required': [('allocation_mode','=', 'category')]}"
-                                    name="category_ids" widget="many2many_tags"/>
-                                <field  attrs="{'required' : [('interest_rate','=', 0)] }" name="date"/>
-                                <field  name="date_start"/>
-                                <field  invisible="1" name="date_end"/>
-                                <label  for="echenace_nbr" string="Nombre des échéances"/>
-                                <div>
-                                    <field  class="oe_inline" name="echeance_nbr"/>
-                                    <label  class="oe_inline" string=" months."/>
-                                </div>
-                                <label  attrs="{'invisible': [('interest_rate','>', 0)]}" for="every" string="Périodicité"/>
-                                <div attrs="{'invisible': [('interest_rate','>', 0)]}">
-                                    <field  class="oe_inline" name="every"/>
-                                    <label  class="oe_inline" string=" months."/>
-                                </div>
-                            </group>
-                            <group>
-                                <field  name="state" required="1"/>
-                                <field  name="avance_id" widget="selection"/>
-                                <field  invisible="1" name="interest_rate"/>
-                                <field  invisible="1" name="code"/>
-                                <field  name="amount"/>
-                                <field  attrs="{'invisible': [('interest_rate','=', 0)]}" name="rate"/>
-                            </group>
+                            <field  name="name"/>
+                            <field  name="allocation_mode"/>
+                            <field  attrs="{'invisible': [('allocation_mode','!=', 'employee')], 'required': [('allocation_mode','=', 'employee')]}"
+                                name="employee_ids" widget="many2many_tags"/>
+                            <field  attrs="{'invisible': [('allocation_mode','!=', 'category')], 'required': [('allocation_mode','=', 'category')]}"
+                                name="category_ids" widget="many2many_tags"/>
+                            <field  attrs="{'required' : [('interest_rate','=', 0)] }" name="date"/>
+                            <field  name="date_start"/>
+                            <field  invisible="1" name="date_end"/>
+                            <label  for="echenace_nbr" string="Nombre des échéances"/>
+                            <div>
+                                <field  class="oe_inline" name="echeance_nbr"/>
+                                <label  class="oe_inline" string=" months."/>
+                            </div>
+                            <label  attrs="{'invisible': [('interest_rate','>', 0)]}" for="every" string="Périodicité"/>
+                            <div attrs="{'invisible': [('interest_rate','>', 0)]}">
+                                <field  class="oe_inline" name="every"/>
+                                <label  class="oe_inline" string=" months."/>
+                            </div>
+                        </group>
+                        <group>
+                            <field  name="state" required="1"/>
+                            <field  name="avance_id" widget="selection"/>
+                            <field  invisible="1" name="interest_rate"/>
+                            <field  invisible="1" name="code"/>
+                            <field  name="amount"/>
+                            <field  attrs="{'invisible': [('interest_rate','=', 0)]}" name="rate"/>
                         </group>
                         <field  colspan="4" name="notes" nolabel="1" placeholder="Ajouter un motif..."/>
                     </group>

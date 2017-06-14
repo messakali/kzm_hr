@@ -10,27 +10,25 @@
                 <form string="Lot des avantages">
                     <group>
                         <group>
-                            <group>
-                                <field  name="name"/>
-                                <field  name="allocation_mode"/>
-                                <field  attrs="{'invisible': [('allocation_mode','!=', 'employee')], 'required': [('allocation_mode','=', 'employee')]}"
-                                    name="employee_ids" widget="many2many_tags"/>
-                                <field  attrs="{'invisible': [('allocation_mode','!=', 'category')], 'required': [('allocation_mode','=', 'category')]}"
-                                    name="category_ids" widget="many2many_tags"/>
-                                <label  for="date_start" string="Durée"/>
-                                <div>
-                                    <group col="3">
-                                        <field  class="oe_inline" name="date_start" nolabel="1"/>
-                                        <label  class="oe_inline" string="-"/>
-                                        <field  class="oe_inline" name="date_end" nolabel="1"/>
-                                    </group>
-                                </div>
-                            </group>
-                            <group>
-                                <field  name="state" required="1"/>
-                                <field  name="avantage_id" widget="selection"/>
-                                <field  name="amount"/>
-                            </group>
+                            <field  name="name"/>
+                            <field  name="allocation_mode"/>
+                            <field  attrs="{'invisible': [('allocation_mode','!=', 'employee')], 'required': [('allocation_mode','=', 'employee')]}"
+                                name="employee_ids" widget="many2many_tags"/>
+                            <field  attrs="{'invisible': [('allocation_mode','!=', 'category')], 'required': [('allocation_mode','=', 'category')]}"
+                                name="category_ids" widget="many2many_tags"/>
+                            <label  for="date_start" string="Durée"/>
+                            <div>
+                                <group>
+                                    <field  class="oe_inline" name="date_start" nolabel="1"/>
+                                    <label  class="oe_inline" string="-"/>
+                                    <field  class="oe_inline" name="date_end" nolabel="1"/>
+                                </group>
+                            </div>
+                        </group>
+                        <group>
+                            <field  name="state" required="1"/>
+                            <field  name="avantage_id" widget="selection"/>
+                            <field  name="amount"/>
                         </group>
                         <field  colspan="4" name="notes" nolabel="1" placeholder="Ajouter un motif..."/>
                     </group>

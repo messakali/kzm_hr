@@ -85,11 +85,11 @@ class hr_avantage(models.Model):
 
     analytic_account_id = fields.Many2one(
         'account.analytic.account', string=u'Compte analytique',)
-    account_tax_id = fields.Many2one('account.tax.code', string=u'Code TVA',)
+    account_tax_id = fields.Many2one('account.tax', string=u'Code TVA',)
     account_debit = fields.Many2one(
-        'account.account', string=u'Compte du débit', domain=[('type', '!=', 'view')],)
+        'account.account', string=u'Compte du débit')
     account_credit = fields.Many2one(
-        'account.account', string=u'Compte du crédit', domain=[('type', '!=', 'view')],)
+        'account.account', string=u'Compte du crédit')
 
     export_ok = fields.Boolean(string=u'Export/Import CSV', default=True,)
     active = fields.Boolean(string=u'Actif', default=True,    )

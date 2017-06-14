@@ -43,21 +43,23 @@ class hr_rubrique_line(models.Model):
     saisie_line_id = fields.Many2one('hr.saisie.line', string=u'Ligne de saisie',)
     contract_id = fields.Many2one('hr.contract', string='Contrat', ondelete='cascade',   )
 
-    @api.one
+
     @api.depends("rubrique_id","rubrique_id.code","rubrique_id.can_reset")
     def _compute_code(self):
-        if self.rubrique_id:
-            self.code = self.rubrique_id.code
-            self.can_reset = self.rubrique_id.can_reset
+        for rec in self:
+            if rec.rubrique_id:
+                rec.code = rec.rubrique_id.code
+                rec.can_reset = rec.rubrique_id.can_reset
 
     code = fields.Char(
         string=u'Code', size=64, compute='_compute_code', store=True)
 
     @api.onchange('rubrique_id')
     def _onchange_rubrique_id(self):
-        if self.rubrique_id:
-            if not self.name:
-                self.name = self.rubrique_id.name
+        for rec in self:
+            if rec.rubrique_id:
+                if not rec.name:
+                    rec.name = rec.rubrique_id.name
 
     can_reset = fields.Boolean(string=u'Peut être réinitialisé', compute='_compute_code', store=True)
 
