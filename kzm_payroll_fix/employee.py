@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-from openerp import models, fields, api, _
-from openerp.addons.decimal_precision import decimal_precision as dp
+from odoo import models, fields, api, _
+import odoo.addons.decimal_precision as dp
 import time
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
