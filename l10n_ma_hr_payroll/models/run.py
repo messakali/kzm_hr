@@ -117,7 +117,7 @@ class hr_pasylip_run(models.Model):
         assert len(self), _("Veuillez exécuter cette action juste pour un seul lot")
         if not self.slip_ids:
             raise Warning(_("Aucun bulletins de paie attaché à ce lot"))
-        return self.env['report'].get_action(self.slip_ids, 'l10n_ma_hr_payroll.report_slip_simple')
+#         return self.env['report'].get_action(self.slip_ids, 'l10n_ma_hr_payroll.report_slip_simple')
 
     @api.one
     def confirm_slips(self):

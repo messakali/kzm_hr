@@ -127,9 +127,9 @@ class hr_payslip_account(models.Model):
             ])
 
     account_debit_id = fields.Many2one(
-        'account.account', string=u'Compte débit par défaut',  domain=[('type', '<>', 'view')],)
+        'account.account', string=u'Compte débit par défaut')
     account_credit_id = fields.Many2one(
-        'account.account', string=u'Compte crédit par défaut',  domain=[('type', '<>', 'view')],)
+        'account.account', string=u'Compte crédit par défaut')
 
     @api.multi
     def _get_payslips(self):
@@ -165,7 +165,6 @@ class hr_payslip_account(models.Model):
     def get_account_from_code(self, company, code):
         code = code.rstrip('0')
         accounts = self.env['account.account'].search([
-            ('type', '!=', 'view'),
             ('company_id', '=', company.id),
             ('code', 'like', code),
         ])
@@ -223,17 +222,20 @@ class hr_payslip_account(models.Model):
                             'partner_id': partner_id,
                             'analytic_account_id': analytic_account_id,
                         })
-        if company:
-            ref = _(
-                'Paie - période %s') % (self.date_from[5:7] + '/' + self.date_from[:4],)
-            res = self.move_id.account_move_prepare(
-                journal_id=self.journal_id.id,
-                date=self.date,
-                ref=ref,
-                company_id=company.id)
+            if company:
+                ref = _(
+                    'Paie - période %s') % (self.date_from[5:7] + '/' + self.date_from[:4],)
+                res = {
+                'journal_id': self.journal_id.id,
+                'date': self.date,
+                'ref': ref,
+                'company_id': company.id,
+            }
+                
+            
             res.update({'name': ref})
             move = self.move_id.create(res)
-
+            
             total_debit = total_credit = 0.0
 
             for line in tab:
@@ -253,7 +255,7 @@ class hr_payslip_account(models.Model):
                         'credit': line.get('credit'),
                     }
                     total_credit += line.get('credit')
-                    move.line_id.create(credit)
+                    move.line_ids.create(credit)
                 if line.get('debit') != 0:
                     debit = {
                         'move_id': move.id,
@@ -268,7 +270,7 @@ class hr_payslip_account(models.Model):
                         'credit': 0.0,
                     }
                     total_debit += line.get('debit')
-                    move.line_id.create(debit)
+                    move.line_ids.create(debit)
             if total_debit != total_credit:
                 difference = abs(total_debit - total_credit)
                 if total_debit > total_credit and not self.account_credit_id:

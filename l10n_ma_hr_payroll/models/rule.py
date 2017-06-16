@@ -42,19 +42,19 @@ class hr_salary_rule(models.Model):
     appears_on_payslip = fields.Boolean(
         string=u'Affichage sur les bulletins',  compute='_compute_appears_on_payslip', store=True,)
 
-    @api.one
-    @api.constrains('code', 'avance_id', 'avantage_id', 'rubrique_id', 'cotisation_id')
-    def _check_code(self):
-#         print self
-#         print self.code
-        if self.search_count([('code', '=', self.code)]) > 1:
-            raise Warning(
-                _('The code [%s] is already exist') % self.code.replace(PARENT, ''))
-        tab = [x for x in [self.rubrique_id, self.avance_id,
-                           self.avantage_id, self.cotisation_id, self.holiday_status_id] if x]
-        if len(tab) > 1:
-            raise Warning(
-                _('The rule can be attached to one element (Avance, Avantage, Cotisation ou Rubrique)'))
+#     @api.one
+#     @api.constrains('code', 'avance_id', 'avantage_id', 'rubrique_id', 'cotisation_id')
+#     def _check_codee(self):
+#         print "self gggg   : ",self.search([('code', '=', self.code)])
+# #         print self.code
+#         if self.search_count([('code', '=', self.code)]) > 1:
+#             raise Warning(
+#                 _('The code [%s] is already exist') % self.code.replace(PARENT, ''))
+#         tab = [x for x in [self.rubrique_id, self.avance_id,
+#                            self.avantage_id, self.cotisation_id, self.holiday_status_id] if x]
+#         if len(tab) > 1:
+#             raise Warning(
+#                 _('The rule can be attached to one element (Avance, Avantage, Cotisation ou Rubrique)'))
 
     base_val = fields.Char(
         string=u'Valeur de base',

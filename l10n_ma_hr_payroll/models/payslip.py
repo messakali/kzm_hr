@@ -82,6 +82,10 @@ class hr_payslip(models.Model):
         return res
 
     @api.multi
+    def action_payslip_done(self):
+        self.process_sheet()
+        
+    @api.multi
     def process_sheet(self):
         for slip in self:
             days = hours =0.0
@@ -121,6 +125,7 @@ class hr_payslip(models.Model):
                 self.write([slip.id], {'solde_tout_compte_id' : holiday_id})
         standard = self.env['ir.config_parameter'].get_param(
             'paie_acc', '0') == '1'
+        print "standard    : ",standard
         if not standard:
             return self.write({'paid': True, 'state': 'done'})
         else:
@@ -209,6 +214,28 @@ class hr_payslip(models.Model):
         ) + "%s" % (time.time() - start_time))
         return res
 
+    @api.onchange('employee_id', 'date_from', 'date_to')
+    def onchange_employee(self):
+        res = super(hr_payslip, self).onchange_employee()
+        if self.employee_id:
+            self.department_id = self.employee_id.department_id or False
+            self.marital = self.employee_id.marital or False
+            self.wife_situation = self.employee_id.wife_situation or False
+            self.children = self.employee_id.children or 0
+            self.hire_date = self.employee_id.hire_date or False
+            self.otherid = self.employee_id.otherid or ''
+            self.address_home = self.employee_id.address_home_id and self.employee_id.address_home_id.contact_address.strip() or ''
+        if self.contract_id:
+            self.voucher_mode = self.contract_id.voucher_mode or False
+            self.job_id = self.contract_id.job_id or False
+            self.journal_id = self.contract_id.journal_id or False
+            self.cimr_ok = self.contract_id.cimr_ok or False
+            self.cnss_ok = self.contract_id.cnss_ok or False
+                
+        self.voucher_mode = self.contract_id.voucher_mode
+        
+        return res
+        
     @api.one
     @api.depends("date_from", "date_to")
     def _get_slip_period_fiscalyear(self):

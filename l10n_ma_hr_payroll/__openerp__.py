@@ -135,7 +135,7 @@ Paie marocaine - Les bases de la paie
         'report/report_cimr_declaration.xml',
         'report/report_cs_declaration.xml',
         'report/report_voucher_order.xml',
-        'report/report_slip.xml',
+#         'report/report_slip.xml',
         'report/report_warning.xml',
         'report/report_contract.xml',
         'report/report_register.xml',

@@ -150,49 +150,46 @@ class hr_contract(models.Model):
     trial_days = fields.Integer(
         string=u'Période de test', compute='_compute_trial_days',)
     
-#     @api.onchange('employee_id')
-#     def onchange_employee_id(self):
-#         res = super(hr_contract, self).onchange_employee_id()
-#         if not self.employee_id:
-#             res['value'].update({'date_start': fields.Date.today()})
-#             return res
-#         emp_obj = self.employee_id
-#         res['value'].update({
-#             'company_id': emp_obj.company_id.id,
-#             'city_signature': emp_obj.company_id.main_company_id.city or '',
-#             'journal_id': emp_obj.company_id.payroll_journal_id.id,
-#         })
-#         hire_date = emp_obj.hire_date or False
-#         if hire_date:
-#             res['value'].update({'date_start': hire_date})
-#         contract_ids = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id)], order="date_start asc")
-#         if contract_ids:
-#             contracts = contract_ids
-#             msg = ''
-#             for contract in contracts:
-#                 msg += _('Société') + ' : ' + contract.company_id.name + '\n'
-#                 msg += _('De') + ' : ' + contract.date_start
-#                 if contract.date_end:
-#                     msg += ' '
-#                     msg += _('À') + ' : ' + contract.date_end
-#                 msg += '\n'
-#                 msg += _('Type du contrat') + ' : ' + contract.type_id.name
-#                 msg += '\n'
-#                 msg += _('Structure du salaire') + ' : ' + contract.struct_id.name
-#                 msg += '\n'
-#                 if contract.motif:
-#                     msg += _('Raison') + ' : ' + contract.motif
-#                     msg += '\n'
-#                 if contract.notes:
-#                     msg += _('Notes') + ' : ' + contract.notes
-#                     msg += '\n'
-#                 msg += '_' * 10
-#                 msg += '\n'
-#             res['warning'] = {
-#                 'title': _('Historisue'),
-#                 'message': msg,
-#             }
-#         return res
+    @api.onchange('employee_id')
+    def _onchange_employee_id(self):
+        super(hr_contract, self)._onchange_employee_id()
+        if not self.employee_id:
+            self.date_start = fields.Date.today()
+            return True
+        emp_obj = self.employee_id
+
+        self.company_id = emp_obj.company_id.id
+        self.city_signature = emp_obj.company_id.main_company_id.city or ''
+        self.journal_id = emp_obj.company_id.payroll_journal_id.id
+
+        hire_date = emp_obj.hire_date or False
+        if hire_date:
+            self.date_start = hire_date
+        contract_ids = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id)], order="date_start asc")
+        if contract_ids:
+            contracts = contract_ids
+            msg = ''
+            for contract in contracts:
+                msg += _('Société') + ' : ' + contract.company_id.name + '\n'
+                msg += _('De') + ' : ' + contract.date_start
+                if contract.date_end:
+                    msg += ' '
+                    msg += _('À') + ' : ' + contract.date_end
+                msg += '\n'
+                msg += _('Type du contrat') + ' : ' + contract.type_id.name
+                msg += '\n'
+                struct_id = contract.struct_id and contract.struct_id.name or ''
+                msg += _('Structure du salaire') + ' : ' + struct_id
+                msg += '\n'
+                if contract.motif:
+                    msg += _('Raison') + ' : ' + contract.motif
+                    msg += '\n'
+                if contract.notes:
+                    msg += _('Notes') + ' : ' + contract.notes
+                    msg += '\n'
+                msg += '_' * 10
+                msg += '\n'
+        return {'warning': {'title': _('Historisue'), 'message': msg}}
 
     @api.onchange('salary_net_effectif')
     def _onchange_salary_net_effectif(self):

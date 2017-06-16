@@ -303,7 +303,6 @@ class hr_avance_line(models.Model):
     def get_account_from_code(self, company, code):
         code = code.rstrip('0')
         accounts = self.env['account.account'].search([
-            ('type', '!=', 'view'),
             ('company_id', '=', company.id),
             ('code', 'like', code),
         ])

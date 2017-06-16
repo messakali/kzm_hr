@@ -32,38 +32,41 @@
                         <field  name="state" statusbar_visible="draft,confirm,done" widget="statusbar"/>
                     </header>
                     <sheet>
-                        <group col="4" colspan="4">
-                            <group colspan="2" name="general">
-                                <field  groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="fiscalyear_id" widget="selection"/>
-                                <field  groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="period_id" required="0" widget="selection"/>
-                                <field  name="date_from" required="1"/>
-                                <field  name="date_to" required="1"/>
-                                <field  groups="l10n_ma_hr_payroll.group_paie_interface_state" name="payslip_state"/>
+                        <group name="general">
+                            <field groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="fiscalyear_id" widget="selection"/>
+                            <field groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="period_id" required="0" widget="selection"/>
+                            <field name="date_from" required="1"/>
+                            <field name="date_to" required="1"/>
+                            <field groups="l10n_ma_hr_payroll.group_paie_interface_state" name="payslip_state"/>
+                        </group>
+                    
+                        <group>
+                            <group name="params" groups="base.group_multi_company" >
+                                <field name="company_child" required="0"/>
+                                <field name="company_parent" required="0"/>
                             </group>
-                            <group colspan="2" name="params">
-                                <field  groups="base.group_multi_company" name="company_child" required="0"/>
-                                <field  groups="base.group_multi_company" name="company_parent" required="0"/>
+                            <group groups="l10n_ma_hr_payroll.group_paie_interface_department" name="department">
+                                <group class="style_department">
+                                    <separator string="Limiter les départements"/>
+                                    <newline/>
+                                    <field name="departments_id" widget="many2many_checkboxes" nolabel="1"/>
+                                </group>
                             </group>
-                            <group colspan="2" groups="l10n_ma_hr_payroll.group_paie_interface_department" name="department">
-                                <div class="style_department">
-                                    <separator  string="Limiter les départements"/>
-                                    <field  name="departments_id" widget="many2many_checkboxes"/>
-                                </div>
+                            <group name="accounting" string="Comptabilité">
+                                <field name="date"/>
+                                <field name="journal_id" widget="selection"/>
+                                <field name="account_debit_id"/>
+                                <field name="account_credit_id"/>
+                                <field name="move_id"/>
                             </group>
-                            <group colspan="2" name="accounting" string="Comptabilité">
-                                <field  name="date"/>
-                                <field  name="journal_id" widget="selection"/>
-                                <field  name="account_debit_id"/>
-                                <field  name="account_credit_id"/>
-                                <field  name="move_id"/>
-                            </group>
-                            <group colspan="4" groups="base.group_multi_company">
+                            <group groups="base.group_multi_company">
                                 <div class="style_company">
-                                    <separator  colspan="4" string="Sociétés"/>
-                                    <field  colspan="4" name="company_ids" nolabel="1" widget="many2many_tags"/>
+                                    <separator string="Sociétés"/>
+                                    <field name="company_ids" nolabel="1" widget="many2many_tags"/>
                                 </div>
                             </group>
                         </group>
+                        
                         <notebook colspan="4">
                             <page string="Payslips">
                                 <field  colspan="4" name="payslip_ids" nolabel="1"/>

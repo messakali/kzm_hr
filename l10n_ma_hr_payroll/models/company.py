@@ -11,7 +11,7 @@ class res_company(models.Model):
 
     @api.multi
     def fix_accounts_reconciliation(self):
-        accounts = self.env['account.account'].search([('reconcile', '=', False), ('type', '!=', 'view')]).filtered(
+        accounts = self.env['account.account'].search([('reconcile', '=', False)]).filtered(
             lambda r: r.code.startswith('34') or r.code.startswith('44'))
         for account in accounts:
             account.reconcile = True
