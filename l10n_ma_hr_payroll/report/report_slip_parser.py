@@ -5,20 +5,20 @@ from . import abstract_report_xlsx
 from odoo import models, fields, api, _
 from odoo.report import report_sxw
 
-class slip_report(abstract_report_xlsx.AbstractReportXslx):
-
-    def __init__(self, name, table, rml=False, parser=False, header=True,
-                 store=False):
-        res = super(slip_report, self).__init__(
-            name, table, rml, parser, header, store)
-        
-        self.localcontext= {
-            'time': time,
-            'lines': self.get_lines,
-            'cumul': self.get_cumul,
-            'current': self.get_current,
-            'root_company': self.get_root_company,
-        }
+class HrPayslip(models.Model):
+    _inherit = 'hr.payslip'
+#     def __init__(self, name, table, rml=False, parser=False, header=True,
+#                  store=False):
+#         res = super(slip_report, self).__init__(
+#             name, table, rml, parser, header, store)
+#         
+#         self.localcontext= {
+#             'time': time,
+#             'lines': self.get_lines,
+#             'cumul': self.get_cumul,
+#             'current': self.get_current,
+#             'root_company': self.get_root_company,
+#         }
 
     def get_root_company(self, company):
         while company.parent_id:
@@ -56,11 +56,11 @@ class slip_report(abstract_report_xlsx.AbstractReportXslx):
         )
 
     
-slip_report(
-    'report.l10n_ma_hr_payroll.report_slip',
-    'report_slip',
-    parser=report_sxw.rml_parse
-)
+# slip_report(
+#     'report.l10n_ma_hr_payroll.report_slip',
+#     'report_slip',
+#     parser=report_sxw.rml_parse
+# )
 
 # class report_slip_standard(models.AbstractModel):
 #     _name = 'report.l10n_ma_hr_payroll.report_slip'
@@ -69,21 +69,21 @@ slip_report(
 #     _wrapped_report_class = slip_report
 
 
-class report_slip_simple(models.AbstractModel):
-    _name = 'report.l10n_ma_hr_payroll.report_slip_simple'
-    _inherit = 'report.abstract_report'
-    _template = 'l10n_ma_hr_payroll.report_slip_simple'
-    _wrapped_report_class = slip_report
-
-
-class report_slip_patronal(models.AbstractModel):
-    _name = 'report.l10n_ma_hr_payroll.report_slip_patronal'
-    _inherit = 'report.abstract_report'
-    _template = 'l10n_ma_hr_payroll.report_slip_patronal'
-    _wrapped_report_class = slip_report
-
-class report_slip_ir_brut(models.AbstractModel):
-    _name = 'report.l10n_ma_hr_payroll.report_slip_ir_brut'
-    _inherit = 'report.abstract_report'
-    _template = 'l10n_ma_hr_payroll.report_slip_ir_brut'
-    _wrapped_report_class = slip_report
+# class report_slip_simple(models.AbstractModel):
+#     _name = 'report.l10n_ma_hr_payroll.report_slip_simple'
+#     _inherit = 'report.abstract_report'
+#     _template = 'l10n_ma_hr_payroll.report_slip_simple'
+#     _wrapped_report_class = slip_report
+# 
+# 
+# class report_slip_patronal(models.AbstractModel):
+#     _name = 'report.l10n_ma_hr_payroll.report_slip_patronal'
+#     _inherit = 'report.abstract_report'
+#     _template = 'l10n_ma_hr_payroll.report_slip_patronal'
+#     _wrapped_report_class = slip_report
+# 
+# class report_slip_ir_brut(models.AbstractModel):
+#     _name = 'report.l10n_ma_hr_payroll.report_slip_ir_brut'
+#     _inherit = 'report.abstract_report'
+#     _template = 'l10n_ma_hr_payroll.report_slip_ir_brut'
+#     _wrapped_report_class = slip_report

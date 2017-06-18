@@ -7,7 +7,7 @@
                 <t t-as="p" t-foreach="docs">
                     <t t-call="kzm_base.kzm_page_layout">
                         <t  t-set="company" t-value="p.company_id.main_company_id"/>
-                        <t  t-set="data_lines" t-value="lines(p, group=False, patronal=True, group_rubrique=False)"/>
+                        <t  t-set="data_lines" t-value="p.get_lines(p, group=False, patronal=True, group_rubrique=False)"/>
                         <div class="page">
                             <table border="1" class="table table-condensed">
                                 <tbody>
@@ -108,41 +108,41 @@
                                             <span  t-esc="line[0]"/>
                                         </td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="line[2] != 0 and formatLang(line[2]) or ''"/>
+                                            <span  t-esc="line[2] != 0 and line[2] or ''"/>
                                         </td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="line[3] != 0 and formatLang(line[3]) or ''"/>
+                                            <span  t-esc="line[3] != 0 and line[3] or ''"/>
                                         </td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="line[4] != 0 and formatLang(line[4]) or ''"/>
+                                            <span  t-esc="line[4] != 0 and line[4] or ''"/>
                                         </td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="line[5] != 0 and formatLang(line[5]) or ''"/>
+                                            <span  t-esc="line[5] != 0 and line[5] or ''"/>
                                         </td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="line[6] != 0 and formatLang(line[6]) or ''"/>
+                                            <span  t-esc="line[6] != 0 and line[6] or ''"/>
                                         </td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="line[7] != 0 and formatLang(line[7]) or ''"/>
+                                            <span  t-esc="line[7] != 0 and line[7] or ''"/>
                                         </td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="line[8] != 0 and formatLang(line[8]) or ''"/>
+                                            <span  t-esc="line[8] != 0 and line[8] or ''"/>
                                         </td>
                                     </tr>
 
                                     <tr style="font-weight: bold;">
                                         <td colspan="3" style="text-align : left;">Total</td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[2])"/>
+                                            <span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[2]"/>
                                         </td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[3])"/>
+                                            <span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[3]"/>
                                         </td>
                                         <td colspan="2">
                                             <span></span>
                                         </td>
                                         <td style="text-align : right;">
-                                            <span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[6])"/>
+                                            <span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[6]"/>
                                         </td>
                                     </tr>
                                     <tr style="font-weight: bold;">
@@ -153,7 +153,7 @@
                                     </tr>
                                     <tr style="font-weight: bold;">
                                         <td colspan="3" style="text-align : center;">
-                                            <span t-esc="formatLang(data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3])"></span>
+                                            <span t-esc="data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3]"></span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -181,28 +181,28 @@
                                             Mensuel
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="current(p, 'NBR_JOURS')"/>
+                                            <span  t-esc="p.get_current(p, 'NBR_JOURS')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="current(p, 'SALAIRE_BASE')"/>
+                                            <span  t-esc="p.get_current(p, 'SALAIRE_BASE')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="current(p, 'BRUT')"/>
+                                            <span  t-esc="p.get_current(p, 'BRUT')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="current(p, 'CNSS')"/>
+                                            <span  t-esc="p.get_current(p, 'CNSS')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="current(p, 'AMO')"/>
+                                            <span  t-esc="p.get_current(p, 'AMO')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="current(p, 'NET_IMPOSABLE')"/>
+                                            <span  t-esc="p.get_current(p, 'NET_IMPOSABLE')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="current(p, 'IR')"/>
+                                            <span  t-esc="p.get_current(p, 'IR')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="current(p, 'NET')"/>
+                                            <span  t-esc="p.get_current(p, 'NET')"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -210,28 +210,28 @@
                                             Cumuls
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="cumul(p, 'NBR_JOURS')"/>
+                                            <span  t-esc="p.get_cumul(p, 'NBR_JOURS')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="cumul(p, 'SALAIRE_BASE')"/>
+                                            <span  t-esc="p.get_cumul(p, 'SALAIRE_BASE')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="cumul(p, 'BRUT')"/>
+                                            <span  t-esc="p.get_cumul(p, 'BRUT')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="cumul(p, 'CNSS')"/>
+                                            <span  t-esc="p.get_cumul(p, 'CNSS')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="cumul(p, 'AMO')"/>
+                                            <span  t-esc="p.get_cumul(p, 'AMO')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="cumul(p, 'NET_IMPOSABLE')"/>
+                                            <span  t-esc="p.get_cumul(p, 'NET_IMPOSABLE')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="cumul(p, 'IR')"/>
+                                            <span  t-esc="p.get_cumul(p, 'IR')"/>
                                         </td>
                                         <td style="text-align : center">
-                                            <span  t-esc="cumul(p, 'NET')"/>
+                                            <span  t-esc="p.get_cumul(p, 'NET')"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -247,7 +247,7 @@
                 <t t-as="p" t-foreach="docs">
                     <t t-call="kzm_base.kzm_page_layout">
                         <t  t-set="company" t-value="p.company_id.main_company_id"/>
-                        <t  t-set="data_lines" t-value="lines(p, group=True, patronal=False, group_rubrique=True)"/>
+                        <t  t-set="data_lines" t-value="p.get_lines(p, group=True, patronal=False, group_rubrique=True)"/>
                         <div class="page">
                             <br/>
                             <br/>
@@ -340,10 +340,10 @@
                                 </tr>
                                 <tr t-as="line" t-foreach="data_lines.get('lines',[])">
                                     <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[0]"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[2] != 0 and formatLang(line[2]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[3] != 0 and formatLang(line[3]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[4] != 0 and formatLang(line[4]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[5] != 0 and formatLang(line[5]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[2] != 0 and line[2] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[3] != 0 and line[3] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[4] != 0 and line[4] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[5] != 0 and line[5] or ''"/></td>
 
                                 </tr>
                                 <tr t-as="tmp" t-foreach="range(22-len(data_lines.get('lines',[])))">
@@ -358,8 +358,8 @@
                                 width="100%">
                                 <tr>
                                     <td style="text-align:right; border: 1px solid #333; padding: 2px;" width="74%">TOTAL</td>
-                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="14%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[2])"/></td>
-                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="12%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[3])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="14%"><span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[2]"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="12%"><span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[3]"/></td>
                                 </tr>
                             </table>
                             <br/>
@@ -367,7 +367,7 @@
                                 width="100%">
                                 <tr>
                                     <td style="text-align:right; padding-right: 6px">NET A PAYER :
-                                        <strong><span  t-esc="formatLang(data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3])"/></strong>
+                                        <strong><span  t-esc="data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3]"/></strong>
                                     </td>
                                 </tr>
                             </table>
@@ -390,13 +390,14 @@
                                     <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="15%">IR</td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NBR_JOURS'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT_IMPOSABLE'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NET_IMPOSABLE'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'AMO_SALARIALE'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'CNSS_SALARIALE'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'IR'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'NBR_JOURS')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'BRUT')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'BRUT_IMPOSABLE')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'NET_IMPOSABLE')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'AMO_SALARIALE')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'CNSS_SALARIALE')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'IR')
+                                    "/></td>
                                 </tr>
 
                             </table>
@@ -432,7 +433,7 @@
                 <t t-as="p" t-foreach="docs">
                     <t t-call="kzm_base.kzm_page_layout">
                         <t  t-set="company" t-value="p.company_id.main_company_id"/>
-                        <t  t-set="data_lines" t-value="lines(p, group=True, patronal=True, group_rubrique=True)"/>
+                        <t  t-set="data_lines" t-value="p.get_lines(p, group=True, patronal=True, group_rubrique=True)"/>
                         <div class="page">
                             <br/>
                             <br/>
@@ -519,12 +520,12 @@
                                 </tr>
                                 <tr t-as="line" t-foreach="data_lines.get('lines',[])">
                                     <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[0]"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[2] != 0 and formatLang(line[2]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[3] != 0 and formatLang(line[3]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[4] != 0 and formatLang(line[4]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[5] != 0 and formatLang(line[5]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[7] != 0 and formatLang(line[7]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[8] != 0 and formatLang(line[8]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[2] != 0 and line[2] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[3] != 0 and line[3] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[4] != 0 and line[4] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[5] != 0 and line[5] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[7] != 0 and line[7] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[8] != 0 and line[8] or ''"/></td>
                                 </tr>
                                 <tr t-as="tmp" t-foreach="range(26-len(data_lines.get('lines',[])))">
                                     <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><br/></td>
@@ -543,10 +544,10 @@
                                 width="100%">
                                 <tr>
                                     <td style="text-align:right; border: 1px solid #333; padding: 2px;" width="58%">TOTAL</td>
-                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="11%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[2])"/></td>
-                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="9%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[3])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="11%"><span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[2]"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="9%"><span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[3]"/></td>
                                     <td style="text-align:right; border: 1px solid #333; padding: 2px" width="10%"></td>
-                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="12%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[6])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="12%"><span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[6]"/></td>
 
                                 </tr>
                             </table>
@@ -555,7 +556,7 @@
                                 width="100%">
                                 <tr>
                                     <td style="text-align:right; padding-right: 6px">NET A PAYER :
-                                        <strong><span  t-esc="formatLang(data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3])"/></strong>
+                                        <strong><span  t-esc="data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3]"/></strong>
                                     </td>
                                 </tr>
                             </table>
@@ -578,13 +579,13 @@
                                     <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="15%">IR</td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NBR_JOURS'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT_IMPOSABLE'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NET_IMPOSABLE'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'AMO'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'CNSS'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'IR'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'NBR_JOURS')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'BRUT')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'BRUT_IMPOSABLE')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'NET_IMPOSABLE')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'AMO')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'CNSS')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'IR')"/></td>
                                 </tr>
 
                             </table>
@@ -619,7 +620,7 @@
                 <t t-as="p" t-foreach="docs">
                     <t t-call="kzm_base.kzm_page_layout">
                         <t  t-set="company" t-value="p.company_id.main_company_id"/>
-                        <t  t-set="data_lines" t-value="lines(p, group=True, patronal=True, group_rubrique=True, rename={'IR_BRUT': 'Retenue IR'}, includes=['IR_BRUT'], excludes=['IR_NET'])"/>
+                        <t  t-set="data_lines" t-value="p.get_lines(p, group=True, patronal=True, group_rubrique=True, rename={'IR_BRUT': 'Retenue IR'}, includes=['IR_BRUT'], excludes=['IR_NET'])"/>
                         <div class="page">
                             <br/>
                             <br/>
@@ -706,12 +707,12 @@
                                 </tr>
                                 <tr t-as="line" t-foreach="data_lines.get('lines',[])">
                                     <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[0]"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[2] != 0 and formatLang(line[2]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[3] != 0 and formatLang(line[3]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[4] != 0 and formatLang(line[4]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[5] != 0 and formatLang(line[5]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[7] != 0 and formatLang(line[7]) or ''"/></td>
-                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[8] != 0 and formatLang(line[8]) or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[2] != 0 and line[2] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[3] != 0 and line[3] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[4] != 0 and line[4] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[5] != 0 and line[5] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[7] != 0 and line[7] or ''"/></td>
+                                    <td style="text-align:right; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><span  t-esc="line[8] != 0 and line[8] or ''"/></td>
                                 </tr>
                                 <tr t-as="tmp" t-foreach="range(26-len(data_lines.get('lines',[])))">
                                     <td style="text-align:left; border-right: 1px solid #333; border-left: 1px solid #333; padding: 2px"><br/></td>
@@ -730,10 +731,10 @@
                                 width="100%">
                                 <tr>
                                     <td style="text-align:right; border: 1px solid #333; padding: 2px;" width="58%">TOTAL</td>
-                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="11%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[2])"/></td>
-                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="9%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[3])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="11%"><span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[2]"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="9%"><span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[3]"/></td>
                                     <td style="text-align:right; border: 1px solid #333; padding: 2px" width="10%"></td>
-                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="12%"><span  t-esc="formatLang(data_lines.get('cumul',(0,0,0,0,0,0,0))[6])"/></td>
+                                    <td style="text-align:right; border: 1px solid #333; padding: 2px" width="12%"><span  t-esc="data_lines.get('cumul',(0,0,0,0,0,0,0))[6]"/></td>
 
                                 </tr>
                             </table>
@@ -742,7 +743,7 @@
                                 width="100%">
                                 <tr>
                                     <td style="text-align:right; padding-right: 6px">NET A PAYER :
-                                        <strong><span  t-esc="formatLang(data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3])"/></strong>
+                                        <strong><span  t-esc="data_lines.get('special',{}).get('NET',(0, 0, 0, 0))[3]"/></strong>
                                     </td>
                                 </tr>
                             </table>
@@ -765,13 +766,13 @@
                                     <td style="text-align:center; background-color:#CCC; border: 1px solid #333; padding: 2px" width="15%">IR</td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NBR_JOURS'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'BRUT_IMPOSABLE'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'NET_IMPOSABLE'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'AMO'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'CNSS'))"/></td>
-                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="formatLang(cumul(p, 'IR'))"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'NBR_JOURS')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'BRUT')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'BRUT_IMPOSABLE')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'NET_IMPOSABLE')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'AMO')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'CNSS')"/></td>
+                                    <td style="text-align:center; border: 1px solid #333; padding: 2px"><span  t-esc="p.get_cumul(p, 'IR')"/></td>
                                 </tr>
 
                             </table>
