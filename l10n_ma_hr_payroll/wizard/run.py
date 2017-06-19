@@ -63,7 +63,7 @@ class hr_payslip_employees(osv.osv_memory):
             }
             slip_ids.append(slip_pool.create(res))
         for slip in slip_ids:
-            print slip
+#             print slip
             slip.compute_sheet()
         _logger.info('Meter payslip_run compute_sheet '.upper() + "%s -> nbr: %s" % (time.time() - start_time, len(data['employee_ids']), ))
         return {'type': 'ir.actions.act_window_close'}

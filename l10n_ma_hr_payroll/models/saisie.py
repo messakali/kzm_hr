@@ -32,21 +32,24 @@ class hr_saisie_run(models.Model):
         self.date_start = False
         self.date_end = False
         if self.fiscalyear_id:
-            period_objs = self.env['date.range'].search([('type_id', '=', self.fiscalyear_id.id)])
-            date_start = [p.date_start for p in period_objs]
-            if date_start:
-                self.date_start = min(date_start)
-            date_end = [p.date_end for p in period_objs]
-            if date_end:
-                self.date_end = max(date_end)
+            period_objs = self.env['date.range'].search(['&', ('date_start', '>=', self.fiscalyear_id.date_start), ('date_start', '<=', self.fiscalyear_id.date_end)])
+#             date_start = [p.date_start for p in period_objs]
+#             if date_start:
+#                 self.date_start = min(date_start)
+#             date_end = [p.date_end for p in period_objs]
+#             if date_end:
+#                 self.date_end = max(date_end)
+            self.date_start = self.fiscalyear_id.date_start
+            self.date_end = self.fiscalyear_id.date_end
             period_ids = [
-                x.id for x in period_objs if x.active == True]
+                x.id for x in period_objs if x.active == True and x.type_id.fiscal_year == False]
+#             print "period_ids    : ",period_ids
             return {
                 'domain': {
-                    'period_id': [('id', 'in', period_ids)],
+                    'period_id': [('id', 'in', period_ids)]
                 }
             }
-
+            
     @api.onchange('period_id')
     def _onchange_period_id(self):
         self.date_start = False
@@ -56,7 +59,7 @@ class hr_saisie_run(models.Model):
             self.date_end = self.period_id.date_end
 
     fiscalyear_id = fields.Many2one(
-        'date.range.type', string=u'Année', required=False)
+        'date.range', string=u'Année', required=False, domain=[('type_id.fiscal_year', '=', True),('active', '=', True)])
     period_id = fields.Many2one(
         'date.range', string=u'Période', required=False)
 

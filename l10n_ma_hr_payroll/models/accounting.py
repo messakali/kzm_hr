@@ -45,7 +45,7 @@ class hr_payslip_account(models.Model):
 
     name = fields.Char(string=u'Nom', size=64, compute='_compute_name',)
     fiscalyear_id = fields.Many2one(
-        'date.range.type', string=u'Année', required=False, states={'draft': [('readonly', False)]}, readonly=True, )
+        'date.range', string=u'Année', required=False, states={'draft': [('readonly', False)]}, readonly=True, domain=[('type_id.fiscal_year', '=', True),('active', '=', True)] )
     period_id = fields.Many2one(
         'date.range', string=u'Période', required=False, states={'draft': [('readonly', False)]}, readonly=True, )
     date_from = fields.Date(string=u'Date début',  required=False, states={
@@ -181,14 +181,17 @@ class hr_payslip_account(models.Model):
 
     @api.one
     def _create_move(self):
+#         print self.env['account.move'].search([])
         own = self.env['ir.config_parameter'].get_param('paie_acc','0') == '2'
         if not own :
             return True
         tab = []
         company = False
         for slip in self.payslip_ids:
+#             print slip
             if slip.move_id:
-                raise Warning(_('Le bulletin [%s] a déjà une écriture comptable'))
+#                 print slip.move_id
+                raise Warning(_('Le bulletin '+ slip.name +' a déjà une écriture comptable'))
             if not company:
                 company = slip.company_id.main_company_id
             for line in slip.details_by_salary_rule_category:

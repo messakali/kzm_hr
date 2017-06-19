@@ -125,7 +125,7 @@ class hr_payslip(models.Model):
                 self.write([slip.id], {'solde_tout_compte_id' : holiday_id})
         standard = self.env['ir.config_parameter'].get_param(
             'paie_acc', '0') == '1'
-        print "standard    : ",standard
+#         print "standard    : ",standard
         if not standard:
             return self.write({'paid': True, 'state': 'done'})
         else:
@@ -241,17 +241,17 @@ class hr_payslip(models.Model):
     def _get_slip_period_fiscalyear(self):
         if self.date_to:
             slip_period_id = self.env[
-            'date.range'].search([('date_start', '<=' ,self.date_to), ('date_end', '>=', self.date_to)])
+            'date.range'].search([('date_start', '<=' ,self.date_to), ('date_end', '>=', self.date_to),('type_id.fiscal_year', '=', True)])
             if slip_period_id:
                 self.slip_period_id = slip_period_id
         if not self.slip_period_id:
             raise Warning('There is no period defined for this date: '+ str(self.date_to) +'.\nPlease go to Configuration/Periods and configure a fiscal year.')
-        self.slip_fiscalyear_id = self.slip_period_id.type_id
+        self.slip_fiscalyear_id = self.slip_period_id
 
     slip_period_id = fields.Many2one(
         'date.range', string=u'Période', compute='_get_slip_period_fiscalyear', store=True)
     slip_fiscalyear_id = fields.Many2one(
-        'date.range.type', string=u'Année', compute='_get_slip_period_fiscalyear', store=True)
+        'date.range', string=u'Année', compute='_get_slip_period_fiscalyear', store=True, domain=[('type_id.fiscal_year', '=', True),('active', '=', True)])
     employee_user_id = fields.Many2one(
         'res.users', string=u'Utilisateur',  related='employee_id.user_id', store=True)
 
