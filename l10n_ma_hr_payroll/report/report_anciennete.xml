@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <openerp>
-    <data noupdate="1">
+    <data noupdate="0">
         <template id="report_anciennete">
             <t t-call="report.html_container">
                 <t t-as="p" t-foreach="docs">
-                    <t  t-set="data_lines" t-value="lines(p,['ANCIENNETE','ANCIENNETE_BASE'],['name','birthday'],['otherid'])"/>
+                    <t  t-set="data_lines" t-value="p.get_lines(['ANCIENNETE','ANCIENNETE_BASE'],['name','birthday'],['otherid'])"/>
                     <t t-call="kzm_base.kzm_page_layout">
                         <div class="page">
                             <h4 style="text-align: center;">Ancienneté
@@ -36,22 +36,22 @@
                                             <span  t-esc="line['employee'].get('name','')"/>
                                         </td>
                                         <td style="text-align: center">
-                                            <span  t-esc="line['employee'].get('birthday','') and formatLang(line['employee'].get('birthday',''), date=True) or ''"/>
+                                            <span  t-esc="line['employee'].get('birthday','') or ''"/>
                                         </td>
                                         <td style="text-align: center">
-                                            <span  t-esc="formatLang(line['inputs'].get('AGE'))"/>
+                                            <span  t-esc="line['inputs'].get('AGE')"/>
                                         </td>
                                         <td style="text-align: center">
-                                            <span  t-esc="formatLang(line['inputs'].get('ANCIENNETE'))"/>
+                                            <span  t-esc="line['inputs'].get('ANCIENNETE')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line['cumul'].get('ANCIENNETE_BASE'))"/>
+                                            <span  t-esc="line['cumul'].get('ANCIENNETE_BASE')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line['inputs'].get('ANCIENNETE_TAUX'))"/>
+                                            <span  t-esc="line['inputs'].get('ANCIENNETE_TAUX')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line['cumul'].get('ANCIENNETE'))"/>
+                                            <span  t-esc="line['cumul'].get('ANCIENNETE')"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -61,7 +61,7 @@
                                             Total
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([line['cumul'].get('ANCIENNETE') for line in data_lines]))"/>
+                                            <span  t-esc="sum([line['cumul'].get('ANCIENNETE') for line in data_lines])"/>
                                         </td>
                                     </tr>
                                 </tfoot>

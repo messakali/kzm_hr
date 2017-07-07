@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <openerp>
-    <data noupdate="1">
+    <data noupdate="0">
         <template id="report_paye_journal">
             <t t-call="report.html_container">
                 <t t-as="p" t-foreach="docs">

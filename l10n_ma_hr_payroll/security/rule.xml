@@ -110,12 +110,12 @@
           <field name="model_id" ref="model_hr_common_report"/>
           <field name="domain_force">[('company_ids','child_of',[user.company_id.id])]</field>
       </record>
-      <!-- Statistiques -->
+      <!-- Statistiques
       <record id="rule_hr_payroll_statistics_report_global" model="ir.rule">
           <field name="name">Statistiques multi-company</field>
           <field name="model_id" ref="model_hr_payroll_statistics_report"/>
           <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
-      </record>
+      </record> -->
       <!-- Rotation -->
       <record id="rule_hr_employee_rotation_global" model="ir.rule">
           <field name="name">Rotation multi-company</field>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <openerp>
-    <data noupdate="1">
+    <data noupdate="0">
         <template id="report_register">
             <t t-call="report.html_container">
                 <t t-as="p" t-foreach="docs">
-                    <t  t-set="data_lines" t-value="register_lines(p)"/>
+                    <t  t-set="data_lines" t-value="p.get_register_lines()"/>
                     <t t-call="kzm_base.kzm_page_layout">
                         <div class="page">
                             <h4 style="text-align: center;">Registre des contributions
@@ -27,7 +27,7 @@
                                             <span  t-esc="line[1]"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line[2])"/>
+                                            <span  t-esc="line[2]"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -37,7 +37,7 @@
                                             Total
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([x[2] for x in data_lines]))"/>
+                                            <span  t-esc="sum([x[2] for x in data_lines])"/>
                                         </td>
                                     </tr>
                                 </tfoot>

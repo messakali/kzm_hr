@@ -5,6 +5,8 @@ import time
 import odoo.addons.decimal_precision as dp
 import math
 
+from dateutil.relativedelta import relativedelta
+
 from odoo.exceptions import Warning
 
 
@@ -417,8 +419,8 @@ class hr_common_report(models.Model):
 #             date_end = [p.date_end for p in period_objs]
 #             if date_end:
 #                 self.date_end = max(date_end)
-            self.date_start = self.fiscalyear_id.date_start
-            self.date_end = self.fiscalyear_id.date_end
+            self.date_from = self.fiscalyear_id.date_start
+            self.date_to = self.fiscalyear_id.date_end
             period_ids = [
                 x.id for x in period_objs if x.active == True and x.type_id.fiscal_year == False]
 #             print "period_ids    : ",period_ids
@@ -430,8 +432,8 @@ class hr_common_report(models.Model):
             
     @api.onchange('period_id')
     def _onchange_period_id(self):
-        self.date_start = False
-        self.date_end = False
+        self.date_from = False
+        self.date_to = False
         if self.period_id:
             self.date_from = self.period_id.date_start
             self.date_to = self.period_id.date_end
@@ -652,7 +654,179 @@ class hr_common_report(models.Model):
         column2='employee_id',
         relation='audit_accounting_payslip_rel',
         string=u'Comptabilité',  readonly=True, )
+    
+    
+    def get_lines(self, dict_keys, employees_fields, payslip_fields, contract_type=False, period=False):
+        p = self
+        dd = p.date_from
+        df = p.date_to
+        if period:
+            dd = period[0][:10]
+            df = period[1][:10]
+        department_ids = [x.id for x in p.departments_id]
+        if not department_ids:
+            department_ids = self.env[
+                'hr.department'].search([]).ids
+        department_ids = self.env[
+            'hr.department'].search([('id', 'child_of', department_ids)])
+        payslip_domain = [
+            ('date_to', '>=', dd),
+            ('date_to', '<=', df),
+            ('company_id', 'in', self.get_companies_ids(p).ids),
+        ]
+        if contract_type:
+            payslip_domain.append(
+                ('contract_id.type_id.type', '=', contract_type),)
+        if p.departments_id:
+            payslip_domain.append(('department_id', 'in', department_ids),)
+        if p.payslip_state != 'all':
+            payslip_domain.append(('state', '=', p.payslip_state),)
+        payslip_ids = self.env['hr.payslip'].search(payslip_domain)
+        print "payslip_ids    : ",payslip_ids
+        payslips = self.env['hr.payslip'].browse(payslip_ids.ids)
+        print "payslips    : ",payslips
+        employees = list(set([x.employee_id for x in payslips]))
+        employees = sorted(employees, key=lambda x: x.otherid)
+        print "employees    : ",employees
+        tab = []
+        for emp in employees:
+            emp_payslips = payslips.filtered(
+                lambda r: r.employee_id.id == emp.id)
+            slip = emp_payslips[-1]
+            line = {}
+            line['tx'] = {}
+            line['employee'] = {}
+            line['cumul'] = {}
+            line['inputs'] = {}
+            line['extra'] = {}
+            line['payslip'] = emp_payslips.read(payslip_fields)[0]
+            employees_dicts = emp.read(employees_fields)[0]
+            print "employees_dicts    : ",employees_dicts
+            if 'marital' in employees_dicts and 'gender' in employees_dicts:
+                employees_dict = {'marital':dict(emp.fields_get(allfields=['marital'])['marital']['selection'])[emp.read(employees_fields)[0]['marital']],
+                                  'gender':dict(emp.fields_get(allfields=['gender'])['gender']['selection'])[emp.read(employees_fields)[0]['gender']]
+                                  }
 
+                employees_dicts.update(employees_dict)
+            line['employee'] = employees_dicts
+            # for name in employees_fields:
+            #     line['employee'][name] = getattr(emp, name)
+            line['employee'][
+                'address_home_id'] = emp.address_home_id and emp.address_home_id.contact_address.strip().replace('\n', ', ') or ''
+            line['employee'][
+                'address_id'] = emp.address_id and emp.address_id.contact_address.strip().replace('\n', ', ') or ''
+            for code in dict_keys:
+                line['cumul'][code] = self.env['hr.dictionnary'].compute_value(
+                    code=code,
+                    date_start=dd,
+                    date_stop=df,
+                    employee_id=emp.id,
+                    payslip_ids=emp_payslips,
+                    department_ids=p.departments_id and department_ids or False,
+                    state=p.payslip_state
+                )
+                dict_id = self.env['hr.salary.rule'].search([('code','=',str(code))])
+                if dict_id:
+                    line['tx'][code] = dict_id.rate_val
+                else:
+                    line['tx'][code] = ''
+            line['extra']['DAYS'] = self.env['hr.dictionnary'].compute_value(
+                category_code='GAIN',
+                date_start=dd,
+                date_stop=df,
+                employee_id=emp.id,
+                payslip_ids=emp_payslips,
+                force_type='quantity',
+                based_on='days',
+                department_ids=p.departments_id and department_ids or False,
+                state=p.payslip_state
+            ) + self.env['hr.dictionnary'].compute_value(
+                category_code='AUTRE_GAIN',
+                date_start=dd,
+                date_stop=df,
+                employee_id=emp.id,
+                payslip_ids=emp_payslips,
+                force_type='quantity',
+                based_on='days',
+                department_ids=p.departments_id and department_ids or False,
+                state=p.payslip_state
+            )
+            line['extra']['HOURS'] = self.env['hr.dictionnary'].compute_value(
+                category_code='GAIN',
+                date_start=dd,
+                date_stop=df,
+                employee_id=emp.id,
+                payslip_ids=emp_payslips,
+                force_type='quantity',
+                based_on='hours',
+                department_ids=p.departments_id and department_ids or False,
+                state=p.payslip_state
+            ) + self.env['hr.dictionnary'].compute_value(
+                category_code='AUTRE_GAIN',
+                date_start=dd,
+                date_stop=df,
+                employee_id=emp.id,
+                payslip_ids=emp_payslips,
+                force_type='quantity',
+                based_on='hours',
+                department_ids=p.departments_id and department_ids or False,
+                state=p.payslip_state
+            )
+            for slip in emp_payslips:
+                for input_line in slip.input_line_ids:
+                    line['inputs'][input_line.code] = input_line.amount
+                line['extra']['TH'] = not slip.contract_id.based_on_days and line[
+                    'inputs'].get('SALAIRE_PAR_HEURE', 0) or 0.0
+                break
+            tab.append(line)
+            print "tab    : ",tab
+        
+        print "tab    : ",tab
+        return tab
+
+    def get_companies_ids(self, p):
+        if p.company_ids:
+            return [x.id for x in p.company_ids]
+        else:
+            return self.env['res.company'].search([])
+    
+    def _get_main_company(self, p):
+        company = p.company_ids and p.company_ids[0] or self.browse(
+            self.cr, self.uid, self.uid).company_id
+        return company.sudo().main_company_id
+    
+    def _get_date_limit(self, o):
+        date = fields.Datetime.from_string(
+            o.date_from) + relativedelta(months=1)
+        date = date.replace(day=self._get_main_company(o).cnss_day_limit)
+        return fields.Datetime.to_string(date)
+    
+    def _get_structure_reference(self, o):
+        if not self._get_main_company(o).cnss:
+            raise Warning(
+                _(u'Veuillez définir l\'affiliation CNSS pour la société [%s]') % self._get_main_company(o).name)
+        cnss = ''.join(
+            [x for x in self._get_main_company(o).cnss if x.isdigit()])
+        period = o.date_from[2:4] + o.date_from[5:7]
+        ref_cnss, ref_amo = cnss + period + '01', cnss + period + '02'
+        ref_cnss += str(int(cnss + period + '01') % 97).rjust(2, '0')
+        ref_amo += str(int(cnss + period + '02') % 97).rjust(2, '0')
+        return ref_cnss, ref_amo
+    
+    def _get_vat(self, o):
+        vat = self._get_main_company(o).vat
+        if not vat:
+            raise Warning(_('Veuillez configurer l\'identifiant fiscal de la société'))
+        return vat.strip().replace(' ', '').rjust(8, ' ')
+    
+    def _get_tv(self, c):
+        new_value = u''
+#         print "_context    : ",self._context
+#         for c in self._context.get('formatLang')(o.ir_total_verse):
+        if c.ir_total_verse.isdigit() or c.ir_total_verse in [',', '.', ';', "'"]:
+            new_value += c.ir_total_verse
+        return new_value.rjust(10, ' ')
+    
 
 class hr_common_report_type(models.Model):
     _name = 'hr.common.report.type'

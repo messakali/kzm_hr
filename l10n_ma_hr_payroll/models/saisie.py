@@ -342,29 +342,29 @@ class hr_saisie_run(models.Model):
 
                 # Expense paid
                 domain = [
-                    ('expense_id.state', 'in', ['done', 'paid']),
-                    ('expense_id.payroll_ok', '=', False),
-                    ('expense_id.employee_id', '=', employee.id),
-                    ('date_value', '<=', date_end),
-                    ('date_value', '>=', date_start),
+                    ('state', 'in', ['done', 'paid']),
+                    ('payroll_ok', '=', False),
+                    ('employee_id', '=', employee.id),
+                    ('date', '<=', date_end),
+                    ('date', '>=', date_start),
                 ]
                 if force_saisie_line_id:
                     domain.append(
                         ('expense_id.saisie_line_id', '=', force_saisie_line_id))
-                lines = self.env['hr.expense.line'].with_context({'active_test': False, }).search(domain)
+                lines = self.env['hr.expense'].with_context({'active_test': False, }).search(domain)
                 matrix[EXPENSE_PAID] = sum([x.total_amount for x in lines])
                 # expense_to_pay
                 domain = [
-                    ('expense_id.state', '=', 'paid'),
-                    ('expense_id.payroll_ok', '=', True),
-                    ('expense_id.employee_id', '=', employee.id),
+                    ('state', '=', 'paid'),
+                    ('payroll_ok', '=', True),
+                    ('employee_id', '=', employee.id),
                     ('payroll_date', '<=', date_end),
                     ('payroll_date', '>=', date_start),
                 ]
                 if force_saisie_line_id:
                     domain.append(
                         ('expense_id.saisie_line_id', '=', force_saisie_line_id))
-                lines = self.env['hr.expense.line'].with_context({'active_test': False, }).search(domain)
+                lines = self.env['hr.expense'].with_context({'active_test': False, }).search(domain)
                 matrix[EXPENSE_TO_PAY] = sum([x.total_amount for x in lines])
                 for leave in self.env['hr.holidays.status'].with_context({'active_test': False, }).search([('is_hs', '=', False)]):
                     total = 0.0

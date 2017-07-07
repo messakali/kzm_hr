@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <openerp>
-    <data noupdate="1">
+    <data noupdate="0">
         <template id="report_cimr_declaration">
             <t t-call="report.html_container">
                 <t t-as="p" t-foreach="docs">
-                    <t t-set="data_lines" t-value="lines(p,['CIMR','BRUT_IMPOSABLE'],['name'],['otherid'])"/>
+                    <t t-set="data_lines" t-value="p.get_lines(['CIMR','BRUT_IMPOSABLE'],['name'],['otherid'])"/>
                     <t t-call="kzm_base.kzm_page_layout">
                         <div class="page">
                             <h4 style="text-align: center;">Etat CIMR
@@ -32,10 +32,10 @@
                                             <span t-esc="line['employee'].get('name')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span t-esc="formatLang(line['cumul'].get('BRUT_IMPOSABLE'))"/>
+                                            <span t-esc="line['cumul'].get('BRUT_IMPOSABLE')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span t-esc="formatLang(line['cumul'].get('CIMR'))"/>
+                                            <span t-esc="line['cumul'].get('CIMR')"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -45,10 +45,10 @@
                                             Total
                                         </td>
                                         <td style="text-align: right">
-                                            <span t-esc="formatLang(sum([line['cumul'].get('BRUT_IMPOSABLE') for line in data_lines]))"/>
+                                            <span t-esc="sum([line['cumul'].get('BRUT_IMPOSABLE') for line in data_lines])"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span t-esc="formatLang(sum([line['cumul'].get('CIMR') for line in data_lines]))"/>
+                                            <span t-esc="sum([line['cumul'].get('CIMR') for line in data_lines])"/>
                                         </td>
                                     </tr>
                                 </tfoot>

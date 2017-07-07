@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <openerp>
-    <data noupdate="1">
+    <data noupdate="0">
         <template id="report_cnss_declaration">
             <t t-call="report.html_container">
                 <t t-as="p" t-foreach="docs">
                     <t  t-set="data_lines"
-                        t-value="lines(p,['BRUT_IMPOSABLE','PRESTATION_FAMILIALE','CNSS_COURT_TERME_IPE','CNSS_LONG_TERME','AMO','TAX_FORMATION_PROFESSIONELLE'],['name'],['otherid'])"/>
+                        t-value="p.get_lines(['BRUT_IMPOSABLE','PRESTATION_FAMILIALE','CNSS_COURT_TERME_IPE','CNSS_LONG_TERME','AMO','TAX_FORMATION_PROFESSIONELLE'],['name'],['otherid'])"/>
                     <t t-call="kzm_base.kzm_page_layout">
                         <div class="page">
                             <h4 style="text-align: center;">Etat CNSS / AMO
@@ -37,22 +37,22 @@
                                             <span  t-esc="line['employee'].get('name')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line['cumul'].get('BRUT_IMPOSABLE'))"/>
+                                            <span  t-esc="line['cumul'].get('BRUT_IMPOSABLE')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line['cumul'].get('PRESTATION_FAMILIALE'))"/>
+                                            <span  t-esc="line['cumul'].get('PRESTATION_FAMILIALE')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line['cumul'].get('CNSS_COURT_TERME_IPE'))"/>
+                                            <span  t-esc="line['cumul'].get('CNSS_COURT_TERME_IPE')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line['cumul'].get('CNSS_LONG_TERME'))"/>
+                                            <span  t-esc="line['cumul'].get('CNSS_LONG_TERME')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line['cumul'].get('AMO'))"/>
+                                            <span  t-esc="line['cumul'].get('AMO')"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(line['cumul'].get('TAX_FORMATION_PROFESSIONELLE'))"/>
+                                            <span  t-esc="line['cumul'].get('TAX_FORMATION_PROFESSIONELLE')"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -62,22 +62,22 @@
                                             Total
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([line['cumul'].get('BRUT_IMPOSABLE') for line in data_lines]))"/>
+                                            <span  t-esc="sum([line['cumul'].get('BRUT_IMPOSABLE') for line in data_lines])"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([line['cumul'].get('PRESTATION_FAMILIALE') for line in data_lines]))"/>
+                                            <span  t-esc="sum([line['cumul'].get('PRESTATION_FAMILIALE') for line in data_lines])"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([line['cumul'].get('CNSS_COURT_TERME_IPE') for line in data_lines]))"/>
+                                            <span  t-esc="sum([line['cumul'].get('CNSS_COURT_TERME_IPE') for line in data_lines])"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([line['cumul'].get('CNSS_LONG_TERME') for line in data_lines]))"/>
+                                            <span  t-esc="sum([line['cumul'].get('CNSS_LONG_TERME') for line in data_lines])"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([line['cumul'].get('AMO') for line in data_lines]))"/>
+                                            <span  t-esc="sum([line['cumul'].get('AMO') for line in data_lines])"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([line['cumul'].get('TAX_FORMATION_PROFESSIONELLE') for line in data_lines]))"/>
+                                            <span  t-esc="sum([line['cumul'].get('TAX_FORMATION_PROFESSIONELLE') for line in data_lines])"/>
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -97,46 +97,46 @@
                     <img  src="l10n_ma_hr_payroll/static/img/CNSS.jpg"
                         style="display: block; margin: 0px; padding: 0px; position: absolute; top: 0px; left: 0px; z-index: 4; width: 941px; height: 1332px;"/>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 163px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="main_company(p).cnss or ''"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 163px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p._get_main_company(p).cnss or ''"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 296px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(date_limit(p), date=True)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 296px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p._get_date_limit(p)"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 124px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="structure_reference(p)[0]"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 124px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p._get_structure_reference(p)[0]"/></div>
                     <div
                         style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 250px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.date_from[5:7]+'/'+p.date_from[:4]"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 432px; left: 308px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.total_prestation_familiale)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 432px; left: 308px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.total_prestation_familiale"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 431px; left: 135px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.total_prestation_familiale_base)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 431px; left: 135px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.total_prestation_familiale_base"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 465px; left: 136px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.total_prestation_sociale_base)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 465px; left: 136px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.total_prestation_sociale_base"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 501px; left: 263px; width: 169px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.total_prestation_sociale+p.total_prestation_familiale)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 501px; left: 263px; width: 169px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.total_prestation_sociale+p.total_prestation_familiale"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 464px; left: 307px; width: 126px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.total_prestation_sociale)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 464px; left: 307px; width: 126px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.total_prestation_sociale"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 702px; left: 308px; width: 126px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.total_tax_formation_professionnelle)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 702px; left: 308px; width: 126px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.total_tax_formation_professionnelle"/></div>
                     <div
                         style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 734px; left: 264px; width: 170px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 702px; left: 59px; width: 203px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.total_tax_formation_professionnelle_base)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 702px; left: 59px; width: 203px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.total_tax_formation_professionnelle_base"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 841px; left: 117px; width: 678px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="text(p.total_cnss)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 841px; left: 117px; width: 678px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.total_cnss"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 769px; left: 171px; width: 262px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.total_cnss)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 769px; left: 171px; width: 262px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.total_cnss"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 206px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(p.edition_date, date=True)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 206px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.edition_date"/></div>
                     <div
                         style="margin: 0px; padding: 4px; position: absolute; top: 129px; left: 461px; width: 447px; height: 227px; z-index:30; border-width: 0px; font-weight: bold; font-size: 18px;">
-                        <span  t-esc="main_company(p).name"/>
+                        <span  t-esc="p._get_main_company(p).name"/>
                         <br/>
                         <br/>
                         <p>
-                            <span  t-esc="main_company(p).partner_id.contact_address"/>
+                            <span  t-esc="p._get_main_company(p).partner_id.contact_address"/>
                         </p>
                         <br/>
                         <p>
-                            <span  t-esc="main_company(p).activity or ''"/>
+                            <span  t-esc="p._get_main_company(p).activity or ''"/>
                         </p>
                     </div>
                 </div>
@@ -144,40 +144,40 @@
                     <img  src="l10n_ma_hr_payroll/static/img/AMO.jpg"
                         style="display: block; margin: 0px; padding: 0px; position: absolute; top: 0px; left: 0px; z-index: 4; width: 941px; height: 1332px;"/>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 163px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="main_company(p).cnss or ''"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 163px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p._get_main_company(p).cnss or ''"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 296px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="formatLang(date_limit(p), date=True)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 296px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p._get_date_limit(p)"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 124px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="structure_reference(p)[1]"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 124px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p._get_structure_reference(p)[1]"/></div>
                     <div
                         style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 250px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span  t-esc="p.date_from[5:7]+'/'+p.date_from[:4]"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 432px; left: 308px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="formatLang(p.total_amo_solidarite)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 432px; left: 308px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="p.total_amo_solidarite"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 431px; left: 135px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="formatLang(p.total_amo_solidarite_base)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 431px; left: 135px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="p.total_amo_solidarite_base"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 465px; left: 136px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="formatLang(p.total_amo_base_base)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 465px; left: 136px; width: 127px; height: 22px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="p.total_amo_base_base"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 563px; left: 265px; width: 167px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="formatLang(p.total_amo)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 563px; left: 265px; width: 167px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="p.total_amo"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 501px; left: 308px; width: 124px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="formatLang(p.total_amo)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 501px; left: 308px; width: 124px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="p.total_amo"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 464px; left: 307px; width: 126px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="formatLang(p.total_amo_base)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 464px; left: 307px; width: 126px; height: 24px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="p.total_amo_base"/></div>
                     <div
-                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 841px; left: 121px; width: 678px; height: 24px; z-index:30; text-align: left; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="text(p.total_amo)"/></div>
+                        style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 841px; left: 121px; width: 678px; height: 24px; z-index:30; text-align: left; vertical-align:middle; font-weight: bold; font-size: 14px;"><span t-esc="p.total_amo"/></div>
                     <div
                         style="margin: 0px; padding: 10px 0px 0px 0px; position: absolute; top: 206px; left: 226px; width: 181px; height: 30px; z-index:30; text-align: center; vertical-align:middle; font-weight: bold; font-size: 14px;">EMISSION</div>
                     <div
                         style="margin: 0px; padding: 4px; position: absolute; top: 129px; left: 461px; width: 447px; height: 227px; z-index:30; border-width: 0px; font-weight: bold; font-size: 18px;">
-                        <span  t-esc="main_company(p).name"/>
+                        <span  t-esc="p._get_main_company(p).name"/>
                         <br/>
                         <br/>
                         <p>
-                            <span  t-esc="main_company(p).partner_id.contact_address"/>
+                            <span  t-esc="p._get_main_company(p).partner_id.contact_address"/>
                         </p>
                         <br/>
                         <p>
-                            <span  t-esc="main_company(p).activity or ''"/>
+                            <span  t-esc="p._get_main_company(p).activity or ''"/>
                         </p>
                     </div>
                 </div>

@@ -134,8 +134,8 @@ class hr_voucher_order(models.Model):
 #             date_end = [p.date_end for p in period_objs]
 #             if date_end:
 #                 self.date_end = max(date_end)
-            self.date_start = self.fiscalyear_id.date_start
-            self.date_end = self.fiscalyear_id.date_end
+            self.date_from = self.fiscalyear_id.date_start
+            self.date_to = self.fiscalyear_id.date_end
             period_ids = [
                 x.id for x in period_objs if x.active == True and x.type_id.fiscal_year == False]
 #             print "period_ids    : ",period_ids
@@ -164,15 +164,15 @@ class hr_voucher_order(models.Model):
 
     @api.multi
     def open_es_slips(self) :
-         return self.open_slips(domain=[('voucher_mode','=','ES')], context={'default_voucher_mode' : 'ES'}, name='Bulletins pour especes')
+        return self.open_slips(domain=[('voucher_mode','=','ES')], context={'default_voucher_mode' : 'ES'}, name='Bulletins pour especes')
 
     @api.multi
     def open_ch_slips(self) :
-         return self.open_slips(domain=[('voucher_mode','=','CH')], context={'default_voucher_mode' : 'CH'}, name='Bulletins pour cheques')
+        return self.open_slips(domain=[('voucher_mode','=','CH')], context={'default_voucher_mode' : 'CH'}, name='Bulletins pour cheques')
 
     @api.multi
     def open_vir_slips(self) :
-         return self.open_slips(domain=[('voucher_mode','=','VIR')], context={'default_voucher_mode' : 'VIR'}, name='Bulletins pour virements')
+        return self.open_slips(domain=[('voucher_mode','=','VIR')], context={'default_voucher_mode' : 'VIR'}, name='Bulletins pour virements')
 
     @api.multi
     def open_slips(self, domain=[], context=[], name=_('Payslips')) :

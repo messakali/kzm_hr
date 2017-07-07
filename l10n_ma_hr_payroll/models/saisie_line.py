@@ -108,7 +108,7 @@ class hr_saisie_line(models.Model):
 
         product = self.env['product.product'].with_context({'active_test': False, }).search([
             ('default_expense_ok', '=', True),
-        ], order='hr_expense_ok desc', limit=1)
+        ], order='can_be_expensed desc', limit=1)
         tab = self.run_id.get_tab(force_employee_id=self.employee_id.id)
         # Propagate hours
         origin = self.based_on in [FIXED_DAYS, FIXED_HOURS] and tab.get(NORMAL, 0.0) or tab.get(ATTENDANCE, 0.0)

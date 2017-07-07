@@ -17,28 +17,31 @@ class hr_payslip_account(models.Model):
     @api.onchange('fiscalyear_id')
     def _onchange_fiscalyear_id(self):
         self.period_id = False
-        self.date_from = False
-        self.date_to = False
-        if self.fiscalyear_id:
-            period_objs = self.env['date.range'].search([('type_id', '=', self.fiscalyear_id.id)])
-            date_start = [p.date_start for p in period_objs]
-            if date_start:
-                self.date_from = min(date_start)
-            date_end = [p.date_end for p in period_objs]
-            if date_end:
-                self.date_to = max(date_end)
-            period_ids = [
-                x.id for x in period_objs if x.active == True]
-            return {
-                'domain': {
-                    'period_id': [('id', 'in', period_ids)],
-                }
-            }
-
-    @api.onchange('period_id')
-    def _onchange_period_id(self):
         self.date_start = False
         self.date_end = False
+        if self.fiscalyear_id:
+            period_objs = self.env['date.range'].search(['&', ('date_start', '>=', self.fiscalyear_id.date_start), ('date_start', '<=', self.fiscalyear_id.date_end)])
+#             date_start = [p.date_start for p in period_objs]
+#             if date_start:
+#                 self.date_start = min(date_start)
+#             date_end = [p.date_end for p in period_objs]
+#             if date_end:
+#                 self.date_end = max(date_end)
+            self.date_from = self.fiscalyear_id.date_start
+            self.date_to = self.fiscalyear_id.date_end
+            period_ids = [
+                x.id for x in period_objs if x.active == True and x.type_id.fiscal_year == False]
+#             print "period_ids    : ",period_ids
+            return {
+                'domain': {
+                    'period_id': [('id', 'in', period_ids)]
+                }
+            }
+            
+    @api.onchange('period_id')
+    def _onchange_period_id(self):
+        self.date_from = False
+        self.date_to = False
         if self.period_id:
             self.date_from = self.period_id.date_start
             self.date_to = self.period_id.date_end

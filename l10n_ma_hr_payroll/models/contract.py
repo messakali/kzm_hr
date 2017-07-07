@@ -165,10 +165,10 @@ class hr_contract(models.Model):
         hire_date = emp_obj.hire_date or False
         if hire_date:
             self.date_start = hire_date
+        msg = ''
         contract_ids = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id)], order="date_start asc")
         if contract_ids:
             contracts = contract_ids
-            msg = ''
             for contract in contracts:
                 msg += _('Société') + ' : ' + contract.company_id.name + '\n'
                 msg += _('De') + ' : ' + contract.date_start

@@ -57,8 +57,8 @@ class hr_salary_declaration(models.TransientModel):
 #             date_end = [p.date_end for p in period_objs]
 #             if date_end:
 #                 self.date_end = max(date_end)
-            self.date_start = self.fiscalyear_id.date_start
-            self.date_end = self.fiscalyear_id.date_end
+            self.date_from = self.fiscalyear_id.date_start
+            self.date_to = self.fiscalyear_id.date_end
             period_ids = [
                 x.id for x in period_objs if x.active == True and x.type_id.fiscal_year == False]
 #             print "period_ids    : ",period_ids
@@ -70,8 +70,8 @@ class hr_salary_declaration(models.TransientModel):
 
     @api.onchange('period_id')
     def _onchange_period_id(self):
-        self.date_start = False
-        self.date_end = False
+        self.date_from = False
+        self.date_to = False
         if self.period_id:
             self.date_from = self.period_id.date_start
             self.date_to = self.period_id.date_end
@@ -79,3 +79,14 @@ class hr_salary_declaration(models.TransientModel):
     @api.multi
     def action_print(self):
         return self.env['report'].get_action(self, 'l10n_ma_hr_payroll.report_salary_declaration')
+    
+    def get_lines_by_type(self, dict_keys, employees_fields, payslip_fields):
+        p = self.env['hr.common.report']
+        return [
+            (p.get_lines(dict_keys, employees_fields, payslip_fields, contract_type='permanent'),
+             u'ETAT CONCERNANT LE PERSONNEL PERMANENET',),
+            (p.get_lines(dict_keys, employees_fields, payslip_fields, contract_type='occasional'),
+             u'ETAT CONCERNANT LE PERSONNEL OCCASIONEL',),
+            (p.get_lines(dict_keys, employees_fields, payslip_fields, contract_type='trainee'),
+             u'ETAT CONCERNANT LES STAGIARES',),
+        ]

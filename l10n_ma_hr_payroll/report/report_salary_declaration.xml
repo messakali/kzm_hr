@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <openerp>
-    <data noupdate="1">
+    <data noupdate="0">
         <template id="report_salary_declaration">
             <t t-call="report.html_container">
                 <t t-as="p" t-foreach="docs">
                   <t t-set="index" t-value="0"/>
 
-                    <t t-as="item" t-foreach="lines_by_type(p, ['SALAIRE_BASE','EXONORE','TAXABLE','BRUT_IMPOSABLE','ASSURANCE_RETRAITE_SALARIALE','RETENU','NET_IMPOSABLE','NBR_JOURS','FP','INTERET','IR','NBR_REDUCTION','AVANTAGE'],['name','cin','carte_sejour','identification_id','cnss','date_ac','date_ph'],['otherid','marital','address_home'])">
+                    <t t-as="item" t-foreach="p.get_lines_by_type(['SALAIRE_BASE','EXONORE','TAXABLE','BRUT_IMPOSABLE','ASSURANCE_RETRAITE_SALARIALE','RETENU','NET_IMPOSABLE','NBR_JOURS','FP','INTERET','IR','NBR_REDUCTION','AVANTAGE'],['name','cin','carte_sejour','identification_id','cnss','date_ac','date_ph'],['otherid','marital','address_home'])">
                       <t t-set="index" t-value="index+1"/>
                         <t t-set="datas" t-value="item[0]"/>
                         <t t-call="kzm_base.kzm_page_layout">
@@ -67,28 +67,28 @@
                                                         <span t-esc="line['payslip'].get('marital','')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE'))"/>
+                                                        <span t-esc="line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('TAXABLE'))"/>
+                                                        <span t-esc="line['cumul'].get('TAXABLE')"/>
                                                     </td>
                                                     <td rowspan="2" style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('BRUT_IMPOSABLE'))"/>
+                                                        <span t-esc="line['cumul'].get('BRUT_IMPOSABLE')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['inputs'].get('FP_TAUX'))"/>
+                                                        <span t-esc="line['inputs'].get('FP_TAUX')"/>
                                                     </td>
                                                     <td colspan="3" style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE'))"/>
+                                                        <span t-esc="line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE')"/>
                                                     </td>
                                                     <td colspan="2" style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('RETENU') - line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE'))"/>
+                                                        <span t-esc="line['cumul'].get('RETENU') - line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('NET_IMPOSABLE'))"/>
+                                                        <span t-esc="line['cumul'].get('NET_IMPOSABLE')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('NBR_JOURS'))"/>
+                                                        <span t-esc="line['cumul'].get('NBR_JOURS')"/>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -99,16 +99,16 @@
                                                         <span t-esc="line['employee'].get('cnss','')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('AVANTAGE'))"/>
+                                                        <span t-esc="line['cumul'].get('AVANTAGE')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('EXONORE'))"/>
+                                                        <span t-esc="line['cumul'].get('EXONORE')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('FP'))"/>
+                                                        <span t-esc="line['cumul'].get('FP')"/>
                                                     </td>
                                                     <td colspan="2" style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('INTERET'))"/>
+                                                        <span t-esc="line['cumul'].get('INTERET')"/>
                                                     </td>
                                                     <td colspan="2" style="text-align: right">
                                                         <span t-esc="line['employee'].get('date_ac','')"/>
@@ -117,7 +117,7 @@
                                                         <span t-esc="line['employee'].get('date_ph','')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('IR'))"/>
+                                                        <span t-esc="line['cumul'].get('IR')"/>
                                                     </td>
                                                     <td style="text-align: right">
                                                         <span t-esc="line['cumul'].get('NBR_REDUCTION')"/>
@@ -131,44 +131,44 @@
                                                     Total
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE') for line in datas])"/>
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('TAXABLE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('TAXABLE') for line in datas])"/>
                                                 </td>
                                                 <td rowspan="2" style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('BRUT_IMPOSABLE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('BRUT_IMPOSABLE') for line in datas])"/>
                                                 </td>
                                                 <td class="payroll-black" style="text-align: right"></td>
                                                 <td colspan="3" style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE') for line in datas])"/>
                                                 </td>
                                                 <td colspan="2" style="text-align: right">
                                                     <span
-                                                        t-esc="formatLang(sum([(line['cumul'].get('RETENU') - line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE'))for line in datas]))"/>
+                                                        t-esc="sum([(line['cumul'].get('RETENU') - line['cumul'].get('ASSURANCE_RETRAITE_SALARIALE'))for line in datas])"/>
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('NET_IMPOSABLE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('NET_IMPOSABLE') for line in datas])"/>
                                                 </td>
                                                 <td class="payroll-black" style="text-align: right"></td>
                                             </tr>
                                             <tr>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('AVANTAGE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('AVANTAGE') for line in datas])"/>
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('EXONORE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('EXONORE') for line in datas])"/>
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('FP') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('FP') for line in datas])"/>
                                                 </td>
                                                 <td colspan="2" style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('INTERET') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('INTERET') for line in datas])"/>
                                                 </td>
                                                 <td class="payroll-black" colspan="2" style="text-align: right"></td>
                                                 <td class="payroll-black" style="text-align: right"></td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('IR') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('IR') for line in datas])"/>
                                                 </td>
                                                 <td class="payroll-black" style="text-align: right"></td>
                                             </tr>
@@ -215,10 +215,10 @@
                                                         <span t-esc="line['payslip'].get('job_id',['',''])[1]"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('BRUT_IMPOSABLE'))"/>
+                                                        <span t-esc="line['cumul'].get('BRUT_IMPOSABLE')"/>
                                                     </td>
                                                     <td style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('IR'))"/>
+                                                        <span t-esc="line['cumul'].get('IR')"/>
                                                     </td>
                                                 </tr>
                                             </t>
@@ -229,10 +229,10 @@
                                                     Total
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('BRUT_IMPOSABLE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('BRUT_IMPOSABLE') for line in datas])"/>
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('IR') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('IR') for line in datas])"/>
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -277,19 +277,19 @@
                                                         <span t-esc="line['employee'].get('identification_id','')"/>
                                                     </td>
                                                     <td rowspan="2" style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE'))"/>
+                                                        <span t-esc="line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE')"/>
                                                     </td>
                                                     <td rowspan="2" style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('TAXABLE') + line['cumul'].get('AVANTAGE'))"/>
+                                                        <span t-esc="line['cumul'].get('TAXABLE') + line['cumul'].get('AVANTAGE')"/>
                                                     </td>
                                                     <td rowspan="2" style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('RETENU'))"/>
+                                                        <span t-esc="line['cumul'].get('RETENU')"/>
                                                     </td>
                                                     <td rowspan="2" style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('NET_IMPOSABLE'))"/>
+                                                        <span t-esc="line['cumul'].get('NET_IMPOSABLE')"/>
                                                     </td>
                                                     <td rowspan="2" style="text-align: right">
-                                                        <span t-esc="formatLang(line['cumul'].get('NBR_JOURS'))"/>
+                                                        <span t-esc="line['cumul'].get('NBR_JOURS')"/>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -308,16 +308,16 @@
                                                     Total
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('SALAIRE_BASE')+line['cumul'].get('EXONORE') for line in datas])"/>
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('TAXABLE')+line['cumul'].get('AVANTAGE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('TAXABLE')+line['cumul'].get('AVANTAGE') for line in datas])"/>
                                                 </td>
                                                 <td rowspan="2" style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('RETENU') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('RETENU') for line in datas])"/>
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <span t-esc="formatLang(sum([line['cumul'].get('NET_IMPOSABLE') for line in datas]))"/>
+                                                    <span t-esc="sum([line['cumul'].get('NET_IMPOSABLE') for line in datas])"/>
                                                 </td>
                                                 <td class="payroll-black" style="text-align: right"></td>
                                             </tr>

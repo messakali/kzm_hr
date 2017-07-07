@@ -32,8 +32,8 @@ class mass_attendance_run(models.Model):
 #             date_end = [p.date_end for p in period_objs]
 #             if date_end:
 #                 self.date_end = max(date_end)
-            self.date_start = self.fiscalyear_id.date_start
-            self.date_end = self.fiscalyear_id.date_end
+            self.date_from = self.fiscalyear_id.date_start
+            self.date_to = self.fiscalyear_id.date_end
             period_ids = [
                 x.id for x in period_objs if x.active == True and x.type_id.fiscal_year == False]
 #             print "period_ids    : ",period_ids
@@ -45,8 +45,8 @@ class mass_attendance_run(models.Model):
             
     @api.onchange('period_id')
     def _onchange_period_id(self):
-        self.date_start = False
-        self.date_end = False
+        self.date_from = False
+        self.date_to = False
         if self.period_id:
             self.date_from = self.period_id.date_start
             self.date_to = self.period_id.date_end
