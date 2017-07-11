@@ -672,7 +672,7 @@ class hr_common_report(models.Model):
         payslip_domain = [
             ('date_to', '>=', dd),
             ('date_to', '<=', df),
-            ('company_id', 'in', self.get_companies_ids(p).ids),
+            ('company_id', 'in', self.get_companies_ids(p)),
         ]
         if contract_type:
             payslip_domain.append(
@@ -682,12 +682,9 @@ class hr_common_report(models.Model):
         if p.payslip_state != 'all':
             payslip_domain.append(('state', '=', p.payslip_state),)
         payslip_ids = self.env['hr.payslip'].search(payslip_domain)
-        print "payslip_ids    : ",payslip_ids
         payslips = self.env['hr.payslip'].browse(payslip_ids.ids)
-        print "payslips    : ",payslips
         employees = list(set([x.employee_id for x in payslips]))
         employees = sorted(employees, key=lambda x: x.otherid)
-        print "employees    : ",employees
         tab = []
         for emp in employees:
             emp_payslips = payslips.filtered(
@@ -701,7 +698,6 @@ class hr_common_report(models.Model):
             line['extra'] = {}
             line['payslip'] = emp_payslips.read(payslip_fields)[0]
             employees_dicts = emp.read(employees_fields)[0]
-            print "employees_dicts    : ",employees_dicts
             if 'marital' in employees_dicts and 'gender' in employees_dicts:
                 employees_dict = {'marital':dict(emp.fields_get(allfields=['marital'])['marital']['selection'])[emp.read(employees_fields)[0]['marital']],
                                   'gender':dict(emp.fields_get(allfields=['gender'])['gender']['selection'])[emp.read(employees_fields)[0]['gender']]
@@ -779,16 +775,14 @@ class hr_common_report(models.Model):
                     'inputs'].get('SALAIRE_PAR_HEURE', 0) or 0.0
                 break
             tab.append(line)
-            print "tab    : ",tab
         
-        print "tab    : ",tab
         return tab
 
     def get_companies_ids(self, p):
         if p.company_ids:
             return [x.id for x in p.company_ids]
         else:
-            return self.env['res.company'].search([])
+            return self.env['res.company'].search([]).ids
     
     def _get_main_company(self, p):
         company = p.company_ids and p.company_ids[0] or self.browse(
@@ -823,7 +817,7 @@ class hr_common_report(models.Model):
         new_value = u''
 #         print "_context    : ",self._context
 #         for c in self._context.get('formatLang')(o.ir_total_verse):
-        if c.ir_total_verse.isdigit() or c.ir_total_verse in [',', '.', ';', "'"]:
+        if str(c.ir_total_verse).isdigit() or c.ir_total_verse in [',', '.', ';', "'"]:
             new_value += c.ir_total_verse
         return new_value.rjust(10, ' ')
     

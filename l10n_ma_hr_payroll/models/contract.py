@@ -155,7 +155,7 @@ class hr_contract(models.Model):
         super(hr_contract, self)._onchange_employee_id()
         if not self.employee_id:
             self.date_start = fields.Date.today()
-            return True
+            return 
         emp_obj = self.employee_id
 
         self.company_id = emp_obj.company_id.id
@@ -189,7 +189,8 @@ class hr_contract(models.Model):
                     msg += '\n'
                 msg += '_' * 10
                 msg += '\n'
-        return {'warning': {'title': _('Historisue'), 'message': msg}}
+        if msg:
+            return {'warning': {'title': _('Historisue'), 'message': msg}}
 
     @api.onchange('salary_net_effectif')
     def _onchange_salary_net_effectif(self):
@@ -988,8 +989,8 @@ class hr_contract(models.Model):
     @api.onchange('auto_change_template')
     def _onchange_auto_change_template(self) :
         if self.auto_change_template:
-             self.onchange_template_id()
-             self.auto_change_template = False
+            self.onchange_template_id()
+            self.auto_change_template = False
     # @api.one
     # @api.constrains('wage')
     # def _check_wage(self):

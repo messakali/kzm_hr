@@ -20,7 +20,43 @@ PATRONALE = 'PATRONALE'
 class hr_payslip(models.Model):
     _inherit = ['hr.payslip', 'mail.thread', 'ir.needaction_mixin']
     _name = 'hr.payslip'
+    
+    
+    def get_root_company(self, company):
+        while company.parent_id:
+            company = company.parent_id
+        return company
 
+    def get_lines(self, p, group, patronal, group_rubrique, rename={}, includes=[], excludes=[]):
+        tab, cumul, special = p.get_slip_report_items(group, patronal, group_rubrique, rename, includes, excludes)
+        res = {
+            'lines': tab,
+            'cumul': cumul,
+            'special': special,
+        }
+        return res
+
+    def get_cumul(self, p, code):
+        return self.env['hr.dictionnary'].compute_value(
+            code=code,
+            year_of_date=p.date_from,
+            date_start=False,
+            date_stop=p.date_to,
+            employee_id=p.employee_id.id,
+            company_id=p.company_id.id,
+        )
+
+    def get_current(self, p, code):
+        return self.env['hr.dictionnary'].compute_value(
+            code=code,
+            year_of_date=p.date_from,
+            date_start=p.date_from,
+            date_stop=p.date_to,
+            employee_id=p.employee_id.id,
+            contract_id=False,
+            company_id=p.company_id.id,
+        )
+    
     department_id = fields.Many2one(
         'hr.department', string=u'Département', readonly=True, states={'draft': [('readonly', False)]})
 

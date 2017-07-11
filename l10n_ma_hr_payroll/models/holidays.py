@@ -199,23 +199,23 @@ class hr_holidays(models.Model):
         })
         return res
 
-    def _onchange_date_from(self, type_holiday, holiday_status_id, employee_id, date_to, date_from):
-        res = super(hr_holidays, self)._onchange_date_from(
-            date_to, date_from)
-        if not date_to or not date_from or type_holiday != 'remove':
-            return res
-        dd = datetime.datetime.strptime(date_from, "%Y-%m-%d %H:%M:%S")
-        ds = datetime.datetime.strptime(date_to, "%Y-%m-%d %H:%M:%S")
-        return self._update_numbers(res, holiday_status_id, employee_id, dd, ds)
-
-    def _onchange_date_to(self, type_holiday, holiday_status_id, employee_id, date_to, date_from):
-        res = super(hr_holidays, self)._onchange_date_to(
-            date_to, date_from)
-        if not date_to or not date_from or type_holiday != 'remove':
-            return res
-        dd = datetime.datetime.strptime(date_from, "%Y-%m-%d %H:%M:%S")
-        ds = datetime.datetime.strptime(date_to, "%Y-%m-%d %H:%M:%S")
-        return self._update_numbers(res, holiday_status_id, employee_id, dd, ds)
+#     def _onchange_date_from(self, type_holiday, holiday_status_id, employee_id, date_to, date_from):
+#         res = super(hr_holidays, self)._onchange_date_from(
+#             date_to, date_from)
+#         if not date_to or not date_from or type_holiday != 'remove':
+#             return res
+#         dd = datetime.datetime.strptime(date_from, "%Y-%m-%d %H:%M:%S")
+#         ds = datetime.datetime.strptime(date_to, "%Y-%m-%d %H:%M:%S")
+#         return self._update_numbers(res, holiday_status_id, employee_id, dd, ds)
+# 
+#     def _onchange_date_to(self, type_holiday, holiday_status_id, employee_id, date_to, date_from):
+#         res = super(hr_holidays, self)._onchange_date_to(
+#             date_to, date_from)
+#         if not date_to or not date_from or type_holiday != 'remove':
+#             return res
+#         dd = datetime.datetime.strptime(date_from, "%Y-%m-%d %H:%M:%S")
+#         ds = datetime.datetime.strptime(date_to, "%Y-%m-%d %H:%M:%S")
+#         return self._update_numbers(res, holiday_status_id, employee_id, dd, ds)
 
     @api.one
     @api.constrains('date_from')

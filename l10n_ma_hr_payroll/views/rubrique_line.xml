@@ -96,7 +96,7 @@
                                 <field  name="name"/>
                                 <label  for="date_start" string="Durée"/>
                                 <div>
-                                    <group col="3">
+                                    <group>
                                         <field  class="oe_inline" name="date_start" nolabel="1"/>
                                         <label  class="oe_inline" string="-"/>
                                         <field  class="oe_inline" name="date_end" nolabel="1"/>
@@ -109,7 +109,7 @@
                                 <field  name="amount"/>
                             </group>
                         </group>
-                        <field  colspan="4" name="notes" nolabel="1" placeholder="Ajouter un motif..."/>
+                        <field name="notes" nolabel="1" placeholder="Ajouter un motif..."/>
                     </sheet>
                     <div class="oe_chatter">
                         <field  name="message_follower_ids" widget="mail_followers"/>
