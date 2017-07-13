@@ -7,11 +7,6 @@
             <field  name="inherit_id" ref="base.view_company_form"/>
             <field name="arch" type="xml">
                 <data>
-                    <xpath expr="//field[@name='name']" position="after">
-                        <h4>
-                            <field  name="initial" placeholder="Initial" required="1"/>
-                        </h4>
-                    </xpath>
                     <field name="company_registry" position="attributes">
                         <attribute name="string">Registre de commerce</attribute>
                     </field>

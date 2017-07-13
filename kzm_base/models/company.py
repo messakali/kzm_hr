@@ -133,15 +133,15 @@ class res_company(models.Model):
 #     code_digits = fields.Integer('# digits', required=True, default=0)
 #     code_digits_min = fields.Integer('# digits min', readonly=True,)
 
-    initial = fields.Char(string=u'Initial', size=64,)
-
-    cnss_day_limit = fields.Integer(string=u'Dernier jour de la regularisation', default=10,  required=True,  )
-
-
-    _sql_constraints = [
-        ('initial_unique', 'UNIQUE (initial)',
-         'The initial of the company must be unique !'),
-    ]
+#     initial = fields.Char(string=u'Initial', size=64,)
+# 
+#     cnss_day_limit = fields.Integer(string=u'Dernier jour de la regularisation', default=10,  required=True,  )
+# 
+# 
+#     _sql_constraints = [
+#         ('initial_unique', 'UNIQUE (initial)',
+#          'The initial of the company must be unique !'),
+#     ]
 
 #     @api.one
 #     def process_code_digits(self):
