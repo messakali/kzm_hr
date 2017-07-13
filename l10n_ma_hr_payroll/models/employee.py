@@ -631,7 +631,7 @@ class hr_employee(models.Model):
     # CRON
     @api.model
     def attendance_action_signoutall(self):
-        employees = self.search([]).filtered(lambda r: r.state == 'present')
+        employees = self.search([]).filtered(lambda r: r.attendance_state == 'present')
         employees.attendance_action_change()
 
     # ROTATION

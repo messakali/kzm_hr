@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_hr_teledeclaration_damancom_form_first" model="ir.ui.view">
+            <field name="name">hr.teledeclaration.damancom.form.first</field>
+            <field name="model">hr.teledeclaration.damancom</field>
+            <field  eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="DAMANCOM">
+                    <group col="4" colspan="4">
+                        <group colspan="2">
+                            <field  groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="fiscalyear_id" widget="selection"/>
+                            <field  groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="period_id" widget="selection"/>
+                            <field  name="date_from" required="1"/>
+                            <field  name="date_to" required="1"/>
+                            <field  name="declaration_type"/>
+                            <field  attrs="{'required': [('declaration_type','=', 'c')],'invisible': [('declaration_type','!=', 'c')]}"
+                                name="declaration_number"/>
+                            <field  groups="l10n_ma_hr_payroll.group_paie_interface_state" name="state"/>
+                        </group>
+                        <group colspan="2" groups="l10n_ma_hr_payroll.group_paie_interface_helper">
+                            <field  groups="base.group_multi_company" name="company_child" required="0"/>
+                            <field  groups="base.group_multi_company" name="company_parent" required="0"/>
+                        </group>
+                        <group colspan="2" groups="l10n_ma_hr_payroll.group_paie_interface_department" name="department">
+                            <div class="style_department">
+                                <separator  string="Limiter les départements"/>
+                                <field  name="departments_id" widget="many2many_checkboxes"/>
+                            </div>
+                        </group>
+                        <group colspan="4" groups="base.group_multi_company">
+                            <div class="style_company">
+                                <separator  colspan="4" string="Sociétés"/>
+                                <field  colspan="4" name="company_ids" nolabel="1" widget="many2many_tags"/>
+                            </div>
+                        </group>
+                        <group colspan="4">
+                            <field  name="fichier_preetabli"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button  class="oe_highlight" name="goto_intermediate" string="Suivant" type="object"/>
+                        <button  name="update_data" string="Update data" type="object"/>
+                        ou
+                        <button  class="oe_link" special="cancel" string="Annuler" type="special"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_teledeclaration_damancom_form_intermediate" model="ir.ui.view">
+            <field name="name">hr.teledeclaration.damancom.form.intermediate</field>
+            <field name="model">hr.teledeclaration.damancom</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="DAMANCOM">
+                    <group col="4" colspan="4">
+                        <field  invisible="1" name="declaration_type"/>
+                        <notebook colspan="4">
+                            <page attrs="{'invisible': [('declaration_type','=', 'c')]}" string="Summary">
+                                <field  name="summary"/>
+                            </page>
+                            <page attrs="{'invisible': [('declaration_type','=', 'c')]}" string="Entrants">
+                                <field  colspan="4" name="entrant_ids" nolabel="1"/>
+                            </page>
+                            <page attrs="{'invisible': [('declaration_type','=', 'c')]}" string="Sortants">
+                                <field  colspan="4" name="sortant_ids" nolabel="1"/>
+                            </page>
+                            <page attrs="{'invisible': [('declaration_type','=', 'c')]}" string="Courants">
+                                <field  colspan="4" name="courant_ids" nolabel="1"/>
+                            </page>
+                            <page string="Erreurs">
+                                <field  colspan="4" name="erreur_ids" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </group>
+                    <footer>
+                        <button  name="goto_last" string="Suivant" type="object"/>
+                        ou
+                        <button  class="oe_link" name="goto_first" string="Précédent" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_teledeclaration_damancom_form_last" model="ir.ui.view">
+            <field name="name">hr.teledeclaration.damancom.form.last</field>
+            <field name="model">hr.teledeclaration.damancom</field>
+            <field  eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="DAMANCOM">
+                    <group col="4" colspan="4">
+                        <div colspan="4">You can now download the file</div>
+                        <field  class="oe_inline" filename="name" name="generated_file" readonly="1"/>
+                        <field  class="oe_inline" invisible="1" name="name"/>
+                    </group>
+                    <footer>
+                        <button  name="goto_intermediate" string="Précédent" type="object"/>
+                        ou
+                        <button  class="oe_link" special="cancel" string="Annuler" type="special"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="hr_teledeclaration_damancom_wizard_action" model="ir.actions.act_window">
+            <field name="name">DAMANCOM</field>
+            <field name="res_model">hr.teledeclaration.damancom</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem  action="hr_teledeclaration_damancom_wizard_action" groups="l10n_ma_hr_payroll_damancom.group_hr_menu_damancom"
+            id="hr_teledeclaration_damancom_wizard_menu" parent="l10n_ma_hr_payroll.menu_hr_main_teledeclaration" sequence="40"/>
+    </data>
+</odoo>

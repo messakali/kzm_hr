@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="hr_expense.view_product_hr_expense_form" />
             <field name="arch" type="xml">
                 <xpath expr="//notebook/page[@name='general_information']/group[last()]" position="after">
-                    <group colspan="2" string="Notes de frais" attrs="{'invisible': [('hr_expense_ok','=', False)]}">
+                    <group colspan="2" string="Notes de frais" attrs="{'invisible': [('can_be_expensed','=', False)]}">
                         <field name="default_expense_ok" />
                         <field name="payroll_type" />
                         <field name="payroll_rubrique_id" attrs="{'required': [('payroll_type','=', 'rubrique')],'invisible': [('payroll_type','!=', 'rubrique')]}" />

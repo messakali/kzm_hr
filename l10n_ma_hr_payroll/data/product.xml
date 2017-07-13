@@ -3,7 +3,7 @@
     <data noupdate="1">
         <record id="product_expense_majoration" model="product.template">
             <field name="name">Note de frais</field>
-            <field eval="True" name="hr_expense_ok"/>
+            <field eval="True" name="can_be_expensed"/>
             <field eval="False" name="sale_ok"/>
             <field eval="'majoration_net'" name="payroll_type"/>
             <field eval="'service'" name="type"/>

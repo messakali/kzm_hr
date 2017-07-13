@@ -13,7 +13,7 @@ Paie marocaine - Les bases de la paie
 
     """,
     'images': [],
-    'depends': ['report_xlsx','kzm_base', 'hr_payroll_account', 'hr_timesheet_sheet', 'document', 'portal', 'hr_attendance', 'account_fiscal_year'],
+    'depends': ['report_xlsx','kzm_base', 'hr_payroll_account', 'hr_timesheet_sheet', 'document', 'hr_attendance', 'account_fiscal_year'],
     'data': [
         'views/l10n_ma_hr_payroll.xml',
         'security/groups.xml',

@@ -328,7 +328,6 @@
             <field model="hr.salary.rule.category" name="add_category_ids" search="[('code','=','RETENU')]"/>
             <field name="description">Aucun</field>
         </record>
-<!--
         <record id="dict_assurance_retaite" model="hr.dictionnary">
             <field name="name">ASSURANCE_RETRAITE</field>
             <field name="type">total</field>
@@ -355,7 +354,6 @@
             <field model="hr.salary.rule" name="add_rule_ids" search="[('code','like','ASSURANCE_RETRAITE_PATRONALE')]"/>
             <field name="description">* Aucun</field>
         </record>
-        -->
         <record id="dict_mutuelle" model="hr.dictionnary">
             <field name="name">MUTUELLE</field>
             <field name="type">total</field>

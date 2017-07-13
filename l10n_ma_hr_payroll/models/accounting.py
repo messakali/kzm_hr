@@ -306,7 +306,7 @@ class hr_payslip_account(models.Model):
                         'account_id': self.get_account_from_code(company, self.account_debit_id.code).id,
                         'credit': difference,
                     })
-                move.line_id.create(diff_line)
+                move.line_ids.create(diff_line)
             self.move_id = move
             for slip in self.payslip_ids:
                 slip.move_id = move

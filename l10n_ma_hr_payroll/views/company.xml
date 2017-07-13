@@ -7,6 +7,11 @@
             <field name="model">res.company</field>
             <field  name="inherit_id" ref="kzm_base.view_res_company_kzm_base_inherit_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <h4>
+                        <field  name="initial" placeholder="Initial" required="1"/>
+                    </h4>
+                </xpath>
                 <xpath expr="//sheet" position="after">
                     <div class="oe_chatter" groups="l10n_ma_hr_payroll.group_hr_company">
                         <field  name="message_follower_ids" widget="mail_followers"/>

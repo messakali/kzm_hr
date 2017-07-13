@@ -98,6 +98,16 @@ class res_company(models.Model):
         contracts = self.env['hr.contract'].search(domain)
         self.nbr_employees = len(contracts.mapped('employee_id'))
 
+    initial = fields.Char(string=u'Initial', size=64,)
+
+    cnss_day_limit = fields.Integer(string=u'Dernier jour de la regularisation', default=10,  required=True,  )
+
+
+    _sql_constraints = [
+        ('initial_unique', 'UNIQUE (initial)',
+         'The initial of the company must be unique !'),
+    ]
+
     simpleir_employee_id = fields.Many2one(
         'hr.employee', string=u'Contribuable (Simple IR)', track_visibility='onchange')
     manager_id = fields.Many2one(

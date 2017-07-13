@@ -178,7 +178,7 @@
                         <field  name="task_id"/>
                         <field  name="qualif_id"/>
                     </group>
-                    <group string="Paie">
+                    <group string="Paie" name="paie">
                         <field  name="hire_date"/>
                         <label  for="seniority"/>
                         <div>
