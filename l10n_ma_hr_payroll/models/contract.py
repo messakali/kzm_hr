@@ -158,9 +158,9 @@ class hr_contract(models.Model):
             return 
         emp_obj = self.employee_id
 
-        self.company_id = emp_obj.company_id.id
+        self.company_id = emp_obj.company_id
         self.city_signature = emp_obj.company_id.main_company_id.city or ''
-        self.journal_id = emp_obj.company_id.payroll_journal_id.id
+        self.journal_id = emp_obj.company_id.payroll_journal_id
 
         hire_date = emp_obj.hire_date or False
         if hire_date:

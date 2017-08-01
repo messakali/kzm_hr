@@ -137,7 +137,7 @@ class hr_dictionnary(models.Model):
         dictionnary = False
         if code:
             dictionnary = self.search([('name', '=', code)])
-            print "dictionnary    : ",dictionnary
+#             print "dictionnary    : ",dictionnary
             assert dictionnary, _(
                 "A dictionnary should be created for [%s]") % code
         assert force_type or dictionnary, _(

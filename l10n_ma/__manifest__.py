@@ -4,7 +4,7 @@
 # Copyright (c) 2010 kazacube (http://kazacube.com).
 
 {
-    'name': 'Maroc - Accountinggggg',
+    'name': 'Maroc - Accounting',
     'author': 'kZm',
     'category': 'Localization',
     'sequence': 1,

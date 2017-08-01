@@ -35,7 +35,7 @@
                                 <tr>
                                     <th>Total</th>
                                     <th style="text-align: right">
-                                        <span  t-esc="formatLang(sum([x.amount for x in order.vir_line_ids ]))"/>
+                                        <span  t-esc="sum([x.amount for x in order.vir_line_ids ])"/>
                                     </th>
                                 </tr>
                             </thead>
@@ -113,7 +113,7 @@
                                         Total
                                     </td>
                                     <td style="text-align: right">
-                                        <span  t-esc="formatLang(sum([x.amount for x in order.vir_line_ids ]))"/>
+                                        <span  t-esc="sum([x.amount for x in order.vir_line_ids ])"/>
                                     </td>
                                 </tr>
                             </tfoot>

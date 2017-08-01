@@ -4,7 +4,7 @@
         <template id="report_paye_journal">
             <t t-call="report.html_container">
                 <t t-as="p" t-foreach="docs">
-                    <t  t-set="lines" t-value="p.move_id.line_id.sorted(lambda r: r.debit, reverse=True)"/>
+                    <t  t-set="lines" t-value="p.move_id.line_ids.sorted(lambda r: r.debit, reverse=True)"/>
                     <t t-call="kzm_base.kzm_page_layout">
                         <div class="page">
                             <h4 style="text-align: center;">Journal des opérations diverses
@@ -49,10 +49,10 @@
                                             Total
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([line.debit for line in lines]))"/>
+                                            <span  t-esc="sum([line.debit for line in lines])"/>
                                         </td>
                                         <td style="text-align: right">
-                                            <span  t-esc="formatLang(sum([line.credit for line in lines]))"/>
+                                            <span  t-esc="sum([line.credit for line in lines])"/>
                                         </td>
                                     </tr>
                                 </tfoot>
