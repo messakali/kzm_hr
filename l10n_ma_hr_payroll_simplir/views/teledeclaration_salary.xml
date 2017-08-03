@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_hr_teledeclaration_salary_form" model="ir.ui.view">
+            <field name="name">hr.teledeclaration.salary.form</field>
+            <field name="model">hr.teledeclaration.salary</field>
+            <field  eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Simpl-IR">
+                    <field  invisible="1" name="is_first_page"/>
+                    <group col="4" colspan="4">
+                        <group colspan="2">
+                            <field  groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="fiscalyear_id" widget="selection"/>
+                            <field  
+                                groups="l10n_ma_hr_payroll.group_paie_interface_helper" name="period_id" required="0" widget="selection"/>
+                            <field  name="date_from" required="1"/>
+                            <field  name="date_to" required="1"/>
+                            <field  groups="l10n_ma_hr_payroll.group_paie_interface_state" name="state"/>
+                            <field  name="reference"/>
+                        </group>
+                        <group colspan="2" groups="l10n_ma_hr_payroll.group_paie_interface_helper">
+                            <field  groups="base.group_multi_company" name="company_child" required="0"/>
+                            <field  groups="base.group_multi_company" name="company_parent" required="0"/>
+                        </group>
+                        <group colspan="2" groups="l10n_ma_hr_payroll.group_paie_interface_department" name="department">
+                            <div class="style_department">
+                                <separator  string="Limiter les départements"/>
+                                <field  name="departments_id" widget="many2many_checkboxes"/>
+                            </div>
+                        </group>
+                        <group colspan="4" groups="base.group_multi_company">
+                            <div class="style_company">
+                                <separator  colspan="4" string="Sociétés"/>
+                                <field  colspan="4" name="company_ids" nolabel="1" widget="many2many_tags"/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <notebook>
+	                        <page string="IR">
+                    			<group>
+		                            <field name="identifiantFiscal"/>
+		                            <field name="nom"/>
+		                            <field name="prenom"/>
+		                            <field name="raisonSociale"/>
+		                            <field name="exerciceFiscalDu"/>
+		                            <field name="exerciceFiscalAu"/>
+		                            <field name="annee"/>
+		                            
+		                            <field name="adresse"/>
+		                            <field name="numeroCIN"/>
+		                            <field name="numeroCNSS"/>
+		                            <field name="numeroCE"/>
+		                            <field name="numeroRC"/>
+                    			</group>
+	                        </page>
+                        </notebook>
+                    </group>
+                    <group col="4" colspan="4">
+                        <group colspan="4">
+                            <field  class="oe_inline" filename="name" name="generated_file" readonly="1"/>
+                            <field  class="oe_inline" invisible="1" name="name"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button class="oe_highlight" name="action_generate_list" string="Générer liste" type="object"/>
+                        ou
+                        <button class="oe_highlight" name="action_generate" string="Générer" type="object"/>
+                        ou
+                        <button  class="oe_link" special="cancel" string="Annuler" type="special"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="hr_teledeclaration_salary_wizard_action" model="ir.actions.act_window">
+            <field name="name">Simpl-IR</field>
+            <field name="res_model">hr.teledeclaration.salary</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="target">current</field>
+        </record>
+        <menuitem  action="hr_teledeclaration_salary_wizard_action" groups="l10n_ma_hr_payroll_simplir.group_hr_menu_simplir"
+            id="hr_teledeclaration_salary_wizard_menu" parent="l10n_ma_hr_payroll.menu_hr_main_teledeclaration" sequence="40"/>
+    </data>
+</odoo>

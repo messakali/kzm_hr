@@ -74,13 +74,13 @@
                                             <strong>Article
                                                 <span t-esc="int_to_roman(index())"/></strong>
                                             : Durant la période probatoire de
-                                            <span t-esc="text(c.trial_days,'mois','jour',True)"/>, à compter du
+                                            <span t-esc="c.trial_days"/>, à compter du
                                             <span t-field="c.date_start"/>,
                                             <t t-if="c.preavis_nbr_renew">et qui ne pourra être renouvelée que
-                                                <span t-esc="text(c.preavis_nbr_renew,'fois','',True)"/>,
+                                                <span t-esc="c.preavis_nbr_renew"/>,
                                             </t>le présent contrat pourra être résilié par chacune des parties contractantes,
                                             <t t-if="c.observation_preavis_duration">moyennant l’observation d’un préavis de
-                                                <span t-esc="text(c.observation_preavis_duration,'jour','',True)"/>.
+                                                <span t-esc="c.observation_preavis_duration"/>.
                                             </t>Au delà d’un mois et demi et après votre confirmation dans vos fonctions, le délai de préavis passera à PreavisDuration mois.</p>
                                     </t>
 
@@ -104,7 +104,7 @@
                                             :
                                             <span t-field="c.employee_id.full_name"/>
                                             bénéficiera d’un congé payé de
-                                            <span t-esc="text(c.nb_holidays_by_month,'jour','',True)"/>
+                                            <span t-esc="c.nb_holidays_by_month"/>
                                             par mois de travail.</p>
                                     </t>
 
@@ -120,7 +120,7 @@
                                         <strong>Article
                                             <span t-esc="int_to_roman(index())"/></strong>
                                         : Les parties se réservent le droit de mettre fin au contrat moyennant un préavis de
-                                        <span t-esc="text(c.preavis_duration,'mois','jour',True,30)"/>
+                                        <span t-esc="c.preavis_duration"/>
                                         qu’elles s’engagent à respecter.</p>
 
                                     <p>
@@ -179,7 +179,7 @@
                                         : Le présent contrat qui prend effet le
                                         <span t-field="c.date_start"/>
                                         est conclu pour une durée minimale de
-                                        <span t-esc="text(c.minimal_duration,'mois','jours',True,30)"/>, si la saison se prolonge au delà de cette durée minimale, le
+                                        <span t-esc="c.minimal_duration"/>, si la saison se prolonge au delà de cette durée minimale, le
                                             contrat se poursuivra jusqu’à l’achèvement de la saison qui constituera son terme.</p>
 
                                     <p><span t-field="c.employee_id.full_name"/>
@@ -197,7 +197,7 @@
                                             <strong>Article
                                                 <span t-esc="int_to_roman(index())"/></strong>
                                             : Le présent contrat ne sera effectif qu’à l’expiration d’une période d’essai de
-                                            <span t-esc="text(c.trial_days,'jour','',True)"/>.</p>
+                                            <span t-esc="c.trial_days"/>.</p>
                                     </t>
 
                                     <p>
@@ -221,7 +221,7 @@
                                             :
                                             <span t-field="c.employee_id.full_name"/>
                                             bénéficiera d’un congé payé de
-                                            <span t-esc="text(c.nb_holidays_by_month,'jour','',True)"/>
+                                            <span t-esc="c.nb_holidays_by_month"/>
                                             par mois de travail.</p>
                                     </t>
                                     <p>
@@ -263,7 +263,7 @@
                                             : Le présent contrat qui prend effet le
                                             <span t-field="c.date_start"/>
                                             est conclu pour une durée minimale de
-                                            <span t-esc="text(c.minimal_duration,'mois','jours',True,30)"/>, si la saison se prolonge au delà de cette durée minimale, le
+                                            <span t-esc="c.minimal_duration"/>, si la saison se prolonge au delà de cette durée minimale, le
                                                 contrat se poursuivra jusqu’à l’achèvement de la saison qui constituera son terme.</p>
                                     </t>
 
@@ -282,7 +282,7 @@
                                             <strong>Article
                                                 <span t-esc="int_to_roman(index())"/></strong>
                                             : Le présent contrat ne sera effectif qu’à l’expiration d’une période d’essai de
-                                            <span t-esc="text(c.trial_days,'jour','',True)"/>.</p>
+                                            <span t-esc="c.trial_days"/>.</p>
 
                                     </t>
                                     <p>
@@ -306,7 +306,7 @@
                                             :
                                             <span t-field="c.employee_id.full_name"/>
                                             bénéficiera d’un congé payé de
-                                            <span t-esc="text(c.nb_holidays_by_month,'jour','',True)"/>
+                                            <span t-esc="c.nb_holidays_by_month"/>
                                             par mois de travail.</p>
                                     </t>
                                     <p>

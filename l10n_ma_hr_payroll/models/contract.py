@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import json
 import logging
 from odoo import models, fields, api, _
 import odoo.addons.decimal_precision as dp
@@ -397,21 +398,36 @@ class hr_contract(models.Model):
 
     based_on_id = fields.Many2one(
         'hr.contract.base', string=u'Basé sur', required=True,)
+    
+    based_on_ids = fields.Char(
+        compute="_compute_based_on_ids_domain",
+        readonly=True,
+        store=False,
+    )
+    
+    @api.multi
+    @api.depends('company_id', 'company_id.based_on_ids')
+    def _compute_based_on_ids_domain(self):
+        for rec in self:
+            rec.based_on_ids = json.dumps(
+                [('id', 'in', rec.company_id.based_on_ids.ids)
+                ]
+            )
 
-    @api.one
-    @api.depends("company_id", "company_id.based_on_ids")
-    def _compute_based_on_ids(self):
-        if self.company_id:
-            self.based_on_ids = self.company_id.based_on_ids
-        else:
-            self.based_on_ids = False
-
-    based_on_ids = fields.Many2many(
-        comodel_name='hr.contract.base',
-        relation='hr_contract_based_on_rel',
-        column1='contract_id',
-        column2='based_on_id',
-        string=u'Basé sur', compute='_compute_based_on_ids', store=True,)
+#     @api.one
+#     @api.depends("company_id", "company_id.based_on_ids")
+#     def _compute_based_on_ids(self):
+#         if self.company_id:
+#             self.based_on_ids = self.company_id.based_on_ids
+#         else:
+#             self.based_on_ids = False
+# 
+#     based_on_ids = fields.Many2many(
+#         comodel_name='hr.contract.base',
+#         relation='hr_contract_based_on_rel',
+#         column1='contract_id',
+#         column2='based_on_id',
+#         string=u'Basé sur', compute='_compute_based_on_ids', store=True,)
 
     @api.one
     @api.depends("based_on")

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="group_hr_menu_simplir" model="res.groups">
+            <field name="name">Simpl-IR</field>
+            <field name="category_id" ref="l10n_ma_hr_payroll.module_paie_menu"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+    </data>
+</odoo>

@@ -25,7 +25,7 @@
                                 <t  t-esc="order.bank_id.acc_number"/>
                             </strong>, nous vous prions de bien vouloir créditer les comptes suivants d'un Montant de
                             <strong>
-                                <span  t-esc="text(sum([x.amount for x in order.vir_line_ids ]))"/>
+                                <span  t-esc="sum([x.amount for x in order.vir_line_ids ])"/>
                             </strong>
                             .
                         </p>
@@ -73,7 +73,7 @@
                                 <t  t-esc="order.bank_id.acc_number"/>
                             </strong>, nous vous prions de bien vouloir créditer les comptes suivants d'un Montant de
                             <strong>
-                                <span  t-esc="text(sum([x.amount for x in order.vir_line_ids ]))"/>
+                                <span  t-esc="sum([x.amount for x in order.vir_line_ids ])"/>
                             </strong>
                             .
                         </p>
