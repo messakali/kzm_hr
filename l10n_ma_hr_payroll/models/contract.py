@@ -70,7 +70,7 @@ class hr_contract(models.Model):
     date_end = fields.Date(string=u'Date fin', track_visibility='onchange')
 
     name = fields.Char(
-        default=lambda self: self.env['ir.sequence'].get('rec_contract'), track_visibility='onchange')
+        default='/', track_visibility='onchange')
     voucher_mode = fields.Selection([
         ('ES', u'Espèces'),
         ('CH', u'Chèque'),
@@ -171,7 +171,7 @@ class hr_contract(models.Model):
         if contract_ids:
             contracts = contract_ids
             for contract in contracts:
-                msg += _('Société') + ' : ' + contract.company_id.name + '\n'
+                msg += _(u'Société') + ' : ' + str(contract.company_id.name) + '\n'
                 msg += _('De') + ' : ' + contract.date_start
                 if contract.date_end:
                     msg += ' '
@@ -233,18 +233,24 @@ class hr_contract(models.Model):
                 day_from = datetime.datetime.strptime(dt_from, "%Y-%m-%d")
                 day_to = datetime.datetime.strptime(dt_to, "%Y-%m-%d")
                 nb_of_days = (day_to - day_from).days + 1
+                print "nb_of_days    : ",nb_of_days
                 days = hours = 0
                 for day in range(0, nb_of_days):
                     current_date = day_from + datetime.timedelta(days=day)
-                    working_hours_on_day = self.env['resource.calendar'].working_hours_on_day(current_date)
+                    print "current_date    : ",current_date
+                    working_hours_on_day = self.env['resource.calendar'].get_working_hours_of_date(current_date)
+                    print "working_hours_on_day    : ",working_hours_on_day
                     days += working_hours_on_day > 0 and 1 or 0
                     hours += working_hours_on_day
+                print "days    : ",days
                 contract.nbr_days_declared_first_month = days
                 contract.nbr_hours_declared_first_month = hours
 
 
     @api.model
     def create(self, vals):
+        if vals.get('name') == '/':
+            vals['name'] = 'Contrat de ' + str(self.env['hr.employee'].browse(vals['employee_id']).name) + ' ' + str(self.env['ir.sequence'].next_by_code('rec_contract'))
         contract = super(hr_contract, self).create(vals)
         contract.employee_id.update_rotation()
         self.update_contract_state(force_employee=contract.employee_id)
@@ -403,6 +409,7 @@ class hr_contract(models.Model):
         compute="_compute_based_on_ids_domain",
         readonly=True,
         store=False,
+        default="[]"
     )
     
     @api.multi

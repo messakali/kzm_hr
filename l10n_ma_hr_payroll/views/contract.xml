@@ -167,8 +167,8 @@
                                 <field name="code" invisible="1" />
                                 <field name="can_reset" invisible="1" />
                                 <field name="state" invisible="1" />
-                                <button string="Valider" states="draft,confirm,validate" type="object" icon="STOCK_YES" name="should_be_done"/>
-                                <button string="Réinitialiser" states="done" type="object" icon="STOCK_CLOSE"  name="should_be_draft"/>
+                                <button string="Valider" states="draft,confirm,validate" type="object" icon="fa-check" name="should_be_done"/>
+                                <button string="Réinitialiser" states="done" type="object" icon="fa fa-undo text-warning"  name="should_be_draft"/>
                             </tree>
                         </field>
                     </page>

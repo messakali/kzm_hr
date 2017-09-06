@@ -38,5 +38,15 @@
             <field name="name">Réactiver les employés</field>
             <field eval="'ir.actions.server,%d'%action_unarchive_employee" name="value"/>
         </record>
+        
+        <!-- Sequence -->
+        <record id="sequence_payment_customer_refund" model="ir.sequence">
+            <field name="name">Employee sequence</field>
+            <field name="code">hr.employee</field>
+            <field name="prefix"></field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field name="padding">4</field>
+        </record>
     </data>
 </openerp>

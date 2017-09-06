@@ -242,23 +242,24 @@ class hr_employee(models.Model):
     @api.model
     def create(self, vals):
         if not vals.get('otherid', False):
-            company = self.env['res.company'].browse(
-                vals.get('company_id', False))
-            if not company:
-                company = self.env.user.company_id
-            if company and company.initial:
-                employee = self.env['hr.employee'].with_context({'active_test': False, }).search(
-                    [('otherid', 'like', company.initial)], limit=1, order='otherid desc')
-                seq = company.initial + '1'.rjust(5, '0')
-                if employee:
-                    seq = company.initial + \
-                        str(int(''.join(
-                            [x for x in (employee.otherid or '0') if x.isdigit()]) or '0') + 1).rjust(5, '0')
-            else:
-                raise Warning('Veuillez configurer l\'initial de la société')
-            vals.update({
-                'otherid': seq,
-            })
+            vals['otherid'] = self.env['ir.sequence'].next_by_code('hr.employee')
+#             company = self.env['res.company'].browse(
+#                 vals.get('company_id', False))
+#             if not company:
+#                 company = self.env.user.company_id
+#             if company and company.initial:
+#                 employee = self.env['hr.employee'].with_context({'active_test': False, }).search(
+#                     [('otherid', 'like', company.initial)], limit=1, order='otherid desc')
+#                 seq = company.initial + '1'.rjust(5, '0')
+#                 if employee:
+#                     seq = company.initial + \
+#                         str(int(''.join(
+#                             [x for x in (employee.otherid or '0') if x.isdigit()]) or '0') + 1).rjust(5, '0')
+#             else:
+#                 raise Warning('Veuillez configurer l\'initial de la société')
+#             vals.update({
+#                 'otherid': seq,
+#             })
         if vals.get('name', False):
             name = vals.get('name').split(' ', 1)
             vals.update({

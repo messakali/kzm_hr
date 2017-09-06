@@ -20,12 +20,15 @@
           <field name="model_id" ref="model_hr_contract"/>
           <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
       </record>
-      <!-- Payslip 
-      <record id="hr_payroll.property_rule_employee_payslip" model="ir.rule">
+      <!-- Payslip -->
+   	  <record id="property_rule_employee_payslip" model="ir.rule">
+          <field name="name">Employee Payslip</field>
+          <field name="model_id" ref="model_hr_payslip"/>
           <field name="domain_force">[(1, '=', 1)]</field>
-      </record>-->
-      <record id="property_rule_employee_payslip" model="ir.rule">
-          <field name="name">Payslip Employee</field>
+          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+	  </record>
+      <record id="property_rule_officer_payslip" model="ir.rule">
+          <field name="name">Payslip Officer</field>
           <field name="model_id" ref="model_hr_payslip"/>
           <field name="domain_force">[('employee_id.user_id', '=', user.id),('state','in',['done'])]</field>
           <field name="groups" eval="[(4,ref('base.group_user'))]"/>
