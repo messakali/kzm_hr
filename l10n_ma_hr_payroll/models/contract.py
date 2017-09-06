@@ -233,16 +233,12 @@ class hr_contract(models.Model):
                 day_from = datetime.datetime.strptime(dt_from, "%Y-%m-%d")
                 day_to = datetime.datetime.strptime(dt_to, "%Y-%m-%d")
                 nb_of_days = (day_to - day_from).days + 1
-                print "nb_of_days    : ",nb_of_days
                 days = hours = 0
                 for day in range(0, nb_of_days):
                     current_date = day_from + datetime.timedelta(days=day)
-                    print "current_date    : ",current_date
                     working_hours_on_day = self.env['resource.calendar'].get_working_hours_of_date(current_date)
-                    print "working_hours_on_day    : ",working_hours_on_day
                     days += working_hours_on_day > 0 and 1 or 0
                     hours += working_hours_on_day
-                print "days    : ",days
                 contract.nbr_days_declared_first_month = days
                 contract.nbr_hours_declared_first_month = hours
 

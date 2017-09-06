@@ -80,7 +80,7 @@ class hr_teledeclaration_salary(models.Model):
     montantOccasionnel = fields.Char(string=u'montant Occasionnel',)
     montantStagiaire = fields.Char(string=u'montant Stagiaire',)
     referenceDeclaration = fields.Char(string=u'reference Declaration',)
-    listPersonnelPermanent = fields.Char(string=u'list Personnel Permanent',)
+    listPersonnelPermanent_ids = fields.One2many('list.personnel.permanent', 'salary_id', string=u'list Personnel Permanent')
     listPersonnelOccasionnel = fields.Char(string=u'list Personnel Occasionnel',)
     listStagiaires = fields.Char(string=u'list Stagiaires',)
     listBeneficiaires = fields.Char(string=u'list Beneficiaires',)
@@ -437,8 +437,9 @@ class hr_teledeclaration_salary(models.Model):
         # Reference declaration
         self.referenceDeclaration = self.reference
         # List Personnel Permanent
-        listPersonnelPermanent = self._get_listPersonnelPermanent()
-        self.listPersonnelPermanent = listPersonnelPermanent
+        listPersonnelPermanent = self._get_listPersonnelPermanent_list()
+#         self.listPersonnelPermanent_ids = listPersonnelPermanent
+        self.write({'listPersonnelPermanent_ids': [(0,0, listPersonnelPermanent)]})
         # List Personnel Occasionnel
         listPersonnelOccasionnel = self._get_listPersonnelOccasionnel()
         self.listPersonnelOccasionnel = listPersonnelOccasionnel
@@ -456,6 +457,178 @@ class hr_teledeclaration_salary(models.Model):
         self.listVersements = listVersements
 
         return etree.tostring(root, xml_declaration=True, encoding="utf-8", pretty_print=True)
+
+    @api.multi
+    def _get_listPersonnelPermanent_list(self):
+        all_payslips = self._get_payslips('permanent')
+        all_employees = all_payslips.mapped('employee_id')
+        for emp in all_employees:
+            payslips = all_payslips.filtered(
+                lambda r: r.employee_id.id == emp.id)
+            payslip_ids = payslips.mapped('id')
+            tmp = {}
+            tmp['nom'] = emp.nom
+            tmp['prenom'] = emp.prenom
+            adressePersonnelle = ' '
+            if emp.address_home_id:
+                adressePersonnelle = emp.address_home_id.contact_address.strip().replace(
+                    '\n', ', ')
+            tmp['adressePersonnelle'] = adressePersonnelle
+            tmp['numCNI'] = emp.cin or ''
+            tmp['numCE'] = emp.carte_sejour or ''
+            tmp['numPPR'] = emp.ppr or ''
+            tmp['numCNSS'] = emp.cnss or ''
+            tmp['ifu'] = emp.identification_id or ''
+            mtBrutTraitementSalaire = self.env['hr.dictionnary'].compute_value(
+                code='SALAIRE_BASE',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtBrutTraitementSalaire'] = mtBrutTraitementSalaire
+            periode = self.env['hr.dictionnary'].compute_value(
+                code='NBR_JOURS',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['periode'] = periode
+            mtExonere = self.env['hr.dictionnary'].compute_value(
+                code='EXONORE',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtExonere'] = mtExonere
+            mtEcheances = self.env['hr.dictionnary'].compute_value(
+                code='INTERET',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtEcheances'] = mtEcheances
+            nbrReductions = self.env['hr.dictionnary'].compute_value(
+                code='NBR_REDUCTION',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['nbrReductions'] = nbrReductions
+            mtIndemnite = self.env['hr.dictionnary'].compute_value(
+                code='INDEMNITE',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtIndemnite'] = mtIndemnite
+            mtAvantages = self.env['hr.dictionnary'].compute_value(
+                code='AVANTAGE',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtAvantages'] = mtAvantages
+            mtRevenuBrutImposable = self.env['hr.dictionnary'].compute_value(
+                code='BRUT_IMPOSABLE',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtRevenuBrutImposable'] = mtRevenuBrutImposable
+            mtFraisProfess = self.env['hr.dictionnary'].compute_value(
+                code='FP',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtFraisProfess'] = mtFraisProfess
+            mtCotisationAssur = self.env['hr.dictionnary'].compute_value(
+                code='ASSURANCE_RETRAITE_SALARIALE',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtCotisationAssur'] = mtCotisationAssur
+            mtAutresRetenues = self.env['hr.dictionnary'].compute_value(
+                code='RETENU',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            ) - mtCotisationAssur
+            tmp['mtAutresRetenues'] = mtAutresRetenues
+            mtRevenuNetImposable = self.env['hr.dictionnary'].compute_value(
+                code='NET_IMPOSABLE',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtRevenuNetImposable'] = mtRevenuNetImposable
+            mtTotalDeduction = self.env['hr.dictionnary'].compute_value(
+                code='TOTAL_DEDUCTION',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['mtTotalDeduction'] = mtTotalDeduction
+            irPreleve = self.env['hr.dictionnary'].compute_value(
+                code='IR',
+                date_start=self.date_from,
+                date_stop=self.date_to,
+                department_ids=self._get_departments(),
+                state=self.state,
+                company_id=self._get_companies(),
+                payslip_ids=payslip_ids,
+            )
+            tmp['irPreleve'] = irPreleve
+            tmp['casSportif'] = 'false'
+            tmp['numMatricule'] = emp.otherid or ''
+            tmp['datePermis'] = emp.date_ph or ''
+            tmp['dateAutorisation'] = emp.date_ac or ''
+                
+            tmp['codemarital'] = emp.marital or ''
+            tmp['code'] = payslips[0].company_id.fp_id.name or ''
+            
+            print "tmp    : ",tmp
+        return tmp
 
 ########################################################################################
     @api.multi
@@ -542,8 +715,9 @@ class hr_teledeclaration_salary(models.Model):
         root.append(
             self._write_node('referenceDeclaration', self.referenceDeclaration))
         # List Personnel Permanent
-        print "self.listPersonnelPermanent    : ",self.listPersonnelPermanent
-#         root.append(self.listPersonnelPermanent)
+        listPersonnelPermanent = self._get_listPersonnelPermanent()
+        print "listPersonnelPermanent    : ",listPersonnelPermanent
+        root.append(listPersonnelPermanent)
 #         # List Personnel Occasionnel
 #         root.append(self.listPersonnelOccasionnel)
 #         # List Stagiaires
@@ -560,201 +734,66 @@ class hr_teledeclaration_salary(models.Model):
     @api.multi
     def _get_listPersonnelPermanent(self):
         listPersonnelPermanent = Element('listPersonnelPermanent')
-        all_payslips = self._get_payslips('permanent')
-        all_employees = all_payslips.mapped('employee_id')
-        for emp in all_employees:
-            payslips = all_payslips.filtered(
-                lambda r: r.employee_id.id == emp.id)
-            payslip_ids = payslips.mapped('id')
+        for emp in self.listPersonnelPermanent_ids:
             tmp = Element('PersonnelPermanent')
             tmp.append(
                 self._write_node('nom', emp.nom))
             tmp.append(
                 self._write_node('prenom', emp.prenom))
-            adressePersonnelle = ' '
-            if emp.address_home_id:
-                adressePersonnelle = emp.address_home_id.contact_address.strip().replace(
-                    '\n', ', ')
             tmp.append(
-                self._write_node('adressePersonnelle', adressePersonnelle))
+                self._write_node('adressePersonnelle', emp.adressePersonnelle))
             tmp.append(
-                self._write_node('numCNI', emp.cin or ''))
+                self._write_node('numCNI', emp.numCNI))
             tmp.append(
-                self._write_node('numCE', emp.carte_sejour or ''))
+                self._write_node('numCE', emp.numCE))
             tmp.append(
-                self._write_node('numPPR', emp.ppr or ''))
+                self._write_node('numPPR', emp.numPPR))
             tmp.append(
-                self._write_node('numCNSS', emp.cnss or ''))
+                self._write_node('numCNSS', emp.numCNSS))
             tmp.append(
-                self._write_node('ifu', emp.identification_id or ''))
-            mtBrutTraitementSalaire = self.env['hr.dictionnary'].compute_value(
-                code='SALAIRE_BASE',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('ifu', emp.ifu))
             tmp.append(
-                self._write_node('mtBrutTraitementSalaire', mtBrutTraitementSalaire))
-            periode = self.env['hr.dictionnary'].compute_value(
-                code='NBR_JOURS',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtBrutTraitementSalaire', emp.mtBrutTraitementSalaire))
             tmp.append(
-                self._write_node('periode', periode))
-            mtExonere = self.env['hr.dictionnary'].compute_value(
-                code='EXONORE',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('periode', emp.periode))
             tmp.append(
-                self._write_node('mtExonere', mtExonere))
-            mtEcheances = self.env['hr.dictionnary'].compute_value(
-                code='INTERET',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtExonere', emp.mtExonere))
             tmp.append(
-                self._write_node('mtEcheances', mtEcheances))
-            nbrReductions = self.env['hr.dictionnary'].compute_value(
-                code='NBR_REDUCTION',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtEcheances', emp.mtEcheances))
             tmp.append(
-                self._write_node('nbrReductions', nbrReductions))
-            mtIndemnite = self.env['hr.dictionnary'].compute_value(
-                code='INDEMNITE',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('nbrReductions', emp.nbrReductions))
             tmp.append(
-                self._write_node('mtIndemnite', mtIndemnite))
-            mtAvantages = self.env['hr.dictionnary'].compute_value(
-                code='AVANTAGE',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtIndemnite', emp.mtIndemnite))
             tmp.append(
-                self._write_node('mtAvantages', mtAvantages))
-            mtRevenuBrutImposable = self.env['hr.dictionnary'].compute_value(
-                code='BRUT_IMPOSABLE',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtAvantages', emp.mtAvantages))
             tmp.append(
-                self._write_node('mtRevenuBrutImposable', mtRevenuBrutImposable))
-            mtFraisProfess = self.env['hr.dictionnary'].compute_value(
-                code='FP',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtRevenuBrutImposable', emp.mtRevenuBrutImposable))
             tmp.append(
-                self._write_node('mtFraisProfess', mtFraisProfess))
-            mtCotisationAssur = self.env['hr.dictionnary'].compute_value(
-                code='ASSURANCE_RETRAITE_SALARIALE',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtFraisProfess', emp.mtFraisProfess))
             tmp.append(
-                self._write_node('mtCotisationAssur', mtCotisationAssur))
-            mtAutresRetenues = self.env['hr.dictionnary'].compute_value(
-                code='RETENU',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            ) - mtCotisationAssur
+                self._write_node('mtCotisationAssur', emp.mtCotisationAssur))
             tmp.append(
-                self._write_node('mtAutresRetenues', mtAutresRetenues))
-            mtRevenuNetImposable = self.env['hr.dictionnary'].compute_value(
-                code='NET_IMPOSABLE',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtAutresRetenues', emp.mtAutresRetenues))
             tmp.append(
-                self._write_node('mtRevenuNetImposable', mtRevenuNetImposable))
-            mtTotalDeduction = self.env['hr.dictionnary'].compute_value(
-                code='TOTAL_DEDUCTION',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtRevenuNetImposable', emp.mtRevenuNetImposable))
             tmp.append(
-                self._write_node('mtTotalDeduction', mtTotalDeduction))
-            irPreleve = self.env['hr.dictionnary'].compute_value(
-                code='IR',
-                date_start=self.date_from,
-                date_stop=self.date_to,
-                department_ids=self._get_departments(),
-                state=self.state,
-                company_id=self._get_companies(),
-                payslip_ids=payslip_ids,
-            )
+                self._write_node('mtTotalDeduction', emp.mtTotalDeduction))
             tmp.append(
-                self._write_node('irPreleve', irPreleve))
+                self._write_node('irPreleve', emp.irPreleve))
             tmp.append(
-                self._write_node('casSportif', 'false'))
+                self._write_node('casSportif', emp.casSportif))
             tmp.append(
-                self._write_node('numMatricule', emp.otherid or ''))
+                self._write_node('numMatricule', emp.numMatricule))
             tmp.append(
-                self._write_node('datePermis', emp.date_ph or ''))
+                self._write_node('datePermis', emp.datePermis))
             tmp.append(
-                self._write_node('dateAutorisation', emp.date_ac or ''))
+                self._write_node('dateAutorisation', emp.dateAutorisation))
             refSituationFamiliale = Element('refSituationFamiliale')
             refSituationFamiliale.append(
-                self._write_node('code', emp.marital or ''))
+                self._write_node('codemarital', emp.codemarital))
             refTaux = Element('refTaux')
             refTaux.append(
-                self._write_node('code', payslips[0].company_id.fp_id.name or ''))
+                self._write_node('code', emp.code))
             tmp.append(refSituationFamiliale)
             tmp.append(refTaux)
             listPersonnelPermanent.append(tmp)
@@ -971,6 +1010,7 @@ class hr_teledeclaration_salary(models.Model):
 class ListPersonnelPermanent(models.Model):
     _name = 'list.personnel.permanent'
     
+    salary_id = fields.Many2one('hr.teledeclaration.salary', 'Salary')
     nom = fields.Char(string=u'nom',)
     prenom = fields.Char(string=u'prenom',)
     adressePersonnelle = fields.Char(string=u'adresse Personnelle',)
@@ -994,11 +1034,12 @@ class ListPersonnelPermanent(models.Model):
     mtTotalDeduction = fields.Char(string=u'mt Total Deduction',)
     irPreleve = fields.Char(string=u'ir Preleve',)
     casSportif = fields.Char(string=u'cas Sportif',)
-    irPreleve = fields.Char(string=u'ir Preleve',)
+#     irPreleve = fields.Char(string=u'ir Preleve',)
     numMatricule = fields.Char(string=u'num Matricule',)
     datePermis = fields.Char(string=u'date Permis',)
     dateAutorisation = fields.Char(string=u'date Autorisation',)
     code = fields.Char(string=u'code',)
+    codemarital = fields.Char(string=u'code marital',)
     refSituationFamiliale = fields.Many2one('ref.situation.familiale', string=u'ref Situation Familiale',)
     
     

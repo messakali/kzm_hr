@@ -54,6 +54,41 @@
 		                            <field name="numeroRC"/>
                     			</group>
 	                        </page>
+	                        <page string="Personnel permanent">
+	                        <field name="listPersonnelPermanent_ids">
+                    			<tree>
+		                            <field name="nom"/>
+		                            <field name="prenom"/>
+		                            <field name="adressePersonnelle"/>
+		                            <field name="numCNI"/>
+		                            <field name="numCE"/>
+		                            <field name="numPPR"/>
+		                            <field name="numCNSS"/>
+		                            <field name="ifu"/>
+		                            <field name="mtBrutTraitementSalaire"/>
+		                            <field name="periode"/>
+		                            <field name="mtExonere"/>
+		                            <field name="mtEcheances"/>
+		                            <field name="nbrReductions"/>
+		                            <field name="mtIndemnite"/>
+		                            <field name="mtAvantages"/>
+		                            <field name="mtRevenuBrutImposable"/>
+		                            <field name="mtFraisProfess"/>
+		                            <field name="mtCotisationAssur"/>
+		                            <field name="mtAutresRetenues"/>
+		                            <field name="mtRevenuNetImposable"/>
+		                            <field name="mtTotalDeduction"/>
+		                            <field name="irPreleve"/>
+		                            <field name="casSportif"/>
+		                            <field name="numMatricule"/>
+		                            <field name="datePermis"/>
+		                            <field name="dateAutorisation"/>
+		                            <field name="code"/>
+		                            <field name="codemarital"/>
+		                            <field name="refSituationFamiliale"/>
+                    			</tree>
+	                        </field>
+	                        </page>
                         </notebook>
                     </group>
                     <group col="4" colspan="4">

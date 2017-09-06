@@ -64,17 +64,16 @@
                         <h4>
                         	<field name="title" options="{'no_create': true, 'no_open': true}" />
                         </h4>
-                        <label for="prenom" class="oe_edit_only" string="Prénom : "/>
-                        <h1>
-                        	<field name="prenom" required="1"/>
-                        </h1>
-                        <label for="nom" class="oe_edit_only" string="Nom : "/>
-                        <h1>
-                        	<field name="nom" required="1"/>
-                        </h1>
+                        
+                        <label for="nom" class="oe_edit_only" string="Nom et Prénom : "/>
+                        <div>
+                        	<h1>
+                            	<field name="nom" required="1" class="oe_inline"/><field name="prenom" required="1" class="oe_inline" style="padding-left:0.3em"/>
+                        	</h1>
+                        </div>
                         <label for="otherid" class="oe_edit_only" string="Matricule : "/>
                         <h1>
-                        	<field name="otherid" readonly="1"/>
+                        	<field name="otherid" readonly="0"/>
                         </h1>
                         <label for="category_ids" class="oe_edit_only"/>
                         <field name="category_ids" widget="many2many_tags" placeholder="i.e. Temps partiel" modifiers="{}"/>
