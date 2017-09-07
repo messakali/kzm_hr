@@ -1,0 +1,11 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_teledeclaration_salary_user,hr.teledeclaration.salary user,model_hr_teledeclaration_salary,base.group_user,1,1,1,0
+access_list_personnel_permanent_user,list.personnel.permanent user,model_list_personnel_permanent,base.group_user,1,1,1,0
+access_ref_situation_familiale_user,ref.situation.familiale user,model_ref_situation_familiale,base.group_user,1,1,1,0
+access_list_personnel_occasionnel_user,list.personnel.occasionnel,model_list_personnel_occasionnel,base.group_user,1,1,1,0
+access_list_stagiaires_user,list.stagiaires,model_list_stagiaires,base.group_user,1,1,1,0
+access_list_versements_user,list.versements,model_list_versements,base.group_user,1,1,1,0
+access_list_detail_paiement_user,list.detail.paiement,model_list_detail_paiement,base.group_user,1,1,1,0
+access_list_beneficiaires_user,list.beneficiaires,model_list_beneficiaires,base.group_user,1,1,1,0
+access_list_beneficiaires_plan_epargne_user,list.beneficiaires.plan.epargne,model_list_beneficiaires_plan_epargne,base.group_user,1,1,1,0
+access_list_salaries_exoneration_user,list.salaries.exoneration,model_list_salaries_exoneration,base.group_user,1,1,1,0

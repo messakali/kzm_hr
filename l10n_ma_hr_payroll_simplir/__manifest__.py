@@ -17,6 +17,7 @@ Paie marocaine - Simpl-IR
     'data': [
         'security/hr.xml',
         'views/teledeclaration_salary.xml',
+        'security/ir.model.access.csv',
     ],
     "qweb": [
 

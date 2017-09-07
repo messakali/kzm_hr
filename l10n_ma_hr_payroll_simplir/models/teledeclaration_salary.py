@@ -1127,15 +1127,15 @@ class RefSituationFamiliale(models.Model):
     code = fields.Char(string=u'code',)
     refTaux = fields.Char(string=u'ref Taux',)
 
-class RefMoyenPaiement(models.Model):
-    _name = 'ref.moyen.paiement'
+# class RefMoyenPaiement(models.Model):
+#     _name = 'ref.moyen.paiement'
+#     
+#     code = fields.Char(string=u'code',)
     
-    code = fields.Char(string=u'code',)
-    
-class HrCommune(models.Model):
-    _name = 'hr.commune'
-    
-    code = fields.Char(string=u'code',)
+# class HrCommune(models.Model):
+#     _name = 'hr.commune'
+#     
+#     code = fields.Char(string=u'code',)
         
 class ListPersonnelOccasionnel(models.Model):
     _name = 'list.personnel.occasionnel'
