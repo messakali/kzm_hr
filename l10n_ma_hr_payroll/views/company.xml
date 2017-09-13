@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="after">
                     <h4>
-                        <field  name="initial" placeholder="Initial" required="1"/>
+                        <field  name="initial" groups="base.group_multi_company" placeholder="Initial" required="1"/>
                     </h4>
                 </xpath>
                 <xpath expr="//sheet" position="after">

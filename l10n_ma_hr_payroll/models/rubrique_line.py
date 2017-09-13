@@ -7,7 +7,7 @@ from odoo.exceptions import Warning
 
 class hr_rubrique_line(models.Model):
     _name = 'hr.rubrique.line'
-    _description = 'Éléments de salaire'
+    _description = u'Éléments de salaire'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     _track = {

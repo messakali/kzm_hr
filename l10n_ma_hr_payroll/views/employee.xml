@@ -66,9 +66,9 @@
                         </h4>
                         
                         <label for="nom" class="oe_edit_only" string="Nom et Prénom : "/>
-                        <div>
+                        <div col="6">
                         	<h1>
-                            	<field name="nom" required="1" class="oe_inline"/><field name="prenom" required="1" class="oe_inline" style="padding-left:0.3em"/>
+                            	<field name="nom" placeholder="Nom" required="1" class="oe_inline"/><field name="prenom" placeholder="Prénom" required="1" class="oe_inline" style="padding-left:0.3em"/>
                         	</h1>
                         </div>
                         <label for="otherid" class="oe_edit_only" string="Matricule : "/>

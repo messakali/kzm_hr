@@ -41,6 +41,7 @@
       <!-- Rubrique -->
       <record id="rule_hr_rubrique_line_global" model="ir.rule">
           <field name="name">Rubrique Line multi-company</field>
+          <field name="active">False</field>
           <field name="model_id" ref="model_hr_rubrique_line"/>
           <field name="domain_force">['|',('employee_id.company_id','=',False),('employee_id.company_id','child_of',[user.company_id.id])]</field>
       </record>
