@@ -104,17 +104,9 @@
                         name="%(act_open_hr_expense_view_context)d" type="action">
                         <field  name="expense_count" string="Notes de frais" widget="statinfo"/>
                     </button>
-                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_warning" icon="fa-exclamation-triangle"
-                        name="%(act_open_hr_warning_view_context)d" type="action">
-                        <field  name="warning_count" string="Avertissements" widget="statinfo"/>
-                    </button>
                     <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_mass_attendance" icon="fa-clock-o"
                         name="%(act_open_hr_employee_mass_attendance_view_context)d" type="action">
                         <field  name="attendance_count" string="Pointage en masse" widget="statinfo"/>
-                    </button>
-                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_document" icon="fa-file-text-o"
-                        name="%(act_open_hr_document_view_context)d" type="action">
-                        <field  name="document_count" string="Documents" widget="statinfo"/>
                     </button>
                     <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_avantage" icon="fa-money"
                         name="%(act_open_hr_avantage_line_view_context)d" type="action">

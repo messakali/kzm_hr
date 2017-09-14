@@ -37,7 +37,7 @@
                         <field  name="state" statusbar_visible="draft,done" widget="statusbar"/>
                     </header>
                     <sheet>
-                        <div class="oe_right oe_button_box" name="button_box">
+                        <div class="oe_button_box" name="button_box">
                             <button class="oe_stat_button" icon="fa-list" name="open_es_slips" type="object" attrs="{'invisible': [('espece','=', False)]}">
                                 <field name="count_es_line_ids" string="Espèces" widget="statinfo"/>
                             </button>
@@ -187,6 +187,6 @@
             <field  name="view_id" ref="view_hr_voucher_order_tree"/>
         </record>
         <menuitem  action="act_open_hr_voucher_order_view" groups="l10n_ma_hr_payroll.group_hr_menu_voucher" id="menu_hr_voucher_order"
-            parent="hr_payroll.menu_hr_payroll_root" sequence="40"/>
+            parent="l10n_ma_hr_payroll.menu_hr_main_accounting" sequence="16"/>
     </data>
 </openerp>

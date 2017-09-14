@@ -126,37 +126,6 @@
           <field name="model_id" ref="model_hr_employee_rotation"/>
           <field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
       </record>
-      <!-- Avertissmeents -->
-      <record id="rule_warning_global" model="ir.rule">
-          <field name="name">Avertissement multi-company</field>
-          <field name="model_id" ref="model_hr_employee_warning"/>
-          <field name="domain_force">['|',('employee_id.company_id','=',False),('employee_id.company_id','child_of',[user.company_id.id])]</field>
-      </record>
-      <record id="rule_warning_employee" model="ir.rule">
-          <field name="name">Avertissement employee</field>
-          <field name="model_id" ref="model_hr_employee_warning"/>
-          <field name="domain_force">[('state','in',['sent','received'])]</field>
-          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
-      </record>
-      <!-- Documnets administratifs -->
-      <record id="rule_document_global" model="ir.rule">
-          <field name="name">Document Administratifs multi-company</field>
-          <field name="model_id" ref="model_hr_document"/>
-          <field name="domain_force">['|','|','|',('user_id.company_id','child_of',[user.company_id.id]),('company_id','=',False),('company_id','child_of',[user.company_id.id]),('employee_id.company_id','child_of',[user.company_id.id])]</field>
-      </record>
-      <record id="rule_document_employee" model="ir.rule">
-          <field name="name">Document Administratifs employee</field>
-          <field name="model_id" ref="model_hr_document"/>
-          <field name="domain_force">['|',('user_id','=',user.id),('employee_id.user_id','=',user.id)]</field>
-          <field name="groups" eval="[(4,ref('base.group_user'))]"/>
-      </record>
-
-      <record id="rule_document_officier" model="ir.rule">
-          <field name="name">Document Administratifs Officier</field>
-          <field name="model_id" ref="model_hr_document"/>
-          <field name="domain_force">[(1,'=',1)]</field>
-          <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
-      </record>
       <!-- Kilometrage -->
       <record id="rule_employee_km_global" model="ir.rule">
           <field name="name">Kilométrage multi-company</field>

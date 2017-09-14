@@ -52,7 +52,7 @@
                     </header>
                     <sheet>
                       <h1><field name="name"/></h1>
-                      <div class="oe_right oe_button_box" name="button_box">
+                      <div class="oe_button_box" name="button_box">
                           <button class="oe_stat_button" icon="fa-list" name="%(act_open_hr_saisie_line_view_by_context)d" type="action">
                               <field name="saisie_line_count" string="Lignes" widget="statinfo"/>
                           </button>

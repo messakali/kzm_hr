@@ -3,18 +3,6 @@
     <data>
         <!-- Main menu -->
         <menuitem id="menu_hr_main_request" name="Espace employé" parent="hr.menu_hr_root" sequence="18"/>
-        <!-- Documents -->
-        <record id="act_open_document_request_view" model="ir.actions.act_window">
-            <field name="name">Documents</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">hr.document</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain">[('employee_id.user_id','=',uid)]</field>
-            <field name="context">{ }</field>
-        </record>
-        <menuitem id="request_document_menu" parent="menu_hr_main_request" sequence="0"
-                action="act_open_document_request_view" groups="l10n_ma_hr_payroll.group_portal_employee_menu_document"/>
         <!-- Congé légal -->
         <record model="ir.actions.act_window" id="act_open_holiday_legal_view">
             <field name="name">Congé légal</field>
@@ -128,18 +116,6 @@
             <field name="context">{}</field>
         </record>
         <menuitem groups="l10n_ma_hr_payroll.group_portal_employee_menu_expense"  action="act_open_expense_request_view" id="request_expense_menu" parent="menu_hr_main_request" sequence="8" />
-        <!-- Avertissements -->
-        <record model="ir.actions.act_window" id="act_open_warning_request_view">
-            <field name="name">Avertissements</field>
-            <field
-                name="type">ir.actions.act_window</field>
-            <field name="res_model">hr.employee.warning</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field
-                name="domain">[('employee_id.user_id','=',uid)]</field>
-            <field name="context">{}</field>
-        </record>
-        <menuitem groups="l10n_ma_hr_payroll.group_portal_employee_menu_warning"  action="act_open_warning_request_view" id="request_warning_menu" parent="menu_hr_main_request" sequence="10"/>
+        
     </data>
 </openerp>

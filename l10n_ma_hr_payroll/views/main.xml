@@ -24,7 +24,7 @@
         <!-- Payslip menu Security -->
 		<menuitem action="hr_payroll.action_view_hr_payslip_form" id="hr_payroll.menu_department_tree" parent="l10n_ma_hr_payroll.menu_hr_main_accounting" groups="l10n_ma_hr_payroll.group_hr_menu_payslip"/>
         
-        <menuitem action="hr_payroll.action_hr_payslip_run_tree" id="hr_payroll.menu_hr_payslip_run" parent="l10n_ma_hr_payroll.menu_hr_main_accounting" groups="group_hr_menu_payslip_run"/>	        
+        <menuitem action="hr_payroll.action_hr_payslip_run_tree" id="hr_payroll.menu_hr_payslip_run" parent="l10n_ma_hr_payroll.menu_hr_main_accounting" groups="group_hr_menu_payslip_run" sequence="9"/>	        
 
         <!-- Paye reporting Security
         <record id="hr_payroll.menu_hr_payroll_reporting" model="ir.ui.menu">

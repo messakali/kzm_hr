@@ -280,8 +280,8 @@ class hr_payslip(models.Model):
             'date.range'].search([('date_start', '<=' ,self.date_to), ('date_end', '>=', self.date_to),('type_id.fiscal_year', '=', True)])
             if slip_period_id:
                 self.slip_period_id = slip_period_id
-        if not self.slip_period_id:
-            raise Warning('There is no period defined for this date: '+ str(self.date_to) +'.\nPlease go to Configuration/Periods and configure a fiscal year.')
+#         if not self.slip_period_id:
+#             raise Warning('There is no period defined for this date: '+ str(self.date_to) +'.\nPlease go to Configuration/Periods and configure a fiscal year.')
         self.slip_fiscalyear_id = self.slip_period_id
 
     slip_period_id = fields.Many2one(
@@ -331,7 +331,9 @@ class hr_payslip(models.Model):
     @api.depends("line_ids")
     def _compute_salary(self):
         net = net_imposable = net_contractuel = brut = brut_imposable = 0.0
-        for line in self.details_by_salary_rule_category:
+        details_by_salary_rule_category = self.mapped('line_ids').filtered(lambda line: line.category_id)
+        
+        for line in details_by_salary_rule_category: 
             if line.code == 'NET':
                 net = line.total
             if line.code == 'BRUT':
@@ -342,6 +344,7 @@ class hr_payslip(models.Model):
                 net_contractuel = line.total
             if line.code == 'NET_IMPOSABLE':
                 net_imposable = line.total
+                
         self.salary_net = net
         self.salary_brut = brut
         self.salary_brut_imposable = brut_imposable

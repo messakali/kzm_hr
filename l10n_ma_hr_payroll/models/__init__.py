@@ -31,10 +31,8 @@ import expense
 import avance_line_line
 import structure
 import job
-import document
 import saisie
 import saisie_line
-import warning
 import timesheet
 import qualification
 import task

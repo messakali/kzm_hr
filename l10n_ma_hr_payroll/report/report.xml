@@ -201,12 +201,6 @@
             <field name="paperformat_id" ref="paperformat_ma_lowmargin"/>
             <field name="download_filename">'Journal de paie ('+period+').'+ext</field>
         </record>
-        <!-- Avertissement -->
-        <report file="l10n_ma_hr_payroll.report_warning" id="warning"
-            model="hr.employee.warning" name="l10n_ma_hr_payroll.report_warning" report_type="qweb-pdf" string="Warning"/>
-        <record id="warning" model="ir.actions.report.xml">
-            <field name="download_filename">(multi and 'Avertissements' or ('Avertissement ('+o.employee_id.name+')'))+'.'+ext</field>
-        </record>
         <!-- Voucher mode global -->
         <report file="l10n_ma_hr_payroll.report_voucher_order_global" id="voucher_order_global"
             model="hr.voucher.order" name="l10n_ma_hr_payroll.report_voucher_order_global" report_type="qweb-pdf"

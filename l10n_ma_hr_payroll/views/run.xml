@@ -13,8 +13,8 @@
                 <xpath expr="//field[@name='state']" position="after">
 	                  <field name="state2" widget="statusbar" />
                 </xpath> -->
-                <xpath expr="//sheet/h1[1]" position="after">
-                    <div class="oe_right oe_button_box" name="button_box">
+                <xpath expr="//sheet/label[@for='name']" position="before">
+                    <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" icon="fa-list" name="%(act_open_hr_payslip_by_run_context)d" type="action">
                             <field name="slip_count" string="Fiches de paie" widget="statinfo"/>
                         </button>
