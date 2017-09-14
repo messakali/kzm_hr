@@ -1,0 +1,11 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_document_type_user,hr.document.type user,model_hr_document_type,base.group_user,1,0,0,0
+access_hr_document_type_offcier,hr.document.type officier,model_hr_document_type,hr.group_hr_user,1,1,1,1
+access_hr_document_user,hr.document user,model_hr_document,base.group_user,1,1,1,1
+access_hr_employee_warning_type_line_user,access_hr_employee_warning_type_line user,model_hr_employee_warning_type_line,base.group_user,1,1,1,1
+access_hr_employee_warning_type_line_portal,access_hr_employee_warning_type_line portal,model_hr_employee_warning_type_line,base.group_portal,1,1,1,1
+access_hr_employee_warning_type_portal,access_hr_employee_warning_type portal,model_hr_employee_warning_type,base.group_portal,1,1,0,0
+access_hr_employee_warning_type_user,access_hr_employee_warning_type user,model_hr_employee_warning_type,base.group_user,1,1,0,0
+access_hr_employee_warning_type_officier,access_hr_employee_warning_type officier,model_hr_employee_warning_type,hr.group_hr_user,1,1,1,1
+access_hr_employee_warning_user,access_hr_employee_warning user,model_hr_employee_warning,base.group_user,1,0,0,0
+access_hr_employee_warning_officier,access_hr_employee_warning officier,model_hr_employee_warning,hr.group_hr_user,1,1,1,1

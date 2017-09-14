@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+<!-- Employee Form Inherit -->
+        <record id="view_hr_employee_kzm_form" model="ir.ui.view">
+            <field name="name">hr.employee.kzm.form</field>
+            <field name="model">hr.employee</field>
+            <field  name="inherit_id" ref="hr_payroll.payroll_hr_employee_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_warning" icon="fa-exclamation-triangle"
+                        name="%(act_open_hr_warning_view_context)d" type="action">
+                        <field  name="warning_count" string="Avertissements" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" groups="l10n_ma_hr_payroll.group_hr_menu_document" icon="fa-file-text-o"
+                        name="%(act_open_hr_document_view_context)d" type="action">
+                        <field  name="document_count" string="Documents" widget="statinfo"/>
+                    </button>
+                    
+                </xpath>
+                
+            </field>
+        </record>
+        
+    </data>
+</odoo>
