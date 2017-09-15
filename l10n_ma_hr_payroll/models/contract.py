@@ -239,8 +239,8 @@ class hr_contract(models.Model):
                     working_hours_on_day = self.working_hours.get_working_hours_of_date(current_date)
                     days += working_hours_on_day > 0 and 1 or 0
                     hours += working_hours_on_day
-                contract.nbr_days_declared_first_month = days
-                contract.nbr_hours_declared_first_month = hours
+                contract.nbr_days_declared_first_month = contract.nbr_days_declared
+                contract.nbr_hours_declared_first_month = contract.nbr_hours_declared
 
 
     @api.model

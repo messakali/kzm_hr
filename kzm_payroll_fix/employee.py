@@ -13,7 +13,6 @@ from dateutil.relativedelta import relativedelta
 class hr_employee(models.Model):
     _inherit = 'hr.employee'
 
-    @api.one
     @api.onchange("children_ids", "marital", "wife_situation", "nbr_person_charged")
     def change_charged_person(self):
         nbr_person_charged = 0
