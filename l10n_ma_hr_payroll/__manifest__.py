@@ -2,7 +2,7 @@
 
 {
     'name': 'Paie marocaine - Les bases',
-    'version': '4.0.0',
+    'version': '2.0.0',
     'author': 'Karizma Conseil',
     'website': "http://www.karizma.ma",
     'category': 'Paie marocaine',
@@ -13,7 +13,7 @@ Paie marocaine - Les bases de la paie
 
     """,
     'images': [],
-    'depends': ['report_xlsx','kzm_base', 'hr_payroll_account', 'hr_timesheet_sheet', 'document', 'hr_attendance', 'account_fiscal_year','web_domain_field'],
+    'depends': ['report_xlsx','kzm_base', 'hr_payroll_account', 'hr_timesheet_sheet', 'document', 'hr_attendance', 'account_fiscal_year'],
     'data': [
         'views/l10n_ma_hr_payroll.xml',
         'security/groups.xml',

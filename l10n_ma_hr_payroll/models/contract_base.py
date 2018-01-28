@@ -3,7 +3,7 @@
 from odoo import models, fields, api, _
 
 
-class hr_contract_base(models.Model):
+class HrContractBase(models.Model):
     _name = 'hr.contract.base'
     _description = 'Contrats de base'
 
@@ -14,3 +14,11 @@ class hr_contract_base(models.Model):
         ('code_unique', 'UNIQUE(code)',
          'Le code du contrat doit être unique !'),
     ]
+
+    @api.model
+    def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+        context = self._context or {}
+        if context.get('default_values'):
+            args += [('id', 'in', self.env.user.company_id.based_on_ids.ids)]
+        return super(HrContractBase, self)._search(args, offset=offset, limit=limit, order=order,
+                                    count=count, access_rights_uid=access_rights_uid)

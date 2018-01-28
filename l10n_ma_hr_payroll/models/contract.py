@@ -29,7 +29,7 @@ class hr_contract(models.Model):
         @return: the structures linked to the given contracts, ordered by hierachy (parent=False first, then first level children and so on) and without duplicata
         """
         return [r.id for r in self.struct_id._get_parent_structure()]
-    
+
 
     @api.one
     def _get_next_contract(self):
@@ -150,13 +150,13 @@ class hr_contract(models.Model):
 
     trial_days = fields.Integer(
         string=u'Période de test', compute='_compute_trial_days',)
-    
+
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
         super(hr_contract, self)._onchange_employee_id()
         if not self.employee_id:
             self.date_start = fields.Date.today()
-            return 
+            return
         emp_obj = self.employee_id
 
         self.company_id = emp_obj.company_id
@@ -400,37 +400,13 @@ class hr_contract(models.Model):
 
     based_on_id = fields.Many2one(
         'hr.contract.base', string=u'Basé sur', required=True,)
-    
+
     based_on_ids = fields.Char(
-        compute="_compute_based_on_ids_domain",
         readonly=True,
         store=False,
         default="[]"
     )
-    
-    @api.multi
-    @api.depends('company_id', 'company_id.based_on_ids')
-    def _compute_based_on_ids_domain(self):
-        for rec in self:
-            rec.based_on_ids = json.dumps(
-                [('id', 'in', rec.company_id.based_on_ids.ids)
-                ]
-            )
 
-#     @api.one
-#     @api.depends("company_id", "company_id.based_on_ids")
-#     def _compute_based_on_ids(self):
-#         if self.company_id:
-#             self.based_on_ids = self.company_id.based_on_ids
-#         else:
-#             self.based_on_ids = False
-# 
-#     based_on_ids = fields.Many2many(
-#         comodel_name='hr.contract.base',
-#         relation='hr_contract_based_on_rel',
-#         column1='contract_id',
-#         column2='based_on_id',
-#         string=u'Basé sur', compute='_compute_based_on_ids', store=True,)
 
     @api.one
     @api.depends("based_on")
