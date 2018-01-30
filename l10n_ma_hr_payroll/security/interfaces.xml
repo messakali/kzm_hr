@@ -45,16 +45,16 @@
             <field name="category_id" ref="module_paie_interface"/>
             <field name="users" eval="[(4, ref('base.user_root'))]"/>
         </record>
-        <record id="group_paie_interface_rate" model="res.groups">
-            <field name="name">Taux de facturation</field>
-            <field name="category_id" ref="module_paie_interface"/>
-            <field name="users" eval="[(4, ref('base.user_root'))]"/>
-        </record>
-        <record id="group_paie_interface_rate_generate" model="res.groups">
-            <field name="name">Générateur des taux de facturation</field>
-            <field name="category_id" ref="module_paie_interface"/>
-            <field name="users" eval="[(4, ref('base.user_root'))]"/>
-        </record>
+<!--        <record id="group_paie_interface_rate" model="res.groups">-->
+<!--            <field name="name">Taux de facturation</field>-->
+<!--            <field name="category_id" ref="module_paie_interface"/>-->
+<!--            <field name="users" eval="[(4, ref('base.user_root'))]"/>-->
+<!--        </record>-->
+<!--        <record id="group_paie_interface_rate_generate" model="res.groups">-->
+<!--            <field name="name">Générateur des taux de facturation</field>-->
+<!--            <field name="category_id" ref="module_paie_interface"/>-->
+<!--            <field name="users" eval="[(4, ref('base.user_root'))]"/>-->
+<!--        </record>-->
         <record id="group_paie_interface_limit" model="res.groups">
             <field name="name">Gestion des limites</field>
             <field name="category_id" ref="module_paie_interface"/>

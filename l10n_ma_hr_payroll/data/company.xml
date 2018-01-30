@@ -2,7 +2,7 @@
 <openerp>
     <data noupdate="1">
         <record id="base.main_company" model="res.company">
-            <field name="initial">YC</field>
+            <field name="initial"></field>
             <field name="working_hours" ref="resource_calendar_hoursweek0"></field>
             <field name="fp_id" search="[('rate','=',20)]" model="l10n.ma.fp"/>
           	<field name="based_on_ids" eval="[(6, 0, [ref('l10n_ma_hr_payroll.contract_base_fixed_days'),ref('l10n_ma_hr_payroll.contract_base_worked_hours')])]"/>
