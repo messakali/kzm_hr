@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_l10n_ma_fp_tree" model="ir.ui.view">
+            <field name="name">l10n.ma.fp.tree</field>
+            <field name="model">l10n.ma.fp</field>
+            <field name="type">tree</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Frais professionnels">
+                    <field name="name"/>
+                    <field name="rate"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_l10n_ma_fp_form" model="ir.ui.view">
+            <field name="name">l10n.ma.fp.form</field>
+            <field name="model">l10n.ma.fp</field>
+            <field name="type">form</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Frais professionnels">
+                    <group colspan="4">
+                        <field name="name"/>
+                        <field name="rate"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="view_l10n_ma_fp_search" model="ir.ui.view">
+            <field name="name">l10n.ma.fp.search</field>
+            <field name="model">l10n.ma.fp</field>
+            <field name="type">search</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Frais professionnels">
+                    <field name="name" select="True"/>
+                    <field name="rate" select="True"/>
+                </search>
+            </field>
+        </record>
+        <record id="act_open_l10n_ma_fp_view" model="ir.actions.act_window">
+            <field name="name">Frais professionnels</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">l10n.ma.fp</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_l10n_ma_fp_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <record id="act_open_l10n_ma_fp_view_form" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="act_open_l10n_ma_fp_view"/>
+            <field eval="20" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_l10n_ma_fp_form"/>
+        </record>
+        <record id="act_open_l10n_ma_fp_view_tree" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="act_open_l10n_ma_fp_view"/>
+            <field eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_l10n_ma_fp_tree"/>
+        </record>
+    </data>
+</openerp>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data noupdate="1">
-        <record id="hr.employee" model="hr.employee">
-            <field name="name">Administrateur du système</field>
-            <field name="nom">du système</field>
-            <field name="prenom">Administrateur</field>
-        </record>
+<!--        <record id="hr.employee" model="hr.employee">-->
+<!--            <field name="name">Administrateur du système</field>-->
+<!--            <field name="nom">du système</field>-->
+<!--            <field name="prenom">Administrateur</field>-->
+<!--        </record>-->
         <!-- Archivage -->
         <record id="action_archive_employee" model="ir.actions.server">
             <field name="name">Archiver les employés</field>

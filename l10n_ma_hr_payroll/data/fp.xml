@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="fp_tp_40_2009" model="l10n.ma.fp">
+            <field name="name">TPP.40.2009</field>
+            <field eval="40" name="rate"/>
+        </record>
+        <record id="fp_tp_45_2009" model="l10n.ma.fp">
+            <field name="name">TPP.45.2009</field>
+            <field eval="45" name="rate"/>
+        </record>
+        <record id="fp_tp_35_2009" model="l10n.ma.fp">
+            <field name="name">TPP.35.2009</field>
+            <field eval="35" name="rate"/>
+        </record>
+        <record id="fp_tp_25_2009" model="l10n.ma.fp">
+            <field name="name">TPP.25.2009</field>
+            <field eval="25" name="rate"/>
+        </record>
+        <record id="fp_tp_20_2009" model="l10n.ma.fp">
+            <field name="name">TPP.20.2009</field>
+            <field eval="20" name="rate"/>
+        </record>
+        <record id="fp_tp_45_2006" model="l10n.ma.fp">
+            <field name="name">TPP.45.2006</field>
+            <field eval="45" name="rate"/>
+        </record>
+        <record id="fp_tp_35_2006" model="l10n.ma.fp">
+            <field name="name">TPP.35.2006</field>
+            <field eval="35" name="rate"/>
+        </record>
+        <record id="fp_tp_25_2006" model="l10n.ma.fp">
+            <field name="name">TPP.25.2006</field>
+            <field eval="25" name="rate"/>
+        </record>
+        <record id="fp_tp_17_2006" model="l10n.ma.fp">
+            <field name="name">TPP.17.2006</field>
+            <field eval="17" name="rate"/>
+        </record>
+        <record id="fp_tp_40_2012" model="l10n.ma.fp">
+            <field name="name">TPP.40.2012</field>
+            <field eval="40" name="rate"/>
+        </record>
+        <record id="fp_tp_40_2012" model="l10n.ma.fp">
+            <field name="name">TPP.40.2012</field>
+            <field eval="40" name="rate"/>
+        </record>
+    </data>
+</openerp>

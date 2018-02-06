@@ -9,8 +9,11 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="after">
                     <h4>
-                        <field  name="initial" groups="base.group_multi_company" placeholder="Initial" required="1"/>
+                        <field  name="initial" groups="base.group_multi_company" placeholder="Initial" required="0"/>
                     </h4>
+                </xpath>
+                <xpath expr="//field[@name='commune_id']" position="after">
+                    <field  attrs="{'required': [('parent_id','=', False)], 'invisible': [('parent_id','!=', False)]}" name="fp_id"/>
                 </xpath>
                 <xpath expr="//sheet" position="after">
                     <div class="oe_chatter" groups="l10n_ma_hr_payroll.group_hr_company">

@@ -97,8 +97,8 @@
             <field eval="4" name="sequence"/>
             <field name="code">AMO_BASE</field>
             <field name="name">AMO de base</field>
-            <field eval="2" name="rate_patronale"/>
-            <field eval="2" name="rate_salariale"/>
+            <field eval="2.26" name="rate_patronale"/>
+            <field eval="2.26" name="rate_salariale"/>
             <field name="contribution_id" ref="contrib_register_partner_mutuelle"/>
             <field model="account.account" name="account_credit" search="[('code','like','4445')]"/>
             <field name="group_id" ref="cotisation_group_amo"/>
@@ -109,7 +109,7 @@
             <field eval="5" name="sequence"/>
             <field name="code">AMO_OBLIGATOIRE_SOLIDARITE</field>
             <field name="name">AMO obligatoire - Solidarité</field>
-            <field eval="1.5" name="rate_patronale"/>
+            <field eval="1.85" name="rate_patronale"/>
             <field name="contribution_id" ref="contrib_register_partner_mutuelle"/>
             <field model="account.account" name="account_credit" search="[('code','like','4445')]"/>
             <field name="group_id" ref="cotisation_group_amo"/>
