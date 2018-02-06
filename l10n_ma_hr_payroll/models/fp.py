@@ -17,4 +17,4 @@ class l10n_ma_fp(models.Model):
         string=u'Nom', size=64,  compute='_compute_display_name')
     name = fields.Char(string=u'Nom', size=64,  required=True)
     rate = fields.Float(
-        string=u'Rate', digits_compute=dp.get_precision('Account'), required=True,)
+        string=u'Rate', digits=dp.get_precision('Account'), required=True,)

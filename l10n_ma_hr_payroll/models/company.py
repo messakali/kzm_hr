@@ -46,7 +46,7 @@ class res_company(models.Model):
         while main_company_id.parent_id:
             main_company_id = main_company_id.parent_id
         self.main_company_id = main_company_id
- 
+
     main_company_id = fields.Many2one(
         'res.company', string=u'Main company', compute='_compute_main_company',)
 
@@ -186,15 +186,15 @@ class res_company(models.Model):
         column2='based_on_id',
         string=u'Basé sur',  default=lambda self: self.env['hr.contract.base'].search([('code','in',['fixed_days','worked_hours'])]),  )
 
-    cf_plafond = fields.Float('Plafond des charges familiales', digits_compute=dp.get_precision(
+    cf_plafond = fields.Float('Plafond des charges familiales', digits=dp.get_precision(
         'Local 2'), required=True, default=180,)
-    af_plafond = fields.Float('Plafond des charges familiales', digits_compute=dp.get_precision(
+    af_plafond = fields.Float('Plafond des charges familiales', digits=dp.get_precision(
         'Local 2'), required=True, default=180,)
-    cf_amount = fields.Float('Montant pour une charge familiale', digits_compute=dp.get_precision(
+    cf_amount = fields.Float('Montant pour une charge familiale', digits=dp.get_precision(
         'Local 2'), required=True, default=30,)
-    fp_plafond = fields.Float('Plafond des frais professionels', digits_compute=dp.get_precision(
+    fp_plafond = fields.Float('Plafond des frais professionels', digits=dp.get_precision(
         'Local 2'), required=True, default=2500,)
-    fp_taux = fields.Float('Taux des frais professionels', digits_compute=dp.get_precision(
+    fp_taux = fields.Float('Taux des frais professionels', digits=dp.get_precision(
         'Local 4'),  compute='_compute_fp_taux', store=True,)
     fp_id = fields.Many2one(
         'l10n.ma.fp', string=u'Taux des frais professionels', required=False,
@@ -205,11 +205,11 @@ class res_company(models.Model):
         string=u'Plafond de nombre des allocations familiales (1ere tranche)', default=3, required=True)
     nbr_af2_plafond = fields.Integer(
         string=u'Plafond de nombre des allocations familiales (2eme tranche)', default=6, required=True)
-    af1_amount = fields.Float('Montant des allocations familiales (1ere tranche)', digits_compute=dp.get_precision(
+    af1_amount = fields.Float('Montant des allocations familiales (1ere tranche)', digits=dp.get_precision(
         'Local 2'), required=True, default=200,)
-    af2_amount = fields.Float('Montant des allocations familiales (2eme tranche)', digits_compute=dp.get_precision(
+    af2_amount = fields.Float('Montant des allocations familiales (2eme tranche)', digits=dp.get_precision(
         'Local 2'), required=True, default=36,)
-    
+
     code_digits = fields.Integer('# digits', required=True, default=0)
     code_digits_min = fields.Integer('# digits min', readonly=True,)
 
