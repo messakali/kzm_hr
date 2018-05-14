@@ -43,3 +43,4 @@ import title
 import accounting
 import kilometrage
 import mission
+import amount_to_text_fr

@@ -204,11 +204,11 @@
         <!-- Voucher mode global -->
         <report file="l10n_ma_hr_payroll.report_voucher_order_global" id="voucher_order_global"
             model="hr.voucher.order" name="l10n_ma_hr_payroll.report_voucher_order_global" report_type="qweb-pdf"
-            string="Voucher order global"/>
+            string="Ordre de Virement Global"/>
         <!-- Voucher mode -->
         <report file="l10n_ma_hr_payroll.report_voucher_order" id="voucher_order"
             model="hr.voucher.order" name="l10n_ma_hr_payroll.report_voucher_order" report_type="qweb-pdf"
-            string="Voucher order"/>
+            string="Ordre de Virement"/>
         <record id="voucher_order" model="ir.actions.report.xml">
             <field name="download_filename">'Ordre de virement ('+o.voucher_date+').'+ext</field>
         </record>

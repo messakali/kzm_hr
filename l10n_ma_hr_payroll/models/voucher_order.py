@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from amount_to_text_fr import amount_to_text_fr
 from odoo import models, fields, api, _
 import time
 from odoo.exceptions import Warning
@@ -305,6 +306,20 @@ class hr_voucher_order(models.Model):
                     _('Vous ne pouvez pas supprimer un enregistrement qui n\'est pas en état brouillon'))
         return super(hr_voucher_order, self).unlink()
 
+    total_amount = fields.Float(string=_('Total amount'), compute="_compute_total_amount")
+
+    @api.multi
+    def _compute_total_amount(self):
+        for order in self:
+            order.total_amount = sum([o.amount for o in order.line_ids])
+
+    @api.multi
+    def _amount_in_words(self):
+        print ("self._uid", self._uid)
+        self.amount_to_text = amount_to_text_fr(self.total_amount, self.env.user.company_id.currency_id.symbol)
+
+    amount_to_text = fields.Text(string='In Words', readonly=True, compute='_amount_in_words')
+
 
 class hr_voucher_order_line(models.Model):
     _name = 'hr.voucher.order.line'
@@ -350,3 +365,5 @@ class hr_voucher_order_line(models.Model):
         ('CH', u'Chèque'),
         ('VIR', u'Virement'),
     ], string=u'Mode de règlement', compute='_compute_related',  store=True,  )
+
+

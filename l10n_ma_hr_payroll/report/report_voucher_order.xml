@@ -4,7 +4,9 @@
 
 		<template id="report_voucher_order_global">
             <t t-call="report.html_container">
-                <t t-as="order" t-foreach="docs">
+                <t t-call="report.external_layout">
+
+                <t t-as="order" t-foreach="docs.with_context({'lang':'fr_FR'})">
                     <div class="page" style="font-size: 150%;">
                         <div class="row">
                             <div class="col-xs-6 pull-right">
@@ -25,27 +27,21 @@
                                 <t  t-esc="order.bank_id.acc_number"/>
                             </strong>, nous vous prions de bien vouloir créditer les comptes suivants d'un Montant de
                             <strong>
-                                <span  t-esc="sum([x.amount for x in order.vir_line_ids ])"/>
+                                <span  t-esc="order.total_amount"/>
                             </strong>
-                            .
                         </p>
+                        En Chiffres :
+                        <strong>
+                        <span t-esc="order.amount_to_text"/>
+                        </strong>
                         <br/>
-     					<table class="table table-condensed payroll-table-bordered table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Total</th>
-                                    <th style="text-align: right">
-                                        <span  t-esc="sum([x.amount for x in order.vir_line_ids ])"/>
-                                    </th>
-                                </tr>
-                            </thead>
-                        </table>
 
                         <br/>
                         <div class="row">
                             <div class="col-xs-6 pull-right" style="text-align: center">Cachet et signature</div>
                         </div>
                     </div>
+                </t>
                 </t>
             </t>
         </template>
@@ -54,7 +50,8 @@
 
         <template id="report_voucher_order">
             <t t-call="report.html_container">
-                <t t-as="order" t-foreach="docs">
+                <t t-call="report.external_layout">
+                <t t-as="order" t-foreach="docs.with_context({'lang':'fr_FR'})">
                     <div class="page">
                         <div class="row">
                             <div class="col-xs-6 pull-right">
@@ -73,10 +70,14 @@
                                 <t  t-esc="order.bank_id.acc_number"/>
                             </strong>, nous vous prions de bien vouloir créditer les comptes suivants d'un Montant de
                             <strong>
-                                <span  t-esc="sum([x.amount for x in order.vir_line_ids ])"/>
+                                <span  t-esc="order.total_amount"/>
                             </strong>
-                            .
                         </p>
+                        En Chiffres :
+                        <strong>
+                        <span t-esc="order.amount_to_text"/>
+                        </strong>
+                        <br/>
                         <br/>
                    <table class="table table-condensed payroll-table-bordered table-bordered">
                             <thead>
@@ -113,7 +114,7 @@
                                         Total
                                     </td>
                                     <td style="text-align: right">
-                                        <span  t-esc="sum([x.amount for x in order.vir_line_ids ])"/>
+                                        <span  t-esc="order.total_amount"/>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -122,6 +123,7 @@
                             <div class="col-xs-6 pull-right" style="text-align: center">Cachet et signature</div>
                         </div>
                     </div>
+                </t>
                 </t>
             </t>
         </template>
