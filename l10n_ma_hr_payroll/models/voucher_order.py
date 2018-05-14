@@ -57,6 +57,9 @@ class hr_voucher_order(models.Model):
     line_ids = fields.One2many(
         'hr.voucher.order.line', 'voucher_id', string=u'Lignes', states={'draft': [('readonly', False)]}, readonly=True,)
 
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('hr.voucher.order'))
+    currency_id = fields.Many2one('res.currency', related='company_id.currency_id')
+
     @api.one
     @api.depends("line_ids")
     def _compute_lines(self):
@@ -306,7 +309,7 @@ class hr_voucher_order(models.Model):
                     _('Vous ne pouvez pas supprimer un enregistrement qui n\'est pas en état brouillon'))
         return super(hr_voucher_order, self).unlink()
 
-    total_amount = fields.Float(string=_('Total amount'), compute="_compute_total_amount")
+    total_amount = fields.Monetary(string=_('Total amount'), compute="_compute_total_amount")
 
     @api.multi
     def _compute_total_amount(self):

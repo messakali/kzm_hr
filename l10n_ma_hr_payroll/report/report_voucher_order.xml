@@ -6,7 +6,7 @@
             <t t-call="report.html_container">
                 <t t-call="report.external_layout">
 
-                <t t-as="order" t-foreach="docs.with_context({'lang':'fr_FR'})">
+                <t t-as="order" t-foreach="docs">
                     <div class="page" style="font-size: 150%;">
                         <div class="row">
                             <div class="col-xs-6 pull-right">
@@ -27,7 +27,7 @@
                                 <t  t-esc="order.bank_id.acc_number"/>
                             </strong>, nous vous prions de bien vouloir créditer les comptes suivants d'un Montant de
                             <strong>
-                                <span  t-esc="order.total_amount"/>
+                                <span  t-esc="order.total_amount" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
                             </strong>
                         </p>
                         En Chiffres :
@@ -51,7 +51,7 @@
         <template id="report_voucher_order">
             <t t-call="report.html_container">
                 <t t-call="report.external_layout">
-                <t t-as="order" t-foreach="docs.with_context({'lang':'fr_FR'})">
+                <t t-as="order" t-foreach="docs">
                     <div class="page">
                         <div class="row">
                             <div class="col-xs-6 pull-right">
@@ -70,7 +70,7 @@
                                 <t  t-esc="order.bank_id.acc_number"/>
                             </strong>, nous vous prions de bien vouloir créditer les comptes suivants d'un Montant de
                             <strong>
-                                <span  t-esc="order.total_amount"/>
+                                <span  t-esc="order.total_amount" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
                             </strong>
                         </p>
                         En Chiffres :
