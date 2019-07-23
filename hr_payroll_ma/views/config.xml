@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+		<!-- Parametres -->
+		<record id="parametres_form" model="ir.ui.view">
+			<field name="name">hr.payroll_ma.parametres.form</field>
+			<field name="model">hr.payroll_ma.parametres</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="charge" />
+						<field name="arrondi" />
+						<field name="company_id" />
+					</group>
+					<group string="Frais professionels" >
+						<field name="fraispro" />
+						<field name="plafond" />
+					</group>
+					<group string="Impot sur le revenu"  >
+						<field name="credit_account_id" />
+					</group>
+					<group  string="Comptabilité des salaires" >
+						<field name="salary_credit_account_id" />
+						<field name="salary_debit_account_id" />
+					</group>
+					<group  string="Logement social" >
+						<field name="salaire_max_logement_social" />
+						<field name="superficie_max_logement_social" />
+						<field name="prix_achat_max_logement_social" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record id="parametres_tree" model="ir.ui.view">
+			<field name="name">hr.payroll_ma.parametres.tree</field>
+			<field name="model">hr.payroll_ma.parametres</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Autres paramètres">
+					<field name="charge" />
+					<field name="fraispro" />
+					<field name="plafond" />
+					<field name="company_id" />
+					<field name="credit_account_id" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- Ancienneté -->
+		<record model="ir.ui.view" id="anciennete_form">
+			<field name="name">anciennete.form</field>
+			<field name="model">hr.payroll_ma.anciennete</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Ancienneté">
+					<group string="Barèmes ancienneté">
+						<field name="debuttranche" />
+						<field name="fintranche" />
+						<field name="taux" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="anciennete_tree">
+			<field name="name">anciennete.tree</field>
+			<field name="model">hr.payroll_ma.anciennete</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Baremes anciennete">
+					<field name="debuttranche" />
+					<field name="fintranche" />
+					<field name="taux" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- COTISATIONS -->
+		<record model="ir.ui.view" id="cotisation_form">
+			<field name="name">cotisation.form</field>
+			<field name="model">hr.payroll_ma.cotisation</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="code" />
+						<field name="name" />
+						<field name="tauxsalarial" />
+						<field name="tauxpatronal" />
+						<field name="plafonee" />
+						<field name="plafond" />
+						<field name="company_id" />
+					</group>
+					<group string="Comptabilité" >
+						<field name="credit_account_id" />
+						<field name="debit_account_id" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="cotisation_tree">
+			<field name="name">cotisation.tree</field>
+			<field name="model">hr.payroll_ma.cotisation</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Cotisations">
+					<field name="code" />
+					<field name="name" />
+					<field name="tauxsalarial" />
+					<field name="tauxpatronal" />
+					<field name="plafonee" />
+					<field name="plafond" />
+					<field name="company_id" />
+					<field name="credit_account_id" />
+					<field name="debit_account_id" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- TYPES DES COTISATIONS -->
+		<record model="ir.ui.view" id="cotisation_type_form">
+			<field name="name">cotisation_type.form</field>
+			<field name="model">hr.payroll_ma.cotisation.type</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="TYPES DES COTISATIONS">
+					<group col="4">
+						<field name="name" />
+						<field name="company_id" />
+					</group>
+					<notebook colspan="4">
+						<page string="Cotisations">
+							<field name="cotisation_ids"/>
+						</page>
+					</notebook>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="cotisation_type_tree">
+			<field name="name">cotisation_type.tree</field>
+			<field name="model">hr.payroll_ma.cotisation.type</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Types Cotisations">
+					<field name="name" />
+					<field name="company_id" />
+				</tree>
+			</field>
+		</record>
+
+		<!--IR-->
+		<record model="ir.ui.view" id="ir_form">
+			<field name="name">ir.form</field>
+			<field name="model">hr.payroll_ma.ir</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="IR">
+					<group string="Barèmes IR">
+
+					<field name="debuttranche" />
+					<field name="fintranche" />
+					<field name="taux" />
+					<field name="somme" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="ir_tree">
+			<field name="name">ir.tree</field>
+			<field name="model">hr.payroll_ma.ir</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Baremes IR">
+					<field name="debuttranche" />
+					<field name="fintranche" />
+					<field name="taux" />
+					<field name="somme" />
+				</tree>
+			</field>
+		</record>
+		<!-- Actions -->
+		<record model="ir.actions.act_window" id="parametres_all_act">
+			<field name="name">Paramètres</field>
+			<field name="res_model">hr.payroll_ma.parametres</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="anciennete_all_act">
+			<field name="name">Ancienneté</field>
+			<field name="res_model">hr.payroll_ma.anciennete</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="cotisation_all_act">
+			<field name="name">Cotisations</field>
+			<field name="res_model">hr.payroll_ma.cotisation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="cotisation_type_all_act">
+			<field name="name">Types de cotisations</field>
+			<field name="res_model">hr.payroll_ma.cotisation.type</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="ir_all_act">
+			<field name="name">IR</field>
+			<field name="res_model">hr.payroll_ma.ir</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="config_banques">
+			<field name="name">Banques</field>
+			<field name="res_model">res.bank</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- Menus -->
+		<menuitem id="payroll_ma_configure" parent="hr.menu_human_resources_configuration" name="Gestion Paie" />
+		<menuitem id="payroll_ma_configure_baremes" parent="payroll_ma_configure" name="Barèmes" />
+		<menuitem id="payroll_ma_configure_cotisations" parent="payroll_ma_configure" name="Cotisations" />
+
+		<menuitem action="cotisation_all_act" id="cotisation_all_mi" parent="payroll_ma_configure_cotisations" />
+		<menuitem action="cotisation_type_all_act" id="cotisation_type_all_mi" parent="payroll_ma_configure_cotisations" />
+		<menuitem action="ir_all_act" id="ir_all_mi" parent="payroll_ma_configure_baremes" />
+		<menuitem action="anciennete_all_act" id="anciennete_all_mi" parent="payroll_ma_configure_baremes" />
+		<menuitem action="parametres_all_act" id="parametres_all_mi" parent="payroll_ma_configure" />
+
+		<menuitem id="payroll_ma_bank_configure" parent="hr.menu_human_resources_configuration" name="Banques" action="config_banques"/>
+
+
+		<record id="hr_rubriques_settings" model="ir.ui.view">
+            <field name="name">hr config rubriques</field>
+            <field name="model">hr.rubriques.settings</field>
+            <field name="arch" type="xml">
+				<form string="Configure rubriques" class="oe_form_configuration">
+                    <header attrs="{'invisible': [('has_default_company', '=', True)]}">
+                        <button string="Appliquer" type="object" name="generate_data_paie"
+								attrs="{'invisible': [('has_rubriques', '=', True)]}" class="oe_highlight"
+								groups="base.group_multi_company"/>
+                        <button string="Annuler" type="object" name="cancel" class="oe_link" special="cancel"/>
+                    </header>
+                    <field name="has_default_company" invisible="1" />
+                    <field name="has_chart_of_accounts" invisible="1"/>
+					<group>
+						<field name="has_rubriques" invisible="1" readonly="1" string="Has rubriques"/>
+					</group>
+                    <group groups="base.group_multi_company" attrs="{'invisible': [('has_default_company', '=', True)]}">
+						 <label for="id" string="Veuillez choisir une société pour créer ces propres données"  attrs="{'invisible': [('has_rubriques', '=', True)]}"/>
+						 <label for="id" string="Les données de cette société ont été déjâ génerés" style="color:red" attrs="{'invisible': [('has_rubriques', '=', False)]}"/>
+						 <br/>
+						 <br/>
+						 <label for="id" string="Sociétés"/>
+                            <div attrs="{'invisible': [('has_default_company', '=', True)]}">
+                                <field name="company_id" options="{'no_create': True}" class="oe_inline" string="Société"/>
+                            </div>
+					</group>
+                </form>
+            </field>
+		</record>
+
+		<record id="hr_rubriques_settings_action" model="ir.actions.act_window">
+            <field name="name">Configuration rubriques</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.rubriques.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+        <menuitem id="menu_hr_rubriques_settings" name="Settings"
+				  parent="payroll_ma_configure" groups="base.group_multi_company"
+				  sequence="1" action="hr_rubriques_settings_action" />
+
+</odoo>

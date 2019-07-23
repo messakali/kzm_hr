@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Contract Types -->
+        <record id="hr_contract.hr_contract_type_emp" model="hr.contract.type">
+            <field name="name">CDI</field>
+        </record>
+
+        <record id="hr_contract.hr_contract_type_wrkr" model="hr.contract.type">
+            <field name="name">CDD</field>
+        </record>
+
+        <record id="hr_contract.hr_contract_type_sub" model="hr.contract.type">
+            <field name="name">Stage</field>
+        </record>
+
+        <record id="hr_contract_type_exempt" model="hr.contract.type">
+            <field name="name">Exonéré</field>
+        </record>
+
+        <record id="hr_contract_type_phd_student" model="hr.contract.type">
+            <field name="name">Doctorant</field>
+        </record>
+    </data>
+</odoo>

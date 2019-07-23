@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+    <template  id="bulletin_paie" >
+    <t  t-call= "web.html_container" >
+        <t  t-foreach= "docs"  t-as= "o" > 
+            <t  t-call= "web.external_layout" >
+                <div  class= "page" style="font-size:14px">
+                    <div align="left">
+                        <div align="right">Période du <span align="right" t-field="o.period_id.date_start" /> à <span align="right" t-field="o.period_id.date_end" /></div>
+                        <table width="100%" style="border-collapse: collapse;">
+                         <tr>
+                             <td width="40%" style="border: 2px solid black;text-align: center;vertical-align:middle;" height="50">
+                                 <strong> <span  t-field="o.id_payroll_ma.company_id.name" /> </strong>
+                             </td>
+                             <td width="20%" style="border: 2px solid black;text-align: center;vertical-align:middle;" height="50">
+                                 <strong> Bulletin de paie <span align="right" t-field="o.period_id.name" /> </strong>
+                             </td>
+                             <td width="40%" style="border: 2px solid black;text-align: center;vertical-align:middle;" height="50">
+                                 <span  t-field="o.id_payroll_ma.company_id.street" />
+                                 <span  t-field="o.id_payroll_ma.company_id.street2" />
+                                 <span  t-field="o.id_payroll_ma.company_id.city" />
+                             </td>
+                         </tr>
+                        </table>
+                        <br/>
+                        <table width="100%" style="border-collapse: collapse;">
+                            <tr>
+                                <td style="border-top: 2px solid black;border-left: 2px solid black;text-align: left;"><strong><u>Matricule:</u></strong> <span t-field="o.employee_id.matricule"/></td>
+                                <td style="border-top: 2px solid black;border-right: 2px solid black;text-align: left;" colspan="3"><strong><u>Nom et prénom:</u></strong> <span t-field="o.employee_id.name"/> <span t-field="o.employee_id.prenom"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left: 2px solid black;text-align: left;"><strong><u>CIN:</u></strong> <span t-field="o.employee_id.cin"/></td>
+                                <td style="border-right: 2px solid black;text-align: left;" colspan="3"><strong><u>Adresse :</u></strong> <span t-field="o.employee_id.address_home"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left: 2px solid black;text-align: left;"><strong><u>CNSS:</u></strong> <span t-field="o.employee_id.ssnid"/></td>
+                                <td style="border-right: 2px solid black;text-align: left;" colspan="3"><strong><u></u></strong></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left: 2px solid black;text-align: left;"><strong><u>Date naissance:</u></strong> <span t-field="o.employee_id.birthday"/></td>
+                                <td style="text-align: left;"><strong><u>Date embauche:</u></strong> <span t-field="o.employee_id.date"/></td>
+                                <td style="border-right: 2px solid black;text-align: left;" colspan="2"><strong><u>Fonction: </u></strong> <span align="right" t-field="o.employee_id.job_id.name" /></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 2px solid black;border-left: 2px solid black;text-align: left;"><strong><u>Situation de famille:</u></strong> <span t-field="o.employee_id.marital"/></td>
+                                <td style="border-bottom: 2px solid black;text-align: left;"><strong><u>N° d'enfants:</u></strong> <span t-field="o.employee_id.children"/></td>
+                                <td style="border-bottom: 2px solid black;text-align: left;" ><strong><u>N° de charges :</u></strong> <span align="right" t-field="o.employee_id.chargefam" /></td>
+                                <td style="border-bottom: 2px solid black;border-right: 2px solid black;text-align: left;" ><strong><u>Salaire de base :</u></strong> <span align="right" t-field="o.employee_contract_id.wage" /></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom: 2px solid black;border-left: 2px solid black;text-align: left;" colspan="4"><strong><u>Nombre de jours de congés restants:</u></strong> <span t-field="o.employee_id.remaining_leaves"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br/>
+                 <table width="100%" style="border:1px solid black;">
+                    <thead>
+                    <tr style="border: 1px solid black;text-align: center;" width="100%">
+                       
+                        <td style=" border: 1px solid black;text-align: center;" width="35%">
+                            <b>Désignation</b>
+                        </td>
+                        <td style="border: 1px solid black;text-align: center;" width="5%">
+
+                        </td>
+                        <td style="border: 1px solid black;text-align: center;" width="15%">
+                            <b>Base </b>
+                        </td>
+                        <td style="border: 1px solid black;text-align: center;" width="15%">
+                            <b>Taux </b>
+                        </td>
+                        <td style="border: 1px solid black;text-align: center;" width="15%">
+                            <b>A payer </b>
+                        </td>
+                        <td style="border: 1px solid black;text-align: center;" width="15%">
+                            <b>A retenir</b>
+                        </td>
+                    </tr>  
+                    </thead>
+                <tbody class="syst_hr_payroll_ma_tbody">
+                    <t t-set="total_g" t-value="0"/>
+                    <t t-set="total_r" t-value="0"/>
+                <div t-foreach="o.salary_line_ids" t-as="l">
+                    <tr t-if="l.deductible == False">
+                        <td style="border-left: 1px solid;text-align: left;">
+                            <span t-field="l.name"/>
+                        </td> 
+                        <td style="border-left: 1px solid;text-align: center;">
+
+                        </td>
+                        <td style="border-left: 1px solid;text-align: center;">
+                            <span t-field="l.base"/>
+                        </td>
+                        <t t-if="l.rate_employee != 0">
+                        <td style="border-left: 1px solid;text-align:center;">
+                            <span t-field="l.rate_employee"/>
+                        </td>
+                      </t>
+                       <t t-if="l.rate_employee == 0">
+                        <td style="border-left: 1px solid;text-align:center;">
+                            
+                        </td>
+                      </t>
+                          <t t-if="l.subtotal_employee != 0">
+                         <td style="border-left: 1px solid;text-align: center;">
+                                <span t-field="l.subtotal_employee"/>
+                                <t t-set="total_g" t-value="total_g+ l.subtotal_employee"/>
+                            </td>
+                          </t>
+                           <t t-if="l.subtotal_employee == 0">
+                         <td style="border-left: 1px solid;text-align: center;">
+                              
+                            </td>
+                          </t>
+                         <td style="border-left: 1px solid;text-align: left;">
+                           
+                        </td>
+                       
+                    </tr>
+                <tr t-if="l.deductible == True">
+                         <td style="border-left: 1px solid;text-align: left;">
+                            <span t-field="l.name"/>
+                        </td> 
+                       <td style="border-left: 1px solid;text-align: center;">
+
+                        </td>
+                       <td style="border-left: 1px solid;text-align:center;">
+                            <span t-field="l.base"/>
+                        </td>
+                       <t t-if="l.rate_employee != 0">
+                        <td style="border-left: 1px solid;text-align:center;">
+                            <span t-field="l.rate_employee"/>
+                        </td>
+                      </t>
+                       <t t-if="l.rate_employee == 0">
+                        <td style="border-left: 1px solid;text-align:center;">
+                            
+                        </td>
+                      </t>
+                       
+                        <td style="border-left: 1px solid;text-align: left;">
+                           
+                        </td>
+                          <t t-if="l.subtotal_employee != 0">
+                         <td style="border-left: 1px solid;text-align: center;">
+                                <span t-field="l.subtotal_employee"/>
+                                <t t-set="total_r" t-value="total_r+ l.subtotal_employee"/>
+                            </td>
+                          </t>
+                           <t t-if="l.subtotal_employee == 0">
+                         <td style="border-left: 1px solid;text-align: center;">
+                              
+                            </td>
+                          </t>
+                    </tr>
+                </div> 
+                <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                 <tr>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white">.</FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                        <td style="border-left: 1px solid;text-align: left;"><FONT COLOR="white"></FONT></td>
+                </tr>
+                    <tr style="border: 1px solid black;text-align: center;" width="100%">
+                        <td style=" border: 1px solid black;text-align: left;" width="55%" colspan="3">
+                        </td>
+                        <td style="border: 1px solid black;text-align: center;" width="15%">
+                            <b>Total brut </b>
+                        </td>
+                        <td style="border: 1px solid black;text-align: center;" width="15%">
+                            <b><t t-esc="total_g"/> </b>
+                        </td>
+                        <td style="border: 1px solid black;text-align: center;" width="15%">
+                            <b><t t-esc="total_r"/></b>
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid black;text-align: center;" width="100%">
+
+                        <td style=" border: 1px solid black;text-align: center;" width="70%" colspan="4">
+                            # <span t-field="o.salaire_net_a_payer_text"/> #
+                        </td>
+
+                        <td style="border: 1px solid black;text-align: center;" width="15%">
+                            <b><strong>Net à payer :</strong> </b>
+                        </td>
+                        <td style="border: 1px solid black;text-align: center;" width="15%">
+                            <b><span align="right" t-field="o.salaire_net_a_payer" /></b>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+                <br/>
+                <div>
+                <table width="100%" style="border:1px solid black;">
+                    <tr>
+                        <td style="border: 1px solid;text-align: center;"></td>
+                        <td style="border: 1px solid;text-align: center;" ><strong>Jours travaillés</strong></td>
+                        <td style="border: 1px solid;text-align: center;" ><strong>Brut imposable</strong></td>
+                        <td style="border: 1px solid;text-align: center;" ><strong>Net imposable</strong></td>
+                        <td style="border: 1px solid;text-align: center;" ><strong>Retenue I.R</strong></td>
+                        <td style="border: 1px solid;text-align: left;vertical-align: top" rowspan="3"><strong>Emargement </strong></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid;text-align: center;"><strong>Mensuel</strong></td>
+                        <td style="border: 1px solid;text-align: center;" ><b> <span align="right" t-field="o.working_days" /></b></td>
+                        <td style="border: 1px solid;text-align: center;" ><b><span align="right" t-field="o.salaire_brute_imposable" /></b></td>
+                        <td style="border: 1px solid;text-align: center;" ><b><span align="right" t-field="o.salaire_net_imposable" /></b></td>
+                        <td style="border: 1px solid;text-align: center;" ><b><span align="right" t-field="o.igr" /></b></td>
+
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid;text-align: center;"><strong>Annuel</strong></td>
+                        <td style="border: 1px solid;text-align: center;" ><b> <span align="right" t-field="o.cumul_work_days" /></b></td>
+                        <td style="border: 1px solid;text-align: center;" ><b><span align="right" t-field="o.cumul_sbi" /></b></td>
+                        <td style="border: 1px solid;text-align: center;" ><b><span align="right" t-field="o.cumul_sni" /></b></td>
+                        <td style="border: 1px solid;text-align: center;" ><b><span align="right" t-field="o.cumul_igr" /></b></td>
+                    </tr>
+                </table>
+            </div>
+             <div align="left">
+                 <h4><strong>Signature :</strong></h4>
+             </div>
+</div>
+</t>
+</t>
+</t>
+</template>
+</data>
+</odoo>

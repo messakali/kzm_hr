@@ -1,0 +1,3 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_etat_9421","etat_9421","model_etat_9421","group_etat9421",1,1,1,1
+"access_etat_9421_line","etat_9421_line","model_etat_9421_line","group_etat9421",1,1,1,1

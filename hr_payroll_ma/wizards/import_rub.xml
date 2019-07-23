@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="wizard_rub_form_view">
+            <field name="name">wizard.rub.import.form</field>
+            <field name="model">payroll.rub.import.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Import Rubriques">
+
+                     <group col="4" colspan="4">
+                        <field name="file_id"/>
+                         <field name="rub_id"/>
+                        </group>
+                        <group colspan="4" col="4">
+                        <button type="special" special="cancel"
+                                string="Cancel" icon="gtk-cancel"/>
+                         <button type="object" name="action_add_rub"
+                                string="Validerr" icon="gtk-ok"/>
+                         </group>
+
+                </form>
+            </field>
+        </record>
+
+        <act_window id="wizard_rub_import_action"
+                    name="Import rubrique"
+                    src_model="hr.payroll_ma"
+                    res_model="payroll.rub.import.wizard"
+                    view_mode="form"
+                    target="new"/>
+
+    </data>
+</odoo>

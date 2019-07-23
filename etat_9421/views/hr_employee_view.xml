@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_employee_form_inherits_etat9421">
+            <field name="name">view_employee_form_inherits_etat9421</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_payroll_ma.view_employee_form_inherits"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="ssnid" position="after">
+                    <field name="ifu" invisible="1"/>
+                    <field name="n_ppr" invisible="1"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="0">
+
+    <record model="ir.module.category" id="category_payroll">
+        <field name="name">Gestion de paie</field>
+        <field name="description">Gestion de paie</field>
+    </record>
+
+    <record id="group_hr_payroll_user" model="res.groups">
+        <field name="name">Utilisateur</field>
+        <field name="category_id" ref="category_payroll"/>
+    </record>
+
+    <record id="group_hr_payroll_manager" model="res.groups">
+        <field name="name">Responsable</field>
+        <field name="implied_ids" eval="[(4, ref('group_hr_payroll_user'))]"/>
+        <field name="category_id" ref="category_payroll"/>
+    </record>
+
+    <record model="ir.module.category" id="category_payroll_settings">
+        <field name="name">Gestion de paie- configuration</field>
+        <field name="description">Gestion de paie</field>
+    </record>
+
+    <record id="group_hr_payroll_settings" model="res.groups">
+        <field name="name">Payroll_ma / settings</field>
+        <field name="category_id" ref="category_payroll_settings"/>
+
+   </record>
+
+    <record id="hr_multi_company_rule" model="ir.rule">
+        <field name="name">hr employee multi company rule</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field eval="True" name="active"/>
+    </record>
+
+    <record id="hr_payroll_multi_company_rule" model="ir.rule">
+        <field name="name">hr payroll multi company rule</field>
+        <field name="model_id" ref="model_hr_payroll_ma"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field eval="True" name="active"/>
+    </record>
+
+    <record id="hr_contract_multi_company_rule" model="ir.rule">
+        <field name="name">hr contract multi company rule</field>
+        <field name="model_id" ref="model_hr_contract"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field eval="True" name="active"/>
+    </record>
+
+    <record id="hr_payroll_ma_bulletin_multi_company_rule" model="ir.rule">
+        <field name="name">hr payroll bulletin multi company rule</field>
+        <field name="model_id" ref="model_hr_payroll_ma_bulletin"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field eval="True" name="active"/>
+    </record>
+
+    <record id="hr_payroll_ma_cotisation_type_multi_company_rule" model="ir.rule">
+        <field name="name">hr payroll type cotisation multi company rule</field>
+        <field name="model_id" ref="model_hr_payroll_ma_cotisation_type"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field eval="True" name="active"/>
+    </record>
+
+     <record id="hr_payroll_ma_cotisation_multi_company_rule" model="ir.rule">
+        <field name="name">hr payroll cotisation multi company rule</field>
+        <field name="model_id" ref="model_hr_payroll_ma_cotisation"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field eval="True" name="active"/>
+    </record>
+
+    <record id="hr_payroll_ma_parametres_multi_company_rule" model="ir.rule">
+        <field name="name">hr payroll parametres multi company rule</field>
+        <field name="model_id" ref="model_hr_payroll_ma_parametres"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field eval="True" name="active"/>
+    </record>
+
+    <record id="hr_payroll_ma_rubrique_multi_company_rule" model="ir.rule">
+        <field name="name">hr payroll rubrique multi company rule</field>
+        <field name="model_id" ref="model_hr_payroll_ma_rubrique"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field eval="True" name="active"/>
+    </record>
+
+    <record id="hr_payroll_ma_employee_rule" model="ir.rule">
+        <field name="name">hr payroll employee rule</field>
+        <field name="model_id" ref="model_hr_employee"/>
+        <field name="groups" eval="[(4, ref('group_hr_payroll_user'))]"/>
+        <field name="domain_force"> [('user_id','=',user.id)]</field>
+    </record>
+
+    <record id="hr_payroll_ma_bulletin_rule_user" model="ir.rule">
+        <field name="name">hr payroll bulletin rule user</field>
+        <field name="model_id" ref="model_hr_payroll_ma_bulletin"/>
+        <field name="groups" eval="[(4, ref('group_hr_payroll_user'))]"/>
+        <field name="domain_force"> [('employee_id.user_id','=',user.id)]</field>
+    </record>
+    <record id="hr_payroll_ma_employee_rule_resp" model="ir.rule">
+        <field name="name">hr payroll employee rule global</field>
+        <field name="model_id" ref="model_hr_employee"/>
+        <field name="groups" eval="[(4, ref('group_hr_payroll_manager'))]"/>
+        <field name="domain_force"> []</field>
+    </record>
+
+    <record id="hr_payroll_ma_bulletin_rule_resp" model="ir.rule">
+        <field name="name">hr payroll bulletin rule resp</field>
+        <field name="model_id" ref="model_hr_payroll_ma_bulletin"/>
+        <field name="groups" eval="[(4, ref('group_hr_payroll_manager'))]"/>
+        <field name="domain_force"> []</field>
+    </record>
+
+</data>
+</odoo>

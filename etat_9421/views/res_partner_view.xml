@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+	<!--
+           Company form
+        -->
+		<record model="ir.ui.view" id="view_partner_form_simplIR">
+			<field name="name">partner.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="partner_extend.inherit_res_partner_extend_form" />
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+                <field name="nationalite" position="after">
+                    <field name="taux_fp" />
+                    <field name="code_commune" />
+                </field>
+			</field>
+		</record>
+    </data>
+</odoo>

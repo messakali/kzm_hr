@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="hr_payroll_ma_form_inherit">
+			<field name="name">hr.payroll_ma.form.inherit</field>
+			<field name="model">hr.payroll_ma</field>
+			<field name="inherit_id" ref="hr_payroll_ma.hr_payroll_ma_form" />
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+                <xpath expr="//page[last()]" position="after">
+					<page>
+						<group>
+							<field name="penalite"/>
+							<field name="majoration"/>
+						</group>
+						<group>
+							<field name="ref_payment"/>
+							<field name="num_quittance"/>
+						</group>
+					</page>
+                </xpath>
+			</field>
+		</record>
+    </data>
+</odoo>

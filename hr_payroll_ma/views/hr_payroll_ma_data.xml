@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data noupdate="1">
+
+		<record model="hr.payroll_ma.cotisation" id="cotisation_data7">
+			<field name="code">Cnss</field>
+			<field name="name">CNSS</field>
+			<field name="tauxsalarial">4.48</field>
+			<field name="tauxpatronal">8.98</field>
+			<field name="plafonee">TRUE</field>
+			<field name="plafond">6000</field>
+		</record>
+
+		<record model="hr.payroll_ma.cotisation" id="cotisation_data6">
+			<field name="code">AllocFam</field>
+			<field name="name">Couverture des allocations familiales</field>
+			<field name="tauxsalarial">0</field>
+			<field name="tauxpatronal">6.4</field>
+			<field name="plafond">0</field>
+		</record>
+
+		<record model="hr.payroll_ma.cotisation" id="cotisation_data5">
+			<field name="code">TaxeFormationpro</field>
+			<field name="name">Taxe de formation professionnelle</field>
+			<field name="tauxsalarial">0</field>
+			<field name="tauxpatronal">1.6</field>
+			<field name="plafond">0</field>
+		</record>
+
+		<record model="hr.payroll_ma.cotisation" id="cotisation_data4">
+			<field name="code">Amo</field>
+			<field name="name">AMO</field>
+			<field name="tauxsalarial">2.26</field>
+			<field name="tauxpatronal">2.26</field>
+			<field name="plafond">0</field>
+		</record>
+
+		<record model="hr.payroll_ma.cotisation" id="cotisation_data3">
+			<field name="code">participationAMO</field>
+			<field name="name">Participation AMO</field>
+			<field name="tauxsalarial">0</field>
+			<field name="tauxpatronal">1.85</field>
+			<field name="plafond">0</field>
+		</record>
+
+		<record model="hr.payroll_ma.cotisation" id="cotisation_data2">
+			<field name="code">Cimr</field>
+			<field name="name">CIMR</field>
+			<field name="tauxsalarial">4.50</field>
+			<field name="tauxpatronal">5.85</field>
+			<field name="plafond">0</field>
+		</record>
+
+		<record model="hr.payroll_ma.cotisation" id="cotisation_data1">
+			<field name="code">Mutuelle</field>
+			<field name="name">Mutuelle</field>
+			<field name="tauxsalarial">2.75</field>
+			<field name="tauxpatronal">2.75</field>
+			<field name="plafond">0</field>
+		</record>
+
+		<!-- Rubriques des heures Supplémentaires & Jours chômés payés & Jours Congés payés -->
+		<record model="hr.payroll_ma.rubrique" id="hsup_25">
+			<field name="name">Heures Sup 25%</field>
+			<field name="categorie">majoration</field>
+			<field name="afficher">True</field>
+			<field name="type">prime</field>
+			<field name="imposable">True</field>
+			<field name="ir">True</field>
+			<field name="anciennete" eval="False"/>
+			<field name="absence" eval="False"/>
+			<field name="conge" eval="False"/>
+			<field name="heures_sup">25</field>
+		</record>
+
+		<record model="hr.payroll_ma.rubrique" id="hsup_50">
+			<field name="name">Heures Sup 50%</field>
+			<field name="categorie">majoration</field>
+			<field name="afficher">True</field>
+			<field name="type">prime</field>
+			<field name="imposable">True</field>
+			<field name="ir">True</field>
+			<field name="heures_sup">50</field>
+			<field name="anciennete" eval="False"/>
+			<field name="absence" eval="False"/>
+			<field name="conge" eval="False"/>
+		</record>
+
+		<record model="hr.payroll_ma.rubrique" id="hsup_100">
+			<field name="name">Heures Sup 100%</field>
+			<field name="categorie">majoration</field>
+			<field name="afficher">True</field>
+			<field name="type">prime</field>
+			<field name="imposable">True</field>
+			<field name="ir">True</field>
+			<field name="heures_sup">100</field>
+			<field name="anciennete" eval="False"/>
+			<field name="absence" eval="False"/>
+			<field name="conge" eval="False"/>
+		</record>
+
+		<record model="hr.payroll_ma.rubrique" id="jrs_chomes_payes">
+			<field name="name">Jours Chomes payes</field>
+			<field name="categorie">majoration</field>
+			<field name="afficher">True</field>
+			<field name="type">prime</field>
+			<field name="imposable">True</field>
+			<field name="ir">True</field>
+			<field name="anciennete" eval="False"/>
+			<field name="absence" eval="False"/>
+			<field name="conge" eval="False"/>
+		</record>
+
+		<record model="hr.payroll_ma.rubrique" id="jrs_conges_payes">
+			<field name="name">Jours Conges payes</field>
+			<field name="categorie">majoration</field>
+			<field name="afficher">True</field>
+			<field name="type">prime</field>
+			<field name="imposable">True</field>
+			<field name="ir">True</field>
+			<field name="jrs_conge_paye">True</field>
+			<field name="anciennete" eval="False"/>
+			<field name="absence" eval="False"/>
+			<field name="conge" eval="False"/>
+		</record>
+
+
+		<!-- donnee pour l'impot sur le revenue -->
+		<record model="hr.payroll_ma.ir" id="ir_data1">
+			<field name="debuttranche">0</field>
+			<field name="fintranche">30000</field>
+			<field name="taux">0</field>
+			<field name="somme">0</field>
+		</record>
+		<record model="hr.payroll_ma.ir" id="ir_data2">
+			<field name="debuttranche">30001</field>
+			<field name="fintranche">50000</field>
+			<field name="taux">10</field>
+			<field name="somme">3000</field>
+		</record>
+		<record model="hr.payroll_ma.ir" id="ir_data3">
+			<field name="debuttranche">50001</field>
+			<field name="fintranche">60000</field>
+			<field name="taux">20</field>
+			<field name="somme">8000</field>
+		</record>
+		<record model="hr.payroll_ma.ir" id="ir_data4">
+			<field name="debuttranche">60001</field>
+			<field name="fintranche">80000</field>
+			<field name="taux">30</field>
+			<field name="somme">14000</field>
+		</record>
+		<record model="hr.payroll_ma.ir" id="ir_data5">
+			<field name="debuttranche">80001</field>
+			<field name="fintranche">180000</field>
+			<field name="taux">34</field>
+			<field name="somme">17200</field>
+		</record>
+		<record model="hr.payroll_ma.ir" id="ir_data6">
+			<field name="debuttranche">180001</field>
+			<field name="fintranche">999999999</field>
+			<field name="taux">38</field>
+			<field name="somme">24400</field>
+		</record>
+
+		<!-- donnee pour la prime de l'anciennete -->
+		<record model="hr.payroll_ma.anciennete" id="anciennete_data1">
+			<field name="debuttranche">0</field>
+			<field name="fintranche">2</field>
+			<field name="taux">0</field>
+		</record>
+
+		<record model="hr.payroll_ma.anciennete" id="anciennete_data2">
+			<field name="debuttranche">2</field>
+			<field name="fintranche">5</field>
+			<field name="taux">5</field>
+		</record>
+		<record model="hr.payroll_ma.anciennete" id="anciennete_data3">
+			<field name="debuttranche">5</field>
+			<field name="fintranche">12</field>
+			<field name="taux">10</field>
+		</record>
+		<record model="hr.payroll_ma.anciennete" id="anciennete_data4">
+			<field name="debuttranche">12</field>
+			<field name="fintranche">20</field>
+			<field name="taux">15</field>
+		</record>
+		<record model="hr.payroll_ma.anciennete" id="anciennete_data5">
+			<field name="debuttranche">20</field>
+			<field name="fintranche">25</field>
+			<field name="taux">20</field>
+		</record>
+		<record model="hr.payroll_ma.anciennete" id="anciennete_data6">
+			<field name="debuttranche">25</field>
+			<field name="fintranche">60</field>
+			<field name="taux">25</field>
+		</record>
+
+		<record model="hr.payroll_ma.parametres" id="parametres_data8">
+			<field name="charge">30</field>
+			<field name="fraispro">20</field>
+			<field name="plafond">2500</field>
+		</record>
+
+		<record id="salary_journal" model="account.journal">
+			<field name="name">Paie</field>
+			<field name="code">Paie</field>
+			<field name="type">general</field>
+			<field name="show_on_dashboard">False</field>
+		</record>
+
+	</data>
+</odoo>

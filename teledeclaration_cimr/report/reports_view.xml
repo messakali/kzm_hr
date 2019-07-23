@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="etat_cimr"
+            string="Etat CIMR"
+            model="rapport.cimr"
+            report_type="qweb-pdf"
+            file="rapport_cimr.etat_cimr"
+            name="rapport_cimr.etat_cimr_id"
+        />
+
+     </data>
+</odoo>

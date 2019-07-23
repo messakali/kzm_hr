@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!-- HR contract  -->
+		<record model="ir.ui.view" id="view_hr_contract_tree_inherits">
+			<field name="name">hr.contract.view.form.inherits</field>
+			<field name="model">hr.contract</field>
+			<field name="inherit_id" ref="hr_contract.hr_contract_view_tree" />
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<field name="date_end" position="after">
+					<field name="actif" />
+				</field>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hr_contract_form_inherits">
+			<field name="name">hr.contract.view.form.inherits</field>
+			<field name="model">hr.contract</field>
+			<field name="inherit_id" ref="hr_contract.hr_contract_view_form" />
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<xpath expr="//header" position="inside">
+					<button string="Clôturer contrat" attrs="{'invisible':[('actif','=',False)]}" type="object" name="cloturer_contrat" class="oe_highlight" />
+					<button string="Activer contrat" attrs="{'invisible':[('actif','=',True)]}" type="object" name="activer_contrat" class="oe_highlight" />
+				</xpath>
+				<field name="job_id" position="after">
+                    <field name="actif" />
+					<field name="company_id" />
+                </field>
+				 <notebook position="inside">
+		            <page string="Configuration de la paie">
+		               <group>
+							<field name="working_days_per_month"/>
+							<field name="hour_salary"/>
+							<field name="monthly_hour_number"/>
+							<field name="cotisation"/>
+							<field name="ir" groups="hr_payroll_ma.group_hr_payroll_settings"/>
+							<field name="rubrique_ids" colspan="4" nolabel="1"/>
+		               </group>
+		            </page>
+		        </notebook>
+			</field>
+		</record>
+		<!--
+            HR employee  
+        -->
+
+		<record id="act_hr_employee_2_payslips" model="ir.actions.act_window">
+            <field name="res_model">hr.payroll_ma.bulletin</field>
+            <field name="view_type">form</field>
+            <field name="name">Bulletins de paie</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_employee_id': [active_id], 'default_employee_id': active_id}</field>
+            <field name="domain">[('employee_id','=',active_id)]</field>
+        </record>
+		 <record id="view_employee_filter_inherit_matricule" model="ir.ui.view">
+            <field name="name">hr.employee.search.inherit.search</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="matricule"/>
+                </field>
+            </field>
+    	</record>
+		<record model="ir.ui.view" id="view_employee_kanban_inherits">
+			<field name="name">view.employee.kanban.inherits</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.hr_kanban_view_employees" />
+			<field name="arch" type="xml">
+				<field name="name" position="after">
+					<br/> <field name="prenom" />
+				</field>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_employee_tree_inherits">
+			<field name="name">view.employee.tree.inherits</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_tree" />
+			<field name="arch" type="xml">
+				<field name="name" position="before">
+					<field name="matricule"/>
+				</field>
+				<field name="name" position="after">
+					<field name="prenom"/>
+				</field>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_employee_form_inherits">
+			<field name="name">view.employee.form.inherits</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				 <field name="name" position="after">
+					 <div>
+					 	<field name="prenom" required="1"  placeholder="Prénom"/>
+					 </div>
+				 </field>
+				 <field name="category_ids" position="attributes">
+					 <attribute name="placeholder">Catégories</attribute>
+				 </field>
+				<notebook position="inside">
+					<page string="Configuration de la paie">
+		               <group>
+		               	<field name="matricule"/>
+		                <field name="cin"/>
+						<field name="affilie" groups="hr_payroll_ma.group_hr_payroll_settings"/>
+		                <field name="ssnid" string="CNSS" attrs="{'invisible': [('affilie','=',False )]}"/>
+		                <field name="date"/>
+		                <field name="anciennete" groups="hr_payroll_ma.group_hr_payroll_settings"/>
+		                <field name="mode_reglement"/>	                
+		                <field name="bank" attrs="{'required':[('mode_reglement','=','virement')],'invisible':[('mode_reglement','!=','virement')]}"/>
+		                <field name="agence" attrs="{'invisible':[('mode_reglement','!=','virement')]}"/>
+		                <field name="compte" attrs="{'required':[('mode_reglement','=','virement')],'invisible':[('mode_reglement','!=','virement')]}"/>
+		                <field name="chargefam"/>
+		                <field name="address_home"/>
+		                <field name="address"/>
+		                <field name="phone_home"/>  		                            
+		               </group>
+		            </page>
+					 <page string="Prêt logement">
+						 <group>
+							<group string="Infos logement" >
+								<field name="type_logement"/>
+								<field name="superficie_logement"/>
+								<field name="prix_acquisition_logement"/>
+							</group>
+							<group string="Montant" >
+								<field name="logement"/>
+							</group>
+						 </group>
+		            </page>
+		        </notebook>
+
+				<xpath expr="//div[@name='button_box']" position="inside">
+                        <button name="%(act_hr_employee_2_payslips)d"
+                            class="oe_stat_button"
+                            icon="fa-money"
+                            type="action"
+                            groups="hr_payroll_ma.group_hr_payroll_user">
+                            <field name="payslip_count" widget="statinfo" string="Bulletins"/>
+                        </button>
+                    </xpath>
+			</field>
+		</record>
+
+		<record id="employee_form_view_inherit_add_seniority" model="ir.ui.view">
+			<field name="name">hr.employee.view.form.inherits</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr_payroll_ma.view_employee_form_inherits" />
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+                <field name="date" position="after">
+                    <field name="annees_anciennete" />
+                    <field name="taux_anciennete" />
+                </field>
+			</field>
+		</record>
+		<!--
+            Heritage Holiday Type
+        -->
+		<record model="ir.ui.view" id="edit_holiday_status_form_inherit">
+			<field name="name">hr.holidays.status.inherit</field>
+			<field name="model">hr.holidays.status</field>
+			<field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<field name="limit" position="after">
+					<field name="payed" />
+				</field>
+			</field>
+		</record>
+
+		<menuitem parent="" id="menu_ressources_humaines_root" name="Ressources Humaines"  sequence="4"/>
+		<menuitem parent="menu_ressources_humaines_root" id="hr.menu_human_resources_configuration" />
+		<menuitem parent="menu_ressources_humaines_root" id="hr.menu_hr_root" name="Ressources Humaines"  sequence="4"/>
+		<menuitem parent="hr.menu_human_resources_configuration" name="Postes" id="menu_job_id" action="hr.action_hr_job" sequence="4"/>
+	</data>
+</odoo>
+    

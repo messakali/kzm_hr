@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="rubrique1" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de fonction</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">True</field>
+            <field name="ir">True</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61712%')]"/>
+        </record>
+
+        <record id="rubrique2" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de responsabilité</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">True</field>
+            <field name="ir">True</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61712%')]"/>
+        </record>
+
+        <record id="rubrique3" model="hr.payroll_ma.rubrique">
+            <field name="name">Prime de fin d'année</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">prime</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">True</field>
+            <field name="ir">True</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61712%')]"/>
+        </record>
+
+        <record id="rubrique4" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité kilométrique</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">False</field>
+            <field name="absence">False</field>
+            <field name="note">3dh par km</field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique5" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de logement</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">True</field>
+            <field name="ir">True</field>
+            <field name="anciennete">False</field>
+            <field name="absence">False</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique6" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de panier ou de casse-croute</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">False</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique7" model="hr.payroll_ma.rubrique">
+            <field name="name">Bons représentatif de frais nourriture ou d'alimentation délivré par l"employeur</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique8" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de transport urbain</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">False</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique9" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de transport en dehors du périmétre urbain</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique10" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité Risque professionel</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">True</field>
+            <field name="ir">True</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique11" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de caisse et fonds</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique12" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité eau , electricité</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">True</field>
+            <field name="ir">True</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique13" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de représentation</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">False</field>
+            <field name="absence">False</field>
+            <field name="note">10% salaire de base par mois</field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique14" model="hr.payroll_ma.rubrique">
+            <field name="name">Prime de salissure(Prime de bleu ou d'usure de vetement)</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">210</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique15" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de stage</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">True</field>
+            <field name="ir">True</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique16" model="hr.payroll_ma.rubrique">
+            <field name="name">Prime de tournée</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique17" model="hr.payroll_ma.rubrique">
+            <field name="name">Primde d'outillage</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">100</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique18" model="hr.payroll_ma.rubrique">
+            <field name="name">Prime de lait</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">150</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique19" model="hr.payroll_ma.rubrique">
+            <field name="name">Aide médicale</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">150</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique20" model="hr.payroll_ma.rubrique">
+            <field name="name">Gratification sociale liées à en évenement familial</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">2500</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note">2500 par an</field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique21" model="hr.payroll_ma.rubrique">
+            <field name="name">Prime de voyage à la mecque pour le pèlerinage</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique22" model="hr.payroll_ma.rubrique">
+            <field name="name">Allocation versé à un enfant d'un travailleur de l'entreprise</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique23" model="hr.payroll_ma.rubrique">
+            <field name="name">Indemnité de déménagement suite à mutation à l'étranger et au Maroc</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+
+        <record id="rubrique24" model="hr.payroll_ma.rubrique">
+            <field name="name">Dépense relatives au poste de téléphone</field>
+            <field name="categorie">majoration</field>
+            <field name="sequence">1</field>
+            <field name="type">indemnite</field>
+            <field name="plafond">0.0</field>
+            <field name="imposable">False</field>
+            <field name="ir">False</field>
+            <field name="anciennete">True</field>
+            <field name="absence">True</field>
+            <field name="note"></field>
+            <field name="credit_account_id" search="[('code','like','4432%')]"/>
+            <field name="debit_account_id" search="[('code','like','61713%')]"/>
+        </record>
+    </data>
+</odoo>

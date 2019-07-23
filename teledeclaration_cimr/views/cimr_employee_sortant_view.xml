@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_cimr_employee_sortant_form" model="ir.ui.view">
+            <field name="name">Cimr.employés.sortant.form</field>
+            <field name="model">cimr.employee.sortant</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="CIME Sortants">
+                    <sheet>
+                        <group col="4">
+                            <field name="name"/>
+                            <field name="company_id"/>
+                        </group>
+                        <notebook>
+                            <page string="Employées">
+                                <field name="cimr_sortant_line_ids">
+                                <tree string="Cimr Sortants"  editable="bottom">
+                                    <field name="employee_id"/>
+                                </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+		            <div class="oe_chatter">
+		              <field name="message_follower_ids" widget="mail_followers"/>
+		              <field name="message_ids" widget="mail_thread"/>
+		            </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_cimr_employee_sortant_tree" model="ir.ui.view">
+            <field name="name">Cime.employés.sortant.tree</field>
+            <field name="model">cimr.employee.sortant</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="CIMR Sortants">
+                    <field name="name" />
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_cimr_employee_sortant" model="ir.actions.act_window">
+            <field name="name">CIMR-Employés Sortants</field>
+            <field name="res_model">cimr.employee.sortant</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+       <menuitem
+            name="Employés Sortants"
+            action="action_cimr_employee_sortant"
+            id="action_cimr_sortant_menu"
+            parent="menu_rep_cimr_root"
+            sequence="2"/>
+
+    </data>
+</odoo>

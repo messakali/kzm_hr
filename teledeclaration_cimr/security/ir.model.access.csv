@@ -1,0 +1,6 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_rapport_cimr","rapport_cimr","model_rapport_cimr","group_cimr",1,1,1,1
+"access_rapport_cimr_line","rapport_cimr_line","model_rapport_cimr_line","group_cimr",1,1,1,1
+"access_cimr_employee_sortant","cimr_employee_sortant","model_cimr_employee_sortant","group_cimr",1,1,1,1
+"access_cimr_employee_sortant_line","cimr_employee_sortant_line","model_cimr_employee_sortant_line","group_cimr",1,1,1,1
+

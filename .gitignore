@@ -1,6 +1,8 @@
 # Les ligne commençant par '#' sont des commentaires.
-# Ignorer tous les fichiers pyc
 *.pyc
 *.swp
 *.swo
 *~
+*.DS_Store
+*.idea
+__pycache__*

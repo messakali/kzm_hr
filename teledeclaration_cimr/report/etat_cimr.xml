@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+	<template  id= "etat_cimr_id" >
+    <t t-call= "report.html_container" >
+    	<t t-foreach= "docs"  t-as= "oc" >
+              	<div class="page">
+
+                <div alig="center">
+                	<p><b>ETAT PREPARATOIRE A LA DECLARATION </b></p>
+                    <br/><br/>
+                    <p><b>DU <span t-field="oc.trimestre"/> <span t-field="oc.annee"/>RUBRIQUE CIMR</b></p>
+                    <br/><br/>
+                </div>
+                <table width="100%" style="border-collapse: collapse;">
+					<thead>
+                        <tr>
+                            <th style="border: 1px solid black;text-align: center; vertical-align: middle" colspan="2"></th>
+                            <th colspan="5" style="border: 1px solid black;text-align: center;">TRIMESTRE</th>
+                            <th colspan="5" style="border: 1px solid black;text-align: center;">CUMUL TRIMESTRE</th>
+                        </tr>
+
+                        <tr>
+                            <th style="border: 1px solid black;text-align: center; vertical-align: middle">Matricule</th>
+				            <th style="border: 1px solid black;text-align: center; vertical-align: middle">Employé</th>
+                            <th style="border: 1px solid black;text-align: center;">BASE DE CALCUL</th>
+                            <th style="border: 1px solid black;text-align: center;">PART SALARIALE</th>
+                            <th style="border: 1px solid black;text-align: center;">PART PATRONALE</th>
+                            <th style="border: 1px solid black;text-align: center;">TOTAL PART SAL+PAT</th>
+                            <th style="border: 1px solid black;text-align: center;">BASE DE CALCUL</th>
+                            <th style="border: 1px solid black;text-align: center;">PART SALARIALE</th>
+                            <th style="border: 1px solid black;text-align: center;">PART PATRONALE</th>
+                            <th style="border: 1px solid black;text-align: center;">TOTAL PART SAL+PAT</th>
+                        </tr>
+				     </thead>
+                    <t t-foreach= "oc.rep_cimr_line_ids"  t-as= "o" >
+				     	<tr >
+                            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.matricule"/>
+				             </td>
+                            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.employee_id.prenom"/> <span t-field="o.employee_id.name"/>
+				             </td>
+                            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.base_calcul"/>
+				             </td>
+                            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.part_salariale"/>
+				             </td>
+                            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.part_patronale"/>
+				             </td>
+				            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.total_part"/>
+				             </td>
+                            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.cum_base_calcul"/>
+				             </td>
+                            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.cum_part_salariale"/>
+				             </td>
+                            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.cum_part_patronale"/>
+				             </td>
+				            <td style="border: 1px solid black;text-align: center;vertical-align: middle">
+				             	<span t-field="o.cum_total_part"/>
+				             </td>
+				          </tr>
+                    </t>
+                        <tr>
+                            <th style="border: 1px solid black;text-align: center; vertical-align: middle"  colspan="2">Total</th>
+                            <th style="border: 1px solid black;text-align: center;"><span t-field="oc.all_bc"/></th>
+                            <th style="border: 1px solid black;text-align: center;"><span t-field="oc.all_ps"/></th>
+                            <th style="border: 1px solid black;text-align: center;"><span t-field="oc.all_pp"/></th>
+                            <th style="border: 1px solid black;text-align: center;"><span t-field="oc.all_tot_part"/></th>
+                            <th style="border: 1px solid black;text-align: center;"><span t-field="oc.all_cum_bc"/></th>
+                            <th style="border: 1px solid black;text-align: center;"><span t-field="oc.all_cum_ps"/></th>
+                            <th style="border: 1px solid black;text-align: center;"><span t-field="oc.all_cum_pp"/></th>
+                            <th style="border: 1px solid black;text-align: center;"><span t-field="oc.all_cum_tot_part"/></th>
+                        </tr>
+                </table>
+
+               </div>
+              </t>
+           </t>
+ 	</template>
+ 	  	
+	</data>
+</odoo>

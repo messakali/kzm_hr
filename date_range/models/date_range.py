@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# © 2016 ACSONE SA/NV (<http://acsone.eu>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
 from odoo.tools.translate import _
@@ -19,11 +17,11 @@ class DateRange(models.Model):
     date_start = fields.Date(string='Start date', required=True)
     date_end = fields.Date(string='End date', required=True)
     type_id = fields.Many2one(
-        comodel_name='date.range.type', string='Type', index=1, required=True)
+        comodel_name='date.range.type', string='Type', select=1, required=True)
     type_name = fields.Char(
         string='Type', related='type_id.name', readonly=True, store=True)
     company_id = fields.Many2one(
-        comodel_name='res.company', string='Company', index=1,
+        comodel_name='res.company', string='Company', select=1,
         default=_default_company)
     active = fields.Boolean(
         help="The active field allows you to hide the date range without "

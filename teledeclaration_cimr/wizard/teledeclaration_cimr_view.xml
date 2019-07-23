@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+         <record model="ir.ui.view" id="teledeclaration_cimr_view_form">
+             <field name="name">teledeclaration.cimr.form</field>
+             <field name="model">teledeclaration.cimr</field>
+             <field name="type">form</field>
+             <field name="arch" type="xml">
+                <form string="Télédéclaration CIMR">
+					<field invisible="1" name="state"/>
+					<field name="name" invisible="1"/>
+                     <div states="get">
+                        <h2>Fichier CIMR</h2>
+                        <p>Vous pouvez télécharger le fichier e-BDS crée à partir de ce lien: <field name="file_export"  filename="name"/></p>
+                      </div>
+                       <footer states="choose">
+                            <button string="Générer" type="object" name="generate" icon="fa-file-text" />
+                            <button string="Annuler" special="cancel" icon="fa-times" />
+                      </footer>
+                       <footer states="get">
+                            <button string="Fermer" special="cancel" icon="fa-times" />
+                      </footer>
+                </form>
+            </field>
+         </record>
+
+         <record id="teledeclaration_cimr_action" model="ir.actions.act_window">
+             <field name="name">Télédéclaration CIMR</field>
+             <field name="res_model">teledeclaration.cimr</field>
+             <field name="type">ir.actions.act_window</field>
+             <field name="view_type">form</field>
+             <field name="view_mode">form</field>
+             <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
