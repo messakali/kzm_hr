@@ -14,6 +14,7 @@ class HrPayrollMaParametres(models.Model):
     fraispro = fields.Float(string="Frais Professionnels")
     plafond = fields.Float(string="Plafond")
     credit_account_id = fields.Many2one('account.account', string=u'Compte de crédit IR')
+    journal_id = fields.Many2one('account.journal', string=u'Journal')
     salary_credit_account_id = fields.Many2one('account.account', string=u'Compte de crédit')
     salary_debit_account_id = fields.Many2one('account.account', string=u'Compte de débit')
 #   analytic_account_id = fields.Many2one('account.analytic.account', string='Compte analytique')

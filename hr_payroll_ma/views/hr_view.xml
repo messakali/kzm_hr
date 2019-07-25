@@ -103,6 +103,17 @@
 				 <field name="category_ids" position="attributes">
 					 <attribute name="placeholder">Catégories</attribute>
 				 </field>
+				 <field name="bank_account_id" position="before">
+					 <field name="mode_reglement"/>
+				 </field>
+				 <field name="bank_account_id" position="attributes">
+					 <attribute name="attrs">{'invisible':[('mode_reglement','!=','virement')]}</attribute>
+				 </field>
+				 <field name="bank_account_id" position="after">
+					 <field name="bank" attrs="{'required':[('mode_reglement','=','virement')],'invisible':[('mode_reglement','!=','virement')]}"/>
+					 <field name="agence" attrs="{'invisible':[('mode_reglement','!=','virement')]}"/>
+					 <field name="compte" attrs="{'required':[('mode_reglement','=','virement')],'invisible':[('mode_reglement','!=','virement')]}"/>
+				 </field>
 				<notebook position="inside">
 					<page string="Configuration de la paie">
 		               <group>
@@ -112,10 +123,6 @@
 		                <field name="ssnid" string="CNSS" attrs="{'invisible': [('affilie','=',False )]}"/>
 		                <field name="date"/>
 		                <field name="anciennete" groups="hr_payroll_ma.group_hr_payroll_settings"/>
-		                <field name="mode_reglement"/>	                
-		                <field name="bank" attrs="{'required':[('mode_reglement','=','virement')],'invisible':[('mode_reglement','!=','virement')]}"/>
-		                <field name="agence" attrs="{'invisible':[('mode_reglement','!=','virement')]}"/>
-		                <field name="compte" attrs="{'required':[('mode_reglement','=','virement')],'invisible':[('mode_reglement','!=','virement')]}"/>
 		                <field name="chargefam"/>
 		                <field name="address_home"/>
 		                <field name="address"/>

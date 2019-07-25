@@ -3,6 +3,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import except_orm, Warning, RedirectWarning
 import base64
+import xlrd
 
 
 class WizardRub(models.TransientModel):
@@ -20,12 +21,12 @@ class WizardRub(models.TransientModel):
             file_content_decoded = base64.decodestring(self.file_id)
         except IOError:
             raise except_orm('Error !', 'Merci de donner un chemin valide!')
-        data = file_content_decoded.split('\n')
-        for line in data[1:]:
-           line_data = line.split(',')
-           if len(line_data)>1:
-                mat = line_data[0].replace('"', '').strip()
-                amount = line_data[1].replace('"', '').strip()
+
+        wb = xlrd.open_workbook(file_contents=file_content_decoded)
+        for sheet in wb.sheets():
+            for row in range(sheet.nrows):
+                mat = int(sheet.cell(row, 0).value)
+                amount = sheet.cell(row, 1).value
                 emp_id = emp_obj.search([('matricule','=',mat)])
                 if not emp_id:
                     raise except_orm('Error !', 'Erreur marticule: '+str(mat)+'!')
@@ -39,7 +40,7 @@ class WizardRub(models.TransientModel):
                         'period_id': paie.period_id.id,
                         'permanent' : False,
                         'date_start': paie.period_id.date_start,
-                        'date_stop': paie.period_id.date_stop,
+                        'date_stop': paie.period_id.date_end,
                     }
                     emp_id.contract_id.rubrique_ids.create(data)
         return True

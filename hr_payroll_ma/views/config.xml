@@ -20,6 +20,7 @@
 						<field name="credit_account_id" />
 					</group>
 					<group  string="Comptabilité des salaires" >
+						<field name="journal_id" />
 						<field name="salary_credit_account_id" />
 						<field name="salary_debit_account_id" />
 					</group>

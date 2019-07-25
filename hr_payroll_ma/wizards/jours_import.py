@@ -3,6 +3,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import except_orm, Warning, RedirectWarning
 import base64
+import xlrd
 
 
 class Wizard_Jours(models.TransientModel):
@@ -18,12 +19,12 @@ class Wizard_Jours(models.TransientModel):
             file_content_decoded = base64.decodestring(self.file_id)
         except IOError:
             raise except_orm('Error !', 'Merci de donner un chemin valide!')
-        data = file_content_decoded.split('\n')
-        for line in data[1:]:
-           line_data = line.split(',')
-           if len(line_data)>1:
-                mat = line_data[0].replace('"', '').strip()
-                j = line_data[1].replace('"', '').strip()
+
+        wb = xlrd.open_workbook(file_contents=file_content_decoded)
+        for sheet in wb.sheets():
+            for row in range(sheet.nrows):
+                mat = int(sheet.cell(row, 0).value)
+                j = sheet.cell(row, 1).value
 
                 days = int(j)
                 d=0

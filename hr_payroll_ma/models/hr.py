@@ -8,6 +8,12 @@ import datetime
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
+    def _compute_contract_id(self):
+        """ get the lastest contract """
+        Contract = self.env['hr.contract']
+        for employee in self:
+            employee.contract_id = Contract.search([('employee_id', '=', employee.id), ('state', 'in', ['open','pending'])], order='date_start desc', limit=1)
+
     matricule = fields.Char('Matricule', copy=False)
     cin = fields.Char('CIN', copy=False)
     prenom = fields.Char(u'Prénom')
@@ -45,6 +51,14 @@ class HrEmployee(models.Model):
             domain = ['|','|',('matricule', operator, name),('name',operator,name),('prenom',operator,name)] + (args or [])
             return self.search(domain, limit=limit).name_get()
         return super(HrEmployee, self).name_search(name, args, operator, limit=limit)
+
+    @api.multi
+    @api.onchange('bank_account_id')
+    def onchange_bank_account_id(self):
+        for rec in self:
+            if rec.bank_account_id:
+                rec.bank = rec.bank_account_id.bank_id
+                rec.compte = rec.bank_account_id.acc_number
 
     @api.multi
     @api.depends('date')
@@ -88,7 +102,8 @@ class HrEmployee(models.Model):
     @api.constrains('compte')
     def _check_rib(self):
         if self.mode_reglement == 'virement':
-            if len(self.compte) != 24 or not self.compte.isdigit():
+            compte = self.compte.replace(' ', '')
+            if len(compte) != 24 or not compte.isdigit():
                 raise ValidationError(u"Le RIB doit être constitué de 24 chiffres")
 
     @api.multi
@@ -122,9 +137,11 @@ class HrContract(models.Model):
                                  string='Société', readonly=True, copy=False)
 
     @api.one
-    @api.constrains('actif')
+    @api.constrains('actif','state')
     def _check_unicite_contrat(self):
-        contrat_ids = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id),('actif', '=', True)])
+        contrat_ids = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id),
+                                                      ('actif', '=', True),
+                                                      ('state', 'in', ['open','pending'])])
         if len(contrat_ids) > 1:
             raise ValidationError(u'Plusieurs contrats actifs pour cet employé!')
 

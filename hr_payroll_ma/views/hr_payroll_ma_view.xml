@@ -12,20 +12,24 @@
 				<form string="Bulletin de paie">
 					<header>
 						<button name="generate_employees" string="Ajouter Employés" type="object"  attrs="{'invisible':[('state','!=','draft')]}"/>
-						<button name="compute_all_lines" string="Générer bulletins" type="object"  attrs="{'invisible':[('state','!=','draft')]}"/>
+						<button name="compute_all_lines" string="Calculer bulletins" type="object"  attrs="{'invisible':['|',('state','!=','draft'),
+																														('bulletin_line_ids','=',[])]}"/>
 						<button name="draft_cb" string="Brouillon" type="object" states="confirmed,cancelled" icon="fa-eraser" />
 						<button name="confirm_cb" string="Confirmer" type="object" states="draft" icon="fa-check-circle" />
 						<button name="cancel_cb" string="Annuler" type="object" states="draft" />
 						<field name="state" widget="statusbar" statusbar_visible="draft,confirmed" statusbar_colors='{"confirmed":"blue"}'/>
 					</header>
+					<div class="oe_button_box" name="button_box">
+						<button name="%(act_hr_payroo_ma_bulletin)d" string="Bulletins de paie" type="action"
+								icon='fa-code'
+								class="oe_stat_button"/>
+					</div>
 					<group colspan="4" col="6">
 						<field name="number" />
 						<field name="date_salary" />
-						<field name="journal_id" />
 						<field name="period_id" />
 						<field name="date_start" />
 						<field name="date_end" />
-						<field name="move_id" />
 						<field name="company_id" readonly="1"/>
 					</group>
 					<group>
@@ -100,6 +104,7 @@
 							<field name="name" select="1"/>
 							<field name="employee_id" />
 							<field name="working_days" sum="total_0"/>
+							<field name="normal_hours" sum="total_7"/>
 							<field name="salaire_brute" sum="total_1"/>
 							<field name="salaire_brute_imposable" sum="total_2"/>
 							<field name="cotisations_employee" sum="total_3"/>
@@ -108,6 +113,16 @@
 							<field name="salaire_net_a_payer" sum="total_6"/>
 						</tree>
 					</field>
+					</page>
+					<page string="Comptabilité">
+						<group>
+							<group>
+								<field name="journal_id" />
+								<field name="move_id" />
+							</group>
+							<group>
+							</group>
+						</group>
 					</page>
 					</notebook>
 				</form>

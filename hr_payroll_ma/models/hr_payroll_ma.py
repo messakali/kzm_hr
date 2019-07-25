@@ -12,9 +12,12 @@ class HrPayrollMa(models.Model):
     _description = 'Saisie des bulletins'
     _order = "number"
 
-    @api.model
     def _get_journal(self):
-        journal_id = self.env.ref('account.salary_journal')
+        params = self.env['hr.payroll_ma.parametres']
+        company_id = self.env['res.users'].browse(self.env.uid).company_id
+        parametres = params.search([('company_id', '=', company_id.id)], limit=1)
+        journal_id = parametres.journal_id
+        # journal_id = self.env.ref('account.salary_journal')
         return journal_id.id
 
     name = fields.Char(string='Description', required=True)
@@ -29,7 +32,7 @@ class HrPayrollMa(models.Model):
                                         string='Bulletins',  states={'draft': [('readonly', False)]})
     move_id = fields.Many2one('account.move', string=u'Pièce comptable',
                               readonly=True)
-    journal_id = fields.Many2one('account.journal', string='Journal',
+    journal_id = fields.Many2one('account.journal', string='Journal', default=_get_journal,
                                  required=True,  states={'draft': [('readonly', False)]})
     state = fields.Selection(selection=(
             ('draft', 'Brouillon'),

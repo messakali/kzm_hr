@@ -8,17 +8,15 @@
             <field name="arch" type="xml">
                 <form string="Import Rubriques">
 
-                     <group col="4" colspan="4">
+                    <group col="4" colspan="4">
                         <field name="file_id"/>
-                         <field name="rub_id"/>
-                        </group>
-                        <group colspan="4" col="4">
-                        <button type="special" special="cancel"
-                                string="Cancel" icon="gtk-cancel"/>
-                         <button type="object" name="action_add_rub"
-                                string="Validerr" icon="gtk-ok"/>
-                         </group>
+                        <field name="rub_id"/>
+                    </group>
 
+                    <footer>
+                        <button string="Valider" type="object" name="action_add_rub" class="btn-primary"/>
+                        <button string="Annuler" special="cancel" class="btn-default"/>
+                    </footer>
                 </form>
             </field>
         </record>
