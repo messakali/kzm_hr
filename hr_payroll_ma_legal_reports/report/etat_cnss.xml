@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+	<template  id= "etat_cnss" >
+    <!--<t t-call= "hr_payroll_ma_legal_reports.external_layout_hr_reports" >-->
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+			<div class="page">
+				<div align="center">
+					<h3>BORDEREAU CNSS</h3>
+					<h4>MOIS: <span t-field="o.period_id.name"/></h4>
+				</div>
+				<br/><br/><br/>
+				<table width="100%" style="border-collapse: collapse;">
+					<tr height="25">
+						<td style="border: 1px solid black;text-align: center;" width="10%">N° CNSS</td>
+						<td style="border: 1px solid black;text-align: center;" width="45%">Nom complet</td>
+						<td style="border: 1px solid black;text-align: center;" width="5%">N.E</td>
+						<td style="border: 1px solid black;text-align: center;" width="10%">Jours </td>
+						<td style="border: 1px solid black;text-align: center;" width="15">Salaire Brut</td>
+						<td style="border: 1px solid black;text-align: center;" width="15">Salaire plafonné</td>
+					</tr>
+					<t t-set="total_base_plafonnne" t-value="0"/>
+					<t t-set="total_base_non_plafonnne" t-value="0"/>
+					<t t-set="total" t-value="0"/>
+					<div t-foreach="o.bulletin_line_ids.sorted(key=lambda r: r.employee_id.matricule)" t-as="b">
+						<div t-foreach="b.salary_line_ids" t-as="l">
+							<tr t-if="l.name=='CNSS'" height="20">
+								<td style="border: 1px solid black;text-align: center;vertical-align:middle;" widtd="10%"><span t-field="b.employee_id.ssnid"/></td>
+								<td style="padding:5px;border: 1px solid black;text-align: left;vertical-align:middle;" widtd="45%"><span t-field="b.employee_id.name"/> <span t-field="b.employee_id.prenom"/></td>
+								<td style="border: 1px solid black;text-align: center;vertical-align:middle;" widtd="5%"><span t-field="b.employee_id.children"/></td>
+								<td style="border: 1px solid black;text-align: center;vertical-align:middle;" widtd="10%"><span t-field="b.working_days"/></td>
+								<td style="border: 1px solid black;text-align: center;vertical-align:middle;" widtd="15"><span t-field="b.salaire_brute_imposable"/></td>
+								<td style="border: 1px solid black;text-align: center;vertical-align:middle;" widtd="15"><span t-field="l.base"/></td>
+								<t t-set="total_base_plafonnne" t-value="total_base_plafonnne+l.base"/>
+								<t t-set="total_base_non_plafonnne" t-value="total_base_non_plafonnne+b.salaire_brute_imposable"/>
+								<t t-set="total" t-value="total+l.base+b.salaire_brute_imposable"/>
+							</tr>
+						</div>
+					</div>
+					<tr height="20">
+						<td style="border: 1px solid black;text-align: center;" widtd="10%"></td>
+						<td style="border: 1px solid black;text-align: center;" widtd="45%"></td>
+						<td style="border: 1px solid black;text-align: center;" widtd="5%"></td>
+						<td style="border: 1px solid black;text-align: center;" widtd="10%"><b>TOTAL</b></td>
+						<td style="border: 1px solid black;text-align: center;" widtd="15"><t t-esc="total_base_non_plafonnne"/></td>
+						<td style="border: 1px solid black;text-align: center;" widtd="15"><t t-esc="total_base_plafonnne"/></td>
+					</tr>
+				</table>
+				<br/>
+			</div>
+		</t>
+	</t>
+	</t>
+	</template>
+	</data>
+</odoo>

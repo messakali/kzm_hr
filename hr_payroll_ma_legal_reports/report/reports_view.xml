@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report
+            id="journal_paie_id"
+            string="Journal de paie"
+            model="hr.payroll_ma"
+            report_type="qweb-pdf"
+            file="hr_payroll_ma_legal_reports.journal_paie"
+            name="hr_payroll_ma_legal_reports.journal_paie"
+        />
+
+        <report
+            id="bordereau_virement_id"
+            string="Bordereau de virement"
+            model="hr.payroll_ma"
+            report_type="qweb-pdf"
+            file="hr_payroll_ma_legal_reports.bordereau_virement"
+            name="hr_payroll_ma_legal_reports.bordereau_virement"
+        />
+
+        <report
+            id="etat_cnss_id"
+            string="Bordereau CNSS"
+            model="hr.payroll_ma"
+            report_type="qweb-pdf"
+            file="hr_payroll_ma_legal_reports.etat_cnss"
+            name="hr_payroll_ma_legal_reports.etat_cnss"
+        />
+        <!--
+        <report
+            id="bordereau_paiement_cnss_id"
+            string="Bordereau Paiement CNSS"
+            model="hr.payroll_ma"
+            report_type="qweb-pdf"
+            file="hr_payroll_ma_legal_reports.bordereau_paiement_cnss"
+            name="hr_payroll_ma_legal_reports.bordereau_paiement_cnss"
+        />
+        -->
+        <report
+            id="igr_rep_id"
+            string="Etat IR"
+            model="hr.payroll_ma"
+            report_type="qweb-pdf"
+            file="hr_payroll_ma_legal_reports.etat_igr"
+            name="hr_payroll_ma_legal_reports.etat_igr"
+        />
+
+        <record id="report_reports_rh_paperformat" model="report.paperformat">
+            <field name="name">Reports RH paperformat</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="journal_paie_id" model="ir.actions.report">
+            <field name="paperformat_id" ref="report_reports_rh_paperformat"/>
+        </record>
+
+</data>
+</odoo>

@@ -135,6 +135,21 @@ class HrContract(models.Model):
     actif = fields.Boolean(string="Actif", default=True)
     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
                                  string='Société', readonly=True, copy=False)
+    type = fields.Selection(selection=(
+            ('mensuel', 'Mensuel'),
+            ('horaire', u'Horaire')
+             ), string='Type', default='mensuel')
+
+    @api.multi
+    @api.onchange('type')
+    def onchange_type(self):
+        for rec in self:
+            if rec.type == 'mensuel':
+                rec.hour_salary = 0
+                rec.monthly_hour_number = 0
+            if rec.type == 'horaire':
+                rec.wage = 0
+                rec.working_days_per_month = 0
 
     @api.one
     @api.constrains('actif','state')
@@ -144,6 +159,12 @@ class HrContract(models.Model):
                                                       ('state', 'in', ['open','pending'])])
         if len(contrat_ids) > 1:
             raise ValidationError(u'Plusieurs contrats actifs pour cet employé!')
+
+    @api.one
+    @api.constrains('date_start','employee_id.date')
+    def _check_unicite_contrat_date(self):
+        if self.date_start < self.employee_id.date:
+            raise ValidationError(u'La date de contrat ne peut pas être avant la date d\'embauche.!')
 
     @api.multi
     def cloturer_contrat(self):

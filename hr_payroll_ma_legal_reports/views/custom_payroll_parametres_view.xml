@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+        <record id="payroll_param_form_view_inherit" model="ir.ui.view">
+            <field name="name">Paramètres paie</field>
+            <field name="model">hr.payroll_ma.parametres</field>
+            <field name="inherit_id" ref="hr_payroll_ma.parametres_form" />
+            <field name="arch" type="xml">
+
+
+                     <field name="salary_debit_account_id" position="after">
+                         <field name="banque_virement_paie" />
+                         <field name="agence_virement_paie" />
+                         <field name="ville_agence_virement_paie" />
+                         <field name="rib_virement_paie" />
+                     </field>
+
+            </field>
+        </record>
+    </data>
+</odoo>

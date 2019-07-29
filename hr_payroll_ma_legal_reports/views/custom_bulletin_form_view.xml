@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+        <record id="bp_form_view_add_fields" model="ir.ui.view">
+            <field name="name">Bulletin</field>
+            <field name="model">hr.payroll_ma.bulletin</field>
+            <field name="inherit_id" ref="hr_payroll_ma.salary_form" />
+            <field name="arch" type="xml">
+                     <field name="salaire_base" position="after">
+                         <field name="salaire_base_mois"/>
+                         <field name="jrs_conges"/>
+                         <field name="conges_payes"/>
+                         <field name="cnss"/>
+                         <field name="cimr_assurance_amo"/>
+                         <field name="hsup_25"/>
+                         <field name="hsup_50"/>
+                         <field name="hsup_100"/>
+                     </field>
+            </field>
+        </record>
+
+        <record id="payroll_form_view_add_fields" model="ir.ui.view">
+            <field name="name">Saisie Mensuelle</field>
+            <field name="model">hr.payroll_ma</field>
+            <field name="inherit_id" ref="hr_payroll_ma.hr_payroll_ma_form" />
+            <field name="arch" type="xml">
+                     <field name="date_end" position="after">
+                         <field name="total_net_a_payer"/>
+                         <field name="total_net_a_payer_vrt"/>
+                         <field name="total_bordereau_cnss" invisible="1"/>
+                     </field>
+            </field>
+        </record>
+    </data>
+</odoo>

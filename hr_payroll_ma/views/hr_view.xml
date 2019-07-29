@@ -28,12 +28,21 @@
                     <field name="actif" />
 					<field name="company_id" />
                 </field>
+				<field name="type_id" position="after">
+                    <field name="type" />
+                </field>
+				<page name="information" position="attributes">
+                    <attribute name="attrs" >{'invisible':[('type','=','horaire')]}</attribute>
+                </page>
+				<field name="wage" position="attributes">
+                    <attribute name="attrs" >{'required':[('type','=','mensuel')]}</attribute>
+                </field>
 				 <notebook position="inside">
 		            <page string="Configuration de la paie">
 		               <group>
-							<field name="working_days_per_month"/>
-							<field name="hour_salary"/>
-							<field name="monthly_hour_number"/>
+							<field name="working_days_per_month" attrs="{'invisible':[('type','=','horaire')],'required':[('type','=','mensuel')]}"/>
+							<field name="hour_salary" attrs="{'invisible':[('type','=','mensuel')],'required':[('type','=','horaire')]}"/>
+							<field name="monthly_hour_number" attrs="{'invisible':[('type','=','mensuel')],'required':[('type','=','horaire')]}"/>
 							<field name="cotisation"/>
 							<field name="ir" groups="hr_payroll_ma.group_hr_payroll_settings"/>
 							<field name="rubrique_ids" colspan="4" nolabel="1"/>

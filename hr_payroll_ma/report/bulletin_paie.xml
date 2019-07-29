@@ -25,10 +25,11 @@
                          </tr>
                         </table>
                         <br/>
-                        <table width="100%" style="border-collapse: collapse;">
+                        <table style="border: 2px solid black" class="table table-condensed mt32">
                             <tr>
                                 <td style="border-top: 2px solid black;border-left: 2px solid black;text-align: left;"><strong><u>Matricule:</u></strong> <span t-field="o.employee_id.matricule"/></td>
-                                <td style="border-top: 2px solid black;border-right: 2px solid black;text-align: left;" colspan="3"><strong><u>Nom et prénom:</u></strong> <span t-field="o.employee_id.name"/> <span t-field="o.employee_id.prenom"/></td>
+                                <td style="border-top: 2px solid black;"><strong><u>Nom et prénom:</u></strong> <span t-field="o.employee_id.name"/> <span t-field="o.employee_id.prenom"/></td>
+                                <td style="border-top: 2px solid black;border-right: 2px solid black;"/>
                             </tr>
                             <tr>
                                 <td style="border-left: 2px solid black;text-align: left;"><strong><u>CIN:</u></strong> <span t-field="o.employee_id.cin"/></td>
@@ -36,7 +37,8 @@
                             </tr>
                             <tr>
                                 <td style="border-left: 2px solid black;text-align: left;"><strong><u>CNSS:</u></strong> <span t-field="o.employee_id.ssnid"/></td>
-                                <td style="border-right: 2px solid black;text-align: left;" colspan="3"><strong><u></u></strong></td>
+                                <td style="text-align: left;"><strong><u>Situation de famille:</u></strong> <span t-field="o.employee_id.marital"/></td>
+                                <td style="border-right: 2px solid black;"/>
                             </tr>
                             <tr>
                                 <td style="border-left: 2px solid black;text-align: left;"><strong><u>Date naissance:</u></strong> <span t-field="o.employee_id.birthday"/></td>
@@ -44,7 +46,6 @@
                                 <td style="border-right: 2px solid black;text-align: left;" colspan="2"><strong><u>Fonction: </u></strong> <span align="right" t-field="o.employee_id.job_id.name" /></td>
                             </tr>
                             <tr>
-                                <td style="border-bottom: 2px solid black;border-left: 2px solid black;text-align: left;"><strong><u>Situation de famille:</u></strong> <span t-field="o.employee_id.marital"/></td>
                                 <td style="border-bottom: 2px solid black;text-align: left;"><strong><u>N° d'enfants:</u></strong> <span t-field="o.employee_id.children"/></td>
                                 <td style="border-bottom: 2px solid black;text-align: left;" ><strong><u>N° de charges :</u></strong> <span align="right" t-field="o.employee_id.chargefam" /></td>
                                 <td style="border-bottom: 2px solid black;border-right: 2px solid black;text-align: left;" ><strong><u>Salaire de base :</u></strong> <span align="right" t-field="o.employee_contract_id.wage" /></td>
