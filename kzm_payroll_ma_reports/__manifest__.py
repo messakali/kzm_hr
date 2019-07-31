@@ -10,7 +10,7 @@
     'author': 'KARIZMA CONSEIL',
     'website': 'https://karizma-conseil.com',
     'images': [],
-    'depends': ['hr_payroll_ma'],
+    'depends': ['kzm_payroll_ma'],
     'data': [
              'views/custom_bulletin_form_view.xml',
              'views/custom_payroll_parametres_view.xml',
