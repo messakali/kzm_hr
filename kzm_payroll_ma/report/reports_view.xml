@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report
+            id="bulletin_paie_id"
+            string="Bulletin de paie "
+            model="hr.payroll_ma.bulletin"
+            report_type="qweb-pdf"
+            file="kzm_payroll_ma.bulletin_paie"
+            name="kzm_payroll_ma.bulletin_paie"
+        />
+
+</data>
+</odoo>

@@ -15,11 +15,11 @@
                             <field name="rc"/>
                             <field name="cnss"/>
                             <field name="capital_social"/>
-                            <field name="ice"/>
+                            <!--<field name="ice"/>-->
                             <field name="itp"/>
                             <field name="activites"/>
                             <field name="nationalite"/>
-                            <field name="fax"/>
+                            <!--<field name="fax"/>-->
                         </group>
                     </page>
                 </notebook>
