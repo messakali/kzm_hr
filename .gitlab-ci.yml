@@ -15,8 +15,8 @@ tests:
   - git clone --quiet --depth=1 --branch=$ODOO_VERSION https://github.com/odoo/odoo.git env/odoo
   - rm -rf env/odoo/.git
   - createdb --template=template0
-  - pg_dropcluster --stop 8.4 main
-  - pg_createcluster --locale=en_US.utf8 --start 8.4 main
+  - pg_dropcluster --stop
+  - pg_createcluster --locale=en_US.utf8 --start
   - ./env/odoo/odoo-bin -d $CI_BUILD_REF --addons-path=./env/odoo/addons/,./ --log-level=warn --stop-after-init
   - ./env/odoo/odoo-bin -d $CI_BUILD_REF --addons-path=./env/odoo/addons/,./ -i $PROJECT_MODULES --without-demo=all --log-level=warn --stop-after-init
   - ./env/odoo/odoo-bin -d $CI_BUILD_REF --addons-path=./env/odoo/addons/,./ -i $PROJECT_MODULES --test-enable --log-level=warn --stop-after-init
