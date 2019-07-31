@@ -1,5 +1,5 @@
 variables:
-  PROJECT_MODULES: "account_fiscal_period,account_fiscal_year,date_range,etat_9421,hr_payroll_ma,hr_payroll_ma_legal_reports,partner_extend,teledeclaration_cimr,teledeclaration_cnss"
+  PROJECT_MODULES: "account_fiscal_period,account_fiscal_year,date_range,etat_9421,kzm_payroll_ma,kzm_payroll_ma_reports,partner_extend,teledeclaration_cimr,teledeclaration_cnss"
   ODOO_VERSION: "11.0"
 
 stages:
