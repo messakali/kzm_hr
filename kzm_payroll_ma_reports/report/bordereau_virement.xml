@@ -5,7 +5,7 @@
     <t  t-call= "web.html_container" >
         <t  t-foreach= "docs"  t-as= "o" > 
             <t t-call="web.external_layout">
-                <div  class= "page" >
+                <div  class= "page" style="font-size:16px;">
                     <table style="border-collapse: collapse;width:100%" >
                         <tr>
                             <td width="40%"></td>
@@ -29,17 +29,17 @@
                     <br/>
                     <table style="border-collapse: collapse;width:100%" >
                         <tr height="25">
-                            <td width="35%" style="font-size:16px;border: 1px solid black;text-align: center;vertical-align: middle;"><b>Nom</b></td>
-                            <td width="15%" style="font-size:16px;border: 1px solid black;text-align: center;vertical-align: middle;"><b>Banque</b></td>
-                            <td width="30%" style="font-size:16px;border: 1px solid black;text-align: center;vertical-align: middle;"><b>N° de Compte</b></td>
-                            <td width="20%" style="font-size:16px;border: 1px solid black;text-align: center;vertical-align: middle;"><b>Montant</b></td>
+                            <td width="35%" style="border: 1px solid black;text-align: center;vertical-align: middle;"><b>Nom</b></td>
+                            <td width="15%" style="border: 1px solid black;text-align: center;vertical-align: middle;"><b>Banque</b></td>
+                            <td width="30%" style="border: 1px solid black;text-align: center;vertical-align: middle;"><b>N° de Compte</b></td>
+                            <td width="20%" style="border: 1px solid black;text-align: center;vertical-align: middle;"><b>Montant</b></td>
                         </tr>
                         <t t-foreach= "o.bulletin_line_ids.filtered(lambda m: m.employee_id.mode_reglement == 'virement').sorted(key=lambda r: r.employee_id.matricule)"  t-as= "b">
                         <tr>
-                            <td width="35%" style="font-size:16px;padding:5px;border: 1px solid black;text-align: left;vertical-align: middle;"><span t-field="b.employee_id.name"/> <span t-field="b.employee_id.prenom"/></td>
-                            <td width="15%" style="font-size:16px;border: 1px solid black;text-align: center;vertical-align: middle;"><span t-field="b.employee_id.bank"/></td>
-                            <td width="30%" style="font-size:16px;border: 1px solid black;text-align: center;vertical-align: middle;"><span t-field="b.employee_id.compte"/></td>
-                            <td width="20%" style="font-size:16px;border: 1px solid black;text-align: center;vertical-align: middle;"><span t-field="b.salaire_net_a_payer"/></td>
+                            <td width="35%" style="padding:5px;border: 1px solid black;text-align: left;vertical-align: middle;"><span t-field="b.employee_id.name"/> <span t-field="b.employee_id.prenom"/></td>
+                            <td width="15%" style="border: 1px solid black;text-align: center;vertical-align: middle;"><span t-field="b.employee_id.bank"/></td>
+                            <td width="30%" style="border: 1px solid black;text-align: center;vertical-align: middle;"><span t-field="b.employee_id.compte"/></td>
+                            <td width="20%" style="border: 1px solid black;text-align: center;vertical-align: middle;"><span t-field="b.salaire_net_a_payer"/></td>
                         </tr>
                         </t>
                     </table>

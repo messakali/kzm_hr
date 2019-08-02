@@ -27,31 +27,47 @@
                         <br/>
                         <table style="border: 2px solid black" class="table table-condensed mt32">
                             <tr>
-                                <td style="border-top: 2px solid black;border-left: 2px solid black;text-align: left;"><strong><u>Matricule:</u></strong> <span t-field="o.employee_id.matricule"/></td>
-                                <td style="border-top: 2px solid black;"><strong><u>Nom et prénom:</u></strong> <span t-field="o.employee_id.name"/> <span t-field="o.employee_id.prenom"/></td>
+                                <td style="border-top: 2px solid black;border-left: 2px solid black;text-align: left;"><strong>Matricule : </strong></td>
+                                <td><span t-field="o.employee_id.matricule"/></td>
+                                <td style="border-top: 2px solid black;"><strong>Nom et prénom : </strong></td>
+                                <td><span t-field="o.employee_id.name"/> <span t-field="o.employee_id.prenom"/></td>
+                                <td/>
                                 <td style="border-top: 2px solid black;border-right: 2px solid black;"/>
                             </tr>
                             <tr>
-                                <td style="border-left: 2px solid black;text-align: left;"><strong><u>CIN:</u></strong> <span t-field="o.employee_id.cin"/></td>
-                                <td style="border-right: 2px solid black;text-align: left;" colspan="3"><strong><u>Adresse :</u></strong> <span t-field="o.employee_id.address_home"/></td>
+                                <td style="border-left: 2px solid black;text-align: left;"><strong>CIN : </strong></td>
+                                <td><span t-field="o.employee_id.cin"/></td>
+                                <td><strong>Adresse : </strong></td>
+                                <td><span t-field="o.employee_id.address_home"/></td>
+                                <td/>
+                                <td style="border-right: 2px solid black;text-align: left;"/>
                             </tr>
                             <tr>
-                                <td style="border-left: 2px solid black;text-align: left;"><strong><u>CNSS:</u></strong> <span t-field="o.employee_id.ssnid"/></td>
-                                <td style="text-align: left;"><strong><u>Situation de famille:</u></strong> <span t-field="o.employee_id.marital"/></td>
+                                <td style="border-left: 2px solid black;text-align: left;"><strong>CNSS:</strong></td>
+                                <td><span t-field="o.employee_id.ssnid"/></td>
+                                <td style="text-align: left;"><strong>Situation de famille : </strong></td>
+                                <td><span t-field="o.employee_id.marital"/></td>
+                                <td/>
                                 <td style="border-right: 2px solid black;"/>
                             </tr>
                             <tr>
-                                <td style="border-left: 2px solid black;text-align: left;"><strong><u>Date naissance:</u></strong> <span t-field="o.employee_id.birthday"/></td>
-                                <td style="text-align: left;"><strong><u>Date embauche:</u></strong> <span t-field="o.employee_id.date"/></td>
-                                <td style="border-right: 2px solid black;text-align: left;" colspan="2"><strong><u>Fonction: </u></strong> <span align="right" t-field="o.employee_id.job_id.name" /></td>
+                                <td style="border-left: 2px solid black;text-align: left;"><strong>Date naissance : </strong></td>
+                                <td><span t-field="o.employee_id.birthday"/></td>
+                                <td style="text-align: left;"><strong>Date embauche : </strong></td>
+                                <td><span t-field="o.employee_id.date"/></td>
+                                <td><strong>Fonction : </strong></td>
+                                <td style="border-right: 2px solid black;text-align: left;"><span align="right" t-field="o.employee_id.job_id.name" /></td>
                             </tr>
                             <tr>
-                                <td style="border-bottom: 2px solid black;text-align: left;"><strong><u>N° d'enfants:</u></strong> <span t-field="o.employee_id.children"/></td>
-                                <td style="border-bottom: 2px solid black;text-align: left;" ><strong><u>N° de charges :</u></strong> <span align="right" t-field="o.employee_id.chargefam" /></td>
-                                <td style="border-bottom: 2px solid black;border-right: 2px solid black;text-align: left;" ><strong><u>Salaire de base :</u></strong> <span align="right" t-field="o.employee_contract_id.wage" /></td>
+                                <td style="border-bottom: 2px solid black;text-align: left;"><strong>N° d'enfants : </strong></td>
+                                <td><span t-field="o.employee_id.children"/></td>
+                                <td style="border-bottom: 2px solid black;text-align: left;" ><strong>N° de charges : </strong></td>
+                                <td><span align="right" t-field="o.employee_id.chargefam" /></td>
+                                <td style="border-bottom: 2px solid black;text-align: left;"><strong>Salaire de base : </strong></td>
+                                <td style="border-bottom: 2px solid black;border-right: 2px solid black;text-align: left;"><span align="right" t-field="o.employee_contract_id.wage" /></td>
                             </tr>
                             <tr>
-                                <td style="border-bottom: 2px solid black;border-left: 2px solid black;text-align: left;" colspan="4"><strong><u>Nombre de jours de congés restants:</u></strong> <span t-field="o.employee_id.remaining_leaves"/></td>
+                                <td style="border-bottom: 2px solid black;border-left: 2px solid black;text-align: left;" colspan="6"><strong>Nombre de jours de congés restants:</strong> <span t-field="o.employee_id.remaining_leaves"/></td>
                             </tr>
                         </table>
                     </div>

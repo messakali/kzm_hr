@@ -83,6 +83,7 @@ class HrEmployee(models.Model):
     def get_parametre(self):
         params = self.env['hr.payroll_ma.parametres']
         return params.search([], limit=1)
+
     # Contrainte sur logement social
     @api.one
     @api.constrains('superficie_logement', 'prix_acquisition_logement', 'type_logement')
@@ -105,6 +106,15 @@ class HrEmployee(models.Model):
             compte = self.compte.replace(' ', '')
             if len(compte) != 24 or not compte.isdigit():
                 raise ValidationError(u"Le RIB doit être constitué de 24 chiffres")
+
+    # contrainte sur la matricule
+    @api.one
+    @api.constrains('matricule')
+    def _check_matricule(self):
+        if self.matricule:
+            employee_ids = self.env['hr.employee'].search([('matricule', '=', self.matricule), ('id', '!=', self.id)])
+            if employee_ids:
+                raise ValidationError(u"La matricule doit être unique")
 
     @api.multi
     def name_get(self):

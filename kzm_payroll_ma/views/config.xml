@@ -10,7 +10,7 @@
 					<group>
 						<field name="charge" />
 						<field name="arrondi" />
-						<field name="company_id" />
+						<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 					</group>
 					<group string="Frais professionels" >
 						<field name="fraispro" />
@@ -42,7 +42,7 @@
 					<field name="charge" />
 					<field name="fraispro" />
 					<field name="plafond" />
-					<field name="company_id" />
+					<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 					<field name="credit_account_id" />
 				</tree>
 			</field>
@@ -91,7 +91,7 @@
 						<field name="tauxpatronal" />
 						<field name="plafonee" />
 						<field name="plafond" />
-						<field name="company_id" />
+						<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 					</group>
 					<group string="Comptabilité" >
 						<field name="credit_account_id" />
@@ -113,7 +113,7 @@
 					<field name="tauxpatronal" />
 					<field name="plafonee" />
 					<field name="plafond" />
-					<field name="company_id" />
+					<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 					<field name="credit_account_id" />
 					<field name="debit_account_id" />
 				</tree>
@@ -129,7 +129,7 @@
 				<form string="TYPES DES COTISATIONS">
 					<group col="4">
 						<field name="name" />
-						<field name="company_id" />
+						<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 					</group>
 					<notebook colspan="4">
 						<page string="Cotisations">
@@ -147,7 +147,7 @@
 			<field name="arch" type="xml">
 				<tree string="Types Cotisations">
 					<field name="name" />
-					<field name="company_id" />
+					<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 				</tree>
 			</field>
 		</record>
@@ -263,7 +263,7 @@
 						 <br/>
 						 <label for="id" string="Sociétés"/>
                             <div attrs="{'invisible': [('has_default_company', '=', True)]}">
-                                <field name="company_id" options="{'no_create': True}" class="oe_inline" string="Société"/>
+                                <field name="company_id" class="oe_inline" string="Société" groups="base.group_multi_company" options="{'no_create': True}"/>
                             </div>
 					</group>
                 </form>

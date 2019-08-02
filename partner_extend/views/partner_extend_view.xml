@@ -11,15 +11,19 @@
                 <notebook position="inside">
                     <page string="Autres infos" attrs="{'invisible': [('is_company','=', False)],'required': [('is_company','=', True)]}">
                         <group>
-                            <field name="id_fisc"/>
-                            <field name="rc"/>
-                            <field name="cnss"/>
-                            <field name="capital_social"/>
-                            <!--<field name="ice"/>-->
-                            <field name="itp"/>
-                            <field name="activites"/>
-                            <field name="nationalite"/>
-                            <!--<field name="fax"/>-->
+                            <group>
+                                <field name="id_fisc"/>
+                                <field name="rc"/>
+                                <field name="cnss"/>
+                                <field name="capital_social"/>
+                            </group>
+                            <group>
+                                <!--<field name="ice"/>-->
+                                <field name="itp"/>
+                                <field name="activites"/>
+                                <field name="nationalite"/>
+                                <!--<field name="fax"/>-->
+                            </group>
                         </group>
                     </page>
                 </notebook>

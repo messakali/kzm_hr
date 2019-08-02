@@ -11,7 +11,7 @@
                     <sheet>
                         <group col="4">
                             <field name="name"/>
-                            <field name="company_id"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
                         </group>
                         <notebook>
                             <page string="Employées">
@@ -37,7 +37,7 @@
             <field name="arch" type="xml">
                 <tree string="CIMR Sortants">
                     <field name="name" />
-                    <field name="company_id"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
                 </tree>
             </field>
         </record>

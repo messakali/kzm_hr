@@ -26,23 +26,35 @@
 				</xpath>
 				<field name="job_id" position="after">
                     <field name="actif" />
-					<field name="company_id" />
+					<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
                 </field>
 				<field name="type_id" position="after">
                     <field name="type" />
                 </field>
-				<page name="information" position="attributes">
+				<div name="wage" position="after">
+					<field name="working_days_per_month" attrs="{'required':[('type','=','mensuel')]}"/>
+                </div>
+				<group name="salary_and_advantages" position="attributes">
                     <attribute name="attrs" >{'invisible':[('type','=','horaire')]}</attribute>
-                </page>
+                </group>
+				<group name="salary_and_advantages" position="after">
+					<group name="salary_and_advantages_hour" string="Gains mensuels en espèces" attrs="{'invisible':[('type','=','mensuel')]}">
+						<label for="hour_salary"/>
+						<div class="o_row" name="hour_salary">
+							<field name="hour_salary" nolabel="1" attrs="{'required':[('type','=','horaire')]}"/>
+							<span>/ heure</span>
+						</div>
+						<field name="monthly_hour_number" attrs="{'required':[('type','=','horaire')]}"/>
+					</group>
+					<!--<field name="hour_salary" attrs="{'invisible':[('type','=','mensuel')],'required':[('type','=','horaire')]}"/>-->
+					<!--<field name="monthly_hour_number" attrs="{'invisible':[('type','=','mensuel')],'required':[('type','=','horaire')]}"/>-->
+                </group>
 				<field name="wage" position="attributes">
                     <attribute name="attrs" >{'required':[('type','=','mensuel')]}</attribute>
                 </field>
 				 <notebook position="inside">
 		            <page string="Configuration de la paie">
 		               <group>
-							<field name="working_days_per_month" attrs="{'invisible':[('type','=','horaire')],'required':[('type','=','mensuel')]}"/>
-							<field name="hour_salary" attrs="{'invisible':[('type','=','mensuel')],'required':[('type','=','horaire')]}"/>
-							<field name="monthly_hour_number" attrs="{'invisible':[('type','=','mensuel')],'required':[('type','=','horaire')]}"/>
 							<field name="cotisation"/>
 							<field name="ir" groups="kzm_payroll_ma.group_hr_payroll_settings"/>
 							<field name="rubrique_ids" colspan="4" nolabel="1"/>

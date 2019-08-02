@@ -42,7 +42,7 @@
 						<field name="period_id" />
 						<field name="date_start" />
 						<field name="date_end" />
-						<field name="company_id" readonly="1"/>
+						<field name="company_id" readonly="1" groups="base.group_multi_company" options="{'no_create': True}"/>
 					</group>
 					<group>
 						<field name="name"/>
@@ -205,6 +205,10 @@
 			<field name="model">hr.payroll_ma.bulletin</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
+                <header>
+					<button name="compute_all_lines" string="Calculer bulletin"
+						type="object" icon="fa-exchange" />
+                </header>
 				<form string="Bulletins">
 					<group colspan="4" col="6">
 						<field name="employee_id" domain="[('active', '=',True)]"
@@ -214,9 +218,7 @@
 						<field name="name" />
 						<field name="working_days" />
 						<field name="salaire_base" />
-						<button name="compute_all_lines" string="Calculer bulletin"
-							type="object" icon="fa-exchange" />
-						<field name="company_id" />
+						<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 					</group>
 					<notebook colspan="4">
 						<page string="Lignes du bulletin">
@@ -335,7 +337,7 @@
 						<field name="afficher" />
 						<field name="is_hourly" />
 						<field name="pourcentage" attrs="{'invisible':[('is_hourly','=',False)]}"/>
-						<field name="company_id" />
+						<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 					</group>
 					<group  attrs="{'invisible':[('categorie','==','deduction')]}">
 						<group string="Type">
@@ -370,7 +372,7 @@
 					<field name="code" />
 					<field name="name" />
 					<field name="categorie" />
-					<field name="company_id" />
+					<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 					<field name="afficher" />
 				</tree>
 			</field>
