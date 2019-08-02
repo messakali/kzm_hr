@@ -9,7 +9,7 @@
                 <form string="Import Rubriques">
                     <label for="file_id" string="Merci de ne pas ajouter dans le premier ligne le titre de la colonne.
 la première colonne doit être remplie par les matricules.
-la deuxième colonne doit être remplie par les montants (int ou float avec point)"/>
+la deuxième colonne doit être remplie par les montants (entier ou décimal avec séparateur 'point')"/>
 
                     <group col="4" colspan="4">
                         <field name="file_id"/>
