@@ -22,7 +22,7 @@ class Wizard_Hours(models.TransientModel):
         wb = xlrd.open_workbook(file_contents=file_content_decoded)
         for sheet in wb.sheets():
             for row in range(sheet.nrows):
-                mat = int(sheet.cell(row,0).value)
+                mat = sheet.cell(row,0).value
                 hours = sheet.cell(row,1).value
                 days = int(hours) * 26/192
                 d=0

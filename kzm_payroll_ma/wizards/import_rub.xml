@@ -7,6 +7,9 @@
             <field name="model">payroll.rub.import.wizard</field>
             <field name="arch" type="xml">
                 <form string="Import Rubriques">
+                    <label for="file_id" string="Merci de ne pas ajouter dans le premier ligne le titre de la colonne.
+la première colonne doit être remplie par les matricules.
+la deuxième colonne doit être remplie par les montants (int ou float avec point)"/>
 
                     <group col="4" colspan="4">
                         <field name="file_id"/>

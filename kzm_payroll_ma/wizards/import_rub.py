@@ -25,7 +25,7 @@ class WizardRub(models.TransientModel):
         wb = xlrd.open_workbook(file_contents=file_content_decoded)
         for sheet in wb.sheets():
             for row in range(sheet.nrows):
-                mat = int(sheet.cell(row, 0).value)
+                mat = sheet.cell(row, 0).value
                 amount = sheet.cell(row, 1).value
                 emp_id = emp_obj.search([('matricule','=',mat)])
                 if not emp_id:
