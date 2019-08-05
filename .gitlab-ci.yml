@@ -11,6 +11,7 @@ tests:
   - dropdb --if-exists "gitlab-runner"
   - virtualenv env
   - source env/bin/activate
+  - apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev
   - pip install -r requirements.txt
   - git clone --quiet --depth=1 --branch=$ODOO_VERSION https://github.com/odoo/odoo.git env/odoo
   - rm -rf env/odoo/.git
