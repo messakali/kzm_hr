@@ -458,6 +458,7 @@ class hrPayrollMaBulletin(models.Model):
     logement = fields.Float(string='Logement', digits=(16, 2))
 
     # Ajout des champs de cumul
+    cumul_normal_hours = fields.Float(compute='get_cumuls', string=u'Cumul des HT', digits=(16, 2))
     cumul_work_days = fields.Float(compute='get_cumuls', string=u'Cumul des JT', digits=(16, 2))
     cumul_sbi = fields.Float(compute='get_cumuls', string='Cumul SBI', digits=(16, 2))
     cumul_base = fields.Float(compute='get_cumuls', string='Cumul base', digits=(16, 2))
@@ -494,6 +495,7 @@ class hrPayrollMaBulletin(models.Model):
 
             if bulletin:
                 bul = bulletin[0]
+                cumuls['normal_hours'] = bul.normal_hours
                 cumuls['working_days'] = bul.working_days
                 cumuls['salaire_base'] = bul.salaire_base
                 cumuls['salaire_brut_imposable'] = bul.salaire_brute_imposable
@@ -519,6 +521,7 @@ class hrPayrollMaBulletin(models.Model):
             mois = periode[0]
             annee = periode[1]
 
+            somme_nh = 0.0
             somme_wd = 0.0
             somme_sbi = 0.0
             somme_base = 0.0
@@ -536,6 +539,7 @@ class hrPayrollMaBulletin(models.Model):
                 valeur_mois = res.get_bulletin_cumuls(j, annee, res.employee_id.id)
                 if valeur_mois:
                     somme_base += valeur_mois['salaire_base']
+                    somme_nh += valeur_mois['normal_hours']
                     somme_wd += valeur_mois['working_days']
                     somme_sbi += valeur_mois['salaire_brut_imposable']
                     somme_sb += valeur_mois['salaire_brut']
@@ -549,6 +553,7 @@ class hrPayrollMaBulletin(models.Model):
                     somme_exo += valeur_mois['exonerations']
                     somme_avantages += valeur_mois['avantages']
 
+            res.cumul_normal_hours = somme_nh
             res.cumul_work_days = somme_wd
             res.cumul_sbi = somme_sbi
             res.cumul_base = somme_base
@@ -640,6 +645,7 @@ class hrPayrollMaBulletin(models.Model):
             somme = 0
             salaire_net_imposable = 0
             bulletin = rec
+            coef = 0
 
             dictionnaire = rec.get_parametere()
             if not bulletin.employee_contract_id.ir:
@@ -665,24 +671,38 @@ class hrPayrollMaBulletin(models.Model):
                     salaire_net_imposable = sbi - fraispro - cotisations
                 else:
                     salaire_net_imposable = sbi - plafond - cotisations
+
                 # logement
                 salaire_logement = salaire_net_imposable * 10 / 100
                 if logement > salaire_logement:
                     logement = salaire_logement
                 salaire_net_imposable = salaire_net_imposable - logement
+                rec.salaire_net_imposable = salaire_net_imposable
+                rec.get_cumuls()
+                count_days = rec.cumul_work_days
+                count_hours = rec.cumul_normal_hours
+
+                if bulletin.employee_contract_id.type == 'mensuel' and count_days:
+                    coef = 312 / count_days
+                elif bulletin.employee_contract_id.type == 'horaire' and count_hours:
+                    coef = 191 * 12 / count_hours
+
+                new_cumul_net_imp = bulletin.cumul_sni
+                cumul_coef = new_cumul_net_imp * coef
 
                 # IR Brut
                 ir_bareme = self.env['hr.payroll_ma.ir']
                 ir_bareme_list = ir_bareme.search([])
 
-                #sni = salaire_net_imposable * 312 / base
-                sni = salaire_net_imposable
                 for tranche in ir_bareme_list:
-                    if (sni >= (tranche.debuttranche / 12)) and (sni < (tranche.fintranche / 12)):
+                    if (cumul_coef >= tranche.debuttranche) and (cumul_coef < tranche.fintranche):
                         taux = tranche.taux
-                        somme = tranche.somme / 12
-                ir_brute = (sni * taux / 100) - somme
-                #ir_brute = ir_brute * base / 312
+                        somme = coef and (tranche.somme / coef) or 0.0
+
+                ir_cumul_brut = ((new_cumul_net_imp) * taux / 100) - somme
+
+                ir_brute = ir_cumul_brut - rec.cumul_igr_n_1
+
                 # IR Net
                 personnes = bulletin.employee_id.chargefam
                 if (ir_brute - (personnes * dictionnaire.charge)) < 0:
@@ -983,7 +1003,7 @@ class hrPayrollMaBulletin(models.Model):
             rec.salaire_brute_imposable = salaire_brute_imposable
             rec.salaire_net = salaire_net
             rec.salaire_net_a_payer = salaire_net_a_payer
-            rec.salaire_net_imposable = res['salaire_net_imposable']
+            # rec.salaire_net_imposable = res['salaire_net_imposable']
             rec.cotisations_employee = cotisations_employee
             rec.cotisations_employer = cotisations_employer
             rec.igr = res['ir_net']

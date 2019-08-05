@@ -75,6 +75,7 @@
 									</group>
 									<group string="Cumuls">
 										<group>
+											<field name="cumul_normal_hours" />
 											<field name="cumul_work_days" />
 											<field name="cumul_sb" />
 											<field name="cumul_sbi" />
@@ -231,6 +232,7 @@
 							<field name="cotisations_employee" />
 							<field name="cotisations_employer" />
 							<field name="salaire_net_a_payer" />
+							<field name="cumul_normal_hours" />
 							<field name="cumul_work_days" />
 							<field name="cumul_sb" />
 							<field name="cumul_sbi" />
