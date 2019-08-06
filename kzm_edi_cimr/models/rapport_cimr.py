@@ -85,7 +85,7 @@ class RapportCimr(models.Model):
                 period = str(rec.trimestre).rjust(2, '0') + "/" + str(rec.annee)
                 # Je parcours la liste des employés
                 for emp in employe.search([('active', '=', True)]).sorted(key=lambda r: int(r.matricule)):
-                    contract = contract_obj.search([('employee_id', '=', emp.id), ('actif', '=', True)], order='date_start', limit=1)
+                    contract = contract_obj.search([('employee_id', '=', emp.id), ('state', 'in', ('pending', 'open'))], order='date_start', limit=1)
                     bulletin = bul.search([('period_id.name', '=', period), ('employee_id', '=', emp.id)])
 
                     taux_emp = ligne_bul_paie.search([('id_bulletin', '=', bulletin.id), ('name', 'like', '%CIMR%')]).rate_employee or 0
@@ -99,7 +99,7 @@ class RapportCimr(models.Model):
                                                                    ('company_id', '=', rec.company_id.id)], limit=1)
                 for empl_sort in employee_sortant_id.cimr_sortant_line_ids:
                     contract = contract_obj.search([('employee_id', '=', empl_sort.employee_id.id),
-                                                    ('actif', '=', False)], order='date_start', limit=1)
+                                                    ('state', 'not in', ('pending', 'open'))], order='date_start', limit=1)
                     bulletin = bul.search([('period_id.name', '=', period), ('employee_id', '=', empl_sort.employee_id.id)])
                     taux_emp = ligne_bul_paie.search(
                         [('id_bulletin', '=', bulletin.id), ('name', 'like', '%CIMR%')]).rate_employee or 0

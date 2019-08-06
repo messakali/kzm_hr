@@ -10,6 +10,8 @@
 					<group>
 						<field name="charge" />
 						<field name="arrondi" />
+						<field name="hour_day"/>
+						<field name="hour_month"/>
 						<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
 					</group>
 					<group string="Frais professionels" >

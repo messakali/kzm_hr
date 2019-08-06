@@ -132,6 +132,14 @@ class HrEmployee(models.Model):
             count = len(self.env['hr.payroll_ma.bulletin'].sudo().search([('employee_id', '=', rec.id)]))
             rec.payslip_count = count
 
+    @api.model
+    def create(self, values):
+        if not values.get('matricule'):
+            employee_id = self.env['hr.employee'].search([], order='matricule desc', limit=1)
+            if employee_id and employee_id.matricule and employee_id.matricule.isdigit():
+                values['matricule'] = str(int(employee_id.matricule) + 1).zfill(3)
+        return super(HrEmployee, self).create(values)
+
 
 class HrContract(models.Model):
     _inherit = "hr.contract"
@@ -142,7 +150,7 @@ class HrContract(models.Model):
     ir = fields.Boolean(u'IR?')
     cotisation = fields.Many2one('hr.payroll_ma.cotisation.type', string=u'Type cotisation', required=True)
     rubrique_ids = fields.One2many('hr.payroll_ma.ligne_rubrique', 'id_contract', string='Rubriques')
-    actif = fields.Boolean(string="Actif", default=True)
+    # actif = fields.Boolean(string="Actif", default=True)
     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
                                  string='Société', readonly=True, copy=False)
     type = fields.Selection(selection=(
@@ -153,19 +161,22 @@ class HrContract(models.Model):
     @api.multi
     @api.onchange('type')
     def onchange_type(self):
+        params = self.env['hr.payroll_ma.parametres']
+        ids_params = params.search([('company_id', '=', self.company_id.id)], limit=1)
         for rec in self:
             if rec.type == 'mensuel':
                 rec.hour_salary = 0
                 rec.monthly_hour_number = 0
+                rec.working_days_per_month = 26
             if rec.type == 'horaire':
                 rec.wage = 0
                 rec.working_days_per_month = 0
+                rec.monthly_hour_number = ids_params.hour_month
 
     @api.one
-    @api.constrains('actif','state')
+    @api.constrains('state')
     def _check_unicite_contrat(self):
         contrat_ids = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id),
-                                                      ('actif', '=', True),
                                                       ('state', 'in', ['open','pending'])])
         if len(contrat_ids) > 1:
             raise ValidationError(u'Plusieurs contrats actifs pour cet employé!')
@@ -176,17 +187,17 @@ class HrContract(models.Model):
         if self.date_start < self.employee_id.date:
             raise ValidationError(u'La date de contrat ne peut pas être avant la date d\'embauche.!')
 
-    @api.multi
-    def cloturer_contrat(self):
-        for rec in self:
-            rec.actif = False
-            rec.date_end = fields.Date.context_today(self)
-
-    @api.multi
-    def activer_contrat(self):
-        for rec in self:
-            rec.actif = True
-            rec.date_end = None
+    # @api.multi
+    # def cloturer_contrat(self):
+    #     for rec in self:
+    #         rec.actif = False
+    #         rec.date_end = fields.Date.context_today(self)
+    #
+    # @api.multi
+    # def activer_contrat(self):
+    #     for rec in self:
+    #         rec.actif = True
+    #         rec.date_end = None
 
     @api.multi
     def net_to_brute(self):

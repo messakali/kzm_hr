@@ -11,6 +11,8 @@ class HrPayrollMaParametres(models.Model):
 
     arrondi = fields.Boolean("Arrondi", default=True)
     charge = fields.Float(string="Charges familiales", help="Les charges de famille déduites de IR")
+    hour_day = fields.Float(string="Nbr heures par jour", default=8, help="Nbr des heures de travaille par jour")
+    hour_month = fields.Float(string="Nbr heures par mois", default=191, help="Nbr des heures de travaille par mois")
     fraispro = fields.Float(string="Frais Professionnels")
     plafond = fields.Float(string="Plafond")
     credit_account_id = fields.Many2one('account.account', string=u'Compte de crédit IR')

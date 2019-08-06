@@ -2,17 +2,17 @@
 <odoo>
 	<data>
 		<!-- HR contract  -->
-		<record model="ir.ui.view" id="view_hr_contract_tree_inherits">
-			<field name="name">hr.contract.view.form.inherits</field>
-			<field name="model">hr.contract</field>
-			<field name="inherit_id" ref="hr_contract.hr_contract_view_tree" />
-			<field name="type">tree</field>
-			<field name="arch" type="xml">
-				<field name="date_end" position="after">
-					<field name="actif" />
-				</field>
-			</field>
-		</record>
+		<!--<record model="ir.ui.view" id="view_hr_contract_tree_inherits">-->
+			<!--<field name="name">hr.contract.view.form.inherits</field>-->
+			<!--<field name="model">hr.contract</field>-->
+			<!--<field name="inherit_id" ref="hr_contract.hr_contract_view_tree" />-->
+			<!--<field name="type">tree</field>-->
+			<!--<field name="arch" type="xml">-->
+				<!--<field name="date_end" position="after">-->
+					<!--<field name="actif" />-->
+				<!--</field>-->
+			<!--</field>-->
+		<!--</record>-->
 
 		<record model="ir.ui.view" id="view_hr_contract_form_inherits">
 			<field name="name">hr.contract.view.form.inherits</field>
@@ -20,12 +20,12 @@
 			<field name="inherit_id" ref="hr_contract.hr_contract_view_form" />
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<xpath expr="//header" position="inside">
-					<button string="Clôturer contrat" attrs="{'invisible':[('actif','=',False)]}" type="object" name="cloturer_contrat" class="oe_highlight" />
-					<button string="Activer contrat" attrs="{'invisible':[('actif','=',True)]}" type="object" name="activer_contrat" class="oe_highlight" />
-				</xpath>
+				<!--<xpath expr="//header" position="inside">-->
+					<!--<button string="Clôturer contrat" attrs="{'invisible':[('actif','=',False)]}" type="object" name="cloturer_contrat" class="oe_highlight" />-->
+					<!--<button string="Activer contrat" attrs="{'invisible':[('actif','=',True)]}" type="object" name="activer_contrat" class="oe_highlight" />-->
+				<!--</xpath>-->
 				<field name="job_id" position="after">
-                    <field name="actif" />
+                    <!--<field name="actif" />-->
 					<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
                 </field>
 				<field name="type_id" position="after">

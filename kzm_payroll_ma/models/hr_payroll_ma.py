@@ -115,8 +115,7 @@ class HrPayrollMa(models.Model):
 
             for employee in employees:
                 contract = obj_contract.search([('employee_id', '=', employee.id),
-                                                ('state', 'in', ('draft', 'open')),
-                                                ('actif', '=', True)], order='date_start', limit=1)
+                                                ('state', 'in', ('pending', 'open'))], order='date_start', limit=1)
 
                 absences = '''  select sum(number_of_days)
                                 from    hr_holidays h
@@ -660,7 +659,7 @@ class hrPayrollMaBulletin(models.Model):
             else:
                 base = 0
                 if rec.normal_hours:
-                    base = rec.normal_hours / 8
+                    base = rec.normal_hours / (dictionnaire.hour_day or 8)
                 elif rec.working_days:
                     base = rec.working_days
 
@@ -685,7 +684,7 @@ class hrPayrollMaBulletin(models.Model):
                 if bulletin.employee_contract_id.type == 'mensuel' and count_days:
                     coef = 312 / count_days
                 elif bulletin.employee_contract_id.type == 'horaire' and count_hours:
-                    coef = 191 * 12 / count_hours
+                    coef = (dictionnaire.hour_month or 191) * 12 / count_hours
 
                 new_cumul_net_imp = bulletin.cumul_sni
                 cumul_coef = new_cumul_net_imp * coef

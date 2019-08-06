@@ -53,7 +53,7 @@ class TeledeclarationCimr(models.TransientModel):
                 else:
                     cnss = '0000000000'
 
-                if contract_id.actif:
+                if contract_id.state in ('pending', 'open'):
                     code = '2'
                     date_fin = '00000000'
                 else:
