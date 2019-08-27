@@ -284,4 +284,8 @@
 				  parent="payroll_ma_configure" groups="base.group_multi_company"
 				  sequence="1" action="hr_rubriques_settings_action" />
 
+		<!-- Menus -->
+        <menuitem id="menu_date_range_hr" name="Date ranges"
+            parent="hr.menu_human_resources_configuration" sequence="50"/>
+        <menuitem action="date_range.date_range_action" id="menu_date_range_action_hr" parent="menu_date_range_hr"/>
 </odoo>

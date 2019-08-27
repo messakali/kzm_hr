@@ -167,7 +167,7 @@ class HrRubriqueSettings(models.TransientModel):
             raise UserError("Veuillez d'abord configurer le plan comptable de cette société")
         while i < 25:
             vals = {}
-            model = 'hr_payroll_ma.rubrique'+str(i)
+            model = 'kzm_payroll_ma.rubrique'+str(i)
             model = str(model)
             rubrique_id = self.env.ref(model)
             if rubrique_id:
@@ -215,7 +215,7 @@ class HrRubriqueSettings(models.TransientModel):
             raise UserError('Les cotisations de cette société ont été déjâ générés')
         while i < 7:
             vals = {}
-            model = 'hr_payroll_ma.cotisation_data' + str(i)
+            model = 'kzm_payroll_ma.cotisation_data' + str(i)
             model = str(model)
             cotisation_id = self.env.ref(model)
             if cotisation_id:
