@@ -174,18 +174,21 @@ class HrContract(models.Model):
                 rec.monthly_hour_number = ids_params.hour_month
 
     @api.one
-    @api.constrains('state')
+    @api.constrains('state','date_start')
     def _check_unicite_contrat(self):
         contrat_ids = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id),
-                                                      ('state', 'in', ['open','pending'])])
-        if len(contrat_ids) > 1:
+                                                      ('state', 'in', ['open','pending']),
+                                                      ('id', '!=', self.id)])
+        if contrat_ids and self.state in ['open','pending']:
             raise ValidationError(u'Plusieurs contrats actifs pour cet employé!')
+        if self.state in ['open','pending']:
+            self.employee_id.date = self.date_start
 
-    @api.one
-    @api.constrains('date_start','employee_id.date')
-    def _check_unicite_contrat_date(self):
-        if self.date_start < self.employee_id.date:
-            raise ValidationError(u'La date de contrat ne peut pas être avant la date d\'embauche.!')
+    # @api.one
+    # @api.constrains('date_start','employee_id.date')
+    # def _check_unicite_contrat_date(self):
+    #     if self.date_start < self.employee_id.date:
+    #         raise ValidationError(u'La date de contrat ne peut pas être avant la date d\'embauche.!')
 
     # @api.multi
     # def cloturer_contrat(self):
