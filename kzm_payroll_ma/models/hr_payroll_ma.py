@@ -175,7 +175,7 @@ class HrPayrollMa(models.Model):
     def action_move_create(self):
         for rec in self:
             params = self.env['hr.payroll_ma.parametres']
-            dictionnaire = params.search([('company_id', '=', rec.company_id.id)],limit=1)
+            #dictionnaire = params.search([('company_id', '=', rec.company_id.id)],limit=1)// Ayoub
             date = rec.date_salary or datetime.now().date()
             journal = rec.journal_id
             move_lines = []
@@ -310,10 +310,12 @@ class HrPayrollMa(models.Model):
             self.env.cr.execute(sql)
             data_paie = self.env.cr.dictfetchall()
             for line in data_paie:
-                if not dictionnaire.salary_debit_account_id:
+                #if not dictionnaire.salary_debit_account_id:// Ayoub
+                if not rec.company_id.salary_debit_account_id:# Ayoub
                     raise ValidationError(msg)
                 move_line_debit_brute = {
-                                         'account_id': dictionnaire.salary_debit_account_id.id,
+                                         #'account_id': dictionnaire.salary_debit_account_id.id,// Ayoub
+                                         'account_id': rec.company_id.salary_debit_account_id.id,# Ayoub
                                          # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
                                          'journal_id': journal.id,
                                          'date': date,
@@ -337,10 +339,12 @@ class HrPayrollMa(models.Model):
             self.env.cr.execute(sql)
             data = self.env.cr.dictfetchall()
             data = data[0]
-            if not dictionnaire.salary_debit_account_id or not dictionnaire.salary_credit_account_id:
+            #if not dictionnaire.salary_debit_account_id or not dictionnaire.salary_credit_account_id: // Ayoub
+            if not rec.company_id.salary_debit_account_id or not rec.company_id.salary_credit_account_id: # Ayoub
                 raise ValidationError(msg)
             move_line_arrondi = {
-                                         'account_id': dictionnaire.salary_debit_account_id.id,
+                                         #'account_id': dictionnaire.salary_debit_account_id.id, // Ayoub
+                                         'account_id': rec.company_id.salary_debit_account_id.id, #Ayoub
                                          # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
                                          'journal_id': journal.id,
                                          'date': date,
@@ -350,7 +354,8 @@ class HrPayrollMa(models.Model):
                                          'state': 'valid'
                                          }
             move_line_credit = {
-                                         'account_id': dictionnaire.salary_credit_account_id.id,
+                                         #'account_id': dictionnaire.salary_credit_account_id.id, // Ayoub
+                                         'account_id': rec.company_id.salary_credit_account_id.id, # Ayoub
                                          'journal_id': journal.id,
                                          'date': date,
                                          'name': 'Salaire net a payer',
@@ -369,7 +374,8 @@ class HrPayrollMa(models.Model):
             if credit < debit:
                 diff = debit - credit
                 move_line_arrondi = {
-                                         'account_id': dictionnaire.salary_debit_account_id.id,
+                                         #'account_id': dictionnaire.salary_debit_account_id.id, //Ayoub
+                                         'account_id': rec.company_id.salary_debit_account_id.id, # Ayoub
                                          # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
                                          'journal_id': journal.id,
                                          'date': date,
@@ -382,7 +388,8 @@ class HrPayrollMa(models.Model):
             else:
                 diff = credit - debit
                 move_line_arrondi = {
-                                         'account_id': dictionnaire.salary_debit_account_id.id,
+                                         #'account_id': dictionnaire.salary_debit_account_id.id, // Ayoub
+                                         'account_id': rec.company_id.salary_debit_account_id.id,
                                          # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
                                          'journal_id': journal.id,
                                          'date': date,
@@ -652,20 +659,24 @@ class hrPayrollMaBulletin(models.Model):
                         'salaire_net_imposable': salaire_net_imposable,
                         'taux': 0,
                         'ir_net': 0,
-                        'credit_account_id': dictionnaire.credit_account_id.id,
+                        #'credit_account_id': dictionnaire.credit_account_id.id,// Ayoub
+                        'credit_account_id': rec.company_id.credit_account_id.id,# Ayoub
                         'frais_pro': 0,
                         'personnes': 0
                        }
             else:
                 base = 0
                 if rec.normal_hours:
-                    base = rec.normal_hours / (dictionnaire.hour_day or 8)
+                    #base = rec.normal_hours / (dictionnaire.hour_day or 8) // Ayoub
+                    base = rec.normal_hours / (rec.company_id.hour_day or 8) #Ayoub
                 elif rec.working_days:
                     base = rec.working_days
 
                 # Salaire Net Imposable
-                fraispro = sbi * dictionnaire.fraispro / 100
-                plafond = (dictionnaire.plafond * base) / 26
+                #fraispro = sbi * dictionnaire.fraispro / 100 // Ayoub
+                fraispro = sbi * rec.company_id.fraispro / 100 # Ayoub
+                #plafond = (dictionnaire.plafond * base) / 26 // Ayoub
+                plafond = (rec.company_id.plafond * base) / 26 # AYoub
                 if fraispro < plafond:
                     salaire_net_imposable = sbi - fraispro - cotisations
                 else:
@@ -684,7 +695,8 @@ class hrPayrollMaBulletin(models.Model):
                 if bulletin.employee_contract_id.type == 'mensuel' and count_days:
                     coef = 312 / count_days
                 elif bulletin.employee_contract_id.type == 'horaire' and count_hours:
-                    coef = (dictionnaire.hour_month or 191) * 12 / count_hours
+                    #coef = (dictionnaire.hour_month or 191) * 12 / count_hours // Ayoub
+                    coef = (rec.company_id.hour_month or 191) * 12 / count_hours #Ayoub
 
                 new_cumul_net_imp = bulletin.cumul_sni
                 cumul_coef = new_cumul_net_imp * coef
@@ -704,16 +716,19 @@ class hrPayrollMaBulletin(models.Model):
 
                 # IR Net
                 personnes = bulletin.employee_id.chargefam
-                if (ir_brute - (personnes * dictionnaire.charge)) < 0:
+                #if (ir_brute - (personnes * dictionnaire.charge)) < 0:// Ayoub
+                if (ir_brute - (personnes * rec.company_id.charge)) < 0:# Ayoub
                     ir_net = 0
                 else:
-                    ir_net = ir_brute - (personnes * dictionnaire.charge)
+                    # ir_net = ir_brute - (personnes * dictionnaire.charge) // Ayoub
+                    ir_net = ir_brute - (personnes * rec.company_id.charge) # AYoub
 
                 res = {
                     'salaire_net_imposable': salaire_net_imposable,
                     'taux': taux,
                     'ir_net': ir_net,
-                    'credit_account_id': dictionnaire.credit_account_id.id,
+                    # 'credit_account_id': dictionnaire.credit_account_id.id, // Ayoub
+                    'credit_account_id': rec.company_id.credit_account_id.id, #Ayoub
                     'frais_pro': fraispro,
                     'personnes': personnes
                     }
@@ -970,7 +985,8 @@ class hrPayrollMaBulletin(models.Model):
             salaire_net_a_payer = salaire_brute - deduction - res['ir_net'] - cotisations_employee
 
             # Arrondi
-            if dictionnaire['arrondi']:
+            #if dictionnaire['arrondi']:// Ayoub
+            if rec.company_id.arrondi: # Ayoub
                 arrondi = 1-(round(salaire_net_a_payer, 2)-int(salaire_net_a_payer))
                 if arrondi != 1:
                     diff = salaire_net_a_payer-int(salaire_net_a_payer)

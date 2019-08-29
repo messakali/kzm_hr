@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="kzm_res_config_settings_view_form_employee" model="ir.ui.view">
+        <field name="name">kzm.res.config.settings.view.form.inherit.employee</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-string='Employees']" position="inside">
+                <h2>Paramètres</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label for="charge"/>
+                            <div class="text-muted">
+                                Les charges de famille déduites de IR"
+                            </div>
+                             <div class="content-group">
+                                <div class="mt16">
+                                    <field name="charge"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label for="hour_day"/>
+                            <div class="text-muted">
+                                Nbr des heures de travaille par jour
+                            </div>
+                             <div class="content-group">
+                                <div class="mt16">
+                                    <field name="hour_day"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label for="hour_month"/>
+                            <div class="text-muted">
+                               Nbr des heures de travaille par mois
+                            </div>
+                             <div class="content-group">
+                                <div class="mt16">
+                                    <field name="hour_month"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="arrondi"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="arrondi"/>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label for="fraispro"/>
+                            <div class="text-muted">
+
+                            </div>
+                             <div class="content-group">
+                                 <div class="row mt16">
+                                    <label for="fraispro" class="col-md-3 o_light_label"/>
+                                    <field name="fraispro" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+                                 <div class="row mt16">
+                                    <label for="plafond" class="col-md-3 o_light_label"/>
+                                    <field name="plafond" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label for="credit_account_id" string="Impot sur le revenu"/>
+                            <div class="text-muted">
+
+                            </div>
+                             <div class="content-group">
+                                 <div class="row mt16">
+                                    <label for="credit_account_id" class="col-md-3 o_light_label"/>
+                                    <field name="credit_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label for="fraispro"/>
+                            <div class="text-muted">
+
+                            </div>
+                             <div class="content-group">
+                                 <div class="row mt16">
+                                    <label for="journal_id" class="col-md-3 o_light_label"/>
+                                    <field name="journal_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+                                 <div class="row mt16">
+                                    <label for="salary_credit_account_id" class="col-md-3 o_light_label"/>
+                                    <field name="salary_credit_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+                                 <div class="row mt16">
+                                    <label for="salary_debit_account_id" class="col-md-3 o_light_label"/>
+                                    <field name="salary_debit_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label for="salaire_max_logement_social" string="Logement social"/>
+                            <div class="text-muted">
+
+                            </div>
+                             <div class="content-group">
+                                 <div class="row mt16">
+                                    <label for="salaire_max_logement_social" class="col-md-3 o_light_label"/>
+                                    <field name="salaire_max_logement_social" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+                                 <div class="row mt16">
+                                    <label for="superficie_max_logement_social" class="col-md-3 o_light_label"/>
+                                    <field name="superficie_max_logement_social" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+                                 <div class="row mt16">
+                                    <label for="prix_achat_max_logement_social" class="col-md-3 o_light_label"/>
+                                    <field name="prix_achat_max_logement_social" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="has_rubriques"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="has_rubriques"/>
+                            <div class="text-muted">
+                                show the column taxe
+                            </div>
+                        </div>
+                    </div>
+                    <!--div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="kzm_discount"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="kzm_discount"/>
+                            <div class="text-muted">
+                                show the total discount
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="kzm_object"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="kzm_object"/>
+                            <div class="text-muted">
+                                show the quotation object
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="kzm_bank"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="kzm_bank"/>
+                            <div class="text-muted">
+                                show the bank informations
+                            </div>
+                        </div>
+                    </div-->
+                </div>
+                <h2>Settings</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible': [('has_rubriques', '=', True)]}">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label string="Données de la paie" />
+                            <div class="text-muted">
+
+                            </div>
+                             <div class="content-group">
+                                <div class="mt16">
+                                    <button string="Appliquer" type="object" name="generate_data_paie"
+                                             class="oe_highlight" groups="base.group_multi_company"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </xpath>
+        </field>
+    </record>
+
+</odoo>

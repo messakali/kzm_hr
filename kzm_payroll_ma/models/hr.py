@@ -171,7 +171,8 @@ class HrContract(models.Model):
             if rec.type == 'horaire':
                 rec.wage = 0
                 rec.working_days_per_month = 0
-                rec.monthly_hour_number = ids_params.hour_month
+                #rec.monthly_hour_number = ids_params.hour_month // Ayoub
+                rec.monthly_hour_number = rec.company_id.hour_month # Ayoub
 
     @api.one
     @api.constrains('state','date_start')
@@ -213,7 +214,7 @@ class HrContract(models.Model):
 
             liste = objet_ir.search([])
             dictionnaire = rec.employee_id.get_parametre()
-            abattement = personnes * dictionnaire.charge
+            abattement = personnes * rec.company_id.charge
 
             base = 0
             salaire_brute = salaire_base
