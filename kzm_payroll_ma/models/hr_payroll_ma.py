@@ -117,33 +117,33 @@ class HrPayrollMa(models.Model):
                 contract = obj_contract.search([('employee_id', '=', employee.id),
                                                 ('state', 'in', ('pending', 'open'))], order='date_start', limit=1)
 
-                absences = '''  select sum(number_of_days)
-                                from    hr_holidays h
-                                left join hr_holidays_status s on (h.holiday_status_id=s.id)
-                                where date_from >= '%s' and date_to <= '%s'
-                                and employee_id = %s
-                                and state = 'validate'
-                                and s.payed=False''' % (rec.period_id.date_start, rec.period_id.date_end, employee.id)
-                self.env.cr.execute(absences)
-                res = self.env.cr.fetchone()
-                if res[0] is None:
-                    days = 0
-                else:
-                    days = res[0]
-
                 # absences = '''  select sum(number_of_days)
-                #                 from    hr_leave h
-                #                 left join hr_leave_type s on (h.holiday_status_id=s.id)
+                #                 from    hr_holidays h
+                #                 left join hr_holidays_status s on (h.holiday_status_id=s.id)
                 #                 where date_from >= '%s' and date_to <= '%s'
                 #                 and employee_id = %s
                 #                 and state = 'validate'
-                #                 and s.unpaid=True''' % (rec.period_id.date_start, rec.period_id.date_end, employee.id)
+                #                 and s.payed=False''' % (rec.period_id.date_start, rec.period_id.date_end, employee.id)
                 # self.env.cr.execute(absences)
                 # res = self.env.cr.fetchone()
                 # if res[0] is None:
                 #     days = 0
                 # else:
                 #     days = res[0]
+
+                absences = '''  select sum(number_of_days)
+                                from    hr_leave h
+                                left join hr_leave_type s on (h.holiday_status_id=s.id)
+                                where date_from >= '%s' and date_to <= '%s'
+                                and employee_id = %s
+                                and state = 'validate'
+                                and s.unpaid=True''' % (rec.period_id.date_start, rec.period_id.date_end, employee.id)
+                self.env.cr.execute(absences)
+                res = self.env.cr.fetchone()
+                if res[0] is None:
+                    days = 0
+                else:
+                    days = res[0]
 
                 if contract:
                     line = {

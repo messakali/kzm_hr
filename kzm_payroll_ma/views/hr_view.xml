@@ -191,17 +191,17 @@
 		<!--
             Heritage Holiday Type
         -->
-		<record model="ir.ui.view" id="edit_holiday_status_form_inherit">
-			<field name="name">hr.holidays.status.inherit</field>
-			<field name="model">hr.holidays.status</field>
-			<field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-				<field name="limit" position="after">
-					<field name="payed" />
-				</field>
-			</field>
-		</record>
+		<!--<record model="ir.ui.view" id="edit_holiday_status_form_inherit">-->
+			<!--<field name="name">hr.holidays.status.inherit</field>-->
+			<!--<field name="model">hr.holidays.status</field>-->
+			<!--<field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />-->
+			<!--<field name="type">form</field>-->
+			<!--<field name="arch" type="xml">-->
+				<!--<field name="limit" position="after">-->
+					<!--<field name="payed" />-->
+				<!--</field>-->
+			<!--</field>-->
+		<!--</record>-->
 
 		<menuitem parent="" id="menu_ressources_humaines_root" name="Ressources Humaines"  sequence="4"/>
 		<menuitem parent="menu_ressources_humaines_root" id="hr.menu_human_resources_configuration" />

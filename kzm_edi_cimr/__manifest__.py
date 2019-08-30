@@ -8,7 +8,7 @@
     'author': 'KARIZMA CONSEIL',
     'website': 'https://karizma-conseil.com',
     'images': [],
-    'depends': ['kzm_payroll_ma'],
+    'depends': ['kzm_payroll_ma','kzm_base'],
     'data': [
             "security/cimr_security.xml",
             "security/ir.model.access.csv",

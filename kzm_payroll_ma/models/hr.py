@@ -253,7 +253,7 @@ class HrContract(models.Model):
             return True
 
 
-class HRHolidaysStatus(models.Model):
-    _inherit = "hr.holidays.status"
-
-    payed = fields.Boolean(string=u'Payé', default=True)
+# class HRHolidaysStatus(models.Model):
+#     _inherit = "hr.holidays.status"
+#
+#     payed = fields.Boolean(string=u'Payé', default=True)
