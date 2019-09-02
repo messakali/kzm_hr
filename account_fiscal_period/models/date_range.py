@@ -33,13 +33,13 @@ class DateRange(models.Model):
         period_obj = self.env['date.range']
         for fy in self:
             #fy.period_ids.unlink()
-            ds = datetime.strptime(fy.date_start, '%Y-%m-%d')
-            date_stop = datetime.strptime(fy.date_end, '%Y-%m-%d')
+            ds = fy.date_start
+            date_stop = fy.date_end
 
             while ds < date_stop:
                 de = ds + relativedelta(months=interval, days=-1)
                 if date_stop < de:
-                    de = datetime.strptime(fy.date_stop, '%Y-%m-%d')
+                    de = fy.date_stop
                 period_obj.create({
                     'name': ds.strftime('%m/%Y'),
                     'code': ds.strftime('%m/%Y'),

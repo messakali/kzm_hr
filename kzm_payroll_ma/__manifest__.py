@@ -10,6 +10,7 @@
     "description": u"""Gestion de la paie marocaine sous Odoo""",
     "data": [
         "data/rubriques.xml",
+        "data/employee_data.xml",
         "security/hr_payroll_ma_security.xml",
         "security/ir.model.access.csv",
         "wizards/hours_import.xml",

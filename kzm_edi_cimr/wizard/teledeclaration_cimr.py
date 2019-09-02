@@ -20,8 +20,8 @@ class TeledeclarationCimr(models.TransientModel):
             company = rapport_cimr.company_id
             output = ''
             for line in rapport_cimr.rep_cimr_line_ids:
-                birthday_date = datetime.datetime.strptime(line.employee_id.birthday, '%Y-%m-%d').strftime('%d-%m-%Y')
-                date_in = datetime.datetime.strptime(line.employee_id.date, '%Y-%m-%d').strftime('%d-%m-%Y')
+                birthday_date = line.employee_id.birthday
+                date_in = line.employee_id.date
                 contract_id = self.env['hr.contract'].search([('employee_id', '=', line.employee_id.id)])
                 country_ma = self.env.ref('base.ma')
                 nationality = 'M'

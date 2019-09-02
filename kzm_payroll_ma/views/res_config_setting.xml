@@ -201,7 +201,7 @@
                     <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible': [('has_rubriques', '=', True)]}">
                         <div class="o_setting_left_pane"/>
                         <div class="o_setting_right_pane">
-                            <label string="Données de la paie" />
+                            <label for="has_rubriques" string="Données de la paie" />
                             <div class="text-muted">
 
                             </div>

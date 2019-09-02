@@ -737,8 +737,8 @@ class hrPayrollMaBulletin(models.Model):
     def calc_seniority(self, date_embauche, date_paie):
         # date_embauche = str(date_embauche).split('-')
         # date_paie = str(date_paie).split('-')
-        seniority_date = datetime.strptime(date_embauche, '%Y-%m-%d')
-        date_paie = datetime.strptime(date_paie, '%Y-%m-%d')
+        seniority_date = date_embauche
+        date_paie = date_paie
         years = date_paie.year - seniority_date.year
         if date_paie.month < seniority_date.month or (
                 date_paie.month == seniority_date.month and date_paie.day < seniority_date.day):

@@ -135,9 +135,10 @@ class HrEmployee(models.Model):
     @api.model
     def create(self, values):
         if not values.get('matricule'):
-            employee_id = self.env['hr.employee'].search([], order='matricule desc', limit=1)
-            if employee_id and employee_id.matricule and employee_id.matricule.isdigit():
-                values['matricule'] = str(int(employee_id.matricule) + 1).zfill(3)
+            # employee_id = self.env['hr.employee'].search([], order='matricule desc', limit=1)
+            # if employee_id and employee_id.matricule and employee_id.matricule.isdigit():
+            #     values['matricule'] = str(int(employee_id.matricule) + 1).zfill(3)
+            values['matricule'] = self.env['ir.sequence'].next_by_code('hr.employee.matricule')
         return super(HrEmployee, self).create(values)
 
 

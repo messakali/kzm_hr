@@ -141,7 +141,7 @@ class Etat9421(models.Model):
         for rec in self:
             societe = rec.company_id.partner_id
             niv_1 = etree.Element("TraitementEtSalaire")
-            etree.SubElement(niv_1, "identifiantFiscal").text = societe.id_fisc
+            etree.SubElement(niv_1, "identifiantFiscal").text = societe.vat or ''
             etree.SubElement(niv_1, "nom").text = ""
             etree.SubElement(niv_1, "prenom").text = ""
             etree.SubElement(niv_1, "raisonSociale").text = societe.name
@@ -290,7 +290,7 @@ class Etat9421(models.Model):
 
             liste_pp1 = etree.SubElement(niv_1, "listPersonnelExonere")
             for line in rec.etat_line_ids:
-                if line.employee_id.contract_id.type_id == self.env.ref('etat_9421.hr_contract_type_exempt'):
+                if line.employee_id.contract_id.type_id == self.env.ref('kzm_edi_simplir.hr_contract_type_exempt'):
                     liste_pp = etree.SubElement(liste_pp1, "PersonnelExonere")
                     etree.SubElement(liste_pp, "nom").text = str(line.employee_id.name)
                     etree.SubElement(liste_pp, "prenom").text = str(line.employee_id.prenom)
@@ -355,7 +355,7 @@ class Etat9421(models.Model):
 
             liste_pp1 = etree.SubElement(niv_1, "listDoctorants")
             for line in rec.etat_line_ids:
-                if line.employee_id.contract_id.type_id == self.env.ref('etat_9421.hr_contract_type_phd_student'):
+                if line.employee_id.contract_id.type_id == self.env.ref('kzm_edi_simplir.hr_contract_type_phd_student'):
                     liste_pp = etree.SubElement(liste_pp1, "Doctorant")
                     etree.SubElement(liste_pp, "nom").text = str(line.employee_id.name)
                     etree.SubElement(liste_pp, "prenom").text = str(line.employee_id.prenom)
