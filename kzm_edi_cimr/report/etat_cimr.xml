@@ -3,7 +3,7 @@
 	<data>
 
 	<template  id= "etat_cimr_id" >
-    <t t-call= "report.html_container" >
+    <t t-call= "web.html_container" >
     	<t t-foreach= "docs"  t-as= "oc" >
               	<div class="page">
 

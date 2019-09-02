@@ -6,8 +6,8 @@
             string="Etat CIMR"
             model="rapport.cimr"
             report_type="qweb-pdf"
-            file="rapport_cimr.etat_cimr"
-            name="rapport_cimr.etat_cimr_id"
+            file="kzm_edi_cimr.etat_cimr"
+            name="kzm_edi_cimr.etat_cimr_id"
         />
 
      </data>

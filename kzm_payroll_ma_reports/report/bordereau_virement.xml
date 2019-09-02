@@ -12,9 +12,9 @@
                             <td width="60%" style="text-align: center;vertical-align: top;">
                                 <b>A</b><br/>
                                 <b>Monsieur le directeur</b><br/>
-                                <b>DE <span t-field="o.env['hr.payroll_ma.parametres'].search([])[0].banque_virement_paie"/></b><br/>
-                                <b>Agence <span t-field="o.env['hr.payroll_ma.parametres'].search([])[0].agence_virement_paie"/></b><br/>
-                                <b><span t-field="o.env['hr.payroll_ma.parametres'].search([])[0].ville_agence_virement_paie"/></b><br/>
+                                <b>DE <span t-field="o.company_id.banque_virement_paie"/></b><br/>
+                                <b>Agence <span t-field="o.company_id.agence_virement_paie"/></b><br/>
+                                <b><span t-field="o.company_id.ville_agence_virement_paie"/></b><br/>
                             </td>
                         </tr>
                     </table>
@@ -24,7 +24,7 @@
                     </div>
                     <div align="left">
                         Monsieur,<br/>
-                        Par la présente, nous vous prions de bien vouloir virer par le débit de notre compte N° <span t-field="o.env['hr.payroll_ma.parametres'].search([])[0].rib_virement_paie"/> le montant de : <b><span t-field="o.total_net_a_payer_vrt_text"/></b> (<span t-field="o.total_net_a_payer_vrt"/> DHS) détaillé comme suit :
+                        Par la présente, nous vous prions de bien vouloir virer par le débit de notre compte N° <span t-field="o.company_id.rib_virement_paie"/> le montant de : <b><span t-field="o.total_net_a_payer_vrt_text"/></b> (<span t-field="o.total_net_a_payer_vrt"/> DHS) détaillé comme suit :
                     </div>
                     <br/>
                     <table style="border-collapse: collapse;width:100%" >
