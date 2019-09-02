@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 		<!-- Parametres -->
-		<record id="parametres_form" model="ir.ui.view">
+		<!--record id="parametres_form" model="ir.ui.view">
 			<field name="name">hr.payroll_ma.parametres.form</field>
 			<field name="model">hr.payroll_ma.parametres</field>
 			<field name="type">form</field>
@@ -48,7 +48,7 @@
 					<field name="credit_account_id" />
 				</tree>
 			</field>
-		</record>
+		</record-->
 
 		<!-- Ancienneté -->
 		<record model="ir.ui.view" id="anciennete_form">
@@ -186,12 +186,12 @@
 			</field>
 		</record>
 		<!-- Actions -->
-		<record model="ir.actions.act_window" id="parametres_all_act">
+		<!--record model="ir.actions.act_window" id="parametres_all_act">
 			<field name="name">Paramètres</field>
 			<field name="res_model">hr.payroll_ma.parametres</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
-		</record>
+		</record-->
 
 		<record model="ir.actions.act_window" id="anciennete_all_act">
 			<field name="name">Ancienneté</field>
@@ -237,12 +237,12 @@
 		<menuitem action="cotisation_type_all_act" id="cotisation_type_all_mi" parent="payroll_ma_configure_cotisations" />
 		<menuitem action="ir_all_act" id="ir_all_mi" parent="payroll_ma_configure_baremes" />
 		<menuitem action="anciennete_all_act" id="anciennete_all_mi" parent="payroll_ma_configure_baremes" />
-		<menuitem action="parametres_all_act" id="parametres_all_mi" parent="payroll_ma_configure" />
+		<!--menuitem action="parametres_all_act" id="parametres_all_mi" parent="payroll_ma_configure" /-->
 
 		<menuitem id="payroll_ma_bank_configure" parent="hr.menu_human_resources_configuration" name="Banques" action="config_banques"/>
 
 
-		<record id="hr_rubriques_settings" model="ir.ui.view">
+		<!--record id="hr_rubriques_settings" model="ir.ui.view">
             <field name="name">hr config rubriques</field>
             <field name="model">hr.rubriques.settings</field>
             <field name="arch" type="xml">
@@ -282,7 +282,7 @@
 
         <menuitem id="menu_hr_rubriques_settings" name="Settings"
 				  parent="payroll_ma_configure" groups="base.group_multi_company"
-				  sequence="1" action="hr_rubriques_settings_action" />
+				  sequence="1" action="hr_rubriques_settings_action" /-->
 
 		<!-- Menus -->
         <menuitem id="menu_date_range_hr" name="Date ranges"

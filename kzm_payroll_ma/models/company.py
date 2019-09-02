@@ -9,11 +9,11 @@ class KzmResCompany(models.Model):
 
 
     arrondi = fields.Boolean("Arrondi", default=True)
-    charge = fields.Float(string="Charges familiales", help="Les charges de famille déduites de IR")
+    charge = fields.Float(string="Charges familiales", default=30, help="Les charges de famille déduites de IR")
     hour_day = fields.Float(string="Nbr heures par jour", default=8, help="Nbr des heures de travaille par jour")
     hour_month = fields.Float(string="Nbr heures par mois", default=191, help="Nbr des heures de travaille par mois")
-    fraispro = fields.Float(string="Frais Professionnels")
-    plafond = fields.Float(string="Plafond")
+    fraispro = fields.Float(string="Frais Professionnels", default=20)
+    plafond = fields.Float(string="Plafond",default=2500)
     credit_account_id = fields.Many2one('account.account', string=u'Compte de crédit IR')
     journal_id = fields.Many2one('account.journal', string=u'Journal')
     salary_credit_account_id = fields.Many2one('account.account', string=u'Compte de crédit')

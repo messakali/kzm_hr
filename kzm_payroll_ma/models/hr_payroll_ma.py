@@ -13,10 +13,11 @@ class HrPayrollMa(models.Model):
     _order = "number"
 
     def _get_journal(self):
-        params = self.env['hr.payroll_ma.parametres']
-        company_id = self.env['res.users'].browse(self.env.uid).company_id
-        parametres = params.search([('company_id', '=', company_id.id)], limit=1)
-        journal_id = parametres.journal_id
+        #params = self.env['hr.payroll_ma.parametres']
+        #company_id = self.env['res.users'].browse(self.env.uid).company_id
+        #parametres = params.search([('company_id', '=', company_id.id)], limit=1)
+        # journal_id = parametres.journal_id// Ayoub
+        journal_id = self.company_id.journal_id
         # journal_id = self.env.ref('account.salary_journal')
         return journal_id.id
 
@@ -174,7 +175,7 @@ class HrPayrollMa(models.Model):
     @api.multi
     def action_move_create(self):
         for rec in self:
-            params = self.env['hr.payroll_ma.parametres']
+            #params = self.env['hr.payroll_ma.parametres']
             #dictionnaire = params.search([('company_id', '=', rec.company_id.id)],limit=1)// Ayoub
             date = rec.date_salary or datetime.now().date()
             journal = rec.journal_id
@@ -638,10 +639,10 @@ class hrPayrollMaBulletin(models.Model):
                 self.working_days = 26 - abs(days)
                 self.period_id = self.period_id.id
 
-    def get_parametere(self):
-        params = self.env['hr.payroll_ma.parametres']
-        ids_params = params.search([('company_id', '=', self.company_id.id)], limit=1)
-        return ids_params
+    # def get_parametere(self):
+    #     params = self.env['hr.payroll_ma.parametres']
+    #     ids_params = params.search([('company_id', '=', self.company_id.id)], limit=1)
+    #     return ids_params
 
     # Fonction pour la calcul de IR
     @api.multi
@@ -653,7 +654,7 @@ class hrPayrollMaBulletin(models.Model):
             bulletin = rec
             coef = 0
 
-            dictionnaire = rec.get_parametere()
+            #dictionnaire = rec.get_parametere()
             if not bulletin.employee_contract_id.ir:
                 res = {
                         'salaire_net_imposable': salaire_net_imposable,
@@ -757,7 +758,7 @@ class hrPayrollMaBulletin(models.Model):
     @api.multi
     def compute_all_lines(self):
         for rec in self:
-            dictionnaire = self.get_parametere()
+            #dictionnaire = self.get_parametere()
             id_bulletin = rec.id
             bulletin = rec
             if not bulletin.period_id:

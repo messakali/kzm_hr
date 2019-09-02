@@ -184,18 +184,16 @@ class ResConfigSettings(models.TransientModel):
         i = 1
         if self.has_parametre:
             raise UserError('Les paramètres  de cette société ont été déjâ générés')
-        parametre_id = self.env.ref('kzm_payroll_ma.parametres_data8')
-        if parametre_id:
-            #parametre = self.env['hr.payroll_ma.parametres'].sudo().browse(parametre_id.id)
-            vals = {
-                'charge': parametre_id.charge,
-                'fraispro': parametre_id.fraispro,
-                'plafond': parametre_id.plafond,
-                'company_id': self.company_id.id,
-            }
-            #param_id = self.env['hr.payroll_ma.parametres'].create(vals)
-            company = self.env['res.company'].search([('id', '=', self.company_id.id)])
-            company.write(vals)
+        #parametre_id = self.env.ref('kzm_payroll_ma.parametres_data8')
+
+        #if parametre_id:
+        #parametre = self.env['hr.payroll_ma.parametres'].sudo().browse(parametre_id.id)
+        vals = {
+
+        }
+        #param_id = self.env['hr.payroll_ma.parametres'].create(vals)
+        company = self.env['res.company'].search([('id', '=', self.company_id.id)])
+        company.write(vals)
 
         #return param_id
 

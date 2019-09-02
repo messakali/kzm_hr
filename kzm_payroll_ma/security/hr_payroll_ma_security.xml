@@ -77,13 +77,13 @@
         <field eval="True" name="active"/>
     </record>
 
-    <record id="hr_payroll_ma_parametres_multi_company_rule" model="ir.rule">
+    <!--record id="hr_payroll_ma_parametres_multi_company_rule" model="ir.rule">
         <field name="name">hr payroll parametres multi company rule</field>
         <field name="model_id" ref="model_hr_payroll_ma_parametres"/>
         <field eval="True" name="global"/>
         <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
         <field eval="True" name="active"/>
-    </record>
+    </record-->
 
     <record id="hr_payroll_ma_rubrique_multi_company_rule" model="ir.rule">
         <field name="name">hr payroll rubrique multi company rule</field>

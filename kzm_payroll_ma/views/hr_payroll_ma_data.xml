@@ -196,11 +196,11 @@
 			<field name="taux">25</field>
 		</record>
 
-		<record model="hr.payroll_ma.parametres" id="parametres_data8">
+		<!--record model="res.company" id="parametres_data8">
 			<field name="charge">30</field>
 			<field name="fraispro">20</field>
 			<field name="plafond">2500</field>
-		</record>
+		</record-->
 
 		<record id="salary_journal" model="account.journal">
 			<field name="name">Paie</field>

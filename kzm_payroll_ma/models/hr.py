@@ -80,9 +80,9 @@ class HrEmployee(models.Model):
                         rec.taux_anciennete = tranche.taux
                         break
 
-    def get_parametre(self):
-        params = self.env['hr.payroll_ma.parametres']
-        return params.search([], limit=1)
+    # def get_parametre(self):
+    #     params = self.env['hr.payroll_ma.parametres']
+    #     return params.search([], limit=1)
 
     # Contrainte sur logement social
     @api.one
@@ -90,12 +90,12 @@ class HrEmployee(models.Model):
     def _check_param_logement_social(self):
         if self.type_logement == 'social':
 
-            dictionnaire = self.get_parametre()
+            #dictionnaire = self.get_parametre()
             # On vérifie la superficie
-            if self.superficie_logement > dictionnaire['superficie_max_logement_social']:
+            if self.superficie_logement > self.company_id.superficie_max_logement_social:
                 raise ValidationError(u"La superficie indiquée n'est pas conforme aux normes du logement social")
             # On vérifie le prix d'acquisition
-            if self.prix_acquisition_logement > dictionnaire['prix_achat_max_logement_social']:
+            if self.prix_acquisition_logement > self.company_id.prix_achat_max_logement_social:
                 raise ValidationError(u"Le prix d'acquisition n'est pas conforme aux normes du logement social")
 
     # contrainte sur le RIB
@@ -162,8 +162,8 @@ class HrContract(models.Model):
     @api.multi
     @api.onchange('type')
     def onchange_type(self):
-        params = self.env['hr.payroll_ma.parametres']
-        ids_params = params.search([('company_id', '=', self.company_id.id)], limit=1)
+        #params = self.env['hr.payroll_ma.parametres']
+        #ids_params = params.search([('company_id', '=', self.company_id.id)], limit=1)
         for rec in self:
             if rec.type == 'mensuel':
                 rec.hour_salary = 0
@@ -210,11 +210,11 @@ class HrContract(models.Model):
             salaire_base = rec.wage
             cotisation = rec.cotisation
             personnes = rec.employee_id.chargefam
-            params = self.env['hr.payroll_ma.parametres']
+            #params = self.env['hr.payroll_ma.parametres']
             objet_ir = self.env['hr.payroll_ma.ir']
 
             liste = objet_ir.search([])
-            dictionnaire = rec.employee_id.get_parametre()
+            #dictionnaire = rec.employee_id.get_parametre()
             abattement = personnes * rec.company_id.charge
 
             base = 0
@@ -230,11 +230,11 @@ class HrContract(models.Model):
                     else : base = salaire_brute
 
                     cotisations_employee += base * cot.tauxsalarial / 100
-                fraispro = salaire_brute * dictionnaire.fraispro / 100
-                if fraispro < dictionnaire.plafond:
+                fraispro = salaire_brute * rec.company_id.fraispro / 100
+                if fraispro < rec.company_id.plafond:
                     salaire_net_imposable = salaire_brute - fraispro - cotisations_employee
                 else :
-                    salaire_net_imposable = salaire_brute - dictionnaire.plafond - cotisations_employee
+                    salaire_net_imposable = salaire_brute - rec.company_id.plafond - cotisations_employee
                 for tranche in liste:
                     if(salaire_net_imposable >= tranche.debuttranche/12) and (salaire_net_imposable < tranche.fintranche/12):
                         taux = (tranche.taux)
