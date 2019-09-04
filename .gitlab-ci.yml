@@ -9,6 +9,7 @@ stages:
 tests:
   stage: build
   script:
+  - dropdb --if-exists $CI_BUILD_REF
   - virtualenv env
   - source env/bin/activate
   - whoami
