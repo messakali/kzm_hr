@@ -12,8 +12,7 @@ tests:
   - dropdb --if-exists $CI_BUILD_REF
   - python3 -m venv env
   - source env/bin/activate
-  - PROJECT_MODULES=$(ls -m ./ | tr -s " " | tr -d '\n')
-  - echo $PROJECT_MODULES
+  - PROJECT_MODULES=$(ls -m ./ | tr -d '\n')
   - git clone --quiet --depth=1 --branch=$ODOO_VERSION https://github.com/odoo/odoo.git env/odoo
   - git clone --quiet --depth=1 --branch=master http://r.rouichi:1kzmreda1@gitlab.karizma-conseil.com/root/kzm_accounting.git  env/kzm/kzm_accounting
   - rm -rf env/odoo/.git
