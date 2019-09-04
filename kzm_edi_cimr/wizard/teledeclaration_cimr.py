@@ -7,6 +7,7 @@ import datetime
 
 class TeledeclarationCimr(models.TransientModel):
     _name = 'teledeclaration.cimr'
+    _description = 'Teledeclaration Cimr'
 
     file_export = fields.Binary(string=u'Fichier CIMR', readonly=True)
     name = fields.Char('Filename', readonly=True)

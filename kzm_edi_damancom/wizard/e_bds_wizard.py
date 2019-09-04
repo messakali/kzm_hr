@@ -7,6 +7,7 @@ import base64
 
 class EBds(models.TransientModel):
     _name = 'e_bds'
+    _description = 'e_bds'
 
     period_id = fields.Many2one('date.range', string=u'Période',
                                 domain="[('type_id.fiscal_period', '=', True)]",  required=True)

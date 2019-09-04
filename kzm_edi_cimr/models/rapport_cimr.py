@@ -5,6 +5,7 @@ from odoo import fields, models,api
 
 class RapportCimr(models.Model):
         _name = 'rapport.cimr'
+        _description = 'Rapport Cimr'
 
         name = fields.Char(string=u'Intitulé rapport', default="Etat CIMR")
         company_id = fields.Many2one('res.company', u'Societé', default=lambda self: self.env.user.company_id,
@@ -113,6 +114,7 @@ class RapportCimr(models.Model):
 
 class RapportCimrLine(models.Model):
         _name = 'rapport.cimr.line'
+        _description = 'Rapport Cimr Line'
 
         # détail ligne
         employee_id = fields.Many2one('hr.employee', string=u'Employé')
@@ -136,9 +138,6 @@ class RapportCimrLine(models.Model):
         id_rep_cimr = fields.Many2one('rapport.cimr')
 
         @api.multi
-        @api.depends('base_calcul', 'part_salariale', 'part_patronale',
-                     'cum_base_calcul', 'cum_part_salariale',
-                     'cum_part_patronale')
         def get_trimestre_val(self):
             for res in self:
                 # On détermine le dernier mois du trimestre

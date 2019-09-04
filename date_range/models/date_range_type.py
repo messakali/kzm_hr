@@ -5,6 +5,7 @@ from odoo import api, fields, models
 
 class DateRangeType(models.Model):
     _name = "date.range.type"
+    _description = "Date Range Type"
 
     @api.model
     def _default_company(self):
@@ -18,7 +19,7 @@ class DateRangeType(models.Model):
         help="The active field allows you to hide the date range without "
         "removing it.", default=True)
     company_id = fields.Many2one(
-        comodel_name='res.company', string='Company', select=1,
+        comodel_name='res.company', string='Company', index=True,
         default=_default_company)
 
     _sql_constraints = [

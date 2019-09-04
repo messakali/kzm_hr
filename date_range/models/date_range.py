@@ -7,6 +7,7 @@ from odoo.exceptions import ValidationError
 
 class DateRange(models.Model):
     _name = "date.range"
+    _description = "Date Range"
     _order = "type_name,date_start"
 
     @api.model
@@ -17,11 +18,11 @@ class DateRange(models.Model):
     date_start = fields.Date(string='Start date', required=True)
     date_end = fields.Date(string='End date', required=True)
     type_id = fields.Many2one(
-        comodel_name='date.range.type', string='Type', select=1, required=True)
+        comodel_name='date.range.type', string='Type', index=True, required=True)
     type_name = fields.Char(
         string='Type', related='type_id.name', readonly=True, store=True)
     company_id = fields.Many2one(
-        comodel_name='res.company', string='Company', select=1,
+        comodel_name='res.company', string='Company', index=True,
         default=_default_company)
     active = fields.Boolean(
         help="The active field allows you to hide the date range without "

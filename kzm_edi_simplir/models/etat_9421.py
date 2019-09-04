@@ -23,6 +23,7 @@ class HrEmployee(models.Model):
 
 class Etat9421(models.Model):
     _name = 'etat.9421'
+    _description = 'etat 9421'
 
     @api.model
     def get_company(self):
@@ -514,6 +515,7 @@ class Etat9421(models.Model):
 
 class Etat9421Line(models.Model):
     _name = 'etat.9421.line'
+    _description = 'etat 9421 line'
     _order = 'matricule'
 
     id_etat = fields.Many2one('etat.9421')

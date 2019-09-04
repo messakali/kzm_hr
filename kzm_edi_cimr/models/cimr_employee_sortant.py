@@ -24,6 +24,7 @@ class CimrEmployeeSortant(models.Model):
 
 class CimrEmployeeSortantLine(models.Model):
     _name = 'cimr.employee.sortant.line'
+    _description = 'Cimr Employee Sortant Line'
 
     cimr_sortant_id = fields.Many2one('cimr.employee.sortant', u'Cimr employee sortant')
     employee_id = fields.Many2one('hr.employee', string=u'Employé', required=True)

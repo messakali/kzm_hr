@@ -17,6 +17,7 @@ class EBdsSortant(models.Model):
 
 class EBdsSortantLine(models.Model):
     _name = "e_bds.sortant.line"
+    _description = "e_bds Sortant Line"
 
     employee_id = fields.Many2one('hr.employee', string=u'Employé', required=True)
     situation = fields.Selection(selection=(('SO', 'Sortant'),

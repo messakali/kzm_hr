@@ -7,6 +7,7 @@ import xlrd
 
 class Wizard_Hours(models.TransientModel):
     _name = 'payroll.hours.import.wizard'
+    _description = 'Payroll Hours Import Wizard'
 
     file_id = fields.Binary(string="Fichier",required=True)
 
