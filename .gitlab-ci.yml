@@ -14,7 +14,7 @@ tests:
   - source env/bin/activate
   - PROJECT_MODULES=$(ls -m ./ | tr -d '\n')
   - git clone --quiet --depth=1 --branch=$ODOO_VERSION https://github.com/odoo/odoo.git env/odoo
-  - git clone --quiet --depth=1 --branch=master http://r.rouichi:1kzmreda1@gitlab.karizma-conseil.com/root/kzm_accounting.git  env/kzm/kzm_accounting
+  - git clone --quiet --depth=1 --branch=master git@gitlab.karizma-conseil.com:root/kzm_accounting.git env/kzm/kzm_accounting
   - rm -rf env/odoo/.git
   - pip3 install -r requirements.txt
   - createdb --encoding=UTF8 --locale=en_US.UTF-8 --template=template0 $CI_BUILD_REF
