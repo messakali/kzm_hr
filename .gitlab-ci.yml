@@ -1,6 +1,6 @@
 variables:
   PROJECT_MODULES: "account_fiscal_period,account_fiscal_year,date_range,kzm_edi_simplir,kzm_payroll_ma,kzm_payroll_ma_reports,partner_extend,kzm_edi_cimr,kzm_edi_damancom"
-  ODOO_VERSION: "11.0"
+  ODOO_VERSION: "12.0"
 
 stages:
   - build
@@ -10,6 +10,7 @@ tests:
   script:
   - virtualenv env
   - source env/bin/activate
+  - whoami
   - pip install -r requirements.txt
   - git clone --quiet --depth=1 --branch=$ODOO_VERSION https://github.com/odoo/odoo.git env/odoo
   - git clone --quiet --depth=1 --branch=$ODOO_VERSION http://r.rouichi:1kzmreda1@gitlab.karizma-conseil.com/root/kzm_accounting.git  env/kzm/kzm_accounting
