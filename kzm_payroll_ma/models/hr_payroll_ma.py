@@ -12,21 +12,19 @@ class HrPayrollMa(models.Model):
     _description = 'Saisie des bulletins'
     _order = "number"
 
+    @api.multi
     def _get_journal(self):
-        #params = self.env['hr.payroll_ma.parametres']
-        #company_id = self.env['res.users'].browse(self.env.uid).company_id
-        #parametres = params.search([('company_id', '=', company_id.id)], limit=1)
-        # journal_id = parametres.journal_id// Ayoub
-        journal_id = self.company_id.journal_id
-        # journal_id = self.env.ref('account.salary_journal')
-        return journal_id.id
+        company_id = self.company_id.journal_id
+        if not company_id:
+            company_id = self.env['res.company']._company_default_get()
+        return company_id.journal_id.id
 
     name = fields.Char(string='Description', required=True)
     number = fields.Char(string=u'Code', readonly=True)
     date_start = fields.Date(string=u'Date début')
     date_end = fields.Date(string=u'Date fin')
     date_salary = fields.Date(string='Date', states={'open': [('readonly', True)], 'close': [('readonly', True)]})
-    company_id = fields.Many2one('res.company', string=u'Société', default=lambda self: self.env.user.company_id, copy=False)
+    company_id = fields.Many2one('res.company', string=u'Société', default=lambda self: self.env['res.company']._company_default_get(), copy=False)
     period_id = fields.Many2one('date.range', string=u'Période', domain=[('type_id.fiscal_period', '=', True)],
                                 required=True, states={'draft': [('readonly', False)]})
     bulletin_line_ids = fields.One2many('hr.payroll_ma.bulletin', 'id_payroll_ma',
