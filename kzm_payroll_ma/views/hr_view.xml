@@ -150,7 +150,7 @@
 		                <field name="phone_home"/>  		                            
 		               </group>
 		            </page>
-					 <page string="Prêt logement">
+					 <page string="Prêt logement" groups="kzm_payroll_ma.group_hr_payroll_manager">
 						 <group>
 							<group string="Infos logement" >
 								<field name="type_logement"/>
@@ -163,6 +163,9 @@
 						 </group>
 		            </page>
 		        </notebook>
+				<xpath expr="//page[@name='hr_settings']" position="attributes">
+					<attribute name="groups">kzm_payroll_ma.group_hr_payroll_manager</attribute>
+				</xpath>
 
 				<xpath expr="//div[@name='button_box']" position="inside">
                         <button name="%(act_hr_employee_2_payslips)d"

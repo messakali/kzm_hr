@@ -18,16 +18,15 @@
         <field name="category_id" ref="category_payroll"/>
     </record>
 
-    <record model="ir.module.category" id="category_payroll_settings">
-        <field name="name">Gestion de paie- configuration</field>
-        <field name="description">Gestion de paie</field>
-    </record>
-
     <record id="group_hr_payroll_settings" model="res.groups">
-        <field name="name">Payroll_ma / settings</field>
-        <field name="category_id" ref="category_payroll_settings"/>
-
+        <field name="name">Admin</field>
+        <field name="implied_ids" eval="[(4, ref('group_hr_payroll_manager'))]"/>
+        <field name="category_id" ref="category_payroll"/>
    </record>
+
+
+
+
 
     <record id="hr_multi_company_rule" model="ir.rule">
         <field name="name">hr employee multi company rule</field>
