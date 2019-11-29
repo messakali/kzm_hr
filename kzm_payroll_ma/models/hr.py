@@ -149,7 +149,8 @@ class HrContract(models.Model):
     hour_salary = fields.Float(u'Salaire Horaire')
     monthly_hour_number = fields.Float(u'Nombre Heures par mois')
     ir = fields.Boolean(u'IR?')
-    cotisation = fields.Many2one('hr.payroll_ma.cotisation.type', string=u'Type cotisation', required=True)
+    cotisation = fields.Many2one('hr.payroll_ma.cotisation.type', string=u'Type cotisation',
+                                 company_dependent=True, required=True)
     rubrique_ids = fields.One2many('hr.payroll_ma.ligne_rubrique', 'id_contract', string='Rubriques')
     # actif = fields.Boolean(string="Actif", default=True)
     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,

@@ -1088,7 +1088,7 @@ class HrLigneRubrique(models.Model):
             res = [(r.id, r.name) for r in res]
             return res
 
-    rubrique_id = fields.Many2one('hr.payroll_ma.rubrique', string='Rubrique', selection=_sel_rubrique)
+    rubrique_id = fields.Many2one('hr.payroll_ma.rubrique', company_dependent=True, string='Rubrique', selection=_sel_rubrique)
     id_contract = fields.Many2one('hr.contract', string=u'Contrat', ondelete='cascade')
     montant = fields.Float(string='Montant')
     taux = fields.Float(string='Taux')

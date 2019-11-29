@@ -11,7 +11,7 @@ class WizardRub(models.TransientModel):
     _description = 'Payroll Rub Import Wizard'
 
     file_id = fields.Binary(string="Fichiers",required=True)
-    rub_id = fields.Many2one(comodel_name='hr.payroll_ma.rubrique',string='Rubrique:',required=True)
+    rub_id = fields.Many2one(comodel_name='hr.payroll_ma.rubrique',string='Rubrique:', company_dependent=True, required=True)
 
     @api.multi
     def action_add_rub(self):
