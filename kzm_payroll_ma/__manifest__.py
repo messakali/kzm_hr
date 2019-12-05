@@ -6,7 +6,7 @@
     "author": "KARIZMA CONSEIL",
     "website": "https://karizma-conseil.com",
     "category": "HR",
-    "depends": ["base", "hr", "hr_contract","hr_holidays","account","account_fiscal_period"],
+    "depends": ["base", "hr", "hr_contract","account","account_fiscal_period"],
     "description": u"""Gestion de la paie marocaine sous Odoo""",
     "data": [
         "data/rubriques.xml",

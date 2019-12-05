@@ -129,26 +129,26 @@ class HrPayrollMa(models.Model):
                 #     days = 0
                 # else:
                 #     days = res[0]
-
-                absences = '''  select sum(number_of_days)
-                                from    hr_leave h
-                                left join hr_leave_type s on (h.holiday_status_id=s.id)
-                                where date_from >= '%s' and date_to <= '%s'
-                                and employee_id = %s
-                                and state = 'validate'
-                                and s.unpaid=True''' % (rec.period_id.date_start, rec.period_id.date_end, employee.id)
-                self.env.cr.execute(absences)
-                res = self.env.cr.fetchone()
-                if res[0] is None:
-                    days = 0
-                else:
-                    days = res[0]
+                #
+                # absences = '''  select sum(number_of_days)
+                #                 from    hr_leave h
+                #                 left join hr_leave_type s on (h.holiday_status_id=s.id)
+                #                 where date_from >= '%s' and date_to <= '%s'
+                #                 and employee_id = %s
+                #                 and state = 'validate'
+                #                 and s.unpaid=True''' % (rec.period_id.date_start, rec.period_id.date_end, employee.id)
+                # self.env.cr.execute(absences)
+                # res = self.env.cr.fetchone()
+                # if res[0] is None:
+                #     days = 0
+                # else:
+                #     days = res[0]
 
                 if contract:
                     line = {
                             'employee_id': employee.id,
                             'employee_contract_id': contract.id,
-                            'working_days': contract.working_days_per_month + days,
+                            'working_days': contract.working_days_per_month,
                             'normal_hours': contract.monthly_hour_number,
                             'hour_base': contract.hour_salary,
                             'salaire_base': contract.wage,
@@ -617,25 +617,26 @@ class hrPayrollMaBulletin(models.Model):
             if not self.employee_id.contract_id:
                 return True
             else:
-                sql = '''select sum(number_of_days) 
-                        from    hr_leave h
-                                left join hr_leave_type s on (h.holiday_status_id=s.id)
-                        where date_from >= '%s' and date_to <= '%s'
-                              and employee_id = %s
-                              and state = 'validate'
-                              and s.unpaid=True''' % (self.period_id.date_start, self.period_id.date_end, self.employee_id.id)
-                self.env.cr.execute(sql)
-                res = self.env.cr.fetchone()
-                if res[0] is None:
-                    days = 0
-                else:
-                    days = res[0]
+                # sql = '''select sum(number_of_days)
+                #         from    hr_leave h
+                #                 left join hr_leave_type s on (h.holiday_status_id=s.id)
+                #         where date_from >= '%s' and date_to <= '%s'
+                #               and employee_id = %s
+                #               and state = 'validate'
+                #               and s.unpaid=True''' % (self.period_id.date_start, self.period_id.date_end, self.employee_id.id)
+                # self.env.cr.execute(sql)
+                # res = self.env.cr.fetchone()
+                # if res[0] is None:
+                #     days = 0
+                # else:
+                #     days = res[0]
                 self.employee_contract_id = self.employee_id.contract_id.id
                 self.salaire_base = self.employee_id.contract_id.wage
                 self.hour_base = self.employee_id.contract_id.hour_salary
                 self.normal_hours = self.employee_id.contract_id.monthly_hour_number
-                self.working_days = 26 - abs(days)
+                self.working_days = 26
                 self.period_id = self.period_id.id
+
 
     # def get_parametere(self):
     #     params = self.env['hr.payroll_ma.parametres']
