@@ -1081,15 +1081,15 @@ class HrLigneRubrique(models.Model):
     _description = "Ligne Rubrique"
     _order = 'date_start'
 
-    @api.multi
-    def _sel_rubrique(self, cr, uid, context=None):
-        for rec in self:
-            obj = self.env['hr.payroll_ma.rubrique']
-            res = obj.search([])
-            res = [(r.id, r.name) for r in res]
-            return res
+    # @api.multi
+    # def _sel_rubrique(self, cr, uid, context=None):
+    #     for rec in self:
+    #         obj = self.env['hr.payroll_ma.rubrique']
+    #         res = obj.search([])
+    #         res = [(r.id, r.name) for r in res]
+    #         return res
 
-    rubrique_id = fields.Many2one('hr.payroll_ma.rubrique', company_dependent=True, string='Rubrique', selection=_sel_rubrique)
+    rubrique_id = fields.Many2one('hr.payroll_ma.rubrique', string='Rubrique',store=True)
     id_contract = fields.Many2one('hr.contract', string=u'Contrat', ondelete='cascade')
     montant = fields.Float(string='Montant')
     taux = fields.Float(string='Taux')

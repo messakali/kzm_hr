@@ -67,7 +67,9 @@
                                 <td style="border-bottom: 2px solid black;border-right: 2px solid black;text-align: left;"><span align="right" t-field="o.employee_contract_id.wage" /></td>
                             </tr>
                             <tr>
-                                <td style="border-bottom: 2px solid black;border-left: 2px solid black;text-align: left;" colspan="6"><strong>Nombre de jours de congés restants:</strong> <span t-field="o.employee_id.remaining_leaves"/></td>
+                                <td style="border-bottom: 2px solid black;border-left: 2px solid black;text-align: left;" colspan="6"><strong>Nombre de jours de congés restants:</strong>
+                                    <!--<span t-field="o.employee_id.remaining_leaves"/>-->
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -317,9 +319,10 @@
                     </tr>
                 </table>
             </div>
-             <div align="left">
-                 <h4><strong>Signature :</strong></h4>
-             </div>
+            <br/>
+            <div align="right">
+                <h4><strong>Signature :</strong></h4>
+            </div>
 </div>
 </t>
 </t>
