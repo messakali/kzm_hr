@@ -206,7 +206,8 @@
 			<!--</field>-->
 		<!--</record>-->
 
-		<menuitem parent="" id="menu_ressources_humaines_root" name="Ressources Humaines"  sequence="4"/>
+		<menuitem parent="" id="menu_ressources_humaines_root" name="Ressources Humaines"  sequence="4"
+            web_icon="kzm_payroll_ma,static/description/icon2.png"/>
 		<menuitem parent="menu_ressources_humaines_root" id="hr.menu_human_resources_configuration" />
 		<menuitem parent="menu_ressources_humaines_root" id="hr.menu_hr_root" name="Ressources Humaines"  sequence="4"/>
 		<menuitem parent="hr.menu_human_resources_configuration" name="Postes" id="menu_job_id" action="hr.action_hr_job" sequence="4"/>

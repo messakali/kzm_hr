@@ -25,7 +25,7 @@
                          </tr>
                         </table>
                         <br/>
-                        <table style="border: 2px solid black" class="table table-condensed mt32">
+                        <table width="100%" style="border: 2px solid black">
                             <tr>
                                 <td style="border-top: 2px solid black;border-left: 2px solid black;text-align: left;"><strong>Matricule : </strong></td>
                                 <td><span t-field="o.employee_id.matricule"/></td>
@@ -320,8 +320,8 @@
                 </table>
             </div>
             <br/>
-            <div align="right">
-                <h4><strong>Signature :</strong></h4>
+            <div class="col-3 offset-9">
+                <h5><strong>Signature :</strong></h5>
             </div>
 </div>
 </t>
