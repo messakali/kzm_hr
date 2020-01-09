@@ -162,6 +162,7 @@ class Etat9421(models.Model):
                 adresse = adresse+', '+societe.zip.encode('utf8').decode('utf8',errors='xmlcharrefreplace') or ''
             if societe.country_id:
                 adresse = adresse+', '+societe.country_id.name.encode('utf8').decode('utf8',errors='xmlcharrefreplace') or ''
+            print("adresse  : ",adresse)
             etree.SubElement(niv_1, "adresse").text = adresse
             etree.SubElement(niv_1, "numeroCIN").text = ""
             etree.SubElement(niv_1, "numeroCNSS").text = str(societe.cnss)
