@@ -10,19 +10,28 @@ class ResConfigSettings(models.TransientModel):
 
     """***********************Paramétre***********************"""
     arrondi = fields.Boolean("Arrondi", related="company_id.arrondi", readonly=False)
-    charge = fields.Float(string="Charges familiales", related="company_id.charge",help="Les charges de famille déduites de IR", readonly=False)
-    hour_day = fields.Float(string="Nbr heures par jour",related="company_id.hour_day", help="Nbr des heures de travaille par jour", readonly=False)
-    hour_month = fields.Float(string="Nbr heures par mois",related="company_id.hour_month", help="Nbr des heures de travaille par mois", readonly=False)
-    fraispro = fields.Float(string="Frais Professionnels",related="company_id.fraispro", readonly=False)
-    plafond = fields.Float(string="Plafond", related="company_id.plafond",readonly=False)
-    credit_account_id = fields.Many2one('account.account',related="company_id.credit_account_id", string=u'Compte de crédit IR', readonly=False)
-    journal_id = fields.Many2one('account.journal',related="company_id.journal_id", string=u'Journal', readonly=False)
-    salary_credit_account_id = fields.Many2one('account.account', related="company_id.salary_credit_account_id",string=u'Compte de crédit', readonly=False)
-    salary_debit_account_id = fields.Many2one('account.account', related="company_id.salary_debit_account_id",string=u'Compte de débit', readonly=False)
+    charge = fields.Float(string="Charges familiales", related="company_id.charge",
+                          help="Les charges de famille déduites de IR", readonly=False)
+    hour_day = fields.Float(string="Nbr heures par jour", related="company_id.hour_day",
+                            help="Nbr des heures de travaille par jour", readonly=False)
+    hour_month = fields.Float(string="Nbr heures par mois", related="company_id.hour_month",
+                              help="Nbr des heures de travaille par mois", readonly=False)
+    fraispro = fields.Float(string="Frais Professionnels", related="company_id.fraispro", readonly=False)
+    plafond = fields.Float(string="Plafond", related="company_id.plafond", readonly=False)
+    credit_account_id = fields.Many2one('account.account', related="company_id.credit_account_id",
+                                        string=u'Compte de crédit IR', readonly=False)
+    journal_id = fields.Many2one('account.journal', related="company_id.journal_id", string=u'Journal', readonly=False)
+    salary_credit_account_id = fields.Many2one('account.account', related="company_id.salary_credit_account_id",
+                                               string=u'Compte de crédit', readonly=False)
+    salary_debit_account_id = fields.Many2one('account.account', related="company_id.salary_debit_account_id",
+                                              string=u'Compte de débit', readonly=False)
     #   analytic_account_id = fields.Many2one('account.analytic.account', string='Compte analytique')
-    salaire_max_logement_social = fields.Float("Salaire max", related="company_id.salaire_max_logement_social", readonly=False)
-    superficie_max_logement_social = fields.Float(u"Superficie max (m²)", related="company_id.superficie_max_logement_social", readonly=False)
-    prix_achat_max_logement_social = fields.Float("Prix d'achat max",related="company_id.prix_achat_max_logement_social",  readonly=False)
+    salaire_max_logement_social = fields.Float("Salaire max", related="company_id.salaire_max_logement_social",
+                                               readonly=False)
+    superficie_max_logement_social = fields.Float(u"Superficie max (m²)",
+                                                  related="company_id.superficie_max_logement_social", readonly=False)
+    prix_achat_max_logement_social = fields.Float("Prix d'achat max",
+                                                  related="company_id.prix_achat_max_logement_social", readonly=False)
 
     """***********************Settings***********************"""
 
@@ -44,8 +53,6 @@ class ResConfigSettings(models.TransientModel):
 
     is_generated = fields.Boolean()
 
-
-
     @api.depends('company_id')
     def compute_params(self):
         if self.company_id:
@@ -54,7 +61,7 @@ class ResConfigSettings(models.TransientModel):
             self.has_chart_of_accounts = len(company.chart_template_id) > 0 or False
             count_rubrique = self.env['hr.payroll_ma.rubrique'].search_count([('company_id', '=', company.id)])
             count_cotisation = self.env['hr.payroll_ma.cotisation'].search_count([('company_id', '=', company.id)])
-            #count_parametre = self.env['hr.payroll_ma.parametres'].search_count([('company_id', '=', company.id)])
+            # count_parametre = self.env['hr.payroll_ma.parametres'].search_count([('company_id', '=', company.id)])
             count_journal = self.env['account.journal'].search_count(
                 [('company_id', '=', company.id), ('code', '=', 'Paie')])
             if count_rubrique > 0:
@@ -77,13 +84,11 @@ class ResConfigSettings(models.TransientModel):
             else:
                 self.has_journal = False
 
-    @api.multi
     def get_account(self, code, company_id):
         if self.company_id and code:
             return self.env['account.account'].search([('code', 'like', code),
                                                        ('company_id', '=', company_id.id)], limit=1).id
 
-    @api.multi
     def prepare_data_rubrique(self, rubrique, sequence):
         if rubrique:
             credit_code = rubrique.credit_account_id.code
@@ -109,7 +114,6 @@ class ResConfigSettings(models.TransientModel):
                 'company_id': self.company_id.id,
             }
 
-    @api.multi
     def create_rubrique(self):
         i = 1
         if self.has_rubriques:
@@ -148,7 +152,6 @@ class ResConfigSettings(models.TransientModel):
         self.has_rubriques = True
         return True
 
-    @api.multi
     def prepare_data_cotisation(self, cotisation):
         if cotisation:
             return {
@@ -161,7 +164,6 @@ class ResConfigSettings(models.TransientModel):
                 'company_id': self.company_id.id,
             }
 
-    @api.multi
     def create_cotisation(self):
         i = 1
         if self.has_cotisation:
@@ -179,25 +181,23 @@ class ResConfigSettings(models.TransientModel):
                 i += 1
         return True
 
-    @api.multi
     def create_parametre(self):
         i = 1
         if self.has_parametre:
             raise UserError('Les paramètres  de cette société ont été déjâ générés')
-        #parametre_id = self.env.ref('kzm_payroll_ma.parametres_data8')
+        # parametre_id = self.env.ref('kzm_payroll_ma.parametres_data8')
 
-        #if parametre_id:
-        #parametre = self.env['hr.payroll_ma.parametres'].sudo().browse(parametre_id.id)
+        # if parametre_id:
+        # parametre = self.env['hr.payroll_ma.parametres'].sudo().browse(parametre_id.id)
         vals = {
 
         }
-        #param_id = self.env['hr.payroll_ma.parametres'].create(vals)
+        # param_id = self.env['hr.payroll_ma.parametres'].create(vals)
         company = self.env['res.company'].search([('id', '=', self.company_id.id)])
         company.write(vals)
 
-        #return param_id
+        # return param_id
 
-    @api.multi
     def create_journal(self):
         i = 1
         if self.has_journal:
@@ -214,7 +214,6 @@ class ResConfigSettings(models.TransientModel):
             journal_id = self.env['account.journal'].create(vals)
         return journal_id
 
-    @api.multi
     def generate_data_paie(self):
         self.is_generated = True
         self.create_rubrique()
@@ -226,4 +225,3 @@ class ResConfigSettings(models.TransientModel):
             'target': 'self',
             'url': '/web',
         }
-

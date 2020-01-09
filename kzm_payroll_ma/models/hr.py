@@ -12,7 +12,9 @@ class HrEmployee(models.Model):
         """ get the lastest contract """
         Contract = self.env['hr.contract']
         for employee in self:
-            employee.contract_id = Contract.search([('employee_id', '=', employee.id), ('state', 'in', ['open','pending'])], order='date_start desc', limit=1)
+            employee.contract_id = Contract.search(
+                [('employee_id', '=', employee.id), ('state', 'in', ['open', 'pending'])], order='date_start desc',
+                limit=1)
 
     matricule = fields.Char('Matricule', copy=False)
     cin = fields.Char('CIN', copy=False)
@@ -41,18 +43,18 @@ class HrEmployee(models.Model):
     phone_home = fields.Char(string=u'Téléphone Personnel')
     ssnid = fields.Char(string='CNSS', copy=False)
     payslip_count = fields.Integer(compute='get_payslip_count')
-    #anciennete
+    # anciennete
     annees_anciennete = fields.Float(string=u'Ancienneté', compute='calc_seniority')
     taux_anciennete = fields.Float(string=u'Taux ancienneté(%)', compute='calc_seniority')
 
     @api.model
     def name_search(self, name, args=None, operator='ilike', limit=100):
         if name:
-            domain = ['|','|',('matricule', operator, name),('name',operator,name),('prenom',operator,name)] + (args or [])
+            domain = ['|', '|', ('matricule', operator, name), ('name', operator, name), ('prenom', operator, name)] + (
+                    args or [])
             return self.search(domain, limit=limit).name_get()
         return super(HrEmployee, self).name_search(name, args, operator, limit=limit)
 
-    @api.multi
     @api.onchange('bank_account_id')
     def onchange_bank_account_id(self):
         for rec in self:
@@ -60,7 +62,6 @@ class HrEmployee(models.Model):
                 rec.bank = rec.bank_account_id.bank_id
                 rec.compte = rec.bank_account_id.acc_number
 
-    @api.multi
     @api.depends('date')
     def calc_seniority(self):
         for rec in self:
@@ -69,14 +70,15 @@ class HrEmployee(models.Model):
                 seniority_date = datetime.date(int(date_embauche[0]), int(date_embauche[1]), int(date_embauche[2]))
                 today = datetime.date.today()
                 years = today.year - seniority_date.year
-                if today.month < seniority_date.month or (today.month == seniority_date.month and today.day < seniority_date.day):
+                if today.month < seniority_date.month or (
+                        today.month == seniority_date.month and today.day < seniority_date.day):
                     years -= 1
                 rec.annees_anciennete = years
 
                 objet_anciennete = self.env['hr.payroll_ma.anciennete']
                 liste = objet_anciennete.sudo().search([])
                 for tranche in liste:
-                    if(years >= tranche.debuttranche) and (years < tranche.fintranche):
+                    if (years >= tranche.debuttranche) and (years < tranche.fintranche):
                         rec.taux_anciennete = tranche.taux
                         break
 
@@ -85,12 +87,11 @@ class HrEmployee(models.Model):
     #     return params.search([], limit=1)
 
     # Contrainte sur logement social
-    @api.one
     @api.constrains('superficie_logement', 'prix_acquisition_logement', 'type_logement')
     def _check_param_logement_social(self):
         if self.type_logement == 'social':
 
-            #dictionnaire = self.get_parametre()
+            # dictionnaire = self.get_parametre()
             # On vérifie la superficie
             if self.superficie_logement > self.company_id.superficie_max_logement_social:
                 raise ValidationError(u"La superficie indiquée n'est pas conforme aux normes du logement social")
@@ -99,7 +100,6 @@ class HrEmployee(models.Model):
                 raise ValidationError(u"Le prix d'acquisition n'est pas conforme aux normes du logement social")
 
     # contrainte sur le RIB
-    @api.one
     @api.constrains('compte')
     def _check_rib(self):
         if self.mode_reglement == 'virement':
@@ -108,7 +108,6 @@ class HrEmployee(models.Model):
                 raise ValidationError(u"Le RIB doit être constitué de 24 chiffres")
 
     # contrainte sur la matricule
-    @api.one
     @api.constrains('matricule')
     def _check_matricule(self):
         if self.matricule:
@@ -116,7 +115,6 @@ class HrEmployee(models.Model):
             if employee_ids:
                 raise ValidationError(u"La matricule doit être unique")
 
-    @api.multi
     def name_get(self):
         result = []
         for rec in self:
@@ -126,7 +124,6 @@ class HrEmployee(models.Model):
                 result.append((rec.id, rec.name))
         return result
 
-    @api.multi
     def get_payslip_count(self):
         for rec in self:
             count = len(self.env['hr.payroll_ma.bulletin'].sudo().search([('employee_id', '=', rec.id)]))
@@ -145,7 +142,7 @@ class HrEmployee(models.Model):
 class HrContract(models.Model):
     _inherit = "hr.contract"
 
-    working_days_per_month = fields.Integer(string=u'Jours travaillés par mois',default=26)
+    working_days_per_month = fields.Integer(string=u'Jours travaillés par mois', default=26)
     hour_salary = fields.Float(u'Salaire Horaire')
     monthly_hour_number = fields.Float(u'Nombre Heures par mois')
     ir = fields.Boolean(u'IR?')
@@ -156,15 +153,14 @@ class HrContract(models.Model):
     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
                                  string='Société', readonly=True, copy=False)
     type = fields.Selection(selection=(
-            ('mensuel', 'Mensuel'),
-            ('horaire', u'Horaire')
-             ), string='Type', default='mensuel')
+        ('mensuel', 'Mensuel'),
+        ('horaire', u'Horaire')
+    ), string='Type', default='mensuel')
 
-    @api.multi
     @api.onchange('type')
     def onchange_type(self):
-        #params = self.env['hr.payroll_ma.parametres']
-        #ids_params = params.search([('company_id', '=', self.company_id.id)], limit=1)
+        # params = self.env['hr.payroll_ma.parametres']
+        # ids_params = params.search([('company_id', '=', self.company_id.id)], limit=1)
         for rec in self:
             if rec.type == 'mensuel':
                 rec.hour_salary = 0
@@ -173,18 +169,17 @@ class HrContract(models.Model):
             if rec.type == 'horaire':
                 rec.wage = 0
                 rec.working_days_per_month = 0
-                #rec.monthly_hour_number = ids_params.hour_month // Ayoub
-                rec.monthly_hour_number = rec.company_id.hour_month # Ayoub
+                # rec.monthly_hour_number = ids_params.hour_month // Ayoub
+                rec.monthly_hour_number = rec.company_id.hour_month  # Ayoub
 
-    @api.one
-    @api.constrains('state','date_start')
+    @api.constrains('state', 'date_start')
     def _check_unicite_contrat(self):
         contrat_ids = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id),
-                                                      ('state', 'in', ['open','pending']),
+                                                      ('state', 'in', ['open', 'pending']),
                                                       ('id', '!=', self.id)])
-        if contrat_ids and self.state in ['open','pending']:
+        if contrat_ids and self.state in ['open', 'pending']:
             raise ValidationError(u'Plusieurs contrats actifs pour cet employé!')
-        if self.state in ['open','pending']:
+        if self.state in ['open', 'pending']:
             self.employee_id.date = self.date_start
 
     # @api.one
@@ -193,67 +188,70 @@ class HrContract(models.Model):
     #     if self.date_start < self.employee_id.date:
     #         raise ValidationError(u'La date de contrat ne peut pas être avant la date d\'embauche.!')
 
-    # @api.multi
+    #
     # def cloturer_contrat(self):
     #     for rec in self:
     #         rec.actif = False
     #         rec.date_end = fields.Date.context_today(self)
     #
-    # @api.multi
+    #
     # def activer_contrat(self):
     #     for rec in self:
     #         rec.actif = True
     #         rec.date_end = None
 
-    @api.multi
     def net_to_brute(self):
         for rec in self:
             salaire_base = rec.wage
             cotisation = rec.cotisation
             personnes = rec.employee_id.chargefam
-            #params = self.env['hr.payroll_ma.parametres']
+            # params = self.env['hr.payroll_ma.parametres']
             objet_ir = self.env['hr.payroll_ma.ir']
 
             liste = objet_ir.search([])
-            #dictionnaire = rec.employee_id.get_parametre()
+            # dictionnaire = rec.employee_id.get_parametre()
             abattement = personnes * rec.company_id.charge
 
             base = 0
             salaire_brute = salaire_base
-            trouve=False
-            trouve2=False
-            while(trouve == False):
-                salaire_net_imposable=0
-                cotisations_employee=0
-                for cot in cotisation.cotisation_ids :
+            trouve = False
+            trouve2 = False
+            while (trouve == False):
+                salaire_net_imposable = 0
+                cotisations_employee = 0
+                for cot in cotisation.cotisation_ids:
                     if cot.plafonee and salaire_brute >= cot.plafond:
                         base = cot.plafond
-                    else : base = salaire_brute
+                    else:
+                        base = salaire_brute
 
                     cotisations_employee += base * cot.tauxsalarial / 100
                 fraispro = salaire_brute * rec.company_id.fraispro / 100
                 if fraispro < rec.company_id.plafond:
                     salaire_net_imposable = salaire_brute - fraispro - cotisations_employee
-                else :
+                else:
                     salaire_net_imposable = salaire_brute - rec.company_id.plafond - cotisations_employee
                 for tranche in liste:
-                    if(salaire_net_imposable >= tranche.debuttranche/12) and (salaire_net_imposable < tranche.fintranche/12):
+                    if (salaire_net_imposable >= tranche.debuttranche / 12) and (
+                            salaire_net_imposable < tranche.fintranche / 12):
                         taux = (tranche.taux)
-                        somme = (tranche.somme/12)
+                        somme = (tranche.somme / 12)
 
                 ir = (salaire_net_imposable * taux / 100) - somme - abattement
-                if(ir < 0):ir = 0
-                salaire_net=salaire_brute - cotisations_employee - ir
-                if(int(salaire_net)==int(salaire_base) and trouve2==False):
-                    trouve2=True
-                    salaire_brute-=1
-                if(round(salaire_net,2)==salaire_base):trouve=True
-                elif trouve2==False : salaire_brute+=0.5
-                elif trouve2==True : salaire_brute+=0.01
+                if (ir < 0): ir = 0
+                salaire_net = salaire_brute - cotisations_employee - ir
+                if (int(salaire_net) == int(salaire_base) and trouve2 == False):
+                    trouve2 = True
+                    salaire_brute -= 1
+                if (round(salaire_net, 2) == salaire_base):
+                    trouve = True
+                elif trouve2 == False:
+                    salaire_brute += 0.5
+                elif trouve2 == True:
+                    salaire_brute += 0.01
 
-            rec.wage = round(salaire_brute,2)
+            rec.wage = round(salaire_brute, 2)
             return True
-
 
 # class HRHolidaysStatus(models.Model):
 #     _inherit = "hr.holidays.status"

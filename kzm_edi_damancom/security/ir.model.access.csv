@@ -1,3 +1,0 @@
-"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-"access_e_bds_sortant","e_bds_sortant","model_e_bds_sortant","group_cnss",1,1,1,1
-"access_e_bds_sortant_line","e_bds_sortant_line","model_e_bds_sortant_line","group_cnss",1,1,1,1

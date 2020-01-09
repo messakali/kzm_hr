@@ -12,7 +12,6 @@ class HrPayrollMa(models.Model):
     _description = 'Saisie des bulletins'
     _order = "number"
 
-    @api.multi
     def _get_journal(self):
         company_id = self.company_id.journal_id
         if not company_id:
@@ -24,21 +23,22 @@ class HrPayrollMa(models.Model):
     date_start = fields.Date(string=u'Date début')
     date_end = fields.Date(string=u'Date fin')
     date_salary = fields.Date(string='Date', states={'open': [('readonly', True)], 'close': [('readonly', True)]})
-    company_id = fields.Many2one('res.company', string=u'Société', default=lambda self: self.env['res.company']._company_default_get(), copy=False)
+    company_id = fields.Many2one('res.company', string=u'Société',
+                                 default=lambda self: self.env['res.company']._company_default_get(), copy=False)
     period_id = fields.Many2one('date.range', string=u'Période', domain=[('type_id.fiscal_period', '=', True)],
                                 required=True, states={'draft': [('readonly', False)]})
     bulletin_line_ids = fields.One2many('hr.payroll_ma.bulletin', 'id_payroll_ma',
-                                        string='Bulletins',  states={'draft': [('readonly', False)]})
+                                        string='Bulletins', states={'draft': [('readonly', False)]})
     move_id = fields.Many2one('account.move', string=u'Pièce comptable',
                               readonly=True)
     journal_id = fields.Many2one('account.journal', string='Journal', default=_get_journal,
-                                 required=True,  states={'draft': [('readonly', False)]})
+                                 required=True, states={'draft': [('readonly', False)]})
     state = fields.Selection(selection=(
-            ('draft', 'Brouillon'),
-            ('confirmed', u'Confirmé'),
-            ('paid', u'Payé'),
-            ('cancelled', u'Annulé')
-             ), string='Statut', readonly=True, default='draft')
+        ('draft', 'Brouillon'),
+        ('confirmed', u'Confirmé'),
+        ('paid', u'Payé'),
+        ('cancelled', u'Annulé')
+    ), string='Statut', readonly=True, default='draft')
     total_net = fields.Float(string='Total net', compute='get_total_net', digits=(16, 2))
 
     @api.model
@@ -53,7 +53,6 @@ class HrPayrollMa(models.Model):
         if len(payroll_ids) > 1:
             raise ValidationError(u'On ne peut pas avoir deux paies pour la même période !')
 
-    @api.multi
     def unlink(self):
         for rec in self:
             if rec.state != 'draft':
@@ -62,7 +61,6 @@ class HrPayrollMa(models.Model):
             payroll_id = super(HrPayrollMa, self).unlink()
             return payroll_id
 
-    @api.multi
     def get_total_net(self):
         for rec in self:
             net = 0
@@ -77,14 +75,12 @@ class HrPayrollMa(models.Model):
             self.date_start = self.period_id.date_start
             self.date_end = self.period_id.date_end
 
-    @api.multi
     def draft_cb(self):
         for rec in self:
             if rec.move_id:
                 raise ValidationError(u"Veuillez d'abord supprimer les écritures comptables associés")
             rec.state = 'draft'
 
-    @api.multi
     def confirm_cb(self):
         for rec in self:
             rec.action_move_create()
@@ -92,12 +88,10 @@ class HrPayrollMa(models.Model):
             for bulletin in rec.bulletin_line_ids:
                 bulletin.name = self.env['ir.sequence'].next_by_code('hr.payroll_ma.bulletin')
 
-    @api.multi
     def cancel_cb(self):
         for rec in self:
             rec.state = 'cancelled'
 
-    @api.multi
     def generate_employees(self):
         for rec in self:
             employee_obj = self.env['hr.employee']
@@ -146,23 +140,22 @@ class HrPayrollMa(models.Model):
 
                 if contract:
                     line = {
-                            'employee_id': employee.id,
-                            'employee_contract_id': contract.id,
-                            'working_days': contract.working_days_per_month,
-                            'normal_hours': contract.monthly_hour_number,
-                            'hour_base': contract.hour_salary,
-                            'salaire_base': contract.wage,
-                            'id_payroll_ma': rec.id,
-                            'period_id': rec.period_id.id,
-                            'date_start': rec.date_start,
-                            'date_end': rec.date_end,
-                            'date_salary':rec.date_salary
+                        'employee_id': employee.id,
+                        'employee_contract_id': contract.id,
+                        'working_days': contract.working_days_per_month,
+                        'normal_hours': contract.monthly_hour_number,
+                        'hour_base': contract.hour_salary,
+                        'salaire_base': contract.wage,
+                        'id_payroll_ma': rec.id,
+                        'period_id': rec.period_id.id,
+                        'date_start': rec.date_start,
+                        'date_end': rec.date_end,
+                        'date_salary': rec.date_salary
 
-                            }
+                    }
                     self.env['hr.payroll_ma.bulletin'].create(line)
         return True
 
-    @api.multi
     def compute_all_lines(self):
         for rec in self:
             for bulletin in rec.bulletin_line_ids:
@@ -170,11 +163,11 @@ class HrPayrollMa(models.Model):
         return True
 
     # Generation des écriture comptable
-    @api.multi
+
     def action_move_create(self):
         for rec in self:
-            #params = self.env['hr.payroll_ma.parametres']
-            #dictionnaire = params.search([('company_id', '=', rec.company_id.id)],limit=1)// Ayoub
+            # params = self.env['hr.payroll_ma.parametres']
+            # dictionnaire = params.search([('company_id', '=', rec.company_id.id)],limit=1)// Ayoub
             date = rec.date_salary or datetime.now().date()
             journal = rec.journal_id
             move_lines = []
@@ -193,7 +186,7 @@ class HrPayrollMa(models.Model):
                             FROM    hr_payroll_ma_bulletin_line l
                             where   l.type = 'cotisation' and id_bulletin %s %s
                             group by l.name, l.credit_account_id, l.debit_account_id
-                  """ % (operateur, ids )
+                  """ % (operateur, ids)
             self.env.cr.execute(sql)
             data = self.env.cr.dictfetchall()
             msg = u"Merci d'ajouter les comptes crédit/débit pour les Cotisations, Paramètres et Rubriques"
@@ -202,35 +195,35 @@ class HrPayrollMa(models.Model):
                     raise ValidationError(msg)
                 if line['subtotal_employee']:
                     move_line_credit = {
-                                         'account_id': line['credit_account_id'],
-                                         'journal_id': journal.id,
-                                         'date': date,
-                                         'name': (line['name'] or '\\') + ' Salarial',
-                                         'credit': line['subtotal_employee'],
-                                         'debit': 0,
-                                         'state': 'valid'
-                                         }
+                        'account_id': line['credit_account_id'],
+                        'journal_id': journal.id,
+                        'date': date,
+                        'name': (line['name'] or '\\') + ' Salarial',
+                        'credit': line['subtotal_employee'],
+                        'debit': 0,
+                        'state': 'valid'
+                    }
                     move_lines.append((0, 0, move_line_credit))
 
                 if line['subtotal_employer']:
                     move_line_debit = {
-                                     'account_id': line['debit_account_id'],
-                                     'journal_id': journal.id,
-                                     'date': date,
-                                     'name': (line['name'] or '\\') + ' Patronal',
-                                     'debit': line['subtotal_employer'],
-                                     'credit': 0,
-                                     'state': 'valid'
-                                     }
+                        'account_id': line['debit_account_id'],
+                        'journal_id': journal.id,
+                        'date': date,
+                        'name': (line['name'] or '\\') + ' Patronal',
+                        'debit': line['subtotal_employer'],
+                        'credit': 0,
+                        'state': 'valid'
+                    }
                     move_line_credit = {
-                                     'account_id': line['credit_account_id'],
-                                     'journal_id': journal.id,
-                                     'date': date,
-                                     'name': (line['name'] or '\\') + ' Patronal',
-                                     'debit': 0,
-                                     'credit': line['subtotal_employer'],
-                                     'state': 'valid'
-                                     }
+                        'account_id': line['credit_account_id'],
+                        'journal_id': journal.id,
+                        'date': date,
+                        'name': (line['name'] or '\\') + ' Patronal',
+                        'debit': 0,
+                        'credit': line['subtotal_employer'],
+                        'state': 'valid'
+                    }
                     move_lines.append((0, 0, move_line_debit))
                     move_lines.append((0, 0, move_line_credit))
 
@@ -246,22 +239,22 @@ class HrPayrollMa(models.Model):
                             and l.credit_account_id is not null 
                             and l.debit_account_id is not null
                     group by l.name, l.credit_account_id, l.debit_account_id
-                    """ % (operateur, ids )
+                    """ % (operateur, ids)
             self.env.cr.execute(sql)
             data_rub = self.env.cr.dictfetchall()
             for line in data_rub:
                 if not line['debit_account_id']:
                     raise ValidationError(msg)
                 move_line_debit_rubrique = {
-                                         'account_id': line['debit_account_id'],
-                                         # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
-                                         'journal_id': journal.id,
-                                         'date': date,
-                                         'name': line['name'] or '\\',
-                                         'debit':  line['subtotal_employee'],
-                                         'credit': 0,
-                                         'state': 'valid'
-                                         }
+                    'account_id': line['debit_account_id'],
+                    # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
+                    'journal_id': journal.id,
+                    'date': date,
+                    'name': line['name'] or '\\',
+                    'debit': line['subtotal_employee'],
+                    'credit': 0,
+                    'state': 'valid'
+                }
                 move_lines.append((0, 0, move_line_debit_rubrique))
                 # Rubriques deduction
             sql = """
@@ -275,22 +268,22 @@ class HrPayrollMa(models.Model):
                 and l.credit_account_id is not null
                 and l.debit_account_id is not null
                 group by l.name, l.credit_account_id, l.debit_account_id
-                """ % (operateur, ids )
+                """ % (operateur, ids)
             self.env.cr.execute(sql)
             data_rub = self.env.cr.dictfetchall()
             for line in data_rub:
                 if not line['credit_account_id']:
                     raise ValidationError(msg)
                 move_line_credit_rubrique = {
-                        'account_id': line['credit_account_id'],
-                        # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
-                        'journal_id': journal.id,
-                        'date': date,
-                        'name': line['name'] or '\\',
-                        'debit': 0,
-                        'credit': line['subtotal_employee'],
-                        'state': 'valid'
-                    }
+                    'account_id': line['credit_account_id'],
+                    # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
+                    'journal_id': journal.id,
+                    'date': date,
+                    'name': line['name'] or '\\',
+                    'debit': 0,
+                    'credit': line['subtotal_employee'],
+                    'state': 'valid'
+                }
                 move_lines.append((0, 0, move_line_credit_rubrique))
 
             # Salaire brute
@@ -304,25 +297,25 @@ class HrPayrollMa(models.Model):
                             and l.credit_account_id is null 
                             and l.debit_account_id is null
                     group   by l.credit_account_id, l.debit_account_id
-                    ''' % (operateur, ids )
+                    ''' % (operateur, ids)
 
             self.env.cr.execute(sql)
             data_paie = self.env.cr.dictfetchall()
             for line in data_paie:
-                #if not dictionnaire.salary_debit_account_id:// Ayoub
-                if not rec.company_id.salary_debit_account_id:# Ayoub
+                # if not dictionnaire.salary_debit_account_id:// Ayoub
+                if not rec.company_id.salary_debit_account_id:  # Ayoub
                     raise ValidationError(msg)
                 move_line_debit_brute = {
-                                         #'account_id': dictionnaire.salary_debit_account_id.id,// Ayoub
-                                         'account_id': rec.company_id.salary_debit_account_id.id,# Ayoub
-                                         # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
-                                         'journal_id': journal.id,
-                                         'date': date,
-                                         'name': 'Salaire brute',
-                                         'debit':  line['subtotal_employee'],
-                                         'credit': 0,
-                                         'state': 'valid'
-                                         }
+                    # 'account_id': dictionnaire.salary_debit_account_id.id,// Ayoub
+                    'account_id': rec.company_id.salary_debit_account_id.id,  # Ayoub
+                    # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
+                    'journal_id': journal.id,
+                    'date': date,
+                    'name': 'Salaire brute',
+                    'debit': line['subtotal_employee'],
+                    'credit': 0,
+                    'state': 'valid'
+                }
                 move_lines.append((0, 0, move_line_debit_brute))
 
             # salaire_net_a_payer, arrondi
@@ -338,30 +331,30 @@ class HrPayrollMa(models.Model):
             self.env.cr.execute(sql)
             data = self.env.cr.dictfetchall()
             data = data[0]
-            #if not dictionnaire.salary_debit_account_id or not dictionnaire.salary_credit_account_id: // Ayoub
-            if not rec.company_id.salary_debit_account_id or not rec.company_id.salary_credit_account_id: # Ayoub
+            # if not dictionnaire.salary_debit_account_id or not dictionnaire.salary_credit_account_id: // Ayoub
+            if not rec.company_id.salary_debit_account_id or not rec.company_id.salary_credit_account_id:  # Ayoub
                 raise ValidationError(msg)
             move_line_arrondi = {
-                                         #'account_id': dictionnaire.salary_debit_account_id.id, // Ayoub
-                                         'account_id': rec.company_id.salary_debit_account_id.id, #Ayoub
-                                         # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
-                                         'journal_id': journal.id,
-                                         'date': date,
-                                         'name': 'Arrondi',
-                                         'debit':  data['arrondi'],
-                                         'credit': 0,
-                                         'state': 'valid'
-                                         }
+                # 'account_id': dictionnaire.salary_debit_account_id.id, // Ayoub
+                'account_id': rec.company_id.salary_debit_account_id.id,  # Ayoub
+                # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
+                'journal_id': journal.id,
+                'date': date,
+                'name': 'Arrondi',
+                'debit': data['arrondi'],
+                'credit': 0,
+                'state': 'valid'
+            }
             move_line_credit = {
-                                         #'account_id': dictionnaire.salary_credit_account_id.id, // Ayoub
-                                         'account_id': rec.company_id.salary_credit_account_id.id, # Ayoub
-                                         'journal_id': journal.id,
-                                         'date': date,
-                                         'name': 'Salaire net a payer',
-                                         'credit': data['salaire_net_a_payer'],
-                                         'debit': 0,
-                                         'state': 'valid'
-                                         }
+                # 'account_id': dictionnaire.salary_credit_account_id.id, // Ayoub
+                'account_id': rec.company_id.salary_credit_account_id.id,  # Ayoub
+                'journal_id': journal.id,
+                'date': date,
+                'name': 'Salaire net a payer',
+                'credit': data['salaire_net_a_payer'],
+                'debit': 0,
+                'state': 'valid'
+            }
             move_lines.append((0, 0, move_line_arrondi))
             move_lines.append((0, 0, move_line_credit))
 
@@ -373,39 +366,39 @@ class HrPayrollMa(models.Model):
             if credit < debit:
                 diff = debit - credit
                 move_line_arrondi = {
-                                         #'account_id': dictionnaire.salary_debit_account_id.id, //Ayoub
-                                         'account_id': rec.company_id.salary_debit_account_id.id, # Ayoub
-                                         # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
-                                         'journal_id': journal.id,
-                                         'date': date,
-                                         'name': 'Arrondi',
-                                         'credit':  round(diff, 2),
-                                         'debit': 0,
-                                         'state': 'valid'
-                                         }
+                    # 'account_id': dictionnaire.salary_debit_account_id.id, //Ayoub
+                    'account_id': rec.company_id.salary_debit_account_id.id,  # Ayoub
+                    # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
+                    'journal_id': journal.id,
+                    'date': date,
+                    'name': 'Arrondi',
+                    'credit': round(diff, 2),
+                    'debit': 0,
+                    'state': 'valid'
+                }
                 move_lines.append((0, 0, move_line_arrondi))
             else:
                 diff = credit - debit
                 move_line_arrondi = {
-                                         #'account_id': dictionnaire.salary_debit_account_id.id, // Ayoub
-                                         'account_id': rec.company_id.salary_debit_account_id.id,
-                                         # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
-                                         'journal_id': journal.id,
-                                         'date': date,
-                                         'name': 'Arrondi',
-                                         'debit':  round(diff, 2),
-                                         'credit': 0,
-                                         'state': 'valid'
-                                         }
+                    # 'account_id': dictionnaire.salary_debit_account_id.id, // Ayoub
+                    'account_id': rec.company_id.salary_debit_account_id.id,
+                    # 'analytic_account_id': dictionnaire['analytic_account_id'][0],
+                    'journal_id': journal.id,
+                    'date': date,
+                    'name': 'Arrondi',
+                    'debit': round(diff, 2),
+                    'credit': 0,
+                    'state': 'valid'
+                }
                 move_lines.append((0, 0, move_line_arrondi))
 
             move = {
-                    'ref': rec.number,
-                    'journal_id': journal.id,
-                    'date': date,
-                    'state': 'draft',
-                    'name': rec.name or '\\',
-                    'line_ids': move_lines}
+                'ref': rec.number,
+                'journal_id': journal.id,
+                'date': date,
+                'state': 'draft',
+                'name': rec.name or '\\',
+                'line_ids': move_lines}
             move_id = self.env['account.move'].create(move)
             rec.move_id = move_id
             return True
@@ -417,20 +410,27 @@ class hrPayrollMaBulletin(models.Model):
     _description = 'bulletin'
     _order = "name"
 
-    @api.multi
     @api.depends('salaire_net_a_payer')
     def _get_amount_text(self):
         for rec in self:
             devise = 'DH'
             rec.salaire_net_a_payer_text = convertion.trad(rec.salaire_net_a_payer, devise).upper()
 
+    def default_period(self):
+        return self.env['date.range'].search(
+            [('active', '=', True), ('type_id.fiscal_period','=',True), ('date_start', '<', fields.Date.today()),
+             ('date_end', '>', fields.Date.today())],
+            limit=1)
+
     name = fields.Char(string=u'Code', readonly=True)
     date_start = fields.Date(string=u'Date début')
     date_end = fields.Date(string='Date fin')
     date_salary = fields.Date(string='Date salaire')
     employee_id = fields.Many2one('hr.employee', string=u'Employé', required=True)
-    period_id = fields.Many2one('date.range', domain="[('type_id.fiscal_period','=',True)]", string=u'Période')
-    salary_line_ids = fields.One2many('hr.payroll_ma.bulletin.line', 'id_bulletin', string='Lignes de salaire', readonly=True)
+    period_id = fields.Many2one('date.range', domain="[('type_id.fiscal_period','=',True)]",
+                                default=default_period, string=u'Période')
+    salary_line_ids = fields.One2many('hr.payroll_ma.bulletin.line', 'id_bulletin', string='Lignes de salaire',
+                                      readonly=True)
     employee_contract_id = fields.Many2one('hr.contract', string=u'Contrat de travail', required=True)
     id_payroll_ma = fields.Many2one('hr.payroll_ma', string=u'Réf Paie', ondelete='cascade')
     salaire_base = fields.Float(string='Salaire de base')
@@ -443,7 +443,8 @@ class hrPayrollMaBulletin(models.Model):
     salaire_brute_imposable = fields.Float(string='Salaire brut imposable', readonly=True, digits=(16, 2))
     salaire_net = fields.Float(string=u'Salaire Net', readonly=True, digits=(16, 2))
     salaire_net_a_payer = fields.Float(string=u'Salaire Net à payer', readonly=True, digits=(16, 2))
-    indemnites_frais_pro = fields.Float(string=u'Indemnités versées à titre de frais professionnels', readonly=True, digits=(16, 2))
+    indemnites_frais_pro = fields.Float(string=u'Indemnités versées à titre de frais professionnels', readonly=True,
+                                        digits=(16, 2))
     salaire_net_a_payer_text = fields.Char(compute='_get_amount_text', string='Montant en lettres', store=True)
     salaire_net_imposable = fields.Float(string=u'Salaire Net Imposable', readonly=True, digits=(16, 2))
     cotisations_employee = fields.Float(string=u'Cotisations Employé', readonly=True, digits=(16, 2))
@@ -487,7 +488,6 @@ class hrPayrollMaBulletin(models.Model):
         self.date_start = self.period_id.date_start
         self.date_end = self.period_id.date_end
 
-    @api.multi
     def get_bulletin_cumuls(self, mois, annee, employe):
         ligne_bul_paie = self.env['hr.payroll_ma.bulletin.line']
         acct_period = self.env['date.range']
@@ -519,7 +519,6 @@ class hrPayrollMaBulletin(models.Model):
                     cumuls['fp'] = 2500.0
         return cumuls
 
-    @api.multi
     def get_cumuls(self):
         for res in self:
             periode = res.period_id.name.split('/')
@@ -574,7 +573,6 @@ class hrPayrollMaBulletin(models.Model):
             res.cumul_avantages = somme_avantages
         return True
 
-    @api.multi
     def get_cumuls_n_1(self):
         for res in self:
             periode = res.period_id.name.split('/')
@@ -637,14 +635,13 @@ class hrPayrollMaBulletin(models.Model):
                 self.working_days = 26
                 self.period_id = self.period_id.id
 
-
     # def get_parametere(self):
     #     params = self.env['hr.payroll_ma.parametres']
     #     ids_params = params.search([('company_id', '=', self.company_id.id)], limit=1)
     #     return ids_params
 
     # Fonction pour la calcul de IR
-    @api.multi
+
     def get_ir(self, sbi, cotisations, logement):
         for rec in self:
             taux = 0
@@ -653,30 +650,30 @@ class hrPayrollMaBulletin(models.Model):
             bulletin = rec
             coef = 0
 
-            #dictionnaire = rec.get_parametere()
+            # dictionnaire = rec.get_parametere()
             if not bulletin.employee_contract_id.ir:
                 res = {
-                        'salaire_net_imposable': salaire_net_imposable,
-                        'taux': 0,
-                        'ir_net': 0,
-                        #'credit_account_id': dictionnaire.credit_account_id.id,// Ayoub
-                        'credit_account_id': rec.company_id.credit_account_id.id,# Ayoub
-                        'frais_pro': 0,
-                        'personnes': 0
-                       }
+                    'salaire_net_imposable': salaire_net_imposable,
+                    'taux': 0,
+                    'ir_net': 0,
+                    # 'credit_account_id': dictionnaire.credit_account_id.id,// Ayoub
+                    'credit_account_id': rec.company_id.credit_account_id.id,  # Ayoub
+                    'frais_pro': 0,
+                    'personnes': 0
+                }
             else:
                 base = 0
                 if rec.normal_hours:
-                    #base = rec.normal_hours / (dictionnaire.hour_day or 8) // Ayoub
-                    base = rec.normal_hours / (rec.company_id.hour_day or 8) #Ayoub
+                    # base = rec.normal_hours / (dictionnaire.hour_day or 8) // Ayoub
+                    base = rec.normal_hours / (rec.company_id.hour_day or 8)  # Ayoub
                 elif rec.working_days:
                     base = rec.working_days
 
                 # Salaire Net Imposable
-                #fraispro = sbi * dictionnaire.fraispro / 100 // Ayoub
-                fraispro = sbi * rec.company_id.fraispro / 100 # Ayoub
-                #plafond = (dictionnaire.plafond * base) / 26 // Ayoub
-                plafond = (rec.company_id.plafond * base) / 26 # AYoub
+                # fraispro = sbi * dictionnaire.fraispro / 100 // Ayoub
+                fraispro = sbi * rec.company_id.fraispro / 100  # Ayoub
+                # plafond = (dictionnaire.plafond * base) / 26 // Ayoub
+                plafond = (rec.company_id.plafond * base) / 26  # AYoub
                 if fraispro < plafond:
                     salaire_net_imposable = sbi - fraispro - cotisations
                 else:
@@ -695,8 +692,8 @@ class hrPayrollMaBulletin(models.Model):
                 if bulletin.employee_contract_id.type == 'mensuel' and count_days:
                     coef = 312 / count_days
                 elif bulletin.employee_contract_id.type == 'horaire' and count_hours:
-                    #coef = (dictionnaire.hour_month or 191) * 12 / count_hours // Ayoub
-                    coef = (rec.company_id.hour_month or 191) * 12 / count_hours #Ayoub
+                    # coef = (dictionnaire.hour_month or 191) * 12 / count_hours // Ayoub
+                    coef = (rec.company_id.hour_month or 191) * 12 / count_hours  # Ayoub
 
                 new_cumul_net_imp = bulletin.cumul_sni
                 cumul_coef = new_cumul_net_imp * coef
@@ -716,22 +713,22 @@ class hrPayrollMaBulletin(models.Model):
 
                 # IR Net
                 personnes = bulletin.employee_id.chargefam
-                #if (ir_brute - (personnes * dictionnaire.charge)) < 0:// Ayoub
-                if (ir_brute - (personnes * rec.company_id.charge)) < 0:# Ayoub
+                # if (ir_brute - (personnes * dictionnaire.charge)) < 0:// Ayoub
+                if (ir_brute - (personnes * rec.company_id.charge)) < 0:  # Ayoub
                     ir_net = 0
                 else:
                     # ir_net = ir_brute - (personnes * dictionnaire.charge) // Ayoub
-                    ir_net = ir_brute - (personnes * rec.company_id.charge) # AYoub
+                    ir_net = ir_brute - (personnes * rec.company_id.charge)  # AYoub
 
                 res = {
                     'salaire_net_imposable': salaire_net_imposable,
                     'taux': taux,
                     'ir_net': ir_net,
                     # 'credit_account_id': dictionnaire.credit_account_id.id, // Ayoub
-                    'credit_account_id': rec.company_id.credit_account_id.id, #Ayoub
+                    'credit_account_id': rec.company_id.credit_account_id.id,  # Ayoub
                     'frais_pro': fraispro,
                     'personnes': personnes
-                    }
+                }
         return res
 
     def calc_seniority(self, date_embauche, date_paie):
@@ -754,10 +751,9 @@ class hrPayrollMaBulletin(models.Model):
         else:
             return 0
 
-    @api.multi
     def compute_all_lines(self):
         for rec in self:
-            #dictionnaire = self.get_parametere()
+            # dictionnaire = self.get_parametere()
             id_bulletin = rec.id
             bulletin = rec
             if not bulletin.period_id:
@@ -801,7 +797,7 @@ class hrPayrollMaBulletin(models.Model):
                     'rate_employee': round((bulletin.working_days / 26) * 100, 2),
                     'subtotal_employee': round(salaire_base * (bulletin.working_days / 26), 2),
                     'deductible': False,
-                   }
+                }
                 salaire_base_worked += salaire_base * (bulletin.working_days / 26)
                 self.env['hr.payroll_ma.bulletin.line'].create(salaire_base_line)
 
@@ -814,7 +810,7 @@ class hrPayrollMaBulletin(models.Model):
                     'rate_employee': hour_base,
                     'subtotal_employee': normal_hours * hour_base,
                     'deductible': False,
-                    }
+                }
                 salaire_base_worked += hour_base * round(normal_hours, 2)
                 self.env['hr.payroll_ma.bulletin.line'].create(normale_hours_line)
             # Rubriques majoration
@@ -883,11 +879,11 @@ class hrPayrollMaBulletin(models.Model):
                             exoneration += rubrique['plafond']
 
                     if rubrique['type'] == 'prime' and not rubrique['conge']:
-                            prime += montant
+                        prime += montant
                     elif rubrique['type'] == 'indemnite' and not rubrique['conge']:
-                            indemnite += montant
+                        indemnite += montant
                     elif rubrique['type'] == 'avantage' and not rubrique['conge']:
-                            avantage += montant
+                        avantage += montant
                     majoration_line = {
                         'name': rubrique['name'],
                         'id_bulletin': id_bulletin,
@@ -900,11 +896,10 @@ class hrPayrollMaBulletin(models.Model):
                         # 'rubrique_id': rubrique['id'],
                         'credit_account_id': rubrique['credit_account_id'] or False,
                         'debit_account_id': rubrique['debit_account_id'] or False
-                        }
+                    }
                     self.env['hr.payroll_ma.bulletin.line'].create(majoration_line)
 
-
-            #Ancienneté
+            # Ancienneté
 
             taux_anciennete = self.calc_seniority(self.employee_id.date, self.date_end) / 100
             prime_anciennete = (salaire_base_worked + anciennete) * taux_anciennete
@@ -917,11 +912,11 @@ class hrPayrollMaBulletin(models.Model):
                     'rate_employee': taux_anciennete,
                     'subtotal_employee': prime_anciennete,
                     'deductible': False,
-                    }
+                }
                 self.env['hr.payroll_ma.bulletin.line'].create(anciennete_line)
-            #Cotisations
+            # Cotisations
             salaire_brute = salaire_base_worked + prime + indemnite + avantage + prime_anciennete
-            salaire_brute_imposable = salaire_brute-exoneration
+            salaire_brute_imposable = salaire_brute - exoneration
             cotisations = bulletin.employee_contract_id.cotisation.cotisation_ids
             base = 0
             if bulletin.employee_id.affilie:
@@ -937,18 +932,18 @@ class hrPayrollMaBulletin(models.Model):
                         'base': base,
                         'rate_employee': cot.tauxsalarial,
                         'rate_employer': cot.tauxpatronal,
-                        'subtotal_employee': base*cot.tauxsalarial/100,
-                        'subtotal_employer': base*cot.tauxpatronal/100,
+                        'subtotal_employee': base * cot.tauxsalarial / 100,
+                        'subtotal_employer': base * cot.tauxpatronal / 100,
                         'credit_account_id': cot.credit_account_id.id,
                         'debit_account_id': cot.debit_account_id.id,
                         'deductible': True,
                     }
-                    cotisations_employee += base*cot.tauxsalarial/100
-                    cotisations_employer += base*cot.tauxpatronal/100
+                    cotisations_employee += base * cot.tauxsalarial / 100
+                    cotisations_employer += base * cot.tauxpatronal / 100
                     self.env['hr.payroll_ma.bulletin.line'].create(cotisation_line)
 
             # Impot sur le revenu
-            res = rec.get_ir(ir+prime_anciennete, cotisations_employee, logement)
+            res = rec.get_ir(ir + prime_anciennete, cotisations_employee, logement)
             if not res['ir_net'] == 0:
                 ir_line = {
                     'name': 'Impot sur le revenu',
@@ -960,44 +955,44 @@ class hrPayrollMaBulletin(models.Model):
                     'credit_account_id': res['credit_account_id'],
                     'debit_account_id': res['credit_account_id'],
                     'deductible': True,
-                        }
+                }
                 self.env['hr.payroll_ma.bulletin.line'].create(ir_line)
 
             # Rubriques Deduction add compte #Nait
             for rubrique in rubriques:
                 if rubrique['categorie'] == 'deduction':
-                        deduction += rubrique['montant']
-                        deduction_line = {
-                            'name': rubrique['name'],
-                            'id_bulletin': id_bulletin,
-                            'type': 'retenu',
-                            'base': rubrique['montant'],
-                            'rate_employee': 100,
-                            'subtotal_employee': rubrique['montant'],
-                            'deductible': True,
-                            'afficher': rubrique['afficher'],
-                            'credit_account_id': rubrique['credit_account_id'] or False,
-                            'debit_account_id': rubrique['debit_account_id'] or False
-                       }
-                        self.env['hr.payroll_ma.bulletin.line'].create(deduction_line)
+                    deduction += rubrique['montant']
+                    deduction_line = {
+                        'name': rubrique['name'],
+                        'id_bulletin': id_bulletin,
+                        'type': 'retenu',
+                        'base': rubrique['montant'],
+                        'rate_employee': 100,
+                        'subtotal_employee': rubrique['montant'],
+                        'deductible': True,
+                        'afficher': rubrique['afficher'],
+                        'credit_account_id': rubrique['credit_account_id'] or False,
+                        'debit_account_id': rubrique['debit_account_id'] or False
+                    }
+                    self.env['hr.payroll_ma.bulletin.line'].create(deduction_line)
             salaire_net = salaire_brute - res['ir_net'] - cotisations_employee
 
             salaire_net_a_payer = salaire_brute - deduction - res['ir_net'] - cotisations_employee
 
             # Arrondi
-            #if dictionnaire['arrondi']:// Ayoub
-            if rec.company_id.arrondi: # Ayoub
-                arrondi = 1-(round(salaire_net_a_payer, 2)-int(salaire_net_a_payer))
+            # if dictionnaire['arrondi']:// Ayoub
+            if rec.company_id.arrondi:  # Ayoub
+                arrondi = 1 - (round(salaire_net_a_payer, 2) - int(salaire_net_a_payer))
                 if arrondi != 1:
-                    diff = salaire_net_a_payer-int(salaire_net_a_payer)
-                    arrondi = 1-(salaire_net_a_payer-int(salaire_net_a_payer))
+                    diff = salaire_net_a_payer - int(salaire_net_a_payer)
+                    arrondi = 1 - (salaire_net_a_payer - int(salaire_net_a_payer))
 
                     if diff < 0.5:
-                        arrondi = diff*-1
+                        arrondi = diff * -1
                     else:
-                        arrondi = 1-diff
+                        arrondi = 1 - diff
 
-                    arrondi = 1-(salaire_net_a_payer-int(salaire_net_a_payer))
+                    arrondi = 1 - (salaire_net_a_payer - int(salaire_net_a_payer))
 
                     salaire_net_a_payer += arrondi
                     arrondi_line = {
@@ -1008,7 +1003,7 @@ class hrPayrollMaBulletin(models.Model):
                         'rate_employee': 100,
                         'subtotal_employee': arrondi,
                         'deductible': True,
-                               }
+                    }
                     self.env['hr.payroll_ma.bulletin.line'].create(arrondi_line)
                 else:
                     arrondi = 0
@@ -1081,7 +1076,7 @@ class HrLigneRubrique(models.Model):
     _description = "Ligne Rubrique"
     _order = 'date_start'
 
-    # @api.multi
+    #
     # def _sel_rubrique(self, cr, uid, context=None):
     #     for rec in self:
     #         obj = self.env['hr.payroll_ma.rubrique']
@@ -1089,7 +1084,7 @@ class HrLigneRubrique(models.Model):
     #         res = [(r.id, r.name) for r in res]
     #         return res
 
-    rubrique_id = fields.Many2one('hr.payroll_ma.rubrique', string='Rubrique',store=True)
+    rubrique_id = fields.Many2one('hr.payroll_ma.rubrique', string='Rubrique', store=True)
     id_contract = fields.Many2one('hr.contract', string=u'Contrat', ondelete='cascade')
     montant = fields.Float(string='Montant')
     taux = fields.Float(string='Taux')
@@ -1099,7 +1094,6 @@ class HrLigneRubrique(models.Model):
     date_stop = fields.Date(string='Date fin')
     note = fields.Text(string='Commentaire')
 
-    @api.multi
     @api.constrains('date_stop')
     def _check_date(self):
         for obj in self:
@@ -1107,7 +1101,6 @@ class HrLigneRubrique(models.Model):
                 raise ValidationError(u'La Date début doit être inférieur à la date de fin')
             return True
 
-    @api.multi
     @api.onchange('rubrique_id')
     def onchange_rubrique_id(self):
         for rec in self:
@@ -1116,8 +1109,9 @@ class HrLigneRubrique(models.Model):
 
     @api.onchange('period_id')
     def onchange_period_id(self):
-        self.date_start = self.period_id.date_start
-        self.date_stop = self.period_id.date_end
+        if self.period_id:
+            self.date_start = self.period_id.date_start
+            self.date_stop = self.period_id.date_end
 
 
 class HrPayrollMaBulletinLine(models.Model):

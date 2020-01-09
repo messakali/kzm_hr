@@ -45,7 +45,7 @@
         <record id="action_cimr_employee_sortant" model="ir.actions.act_window">
             <field name="name">CIMR-Employés Sortants</field>
             <field name="res_model">cimr.employee.sortant</field>
-            <field name="view_type">form</field>
+
             <field name="view_mode">tree,form</field>
         </record>
 

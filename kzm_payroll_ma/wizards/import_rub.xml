@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-
-        <record model="ir.ui.view" id="wizard_rub_form_view">
-            <field name="name">wizard.rub.import.form</field>
-            <field name="model">payroll.rub.import.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Import Rubriques">
-                    <label for="file_id" string="Merci de ne pas ajouter dans le premier ligne le titre de la colonne.
+    <record model="ir.ui.view" id="wizard_rub_form_view">
+        <field name="name">wizard.rub.import.form</field>
+        <field name="model">payroll.rub.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Rubriques">
+                <label for="file_id" string="Merci de ne pas ajouter dans le premier ligne le titre de la colonne.
 la première colonne doit être remplie par les matricules.
 la deuxième colonne doit être remplie par les montants (entier ou décimal avec séparateur 'point')"/>
 
-                    <group col="4" colspan="4">
-                        <field name="file_id"/>
-                        <field name="rub_id"/>
-                    </group>
+                <group col="4" colspan="4">
+                    <field name="file_id"/>
+                    <field name="rub_id"/>
+                </group>
 
-                    <footer>
-                        <button string="Valider" type="object" name="action_add_rub" class="btn-primary"/>
-                        <button string="Annuler" special="cancel" class="btn-default"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
+                <footer>
+                    <button string="Valider" type="object" name="action_add_rub" class="btn-primary"/>
+                    <button string="Annuler" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <act_window id="wizard_rub_import_action"
-                    name="Import rubrique"
-                    src_model="hr.payroll_ma"
-                    res_model="payroll.rub.import.wizard"
-                    view_mode="form"
-                    target="new"/>
-
-    </data>
+    <act_window id="wizard_rub_import_action"
+                name="Import rubrique"
+                binding_model="hr.payroll_ma"
+                res_model="payroll.rub.import.wizard"
+                view_mode="form"
+                view_id="wizard_rub_form_view"
+                target="new"/>
 </odoo>

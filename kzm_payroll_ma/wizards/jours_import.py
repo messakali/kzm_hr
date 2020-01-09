@@ -12,7 +12,7 @@ class Wizard_Jours(models.TransientModel):
 
     file_id = fields.Binary(string="Fichier",required=True)
 
-    @api.multi
+
     def action_add_jours(self):
         emp_obj = self.env['hr.employee']
         bulletin_obj = self.env['hr.payroll_ma.bulletin']

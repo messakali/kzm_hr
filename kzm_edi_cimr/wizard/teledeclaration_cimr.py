@@ -13,7 +13,7 @@ class TeledeclarationCimr(models.TransientModel):
     name = fields.Char('Filename', readonly=True)
     state = fields.Selection(selection=(('choose', 'choose'), ('get', 'get')), default='choose')
 
-    @api.multi
+
     def generate(self):
         rapport_cimr_id = self._context.get('active_id')
         rapport_cimr = self.env['rapport.cimr'].browse(rapport_cimr_id)

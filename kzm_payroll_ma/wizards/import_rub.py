@@ -13,7 +13,7 @@ class WizardRub(models.TransientModel):
     file_id = fields.Binary(string="Fichiers",required=True)
     rub_id = fields.Many2one(comodel_name='hr.payroll_ma.rubrique',string='Rubrique:', company_dependent=True, required=True)
 
-    @api.multi
+
     def action_add_rub(self):
         emp_obj = self.env['hr.employee']
         paie_obj = self.env['hr.payroll_ma']

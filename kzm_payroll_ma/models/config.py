@@ -126,13 +126,13 @@ class HrCotisationType(models.Model):
 #             else:
 #                 self.has_journal = False
 #
-#     @api.multi
+#
 #     def get_account(self, code, company_id):
 #         if self.company_id and code:
 #             return self.env['account.account'].search([('code', 'like', code),
 #                                                        ('company_id', '=', company_id.id)], limit=1).id
 #
-#     @api.multi
+#
 #     def prepare_data_rubrique(self, rubrique, sequence):
 #         if rubrique:
 #             credit_code = rubrique.credit_account_id.code
@@ -158,7 +158,7 @@ class HrCotisationType(models.Model):
 #                 'company_id': self.company_id.id,
 #                 }
 #
-#     @api.multi
+#
 #     def create_rubrique(self):
 #         i = 1
 #         if self.has_rubriques :
@@ -195,7 +195,7 @@ class HrCotisationType(models.Model):
 #         self.has_rubriques = True
 #         return True
 #
-#     @api.multi
+#
 #     def prepare_data_cotisation(self, cotisation):
 #         if cotisation:
 #             return {
@@ -208,7 +208,7 @@ class HrCotisationType(models.Model):
 #                 'company_id': self.company_id.id,
 #             }
 #
-#     @api.multi
+#
 #     def create_cotisation(self):
 #         i = 1
 #         if self.has_cotisation:
@@ -226,7 +226,7 @@ class HrCotisationType(models.Model):
 #                 i += 1
 #         return True
 #
-#     @api.multi
+#
 #     def create_parametre(self):
 #         i = 1
 #         if self.has_parametre:
@@ -243,7 +243,7 @@ class HrCotisationType(models.Model):
 #             param_id = self.env['hr.payroll_ma.parametres'].create(vals)
 #         return param_id
 #
-#     @api.multi
+#
 #     def create_journal(self):
 #         i = 1
 #         if self.has_journal:
@@ -260,7 +260,7 @@ class HrCotisationType(models.Model):
 #             journal_id = self.env['account.journal'].create(vals)
 #         return journal_id
 #
-#     @api.multi
+#
 #     def generate_data_paie(self):
 #         self.create_rubrique()
 #         self.create_cotisation()

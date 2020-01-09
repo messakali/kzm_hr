@@ -189,42 +189,42 @@
 		<!--record model="ir.actions.act_window" id="parametres_all_act">
 			<field name="name">Paramètres</field>
 			<field name="res_model">hr.payroll_ma.parametres</field>
-			<field name="view_type">form</field>
+
 			<field name="view_mode">tree,form</field>
 		</record-->
 
 		<record model="ir.actions.act_window" id="anciennete_all_act">
 			<field name="name">Ancienneté</field>
 			<field name="res_model">hr.payroll_ma.anciennete</field>
-			<field name="view_type">form</field>
+
 			<field name="view_mode">tree,form</field>
 		</record>
 
 		<record model="ir.actions.act_window" id="cotisation_all_act">
 			<field name="name">Cotisations</field>
 			<field name="res_model">hr.payroll_ma.cotisation</field>
-			<field name="view_type">form</field>
+
 			<field name="view_mode">tree,form</field>
 		</record>
 
 		<record model="ir.actions.act_window" id="cotisation_type_all_act">
 			<field name="name">Types de cotisations</field>
 			<field name="res_model">hr.payroll_ma.cotisation.type</field>
-			<field name="view_type">form</field>
+
 			<field name="view_mode">tree,form</field>
 		</record>
 
 		<record model="ir.actions.act_window" id="ir_all_act">
 			<field name="name">IR</field>
 			<field name="res_model">hr.payroll_ma.ir</field>
-			<field name="view_type">form</field>
+
 			<field name="view_mode">tree,form</field>
 		</record>
 
 		<record model="ir.actions.act_window" id="config_banques">
 			<field name="name">Banques</field>
 			<field name="res_model">res.bank</field>
-			<field name="view_type">form</field>
+
 			<field name="view_mode">tree,form</field>
 		</record>
 

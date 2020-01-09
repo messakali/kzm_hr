@@ -1,61 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <record model="ir.ui.view" id="wizard_hours_form_view">
+        <field name="name">wizard.hours.import.form</field>
+        <field name="model">payroll.hours.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Heures">
+                <label for="file_id"
+                       string="Merci de ne pas ajouter dans le premier ligne le titre de la colonne. La première colonne doit être remplie par les matricules. La deuxième colonne doit être remplie par les heures (entier ou décimal avec séparateur 'point')"/>
+                <group col="4" colspan="4">
+                    <field name="file_id"/>
+                </group>
+                <footer>
+                    <button string="Valider" type="object" name="action_add_hours" class="btn-primary"/>
+                    <button string="Annuler" special="cancel" class="btn-default"/>
+                </footer>
 
-        <record model="ir.ui.view" id="wizard_hours_form_view">
-            <field name="name">wizard.hours.import.form</field>
-            <field name="model">payroll.hours.import.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Import Heures">
-                    <label for="file_id" string="Merci de ne pas ajouter dans le premier ligne le titre de la colonne.
-la première colonne doit être remplie par les matricules.
-la deuxième colonne doit être remplie par les heures (entier ou décimal avec séparateur 'point')"/>
-                    <group col="4" colspan="4">
-                        <field name="file_id"/>
-                    </group>
-                    <footer>
-                        <button string="Valider" type="object" name="action_add_hours" class="btn-primary"/>
-                        <button string="Annuler" special="cancel" class="btn-default"/>
-                    </footer>
+            </form>
+        </field>
+    </record>
 
-                </form>
-            </field>
-        </record>
+    <record model="ir.ui.view" id="wizard_jours_form_view">
+        <field name="name">wizard.jours.import.form</field>
+        <field name="model">payroll.jours.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import jours">
+                <label for="file_id"
+                       string="Merci de ne pas ajouter dans le premier ligne le titre de la colonne. La première colonne doit être remplie par les matricules. La deuxième colonne doit être remplie par les jours (entier ou décimal avec séparateur 'point')"/>
+                <group col="4" colspan="4">
+                    <field name="file_id"/>
+                </group>
+
+                <footer>
+                    <button string="Valider" type="object" name="action_add_jours" class="btn-primary"/>
+                    <button string="Annuler" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="wizard_hours_import_action"
+                name="Import heures"
+                binding_model="hr.payroll.ma"
+                res_model="payroll.hours.import.wizard"
+                view_mode="form"
+                view_id = "wizard_hours_form_view"
+                target="new"/>
+
+    <act_window id="wizard_jours_import_action"
+                name="Import jours"
+                binding_model="hr.payroll.ma"
+                res_model="payroll.jours.import.wizard"
+                view_mode="form"
+                view_id = "wizard_jours_form_view"
+                target="new"/>
 
 
-        <record model="ir.ui.view" id="wizard_jours_form_view">
-            <field name="name">wizard.jours.import.form</field>
-            <field name="model">payroll.jours.import.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Import jours">
-                    <label for="file_id" string="Merci de ne pas ajouter dans le premier ligne le titre de la colonne.
-la première colonne doit être remplie par les matricules.
-la deuxième colonne doit être remplie par les jours (entier ou décimal avec séparateur 'point')"/>
-                    <group col="4" colspan="4">
-                        <field name="file_id"/>
-                    </group>
-
-                    <footer>
-                        <button string="Valider" type="object" name="action_add_jours" class="btn-primary"/>
-                        <button string="Annuler" special="cancel" class="btn-default"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
-        <act_window id="wizard_hours_import_action"
-                    name="Import heures"
-                    src_model="hr.payroll_ma"
-                    res_model="payroll.hours.import.wizard"
-                    view_mode="form"
-                    target="new"/>
-
-        <act_window id="wizard_jours_import_action"
-                    name="Import jours"
-                    src_model="hr.payroll_ma"
-                    res_model="payroll.jours.import.wizard"
-                    view_mode="form"
-                    target="new"/>
-
-    </data>
 </odoo>

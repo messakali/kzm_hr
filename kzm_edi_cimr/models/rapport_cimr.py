@@ -25,7 +25,7 @@ class RapportCimr(models.Model):
         all_cum_pp = fields.Float(compute='get_tot_rapport',string="total cumul part patronale")
         all_cum_tot_part = fields.Float(compute='get_tot_rapport',string="total cumul part sal + pat")
 
-        @api.multi
+
         @api.depends('rep_cimr_line_ids')
         def get_tot_rapport(self):
             somme1 = 0
@@ -69,7 +69,7 @@ class RapportCimr(models.Model):
             )
 
         # Fonction qui génère les résultats du rapport
-        @api.multi
+
         def generer_rapport_cimr(self):
             employe = self.env['hr.employee']
             contract_obj = self.env['hr.contract']
@@ -137,7 +137,7 @@ class RapportCimrLine(models.Model):
 
         id_rep_cimr = fields.Many2one('rapport.cimr')
 
-        @api.multi
+
         def get_trimestre_val(self):
             for res in self:
                 # On détermine le dernier mois du trimestre
