@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	<data>
+    <data>
 
         <record model="ir.ui.view" id="rapport_cimr_tree_view">
             <field name="name">Etat CIMR</field>
             <field name="model">rapport.cimr</field>
-            <field name="priority" eval="15" />
+            <field name="priority" eval="15"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <field name="name"/>
@@ -17,41 +17,45 @@
         <record model="ir.ui.view" id="rapport_cimr_form_view">
             <field name="name">Etat CIMR</field>
             <field name="model">rapport.cimr</field>
-            <field name="priority" eval="15" />
+            <field name="priority" eval="15"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <header>
-                    <button string="Générer" type="object" name="generer_rapport_cimr" class="oe_highlight" />
-                    <button string="Télédéclaration CIMR" type="action" name="%(kzm_edi_cimr.teledeclaration_cimr_action)d" class="oe_highlight" />
-                </header>
-                <form>
-                    <group>
-                        <field name="name"/>
-                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
-                        <field name="trimestre"/>
-                        <field name="annee"/>
-                    </group>
-                    <notebook>
-                        <page string="Détail">
 
-                            <field name="rep_cimr_line_ids" >
-                                <tree>
-                                    <field name="matricule" />
-                                    <field name="nom_complet" />
-                                    <field name="num_cimr" />
-                                    <field name="taux_emp" />
-                                    <field name="base_calcul" />
-                                    <field name="part_salariale" />
-                                    <field name="part_patronale" />
-                                    <field name="total_part" />
-                                    <field name="cum_base_calcul" />
-                                    <field name="cum_part_salariale" />
-                                    <field name="cum_part_patronale" />
-                                    <field name="cum_total_part" />
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
+                <form>
+                    <header>
+                        <button string="Générer" type="object" name="generer_rapport_cimr" class="oe_highlight"/>
+                        <button string="Télédéclaration CIMR" type="action"
+                                name="%(kzm_edi_cimr.teledeclaration_cimr_action)d" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <field name="trimestre"/>
+                            <field name="annee"/>
+                        </group>
+                        <notebook>
+                            <page string="Détail">
+
+                                <field name="rep_cimr_line_ids">
+                                    <tree>
+                                        <field name="matricule"/>
+                                        <field name="nom_complet"/>
+                                        <field name="num_cimr"/>
+                                        <field name="taux_emp"/>
+                                        <field name="base_calcul"/>
+                                        <field name="part_salariale"/>
+                                        <field name="part_patronale"/>
+                                        <field name="total_part"/>
+                                        <field name="cum_base_calcul"/>
+                                        <field name="cum_part_salariale"/>
+                                        <field name="cum_part_patronale"/>
+                                        <field name="cum_total_part"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
                 </form>
             </field>
         </record>

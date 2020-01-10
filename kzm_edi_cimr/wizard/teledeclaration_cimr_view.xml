@@ -28,7 +28,6 @@
              <field name="name">Télédéclaration CIMR</field>
              <field name="res_model">teledeclaration.cimr</field>
              <field name="type">ir.actions.act_window</field>
-
              <field name="view_mode">form</field>
              <field name="target">new</field>
         </record>

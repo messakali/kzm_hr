@@ -17,3 +17,5 @@ class Contract(models.Model):
 
     type_id = fields.Many2one('hr.contract.type', string="Type contrat", required=True,
                               default=lambda self: self.env['hr.contract.type'].search([], limit=1))
+
+

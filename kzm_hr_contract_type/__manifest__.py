@@ -12,7 +12,7 @@
     'maintainer': 'Karizma, Elhamdaoui',
     'category': 'contrat',
     'website': 'https://karizma-conseil.ma/',
-    'depends': ['hr_contract'],
+    'depends': ['hr_contract',],
     'data': [
          'data/hr_contract_type.xml',
          'security/ir.model.access.csv',
