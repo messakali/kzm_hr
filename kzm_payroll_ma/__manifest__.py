@@ -21,6 +21,7 @@
         "views/hr_payroll_ma_sequence.xml",
         "views/hr_payroll_ma_data.xml",
         "views/res_config_setting.xml",
+        "views/date_range_view.xml",
         "report/reports_view.xml",
         "report/bulletin_paie.xml",
         ],
