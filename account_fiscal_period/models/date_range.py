@@ -42,7 +42,7 @@ class DateRange(models.Model):
                     de = fy.date_stop
                 period_obj.create({
                     'name': ds.strftime('%m/%Y'),
-                    'code': ds.strftime('%m/%Y'),
+                    # 'code': ds.strftime('%m/%Y'),
                     'date_start': ds.strftime('%Y-%m-%d'),
                     'date_end': de.strftime('%Y-%m-%d'),
                     'type_id':self.env.ref('account_fiscal_period.fiscalperiod').id,
