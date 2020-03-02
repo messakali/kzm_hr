@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+
+    <record id="kzm_hr_employee_simple_bank_view" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='personal_information']//group" position="inside">
+                    <group string="Banque">
+                        <field name="bank_id" required="1"/>
+                        <field name="rib" required="1" />
+                        <field name="agency" />
+                    </group>
+                </xpath>
+            </field>
+    </record>
+
+  </data>
+</odoo>

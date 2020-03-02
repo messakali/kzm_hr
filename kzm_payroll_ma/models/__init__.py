@@ -6,3 +6,7 @@ from . import hr
 from . import convertion
 from . import company
 from . import res_config
+from . import date_range
+from . import date_range_type
+
+

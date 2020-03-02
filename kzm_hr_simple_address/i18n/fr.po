@@ -1,0 +1,85 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* kzm_hr_simple_address
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-02-26 17:15+0000\n"
+"PO-Revision-Date: 2020-02-26 17:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: kzm_hr_simple_address
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__city
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__city_secondary
+#: model_terms:ir.ui.view,arch_db:kzm_hr_simple_address.hr_employee_simple_address_view
+msgid "City"
+msgstr "Ville"
+
+#. module: kzm_hr_simple_address
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__country_id
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__country_secondary_id
+#: model_terms:ir.ui.view,arch_db:kzm_hr_simple_address.hr_employee_simple_address_view
+msgid "Country"
+msgstr "Pays"
+
+#. module: kzm_hr_simple_address
+#: model:ir.model,name:kzm_hr_simple_address.model_hr_employee
+msgid "Employee"
+msgstr "Employé"
+
+#. module: kzm_hr_simple_address
+#: model_terms:ir.ui.view,arch_db:kzm_hr_simple_address.hr_employee_simple_address_view
+msgid "Main address"
+msgstr "Adresse principale"
+
+#. module: kzm_hr_simple_address
+#: model_terms:ir.ui.view,arch_db:kzm_hr_simple_address.hr_employee_simple_address_view
+msgid "Secondary address"
+msgstr "Adresse secondaire"
+
+#. module: kzm_hr_simple_address
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__state_id
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__state_secondary_id
+#: model_terms:ir.ui.view,arch_db:kzm_hr_simple_address.hr_employee_simple_address_view
+msgid "State"
+msgstr "État"
+
+#. module: kzm_hr_simple_address
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__street
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__street_secondary
+msgid "Street"
+msgstr "Rue"
+
+#. module: kzm_hr_simple_address
+#: model_terms:ir.ui.view,arch_db:kzm_hr_simple_address.hr_employee_simple_address_view
+msgid "Street 2..."
+msgstr "Rue 2..."
+
+#. module: kzm_hr_simple_address
+#: model_terms:ir.ui.view,arch_db:kzm_hr_simple_address.hr_employee_simple_address_view
+msgid "Street..."
+msgstr "Rue..."
+
+#. module: kzm_hr_simple_address
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__street2
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__street2_secondary
+msgid "Street2"
+msgstr "Rue 2..."
+
+#. module: kzm_hr_simple_address
+#: model_terms:ir.ui.view,arch_db:kzm_hr_simple_address.hr_employee_simple_address_view
+msgid "ZIP"
+msgstr ""
+
+#. module: kzm_hr_simple_address
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__zip
+#: model:ir.model.fields,field_description:kzm_hr_simple_address.field_hr_employee__zip_secondary
+msgid "Zip"
+msgstr ""

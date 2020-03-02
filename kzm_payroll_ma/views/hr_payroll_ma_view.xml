@@ -44,117 +44,119 @@
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"
                                statusbar_colors='{"confirmed":"blue"}'/>
                     </header>
-                    <div class="oe_button_box" name="button_box">
-                        <button name="%(act_hr_payroo_ma_bulletin)d" string="Bulletins de paie" type="action"
-                                icon='fa-code'
-                                class="oe_stat_button"/>
-                    </div>
-                    <group colspan="4" col="6">
-                        <field name="number"/>
-                        <field name="date_salary"/>
-                        <field name="period_id"/>
-                        <field name="date_start"/>
-                        <field name="date_end"/>
-                        <field name="company_id" readonly="1" groups="base.group_multi_company"
-                               options="{'no_create': True}"/>
-                    </group>
-                    <group>
-                        <field name="name"/>
-                    </group>
-                    <notebook>
-                        <page string="Bulletins">
-                            <field colspan="4" default_get="{'bulletin_line_ids': bulletin_line_ids}"
-                                   name="bulletin_line_ids"
-                                   context="{'date_start':date_start,'period_id':period_id,'date_end':date_end }"
-                                   nolabel="1" widget="one2many_list">
-                                <form string="Bulletins">
-                                    <group colspan="4" col="6">
-                                        <field name="date_start"/>
-                                        <field name="date_end"/>
-                                        <field name="employee_id" domain="[('active', '=',True)]"/>
-                                        <field name="employee_contract_id"/>
-                                        <field name="working_days"/>
-                                        <field name="salaire_base"/>
-                                        <field name="name"/>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(act_hr_payroo_ma_bulletin)d" string="Bulletins de paie" type="action"
+                                    icon='fa-code'
+                                    class="oe_stat_button"/>
+                        </div>
+                        <group colspan="4" col="6">
+                            <field name="number"/>
+                            <field name="date_salary"/>
+                            <field name="period_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="company_id" readonly="1" groups="base.group_multi_company"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <notebook>
+                            <page string="Bulletins">
+                                <field colspan="4" default_get="{'bulletin_line_ids': bulletin_line_ids}"
+                                       name="bulletin_line_ids"
+                                       context="{'date_start':date_start,'period_id':period_id,'date_end':date_end }"
+                                       nolabel="1" widget="one2many_list">
+                                    <form string="Bulletins">
+                                        <group colspan="4" col="6">
+                                            <field name="date_start"/>
+                                            <field name="date_end"/>
+                                            <field name="employee_id" domain="[('active', '=',True)]"/>
+                                            <field name="employee_contract_id"/>
+                                            <field name="working_days"/>
+                                            <field name="salaire_base"/>
+                                            <field name="name"/>
+                                        </group>
+                                        <notebook colspan="4">
+                                            <page string="Lignes du bulletin">
+                                                <field colspan="4" name="salary_line_ids" nolabel="1"
+                                                       widget="one2many_list"/>
+                                                <group colspan="4" col="6">
+                                                    <field name="salaire_brute"/>
+                                                    <field name="salaire_brute_imposable"/>
+                                                    <field name="salaire_net_imposable"/>
+                                                    <field name="cotisations_employee"/>
+                                                    <field name="cotisations_employer"/>
+                                                    <field name="salaire_net"/>
+                                                    <field name="salaire_net_a_payer"/>
+                                                </group>
+                                                <group string="Cumuls">
+                                                    <group>
+                                                        <field name="cumul_normal_hours"/>
+                                                        <field name="cumul_work_days"/>
+                                                        <field name="cumul_sb"/>
+                                                        <field name="cumul_sbi"/>
+                                                        <field name="cumul_sni"/>
+                                                        <field name="cumul_sni_n_1"/>
+                                                        <field name="cumul_avn"/>
+                                                        <field name="cumul_base"/>
+                                                        <field name="cumul_avantages"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="cumul_ee_cotis"/>
+                                                        <field name="cumul_er_cotis"/>
+                                                        <field name="cumul_igr"/>
+                                                        <field name="cumul_fp"/>
+                                                        <field name="cumul_indemnites_fp"/>
+                                                        <field name="cumul_exo"/>
+                                                    </group>
+                                                </group>
+                                                <group>
+                                                    <field name="salaire_net_a_payer_text"/>
+                                                </group>
+                                            </page>
+                                            <page string="Info Salaire">
+                                                <group>
+                                                    <group>
+                                                        <field name="hour_base"/>
+                                                        <field name="normal_hours"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="igr"/>
+                                                        <field name="deduction"/>
+                                                        <field name="period_id" invisible="0"/>
+                                                    </group>
+                                                </group>
+                                            </page>
+                                        </notebook>
+                                    </form>
+                                    <tree string="Bulletins">
+                                        <field name="name" select="1"/>
+                                        <field name="employee_id"/>
+                                        <field name="working_days" sum="total_0"/>
+                                        <field name="normal_hours" sum="total_7"/>
+                                        <field name="salaire_brute" sum="total_1"/>
+                                        <field name="salaire_brute_imposable" sum="total_2"/>
+                                        <field name="cotisations_employee" sum="total_3"/>
+                                        <field name="cotisations_employer" sum="total_4"/>
+                                        <field name="salaire_net" sum="total_5"/>
+                                        <field name="salaire_net_a_payer" sum="total_6"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Comptabilité">
+                                <group>
+                                    <group>
+                                        <field name="journal_id"/>
+                                        <field name="move_id"/>
                                     </group>
-                                    <notebook colspan="4">
-                                        <page string="Lignes du bulletin">
-                                            <field colspan="4" name="salary_line_ids" nolabel="1"
-                                                   widget="one2many_list"/>
-                                            <group colspan="4" col="6">
-                                                <field name="salaire_brute"/>
-                                                <field name="salaire_brute_imposable"/>
-                                                <field name="salaire_net_imposable"/>
-                                                <field name="cotisations_employee"/>
-                                                <field name="cotisations_employer"/>
-                                                <field name="salaire_net"/>
-                                                <field name="salaire_net_a_payer"/>
-                                            </group>
-                                            <group string="Cumuls">
-                                                <group>
-                                                    <field name="cumul_normal_hours"/>
-                                                    <field name="cumul_work_days"/>
-                                                    <field name="cumul_sb"/>
-                                                    <field name="cumul_sbi"/>
-                                                    <field name="cumul_sni"/>
-                                                    <field name="cumul_sni_n_1"/>
-                                                    <field name="cumul_avn"/>
-                                                    <field name="cumul_base"/>
-                                                    <field name="cumul_avantages"/>
-                                                </group>
-                                                <group>
-                                                    <field name="cumul_ee_cotis"/>
-                                                    <field name="cumul_er_cotis"/>
-                                                    <field name="cumul_igr"/>
-                                                    <field name="cumul_fp"/>
-                                                    <field name="cumul_indemnites_fp"/>
-                                                    <field name="cumul_exo"/>
-                                                </group>
-                                            </group>
-                                            <group>
-                                                <field name="salaire_net_a_payer_text"/>
-                                            </group>
-                                        </page>
-                                        <page string="Info Salaire">
-                                            <group>
-                                                <group>
-                                                    <field name="hour_base"/>
-                                                    <field name="normal_hours"/>
-                                                </group>
-                                                <group>
-                                                    <field name="igr"/>
-                                                    <field name="deduction"/>
-                                                    <field name="period_id" invisible="0"/>
-                                                </group>
-                                            </group>
-                                        </page>
-                                    </notebook>
-                                </form>
-                                <tree string="Bulletins">
-                                    <field name="name" select="1"/>
-                                    <field name="employee_id"/>
-                                    <field name="working_days" sum="total_0"/>
-                                    <field name="normal_hours" sum="total_7"/>
-                                    <field name="salaire_brute" sum="total_1"/>
-                                    <field name="salaire_brute_imposable" sum="total_2"/>
-                                    <field name="cotisations_employee" sum="total_3"/>
-                                    <field name="cotisations_employer" sum="total_4"/>
-                                    <field name="salaire_net" sum="total_5"/>
-                                    <field name="salaire_net_a_payer" sum="total_6"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Comptabilité">
-                            <group>
-                                <group>
-                                    <field name="journal_id"/>
-                                    <field name="move_id"/>
+                                    <group>
+                                    </group>
                                 </group>
-                                <group>
-                                </group>
-                            </group>
-                        </page>
-                    </notebook>
+                            </page>
+                        </notebook>
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -223,65 +225,68 @@
             <field name="model">hr.payroll_ma.bulletin</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <header>
-                    <button name="compute_all_lines" string="Calculer bulletin"
-                            type="object" icon="fa-exchange"/>
-                </header>
+
                 <form string="Bulletins">
-                    <group colspan="4" col="6">
-                        <field name="employee_id" domain="[('active', '=',True)]"
-                        />
-                        <field name="employee_contract_id" domain="[('employee_id', '=',employee_id)]"
-                        />
-                        <field name="name"/>
-                        <field name="working_days"/>
-                        <field name="salaire_base"/>
-                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
-                    </group>
-                    <notebook colspan="4">
-                        <page string="Lignes du bulletin">
-                            <field colspan="4" name="salary_line_ids" nolabel="1" widget="one2many_list"/>
-                            <group colspan="4" col="6">
-                                <field name="salaire_brute"/>
-                                <field name="salaire_brute_imposable"/>
-                                <field name="salaire_net"/>
-                                <field name="salaire_net_imposable"/>
-                                <field name="cotisations_employee"/>
-                                <field name="cotisations_employer"/>
-                                <field name="salaire_net_a_payer"/>
-                                <field name="cumul_normal_hours"/>
-                                <field name="cumul_work_days"/>
-                                <field name="cumul_sb"/>
-                                <field name="cumul_sbi"/>
-                                <field name="cumul_sni"/>
-                                <field name="cumul_avn"/>
-                                <field name="cumul_igr"/>
-                                <field name="cumul_ee_cotis"/>
-                                <field name="cumul_er_cotis"/>
-                                <field name="cumul_fp"/>
-                                <field name="cumul_indemnites_fp"/>
-                                <field name="cumul_exo"/>
-                            </group>
-                            <group>
-                                <field name="salaire_net_a_payer_text"/>
-                            </group>
-                        </page>
-                        <page string="Info Salaire">
-                            <group>
-                                <group>
-                                    <field name="hour_base"/>
-                                    <field name="normal_hours"/>
+                    <header>
+                        <button name="compute_all_lines" string="Calculer bulletin"
+                                type="object" icon="fa-exchange"/>
+                    </header>
+                    <sheet>
+                        <group colspan="4" col="6">
+                            <field name="employee_id" domain="[('active', '=',True)]"
+                            />
+                            <field name="employee_contract_id" domain="[('employee_id', '=',employee_id)]"
+                            />
+                            <field name="name"/>
+                            <field name="working_days"/>
+                            <field name="salaire_base"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Lignes du bulletin">
+                                <field colspan="4" name="salary_line_ids" nolabel="1" widget="one2many_list"/>
+                                <group colspan="4" col="6">
+                                    <field name="salaire_brute"/>
+                                    <field name="salaire_brute_imposable"/>
+                                    <field name="salaire_net"/>
+                                    <field name="salaire_net_imposable"/>
+                                    <field name="cotisations_employee"/>
+                                    <field name="cotisations_employer"/>
+                                    <field name="salaire_net_a_payer"/>
+                                    <field name="cumul_normal_hours"/>
+                                    <field name="cumul_work_days"/>
+                                    <field name="cumul_sb"/>
+                                    <field name="cumul_sbi"/>
+                                    <field name="cumul_sni"/>
+                                    <field name="cumul_avn"/>
+                                    <field name="cumul_igr"/>
+                                    <field name="cumul_ee_cotis"/>
+                                    <field name="cumul_er_cotis"/>
+                                    <field name="cumul_fp"/>
+                                    <field name="cumul_indemnites_fp"/>
+                                    <field name="cumul_exo"/>
                                 </group>
                                 <group>
-                                    <field name="igr"/>
-                                    <field name="deduction"/>
-                                    <field name="period_id"/>
-                                    <field name="date_start" invisible="1"/>
-                                    <field name="date_end" invisible="1"/>
+                                    <field name="salaire_net_a_payer_text"/>
                                 </group>
-                            </group>
-                        </page>
-                    </notebook>
+                            </page>
+                            <page string="Info Salaire">
+                                <group>
+                                    <group>
+                                        <field name="hour_base"/>
+                                        <field name="normal_hours"/>
+                                    </group>
+                                    <group>
+                                        <field name="igr"/>
+                                        <field name="deduction"/>
+                                        <field name="period_id"/>
+                                        <field name="date_start" invisible="1"/>
+                                        <field name="date_end" invisible="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
                 </form>
             </field>
         </record>
