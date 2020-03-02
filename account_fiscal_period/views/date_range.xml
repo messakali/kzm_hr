@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_date_range_fiscalperiod_form_view" model="ir.ui.view">
+            <field name="name">date.range.period.form</field>
+            <field name="model">date.range</field>
+            <field name="inherit_id" ref="date_range.view_date_range_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[1]" position="before">
+                    <header>
+
+                        <button name="create_period" string="Créer périodes mensuelles" type="object" class="oe_highlight"/>
+                        <button name="create_period3" string="Créer périodes trimestrielle" type="object" class="oe_highlight"/>
+                    </header>
+                </xpath>
+
+                <field name="date_end" position="after" >
+                    <field name="previous_fiscal_year" domain="[('type_id.fiscal_year','=',True)]"/>
+                    <field name="next_fiscal_year" domain="[('type_id.fiscal_year','=',True)]"/>
+                </field>
+
+                <form position="inside">
+                    <notebook>
+                        <!--<field name="is_fiscal_year" invisible="1" />-->
+                        <page string="Périodes">
+                            <field name="period_ids">
+                                <tree editable="bottom" string="Taxes" create="0">
+                                    <field name="name"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>
