@@ -133,7 +133,7 @@ class bulletin(models.Model):
 
         salaire_base_mois = fields.Float(string='Salaire de base du mois', compute='get_base_salary')
         jrs_conges = fields.Float(string='Jours de congé', compute='get_nbr_leaves')
-        conges_payes = fields.Float(string='Congés payés', compute='get_nbr_paid_leaves')
+        conges_payes = fields.Float(string='Congés payés')#, compute='get_nbr_paid_leaves')
         cnss = fields.Float(string='CNSS', compute='get_cnss_employee')
         cimr_assurance_amo = fields.Float(string='CIMR/ASS/AMO', compute='get_cimr_assurance_amo')
         hsup_25 = fields.Float(string=u'Heures Sup 25%', compute='get_heures_sup')
@@ -207,28 +207,28 @@ class bulletin(models.Model):
 
                 rec.jrs_conges = somme
 
-        @api.multi
-        @api.depends('salaire_net')
-        def get_nbr_paid_leaves(self):
-
-            for rec in self:
-
-                #rub_paid_leaves = self.env.ref('hr_payroll_ma.jrs_conges_payes')
-                rub_paid_leaves = self.env['hr.payroll_ma.rubrique'].search([('jrs_conge_paye', '=', True),
-                                                                             ('company_id', '=', rec.company_id.id)],
-                                                                            limit=1)
-                if not rub_paid_leaves:
-                    raise ValidationError(u"Veuillez configurer la rubrique jours congé payé dans la liste "
-                                          u"des rubriques")
-
-                lines = self.env['hr.payroll_ma.bulletin.line'].search([('id_bulletin', '=', rec.id),
-                                                                        ('name', '=', rub_paid_leaves.name)])
-
-                somme = 0
-                for line in lines:
-                    somme += line.rate_employee
-
-                rec.conges_payes = somme
+        # @api.multi
+        # @api.depends('salaire_net')
+        # def get_nbr_paid_leaves(self):
+        #
+        #     for rec in self:
+        #
+        #         #rub_paid_leaves = self.env.ref('hr_payroll_ma.jrs_conges_payes')
+        #         rub_paid_leaves = self.env['hr.payroll_ma.rubrique'].search([('jrs_conge_paye', '=', True),
+        #                                                                      ('company_id', '=', rec.company_id.id)],
+        #                                                                     limit=1)
+        #         if not rub_paid_leaves:
+        #             raise ValidationError(u"Veuillez configurer la rubrique jours congé payé dans la liste "
+        #                                   u"des rubriques")
+        #
+        #         lines = self.env['hr.payroll_ma.bulletin.line'].search([('id_bulletin', '=', rec.id),
+        #                                                                 ('name', '=', rub_paid_leaves.name)])
+        #
+        #         somme = 0
+        #         for line in lines:
+        #             somme += line.rate_employee
+        #
+        #         rec.conges_payes = somme
 
         @api.multi
         @api.depends('salaire_net')

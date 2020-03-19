@@ -817,6 +817,20 @@ class hrPayrollMaBulletin(models.Model):
                     }
                 salaire_base_worked += hour_base * round(normal_hours, 2)
                 self.env['hr.payroll_ma.bulletin.line'].create(normale_hours_line)
+
+            #Congés payés
+            if rec.conges_payes:
+                conges_payes_line = {
+                    'name': 'Jours Conges payes',
+                    'id_bulletin': id_bulletin,
+                    'type': 'brute',
+                    'base': salaire_base_worked,
+                    'rate_employee': rec.conges_payes/26,
+                    'subtotal_employee': salaire_base_worked*rec.conges_payes/26,
+                    'deductible': False,
+                    }
+                self.env['hr.payroll_ma.bulletin.line'].create(conges_payes_line)
+
             # Rubriques majoration
             sql = '''
                 SELECT  l.montant,l.taux,r.name,r.categorie,r.type,r.formule,r.afficher,r.sequence,r.imposable,
