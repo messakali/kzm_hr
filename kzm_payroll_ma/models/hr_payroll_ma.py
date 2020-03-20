@@ -1128,6 +1128,16 @@ class HrLigneRubrique(models.Model):
             if rec.rubrique_id.is_hourly:
                 rec.taux = rec.rubrique_id.pourcentage
 
+            if rec.rubrique_id.formule:
+                salaire_base = rec.id_contract.wage
+                try:
+                    rec.montant = eval(str(rec.rubrique_id.formule))
+                except:
+                    rec.rubrique_id = False
+                    raise ValidationError('Veuillez saisir une formule valide!')
+            else:
+                rec.montant = 0
+
     @api.onchange('period_id')
     def onchange_period_id(self):
         self.date_start = self.period_id.date_start
