@@ -151,7 +151,7 @@ class HrContract(models.Model):
     rubrique_ids = fields.One2many('hr.payroll_ma.ligne_rubrique', 'id_contract', string='Rubriques')
     # actif = fields.Boolean(string="Actif", default=True)
     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
-                                 string='Société', readonly=True, copy=False)
+                                 string='Société', readonly=False, copy=False)
     type = fields.Selection(selection=(
         ('mensuel', 'Mensuel'),
         ('horaire', u'Horaire')
