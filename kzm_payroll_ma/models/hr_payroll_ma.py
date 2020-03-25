@@ -33,12 +33,12 @@ class HrPayrollMa(models.Model):
                               readonly=True)
     journal_id = fields.Many2one('account.journal', string='Journal', default=_get_journal,
                                  required=True, states={'draft': [('readonly', False)]})
-    state = fields.Selection(selection=(
+    state = fields.Selection(selection=[
         ('draft', 'Brouillon'),
         ('confirmed', u'Confirmé'),
         ('paid', u'Payé'),
         ('cancelled', u'Annulé')
-    ), string='Statut', readonly=True, default='draft')
+    ], string='Statut', readonly=True, default='draft')
     total_net = fields.Float(string='Total net', compute='get_total_net', digits=(16, 2))
 
     @api.model
@@ -1040,9 +1040,9 @@ class HrRubrique(models.Model):
     categorie = fields.Selection(selection=[('majoration', 'Majoration'),
                                             ('deduction', 'Deduction')], string=u'Catégorie', default='majoration')
     sequence = fields.Integer('Sequence', help=u"Ordre d'affichage dans le bulletin de paie", default=1)
-    type = fields.Selection(selection=(('prime', 'Prime'),
+    type = fields.Selection(selection=[('prime', 'Prime'),
                                        ('indemnite', u'Indemnité'),
-                                       ('avantage', 'Avantage')), string='Type', default='prime')
+                                       ('avantage', 'Avantage')], string='Type', default='prime')
     plafond = fields.Float(string=u'Plafond exonéré', default=0.0)
     formule = fields.Char(string='Formule', required=False, help='''
                     Pour les rubriques de type majoration, on utilise les variables suivantes :
@@ -1065,8 +1065,8 @@ class HrRubrique(models.Model):
     is_hourly = fields.Boolean(u'Par Heure?', default=False)
     pourcentage = fields.Float(u'Pourcentage')
 
-    heures_sup = fields.Selection((('25', '25%'), ('50', '50%'),
-                                   ('100', '100%')), string='Valeur heures sup')
+    heures_sup = fields.Selection([('25', '25%'), ('50', '50%'),
+                                   ('100', '100%')], string='Valeur heures sup')
     jrs_conge_paye = fields.Boolean('Jour congé payé?')
 
 
