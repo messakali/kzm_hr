@@ -1037,8 +1037,8 @@ class HrRubrique(models.Model):
 
     name = fields.Char(string='Nom', required="True")
     code = fields.Char(string='Code', required=False, readonly=False)
-    categorie = fields.Selection(selection=(('majoration', 'Majoration'),
-                                            ('deduction', 'Deduction')), string=u'Catégorie', default='majoration')
+    categorie = fields.Selection(selection=[('majoration', 'Majoration'),
+                                            ('deduction', 'Deduction')], string=u'Catégorie', default='majoration')
     sequence = fields.Integer('Sequence', help=u"Ordre d'affichage dans le bulletin de paie", default=1)
     type = fields.Selection(selection=(('prime', 'Prime'),
                                        ('indemnite', u'Indemnité'),
