@@ -14,7 +14,6 @@ class DateRange(models.Model):
     previous_fiscal_year = fields.Many2one(comodel_name="date.range", string=u"Exercice fiscal précedant", required=False, )
     next_fiscal_year = fields.Many2one(comodel_name="date.range", string="Exercice fiscal suivant", required=False, )
 
-    @api.multi
     @api.depends('type_id')
     def is_fiscal_year(self):
         for record in self:
@@ -23,12 +22,10 @@ class DateRange(models.Model):
                 is_fiscal_year = True
             record.is_fiscal_year = is_fiscal_year
 
-    @api.multi
-    def create_period3(self,context):
-        return self.create_period(context,3)
+    def create_period3(self):
+        return self.create_period(3)
 
-    @api.multi
-    def create_period(self,context, interval=1):
+    def create_period(self, interval=1):
 
         period_obj = self.env['date.range']
         for fy in self:

@@ -60,12 +60,12 @@ class RapportCimr(models.Model):
             res.all_cum_tot_part = somme10
 
     def get_quarters(self):
-        return (
+        return [
             ('1', u'1er Trimestre'),
             ('2', u'2ème Trimestre'),
             ('3', u'3ème Trimestre'),
             ('4', u'4ème Trimestre')
-        )
+        ]
 
     # Fonction qui génère les résultats du rapport
 
