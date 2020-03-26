@@ -23,17 +23,17 @@ class HrEmployee(models.Model):
                        help=u"Cette date est requise pour le calcul de la prime d'ancienneté")
     anciennete = fields.Boolean(string=u"Prime d'ancienneté?", default=True,
                                 help=u"Est ce que cet employé bénificie de la prime d'ancienneté")
-    mode_reglement = fields.Selection(selection=(('virement', 'Virement'),
+    mode_reglement = fields.Selection(selection=[('virement', 'Virement'),
                                                  ('cheque', u'Chèque'),
-                                                 ('espece', u'Espèce')),
+                                                 ('espece', u'Espèce')],
                                       string=u'Mode de règlement', default='virement')
     agence = fields.Char(string=u'Agence')
     bank = fields.Many2one('res.bank', string='Banque Marocaine')
     compte = fields.Char(string=u'Compte bancaire')
     chargefam = fields.Integer(string=u'Nombre de personnes à charge', default=0)
     logement = fields.Float('Abattement Fr Logement', default=0.0)
-    type_logement = fields.Selection(selection=(('normal', 'Normal'),
-                                                ('social', 'Social')), default='normal', string='Type logement')
+    type_logement = fields.Selection(selection=[('normal', 'Normal'),
+                                                ('social', 'Social')], default='normal', string='Type logement')
     superficie_logement = fields.Float(string=u'Superficie(m²)')
     prix_acquisition_logement = fields.Float(string=u"Prix d'acquisition")
     affilie = fields.Boolean(string=u'Affilié', default=True,
@@ -152,10 +152,10 @@ class HrContract(models.Model):
     # actif = fields.Boolean(string="Actif", default=True)
     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
                                  string='Société', readonly=False, copy=False)
-    type = fields.Selection(selection=(
+    type = fields.Selection(selection=[
         ('mensuel', 'Mensuel'),
         ('horaire', u'Horaire')
-    ), string='Type', default='mensuel')
+    ], string='Type', default='mensuel')
 
     @api.onchange('type')
     def onchange_type(self):

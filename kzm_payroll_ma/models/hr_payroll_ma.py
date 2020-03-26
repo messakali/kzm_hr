@@ -1130,10 +1130,10 @@ class HrPayrollMaBulletinLine(models.Model):
 
     name = fields.Char(string='Description', required=True)
     id_bulletin = fields.Many2one('hr.payroll_ma.bulletin', string='Bulletin', ondelete='cascade')
-    type = fields.Selection(selection=(('other', 'Autre'),
+    type = fields.Selection(selection=[('other', 'Autre'),
                                        ('retenu', 'Retenue'),
                                        ('cotisation', 'Cotisation'),
-                                       ('brute', 'Salaire brut')), string='Type')
+                                       ('brute', 'Salaire brut')], string='Type')
     credit_account_id = fields.Many2one('account.account', string=u'Compte crédit')
     debit_account_id = fields.Many2one('account.account', string=u'Compte Débit')
     base = fields.Float(string='Base', required=True, digits=(16, 2))

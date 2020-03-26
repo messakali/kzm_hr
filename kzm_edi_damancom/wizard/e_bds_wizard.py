@@ -14,7 +14,7 @@ class EBds(models.TransientModel):
     file_import = fields.Binary(string=u'Fichier préétabli')
     file_export = fields.Binary(string=u'Fichier e-BDS', readonly=True)
     name = fields.Char('Filename', readonly=True)
-    state = fields.Selection(selection=(('choose', 'choose'), ('get', 'get')), default='choose')
+    state = fields.Selection(selection=[('choose', 'choose'), ('get', 'get')], default='choose')
 
     def generate(self):
         bultain_salaire = self.env['hr.payroll_ma.bulletin']

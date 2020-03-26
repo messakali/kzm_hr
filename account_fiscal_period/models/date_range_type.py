@@ -8,7 +8,6 @@ class DateRangeType(models.Model):
 
     fiscal_period = fields.Boolean(string='Is fiscal period ?', default=False)
 
-    @api.multi
     def unlink(self):
         """
         Cannot delete a date_range_type with 'fiscal_period' flag = True

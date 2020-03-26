@@ -11,7 +11,7 @@ class TeledeclarationCimr(models.TransientModel):
 
     file_export = fields.Binary(string=u'Fichier CIMR', readonly=True)
     name = fields.Char('Filename', readonly=True)
-    state = fields.Selection(selection=(('choose', 'choose'), ('get', 'get')), default='choose')
+    state = fields.Selection(selection=[('choose', 'choose'), ('get', 'get')], default='choose')
 
     def generate(self):
         rapport_cimr_id = self._context.get('active_id')
