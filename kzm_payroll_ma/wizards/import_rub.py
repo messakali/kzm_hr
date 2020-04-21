@@ -37,7 +37,7 @@ class WizardRub(models.TransientModel):
                         'rubrique_id' : self.rub_id.id,
                         'id_contract': emp_id.contract_id.id,
                         'montant' : amount,
-                        'taux' : self.rub_id.pourcentage or 1,
+                        'taux' : self.rub_id.is_hourly and self.rub_id.pourcentage or 1,
                         'period_id': paie.period_id.id,
                         'permanent' : False,
                         'date_start': paie.period_id.date_start,
