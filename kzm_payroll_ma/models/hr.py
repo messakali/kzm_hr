@@ -74,6 +74,7 @@ class HrEmployee(models.Model):
                         today.month == seniority_date.month and today.day < seniority_date.day):
                     years -= 1
                 rec.annees_anciennete = years
+                rec.taux_anciennete = 0
 
                 objet_anciennete = self.env['hr.payroll_ma.anciennete']
                 liste = objet_anciennete.sudo().search([])
