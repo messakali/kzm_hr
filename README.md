@@ -1,29 +1,12 @@
-# README #
+[![Build Status](https://travis-ci.org/karizmaconseil/kzm_hr.svg?branch=master)](https://travis-ci.org/karizmaconseil/kzm_hr)
 
-This README would normally document whatever steps are necessary to get your application up and running.
+
+KZM HR
+=============
+
+This project aim to deal with modules related to Odoo hr and contract.
+
 
 ### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+- Add contract type object and menu
+- 
