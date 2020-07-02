@@ -47,3 +47,11 @@ script:
 
 after_success:
   - travis_after_tests_success
+ 
+notifications:
+  email:
+    recipients:
+      - a.elhamdaoui@karizma.ma
+      - r.rouichi@karizma.ma
+    on_success: never # never, change, always
+    on_failure: always # default: always
