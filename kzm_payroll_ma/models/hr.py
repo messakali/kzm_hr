@@ -139,10 +139,6 @@ class HrEmployee(models.Model):
             values['matricule'] = self.env['ir.sequence'].next_by_code('hr.employee.matricule')
         return super(HrEmployee, self).create(values)
 
-class HrEmployeePublic(models.Model):
-    _inherit = 'hr.employee.public'
-    
-    matricule = fields.Char('Matricule')
 
 
 class HrContract(models.Model):
