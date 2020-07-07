@@ -70,10 +70,11 @@ class HrPayrollMa(models.Model):
 
     @api.onchange('company_id', 'period_id')
     def onchange_period_id(self):
-        if self.company_id and self.period_id:
-            self.name = 'Paie ' + self.company_id.name + u' de la période ' + self.period_id.name
-            self.date_start = self.period_id.date_start
-            self.date_end = self.period_id.date_end
+        for r in self:
+            if r.company_id and r.period_id:
+                r.name = 'Paie ' + r.company_id.name + u' de la période ' + r.period_id.name
+                r.date_start = r.period_id.date_start
+                r.date_end = r.period_id.date_end
 
     def draft_cb(self):
         for rec in self:
@@ -464,29 +465,30 @@ class hrPayrollMaBulletin(models.Model):
     logement = fields.Float(string='Logement', digits=(16, 2))
 
     # Ajout des champs de cumul
-    cumul_normal_hours = fields.Float(compute='get_cumuls', string=u'Cumul des HT', digits=(16, 2))
-    cumul_work_days = fields.Float(compute='get_cumuls', string=u'Cumul des JT', digits=(16, 2))
-    cumul_sbi = fields.Float(compute='get_cumuls', string='Cumul SBI', digits=(16, 2))
-    cumul_base = fields.Float(compute='get_cumuls', string='Cumul base', digits=(16, 2))
-    cumul_sb = fields.Float(compute='get_cumuls', string='Cumul SB', digits=(16, 2))
-    cumul_sni = fields.Float(compute='get_cumuls', string='Cumul SNI', digits=(16, 2))
-    cumul_sni_n_1 = fields.Float(compute='get_cumuls_n_1', string=u'Cumul SNI N-1', digits=(16, 2))
-    cumul_igr = fields.Float(compute='get_cumuls', string='Cumul IR', digits=(16, 2))
-    cumul_igr_n_1 = fields.Float(compute='get_cumuls_n_1', string='Cumul IR N-1', digits=(16, 2))
-    cumul_ee_cotis = fields.Float(compute='get_cumuls', string=u'Cumul Cotis employé', digits=(16, 2))
-    cumul_er_cotis = fields.Float(compute='get_cumuls', string='Cumul Cotis employeur', digits=(16, 2))
-    cumul_fp = fields.Float(compute='get_cumuls', string='Cumul frais professionnels', digits=(16, 2))
-    cumul_avn = fields.Float(compute='get_cumuls', string=u'Cumul Avtg en nature', digits=(16, 2))
-    cumul_exo = fields.Float(compute='get_cumuls', string=u'Cumul exonéré', digits=(16, 2))
-    cumul_indemnites_fp = fields.Float(compute='get_cumuls', string='Cumul Indemn. frais professionnels')
-    cumul_avantages = fields.Float(compute='get_cumuls', string='Cumul Avantages')
+    cumul_normal_hours = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul des HT', digits=(16, 2))
+    cumul_work_days = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul des JT', digits=(16, 2))
+    cumul_sbi = fields.Float(strore=1, compute='get_cumuls', string='Cumul SBI', digits=(16, 2))
+    cumul_base = fields.Float(strore=1, compute='get_cumuls', string='Cumul base', digits=(16, 2))
+    cumul_sb = fields.Float(strore=1, compute='get_cumuls', string='Cumul SB', digits=(16, 2))
+    cumul_sni = fields.Float(strore=1, compute='get_cumuls', string='Cumul SNI', digits=(16, 2))
+    cumul_sni_n_1 = fields.Float(strore=1, compute='get_cumuls_n_1', string=u'Cumul SNI N-1', digits=(16, 2))
+    cumul_igr = fields.Float(strore=1, compute='get_cumuls', string='Cumul IR', digits=(16, 2))
+    cumul_igr_n_1 = fields.Float(strore=1, compute='get_cumuls_n_1', string='Cumul IR N-1', digits=(16, 2))
+    cumul_ee_cotis = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul Cotis employé', digits=(16, 2))
+    cumul_er_cotis = fields.Float(strore=1, compute='get_cumuls', string='Cumul Cotis employeur', digits=(16, 2))
+    cumul_fp = fields.Float(strore=1, compute='get_cumuls', string='Cumul frais professionnels', digits=(16, 2))
+    cumul_avn = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul Avtg en nature', digits=(16, 2))
+    cumul_exo = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul exonéré', digits=(16, 2))
+    cumul_indemnites_fp = fields.Float(strore=1, compute='get_cumuls', string='Cumul Indemn. frais professionnels')
+    cumul_avantages = fields.Float(strore=1, compute='get_cumuls', string='Cumul Avantages')
     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
                                  string='Société', readonly=True, copy=False)
 
-    @api.onchange('period_id')
-    def onchange_period_id(self):
-        self.date_start = self.period_id.date_start
-        self.date_end = self.period_id.date_end
+    # @api.onchange('period_id')
+    # def onchange_period_id(self):
+    #     for r in self:
+    #         r.date_start = r.period_id.date_start
+    #         r.date_end = r.period_id.date_end
 
     def get_bulletin_cumuls(self, mois, annee, employe):
         ligne_bul_paie = self.env['hr.payroll_ma.bulletin.line']
@@ -524,6 +526,20 @@ class hrPayrollMaBulletin(models.Model):
             periode = res.period_id.name.split('/')
             mois = periode[0]
             annee = periode[1]
+            res.cumul_normal_hours = 0
+            res.cumul_work_days = 0
+            res.cumul_sbi = 0
+            res.cumul_base = 0
+            res.cumul_sb = 0
+            res.cumul_sni = 0
+            res.cumul_igr = 0
+            res.cumul_ee_cotis = 0
+            res.cumul_er_cotis = 0
+            res.cumul_fp = 0
+            res.cumul_avn = 0
+            res.cumul_indemnites_fp = 0
+            res.cumul_exo = 0
+            res.cumul_avantages = 0
 
             somme_nh = 0.0
             somme_wd = 0.0
@@ -540,7 +556,7 @@ class hrPayrollMaBulletin(models.Model):
             somme_avantages = 0.0
             somme_exo = 0.0
             for j in range(1, int(mois) + 1, 1):
-                valeur_mois = res.get_bulletin_cumuls(j, annee, res.employee_id.id)
+                valeur_mois = self.get_bulletin_cumuls(j, annee, res.employee_id.id)
                 if valeur_mois:
                     somme_base += valeur_mois['salaire_base']
                     somme_nh += valeur_mois['normal_hours']
@@ -571,7 +587,6 @@ class hrPayrollMaBulletin(models.Model):
             res.cumul_indemnites_fp = somme_ind_fp
             res.cumul_exo = somme_exo
             res.cumul_avantages = somme_avantages
-        return True
 
     def get_cumuls_n_1(self):
         for res in self:
@@ -580,6 +595,8 @@ class hrPayrollMaBulletin(models.Model):
             annee = periode[1]
             somme_sni = 0.0
             somme_igr = 0.0
+            res.cumul_sni_n_1 = 0
+            res.cumul_igr_n_1 = 0
             for j in range(1, int(mois), 1):
                 valeur_mois = res.get_bulletin_cumuls(j, annee, res.employee_id.id)
                 if valeur_mois:
@@ -594,46 +611,39 @@ class hrPayrollMaBulletin(models.Model):
 
     @api.onchange('employee_contract_id')
     def onchange_contract_id(self):
-        contract = self.employee_contract_id
-        if contract:
-            self.salaire_base = contract.wage
-            self.hour_base = contract.hour_salary
-            self.normal_hours = contract.monthly_hour_number
-            self.employee_id = contract.employee_id.id
+        for r in self:
+            contract = r.employee_contract_id
+            if contract:
+                r.salaire_base = contract.wage
+                r.hour_base = contract.hour_salary
+                r.normal_hours = contract.monthly_hour_number
+                r.employee_id = contract.employee_id.id
 
     @api.onchange('employee_id')
     def onchange_employee_id(self):
-        if self.env.context.get('period_id'):
-            self.period_id = self.env.context.get('period_id')
-        if self.env.context.get('date_start'):
-            self.date_start = self.env.context.get('date_start')
-        if self.env.context.get('date_end'):
-            self.date_end = self.env.context.get('date_end')
-        if not self.period_id:
-            raise ValidationError(u"Vous devez d'abord spécifier une période !")
-        if self.period_id and self.employee_id:
-            if not self.employee_id.contract_id:
-                return True
-            else:
-                # sql = '''select sum(number_of_days)
-                #         from    hr_leave h
-                #                 left join hr_leave_type s on (h.holiday_status_id=s.id)
-                #         where date_from >= '%s' and date_to <= '%s'
-                #               and employee_id = %s
-                #               and state = 'validate'
-                #               and s.unpaid=True''' % (self.period_id.date_start, self.period_id.date_end, self.employee_id.id)
-                # self.env.cr.execute(sql)
-                # res = self.env.cr.fetchone()
-                # if res[0] is None:
-                #     days = 0
-                # else:
-                #     days = res[0]
-                self.employee_contract_id = self.employee_id.contract_id.id
-                self.salaire_base = self.employee_id.contract_id.wage
-                self.hour_base = self.employee_id.contract_id.hour_salary
-                self.normal_hours = self.employee_id.contract_id.monthly_hour_number
-                self.working_days = 26
-                self.period_id = self.period_id.id
+        print('====>', self.env.context)
+        print(self.env.context['period_id'])
+        print('====iii')
+        for r in self:
+            if self.env.context['period_id']:
+                r.period_id = self.env.context['period_id']
+            # if self.env.context['date_start']:
+            #     r.date_start = self.env.context['date_start']
+            # if self.env.context['date_end']:
+            #     r.date_end = self.env.context['date_end']
+            if not r.period_id:
+                raise ValidationError(u"Vous devez d'abord spécifier une période !")
+            print('test')
+            if r.period_id and r.employee_id:
+                if r.employee_id.contract_id:
+                    r.employee_contract_id = r.employee_id.contract_id.id
+                    r.salaire_base = r.employee_id.contract_id.wage
+                    r.hour_base = r.employee_id.contract_id.hour_salary
+                    r.normal_hours = r.employee_id.contract_id.monthly_hour_number
+                    r.working_days = 26
+                    r.period_id = r.period_id.id
+
+        print('ok')
 
     # def get_parametere(self):
     #     params = self.env['hr.payroll_ma.parametres']
@@ -729,7 +739,7 @@ class hrPayrollMaBulletin(models.Model):
                     'frais_pro': fraispro,
                     'personnes': personnes
                 }
-        return res
+            return res
 
     def calc_seniority(self, date_embauche, date_paie):
         # date_embauche = str(date_embauche).split('-')
@@ -1117,11 +1127,11 @@ class HrLigneRubrique(models.Model):
             else:
                 rec.montant = 0
 
-    @api.onchange('period_id')
-    def onchange_period_id(self):
-        if self.period_id:
-            self.date_start = self.period_id.date_start
-            self.date_stop = self.period_id.date_end
+    # @api.onchange('period_id')
+    # def onchange_period_id(self):
+    #     if self.period_id:
+    #         self.date_start = self.period_id.date_start
+    #         self.date_stop = self.period_id.date_end
 
 
 class HrPayrollMaBulletinLine(models.Model):
