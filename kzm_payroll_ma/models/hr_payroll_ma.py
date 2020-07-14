@@ -484,11 +484,11 @@ class hrPayrollMaBulletin(models.Model):
     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
                                  string='Société', readonly=True, copy=False)
 
-    # @api.onchange('period_id')
-    # def onchange_period_id(self):
-    #     for r in self:
-    #         r.date_start = r.period_id.date_start
-    #         r.date_end = r.period_id.date_end
+    @api.onchange('period_id')
+    def onchange_period_id(self):
+        for r in self:
+            r.date_start = r.period_id.date_start
+            r.date_end = r.period_id.date_end
 
     def get_bulletin_cumuls(self, mois, annee, employe):
         ligne_bul_paie = self.env['hr.payroll_ma.bulletin.line']
@@ -622,15 +622,15 @@ class hrPayrollMaBulletin(models.Model):
     @api.onchange('employee_id')
     def onchange_employee_id(self):
         print('====>', self.env.context)
-        print(self.env.context['period_id'])
+        print(self.env.context.get('date_end', False))
         print('====iii')
         for r in self:
-            if self.env.context['period_id']:
-                r.period_id = self.env.context['period_id']
-            # if self.env.context['date_start']:
-            #     r.date_start = self.env.context['date_start']
-            # if self.env.context['date_end']:
-            #     r.date_end = self.env.context['date_end']
+            if self.env.context.get('period_id', False):
+                r.period_id = self.env.context.get('period_id', False)
+            if self.env.context.get('date_start', False):
+                r.date_start = self.env.context.get('date_start', False)
+            if self.env.context.get('date_end', False):
+                r.date_end = self.env.context.get('date_end', False)
             if not r.period_id:
                 raise ValidationError(u"Vous devez d'abord spécifier une période !")
             print('test')
@@ -910,8 +910,9 @@ class hrPayrollMaBulletin(models.Model):
                     self.env['hr.payroll_ma.bulletin.line'].create(majoration_line)
 
             # Ancienneté
-
-            taux_anciennete = self.calc_seniority(self.employee_id.date, self.date_end) / 100
+            print('====>', rec.employee_id.date)
+            print('====>', rec.period_id.date_end)
+            taux_anciennete = self.calc_seniority(rec.employee_id.date, fields.Date.today()) / 100
             prime_anciennete = (salaire_base_worked + anciennete) * taux_anciennete
             if taux_anciennete:
                 anciennete_line = {
@@ -1127,11 +1128,11 @@ class HrLigneRubrique(models.Model):
             else:
                 rec.montant = 0
 
-    # @api.onchange('period_id')
-    # def onchange_period_id(self):
-    #     if self.period_id:
-    #         self.date_start = self.period_id.date_start
-    #         self.date_stop = self.period_id.date_end
+    @api.onchange('period_id')
+    def onchange_period_id(self):
+        if self.period_id:
+            self.date_start = self.period_id.date_start
+            self.date_stop = self.period_id.date_end
 
 
 class HrPayrollMaBulletinLine(models.Model):
