@@ -866,10 +866,10 @@ class hrPayrollMaBulletin(models.Model):
                         # Taux: Par exemple: Heures sup 25%:  25%--125%
                         montant = montant * taux_horaire * taux / 100
 
-                    if rubrique['conge']:
+                    if rubrique['absence'] and rubrique['conge']:
                         #taux = rubrique['taux']
                         #montant = 0
-                        taux = bulletin.conges_payes / 26
+                        taux = (bulletin.working_days - bulletin.conges_payes) / 26
                         montant = rubrique['montant'] * taux
                         taux = taux * 100
                         
