@@ -869,7 +869,7 @@ class hrPayrollMaBulletin(models.Model):
                     if rubrique['conge']:
                         #taux = rubrique['taux']
                         #montant = 0
-                        taux = bulletin.jours_conges / 26
+                        taux = bulletin.conges_payes / 26
                         montant = rubrique['montant'] * taux
                         taux = taux * 100
                         
