@@ -46,6 +46,14 @@
             file="kzm_payroll_ma_reports.etat_igr"
             name="kzm_payroll_ma_reports.etat_igr"
         />
+        <report
+            id="etat_rubriques_par_department_id"
+            string="Etat Rubriques par departement"
+            model="hr.payroll_ma"
+            report_type="qweb-pdf"
+            file="kzm_payroll_ma_reports.etat_rubriques_par_department"
+            name="kzm_payroll_ma_reports.etat_rubriques_par_department"
+        />
 
         <record id="report_reports_rh_paperformat" model="report.paperformat">
             <field name="name">Reports RH paperformat</field>

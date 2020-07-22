@@ -621,9 +621,6 @@ class hrPayrollMaBulletin(models.Model):
 
     @api.onchange('employee_id')
     def onchange_employee_id(self):
-        print('====>', self.env.context)
-        print(self.env.context.get('date_end', False))
-        print('====iii')
         for r in self:
             if self.env.context.get('period_id', False):
                 r.period_id = self.env.context.get('period_id', False)
@@ -660,6 +657,8 @@ class hrPayrollMaBulletin(models.Model):
             bulletin = rec
             coef = 0
 
+
+
             # dictionnaire = rec.get_parametere()
             if not bulletin.employee_contract_id.ir:
                 res = {
@@ -688,6 +687,8 @@ class hrPayrollMaBulletin(models.Model):
                     salaire_net_imposable = sbi - fraispro - cotisations
                 else:
                     salaire_net_imposable = sbi - plafond - cotisations
+
+
 
                 # logement
                 salaire_logement = salaire_net_imposable * 10 / 100
@@ -910,8 +911,6 @@ class hrPayrollMaBulletin(models.Model):
                     self.env['hr.payroll_ma.bulletin.line'].create(majoration_line)
 
             # Ancienneté
-            print('====>', rec.employee_id.date)
-            print('====>', rec.period_id.date_end)
             taux_anciennete = self.calc_seniority(rec.employee_id.date, fields.Date.today()) / 100
             prime_anciennete = (salaire_base_worked + anciennete) * taux_anciennete
             if taux_anciennete:

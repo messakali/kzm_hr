@@ -21,6 +21,7 @@
              'report/etat_cnss.xml',
              'report/etat_igr.xml',
              'report/bordereau_paiement_cnss.xml',
+             'report/etat_rubriques_par_departement.xml',
             ],
     'installable': True,
     'auto_install': False,

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="etat_rubriques_par_department">
+            <!--<t  t-call = "report.html_container" >-->
+            <!--<t  t-foreach = "docs"  t-as= "o" >-->
+            <!--<t  t-call = "hr_payroll_ma_legal_reports.external_layout_hr_reports" >-->
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <t t-set="rubriques_splitted" t-value="o.split(o.get_rubriques_departments()[1],5)"/>
+                            <t t-foreach="rubriques_splitted" t-as="rubriques">
+                                <div align="center">
+                                <h2>
+                                    <strong>États rubriques par départements</strong>
+                                </h2>
+                            </div>
+                                <div align="left">
+                                    <h5>Période de paie en cours :
+                                        <span t-field="o.date_start" t-options='{"format": "dd-MM-yyyy"}'/>
+                                        &#160;&#160;&#160; - &#160;&#160;&#160;
+                                        <span t-field="o.date_end" t-options='{"format": "dd-MM-yyyy"}'/>
+                                    </h5>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <table width="100%" style="border-collapse: collapse;">
+                                    <t t-set="d" t-value="o.get_rubriques_departments()"/>
+                                    <t t-set="i" t-value="1"/>
+<!--                                    <t t-set="rubriques" t-value="d[1]"/>-->
+                                    <t t-set="departements" t-value="d[2]"/>
+                                    <!--                                Lignes des rubriques-->
+                                    <tr height="25" style="text-transform: uppercase;">
+                                        <td style="border: 1px solid black;text-align: center;" width="2%">N°</td>
+                                        <td style="border: 1px solid black;text-align: center;" width="20%">Département
+                                        </td>
+                                        <td style="border: 1px solid black;text-align: center;" width="3%">Nbre Employés
+                                        </td>
+                                        <t t-foreach="rubriques" t-as="item">
+                                            <!--                                            <t t-set="montant" t-value="o.calcul_total(item)"/>-->
+                                            <td style="border: 1px solid black;text-align: center;" width="15%">
+                                                <!--                                <t t-esc="item"/>-->
+                                                <t t-set="item" t-esc="item"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <!--                                Lignes des departements-->
+                                    <t t-set="totals" t-value="0"/>
+                                    <t t-set="totals_for_p" t-value="0"/>
+                                    <t t-foreach="d[2]" t-as="dep">
+                                        <t t-set="totals_for_p"
+                                                   t-value="totals_for_p+o.env['hr.department'].search([('name','=',dep)]).total_employee"/>
+                                    </t>
+                                    <tr t-foreach="d[2]" t-as="dep">
+
+                                        <tr height="45">
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <span t-esc="i"/>
+                                            </td>
+                                            <t t-set="i" t-value="i+1"/>
+
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <t t-set="totals"
+                                                   t-value="totals+o.env['hr.department'].search([('name','=',dep)]).total_employee"/>
+                                                <t t-set="dep" t-esc="dep"/>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <span t-esc="o.env['hr.department'].search([('name','=',dep)]).total_employee"/>  <br></br> (<span t-esc="'{0:.2f}'.format(o.env['hr.department'].search([('name','=',dep)]).total_employee/totals_for_p*100)"/>%)
+                                            </td>
+                                            <t t-foreach="rubriques" t-as="item">
+                                                <td t-if="item in d[0][dep]"
+                                                    style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                    <t t-esc="'{0:.2f}'.format(d[0][dep][item])"/>  <br></br> (<span t-esc="'{0:.2f}'.format(d[0][dep][item]/o.calcul_total(item)*100)"/>%)
+                                                </td>
+                                                <t t-else="">
+                                                    <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                        0
+                                                    </td>
+                                                </t>
+                                            </t>
+                                        </tr>
+                                    </tr>
+                                    <!--                                Ligne Totaux-->
+                                    <tr height="35">
+                                        <t t-set="total" t-value="0"/>
+                                        <td colspan="2" style="border: 1px solid black;text-align: center;" width="20%">
+                                            Total
+                                        </td>
+                                        <td style="border: 1px solid black;text-align: center;">
+                                            <t t-esc="totals"></t>
+                                        </td>
+                                        <t t-foreach="rubriques" t-as="item">
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <span t-esc="o.calcul_total(item)"></span>
+                                            </td>
+                                        </t>
+
+                                        <!--                                            <t t-else="" >-->
+                                        <!--                                                    <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">-->
+                                        <!--                                                    </td>-->
+                                        <!--                                            </t>-->
+                                    </tr>
+
+                                </table>
+                                <p style="page-break-after:always;"/>
+
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
