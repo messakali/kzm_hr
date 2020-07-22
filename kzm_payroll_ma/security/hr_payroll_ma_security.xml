@@ -32,7 +32,7 @@
         <field name="name">hr employee multi company rule</field>
         <field name="model_id" ref="hr.model_hr_employee"/>
         <field eval="True" name="global"/>
-        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field name="domain_force"> ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         <field eval="True" name="active"/>
     </record>
 
@@ -40,7 +40,7 @@
         <field name="name">hr payroll multi company rule</field>
         <field name="model_id" ref="model_hr_payroll_ma"/>
         <field eval="True" name="global"/>
-        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field name="domain_force"> ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         <field eval="True" name="active"/>
     </record>
 
@@ -48,7 +48,7 @@
         <field name="name">hr contract multi company rule</field>
         <field name="model_id" ref="model_hr_contract"/>
         <field eval="True" name="global"/>
-        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field name="domain_force"> ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         <field eval="True" name="active"/>
     </record>
 
@@ -56,7 +56,7 @@
         <field name="name">hr payroll bulletin multi company rule</field>
         <field name="model_id" ref="model_hr_payroll_ma_bulletin"/>
         <field eval="True" name="global"/>
-        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field name="domain_force"> ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         <field eval="True" name="active"/>
     </record>
 
@@ -64,7 +64,7 @@
         <field name="name">hr payroll type cotisation multi company rule</field>
         <field name="model_id" ref="model_hr_payroll_ma_cotisation_type"/>
         <field eval="True" name="global"/>
-        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field name="domain_force"> ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         <field eval="True" name="active"/>
     </record>
 
@@ -72,7 +72,7 @@
         <field name="name">hr payroll cotisation multi company rule</field>
         <field name="model_id" ref="model_hr_payroll_ma_cotisation"/>
         <field eval="True" name="global"/>
-        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field name="domain_force"> ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         <field eval="True" name="active"/>
     </record>
 
@@ -80,7 +80,7 @@
         <field name="name">hr payroll parametres multi company rule</field>
         <field name="model_id" ref="model_hr_payroll_ma_parametres"/>
         <field eval="True" name="global"/>
-        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field name="domain_force"> ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         <field eval="True" name="active"/>
     </record-->
 
@@ -88,7 +88,7 @@
         <field name="name">hr payroll rubrique multi company rule</field>
         <field name="model_id" ref="model_hr_payroll_ma_rubrique"/>
         <field eval="True" name="global"/>
-        <field name="domain_force"> ['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+        <field name="domain_force"> ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         <field eval="True" name="active"/>
     </record>
 
