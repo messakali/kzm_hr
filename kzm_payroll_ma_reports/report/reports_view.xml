@@ -54,6 +54,14 @@
             file="kzm_payroll_ma_reports.etat_rubriques_par_department"
             name="kzm_payroll_ma_reports.etat_rubriques_par_department"
         />
+        <report
+            id="bordereau_paiement_multibanque_id"
+            string="Bordereau de paiement multibanque"
+            model="hr.payroll_ma"
+            report_type="qweb-pdf"
+            file="kzm_payroll_ma_reports.bordereau_paiement_multibanque"
+            name="kzm_payroll_ma_reports.bordereau_paiement_multibanque"
+        />
 
         <record id="report_reports_rh_paperformat" model="report.paperformat">
             <field name="name">Reports RH paperformat</field>

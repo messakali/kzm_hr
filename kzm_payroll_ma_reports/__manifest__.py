@@ -14,6 +14,7 @@
     'data': [
              'views/custom_bulletin_form_view.xml',
              'views/custom_payroll_parametres_view.xml',
+             'views/company_virement_bank.xml',
              'report/reports_header_view.xml',
              'report/reports_view.xml',
              'report/journal_paie.xml',
@@ -22,6 +23,7 @@
              'report/etat_igr.xml',
              'report/bordereau_paiement_cnss.xml',
              'report/etat_rubriques_par_departement.xml',
+             'report/bordereau_paiement_multibanque.xml',
             ],
     'installable': True,
     'auto_install': False,

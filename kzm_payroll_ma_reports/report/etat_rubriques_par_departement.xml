@@ -9,15 +9,16 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
+
                             <t t-set="rubriques_splitted" t-value="o.split(o.get_rubriques_departments()[1],5)"/>
                             <t t-foreach="rubriques_splitted" t-as="rubriques">
                                 <div align="center">
                                 <h2>
-                                    <strong>États rubriques par départements</strong>
+                                    <strong>Etat rubriques par département</strong>
                                 </h2>
                             </div>
                                 <div align="left">
-                                    <h5>Période de paie en cours :
+                                    <h5>Periode de paie en cours :
                                         <span t-field="o.date_start" t-options='{"format": "dd-MM-yyyy"}'/>
                                         &#160;&#160;&#160; - &#160;&#160;&#160;
                                         <span t-field="o.date_end" t-options='{"format": "dd-MM-yyyy"}'/>
@@ -31,12 +32,13 @@
                                     <t t-set="i" t-value="1"/>
 <!--                                    <t t-set="rubriques" t-value="d[1]"/>-->
                                     <t t-set="departements" t-value="d[2]"/>
+
                                     <!--                                Lignes des rubriques-->
-                                    <tr height="25" style="text-transform: uppercase;">
+                                    <tr height="25">
                                         <td style="border: 1px solid black;text-align: center;" width="2%">N°</td>
-                                        <td style="border: 1px solid black;text-align: center;" width="20%">Département
+                                        <td style="border: 1px solid black;text-align: center;" width="20%">Départment
                                         </td>
-                                        <td style="border: 1px solid black;text-align: center;" width="3%">Nbre Employés
+                                        <td style="border: 1px solid black;text-align: center;" width="3%">Nb Emp
                                         </td>
                                         <t t-foreach="rubriques" t-as="item">
                                             <!--                                            <t t-set="montant" t-value="o.calcul_total(item)"/>-->
