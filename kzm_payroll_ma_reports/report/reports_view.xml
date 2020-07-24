@@ -62,6 +62,14 @@
             file="kzm_payroll_ma_reports.bordereau_paiement_multibanque"
             name="kzm_payroll_ma_reports.bordereau_paiement_multibanque"
         />
+        <report
+            id="etat_paie_id"
+            string="Etat de paie"
+            model="hr.payroll_ma"
+            report_type="qweb-pdf"
+            file="kzm_payroll_ma_reports.etat_paie"
+            name="kzm_payroll_ma_reports.etat_paie"
+        />
 
         <record id="report_reports_rh_paperformat" model="report.paperformat">
             <field name="name">Reports RH paperformat</field>

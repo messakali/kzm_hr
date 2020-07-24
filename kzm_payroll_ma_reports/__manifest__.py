@@ -24,6 +24,7 @@
              'report/bordereau_paiement_cnss.xml',
              'report/etat_rubriques_par_departement.xml',
              'report/bordereau_paiement_multibanque.xml',
+             'report/etat_paie.xml',
             ],
     'installable': True,
     'auto_install': False,

@@ -119,10 +119,11 @@ class HrPayrollMaReports(models.Model):
                     dict_banks[company_virement_bank.name].append(data)
             banks = list(set(banks))
         pprint(dict_banks)
-        # pprint(banks)
-        pprint(sorted(banks, key = lambda r: r.id))
+        pprint(banks)
         # for v in dict_banks:
         #     banks.append(v)
         #     banks = list(set(banks))
-        #     pprint(banks) <
-        return dict_banks, sorted(banks, key = lambda r: r.id)
+        #     pprint(banks)
+        return dict_banks , banks
+
+

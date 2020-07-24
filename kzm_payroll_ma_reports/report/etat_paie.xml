@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="etat_paie">
+            <!--<t  t-call = "report.html_container" >-->
+            <!--<t  t-foreach = "docs"  t-as= "o" >-->
+            <!--<t  t-call = "hr_payroll_ma_legal_reports.external_layout_hr_reports" >-->
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div align="center">
+                                <h4>
+                                    <strong>ÉTATS DES SALAIRES ET INDEMNITÉS</strong>
+                                </h4>
+                                <br/>
+                                Période de la paie du mois en cours:
+                                <span t-field="o.date_start" t-options='{"format": "dd-MM-yyyy"}'/>
+                                &#160;&#160;&#160; - &#160;&#160;&#160;
+                                <span t-field="o.date_end" t-options='{"format": "dd-MM-yyyy"}'/>
+                            </div>
+
+                            <table style="border-collapse: collapse;width:100%">
+                                <thead>
+                                    <tr height="45">
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b>Matricule</b>
+                                            <br>
+                                            </br>
+                                            <b>Nom et prénom</b>
+                                            <br></br>
+                                            <b></b>
+                                        </th>
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b>Sal Base</b>
+                                            <br></br>
+                                            <b>Rappel</b>
+                                            <br></br>
+                                            <b></b>
+                                        </th>
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b>All.Fam</b>
+                                            <br></br>
+                                            <b>I.Log</b>
+                                            <br></br>
+                                            <b>I.Trspt</b>
+                                        </th>
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b></b>
+                                            <br></br>
+                                            <b>Hrs 50%</b>
+                                            <br></br>
+                                            <b>Hrs 100%</b>
+                                        </th>
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b>P.Expt</b>
+                                            <br></br>
+                                            <b>P.Rept</b>
+                                            <br></br>
+                                            <b>G.F.Année</b>
+                                        </th>
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b>Div en +</b>
+                                            <br></br>
+                                            <b>GR.14mois</b>
+                                            <br></br>
+                                            <b></b>
+                                        </th>
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b>Av1/Sal</b>
+                                            <br></br>
+                                            <b>Av2/Sal</b>
+                                            <br></br>
+                                            <b>Prêt</b>
+                                        </th>
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b>Mutuelle</b>
+                                            <br></br>
+                                            <b>F.Svce</b>
+                                            <br></br>
+                                            <b>B.Essence</b>
+                                        </th>
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b>Div en -</b>
+                                            <br></br>
+                                            <b>F.S.retro</b>
+                                        </th>
+                                        <th style="font-size:16px;border: 1px solid black;text-align: center;">
+                                            <b></b>
+                                            <br></br>
+                                            <b></b>
+                                            <br></br>
+                                            <b>Net</b>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <t t-foreach="o.bulletin_line_ids.sorted(key=lambda r: r.employee_id.matricule)"
+                                       t-as="b">
+                                        <tr height="45">
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <span t-field="b.employee_id.matricule"/>
+                                                <br></br>
+                                                <span t-field="b.employee_id.name"/>
+                                                <span t-field="b.employee_id.prenom"/>
+                                                <br></br>
+                                                <br></br>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <span t-field="b.salaire_base_mois"/>
+                                                <br></br>
+                                                <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == 'Rappel de salaire').base"/>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <t t-set='montant_all_fam' t-value="b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.rubrique22').name == l.name)
+                                        and b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.rubrique22').name == l.name).subtotal_employee"/>
+                                                <br></br>
+                                                <t t-set='montant_i_log' t-value="b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.rubrique5').name == l.name)
+                                        and b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.rubrique5').name == l.name).subtotal_employee"/>
+                                                <br></br>
+                                                <t t-set='montant_i_trans' t-value="b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.rubrique8').name == l.name)
+                                        and b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.rubrique8').name == l.name).subtotal_employee"/>
+                                                <br></br>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <br></br>
+                                                <span t-field="b.hsup_50"/>
+                                                <br></br>
+                                                <span t-field="b.hsup_100"/>
+                                                <br></br>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == &quot;Prime d&apos;expatriation&quot;).base"/>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == 'Eléments en plus').base"/>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <t t-set='montant_mutuelle' t-value="b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.cotisation_data1').name == l.name)
+                                        and b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.cotisation_data1').name == l.name).subtotal_employee"/>
+                                                <br></br>
+                                                <t t-set='montant_f_service' t-value="b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.cotisation_data2').name == l.name)
+                                        and b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.cotisation_data2').name == l.name).subtotal_employee"/>
+                                                <br></br>
+                                                <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == &quot;Bons d&apos;essence&quot;).base"/>
+                                                <br></br>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == 'DIVERS ELEMENTS EN MOINS').base"/>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                            </td>
+                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                                <br></br>
+                                                <br></br>
+                                                <span t-field="b.salaire_net_a_payer"/>
+                                                <br></br>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
