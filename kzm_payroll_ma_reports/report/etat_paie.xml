@@ -99,7 +99,7 @@
                                     <t t-foreach="o.bulletin_line_ids.sorted(key=lambda r: r.employee_id.matricule)"
                                        t-as="b">
                                         <tr height="45">
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <span t-field="b.employee_id.matricule"/>
                                                 <br></br>
                                                 <span t-field="b.employee_id.name"/>
@@ -107,7 +107,7 @@
                                                 <br></br>
                                                 <br></br>
                                             </td>
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <span t-field="b.salaire_base_mois"/>
                                                 <br></br>
                                                 <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == 'Rappel de salaire').base"/>
@@ -115,7 +115,7 @@
                                                 <br></br>
                                                 <br></br>
                                             </td>
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <t t-set='montant_all_fam' t-value="b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.rubrique22').name == l.name)
                                         and b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.rubrique22').name == l.name).subtotal_employee"/>
                                                 <br></br>
@@ -126,31 +126,31 @@
                                         and b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.rubrique8').name == l.name).subtotal_employee"/>
                                                 <br></br>
                                             </td>
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <br></br>
                                                 <span t-field="b.hsup_50"/>
                                                 <br></br>
                                                 <span t-field="b.hsup_100"/>
                                                 <br></br>
                                             </td>
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == &quot;Prime d&apos;expatriation&quot;).base"/>
                                                 <br></br>
                                                 <br></br>
                                                 <br></br>
                                             </td>
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == 'Eléments en plus').base"/>
                                                 <br></br>
                                                 <br></br>
                                                 <br></br>
                                             </td>
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <br></br>
                                                 <br></br>
                                                 <br></br>
                                             </td>
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <t t-set='montant_mutuelle' t-value="b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.cotisation_data1').name == l.name)
                                         and b.salary_line_ids.filtered(lambda l: o.env.ref('kzm_payroll_ma.cotisation_data1').name == l.name).subtotal_employee"/>
                                                 <br></br>
@@ -160,16 +160,16 @@
                                                 <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == &quot;Bons d&apos;essence&quot;).base"/>
                                                 <br></br>
                                             </td>
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <span t-esc="b.salary_line_ids.filtered(lambda r: r.name == 'DIVERS ELEMENTS EN MOINS').base"/>
                                                 <br></br>
                                                 <br></br>
                                                 <br></br>
                                             </td>
-                                            <td style="font-size:16px;border: 1px solid black;text-align: center;vertical-align:middle;">
+                                            <td style="width: 10%; border: 1px solid black;text-align: center;vertical-align:middle;">
                                                 <br></br>
                                                 <br></br>
-                                                <span t-field="b.salaire_net_a_payer"/>
+                                                <span style="font-size:12px;" t-field="b.salaire_net_a_payer"/>
                                                 <br></br>
                                             </td>
                                         </tr>
