@@ -202,7 +202,7 @@ class HrPayrollMa(models.Model):
                         'name': (line['name'] or '\\') + ' Salarial',
                         'credit': line['subtotal_employee'],
                         'debit': 0,
-                        'state': 'valid'
+                        # 'state': 'valid'
                     }
                     move_lines.append((0, 0, move_line_credit))
 
@@ -214,7 +214,7 @@ class HrPayrollMa(models.Model):
                         'name': (line['name'] or '\\') + ' Patronal',
                         'debit': line['subtotal_employer'],
                         'credit': 0,
-                        'state': 'valid'
+                        # 'state': 'valid'
                     }
                     move_line_credit = {
                         'account_id': line['credit_account_id'],
@@ -223,7 +223,7 @@ class HrPayrollMa(models.Model):
                         'name': (line['name'] or '\\') + ' Patronal',
                         'debit': 0,
                         'credit': line['subtotal_employer'],
-                        'state': 'valid'
+                        # 'state': 'valid'
                     }
                     move_lines.append((0, 0, move_line_debit))
                     move_lines.append((0, 0, move_line_credit))
@@ -254,7 +254,7 @@ class HrPayrollMa(models.Model):
                     'name': line['name'] or '\\',
                     'debit': line['subtotal_employee'],
                     'credit': 0,
-                    'state': 'valid'
+                    # 'state': 'valid'
                 }
                 move_lines.append((0, 0, move_line_debit_rubrique))
                 # Rubriques deduction
@@ -283,7 +283,7 @@ class HrPayrollMa(models.Model):
                     'name': line['name'] or '\\',
                     'debit': 0,
                     'credit': line['subtotal_employee'],
-                    'state': 'valid'
+                    # 'state': 'valid'
                 }
                 move_lines.append((0, 0, move_line_credit_rubrique))
 
@@ -315,7 +315,7 @@ class HrPayrollMa(models.Model):
                     'name': 'Salaire brute',
                     'debit': line['subtotal_employee'],
                     'credit': 0,
-                    'state': 'valid'
+                    # # 'state': 'valid'
                 }
                 move_lines.append((0, 0, move_line_debit_brute))
 
@@ -344,7 +344,7 @@ class HrPayrollMa(models.Model):
                 'name': 'Arrondi',
                 'debit': data['arrondi'],
                 'credit': 0,
-                'state': 'valid'
+                # # 'state': 'valid'
             }
             move_line_credit = {
                 # 'account_id': dictionnaire.salary_credit_account_id.id, // Ayoub
@@ -354,7 +354,7 @@ class HrPayrollMa(models.Model):
                 'name': 'Salaire net a payer',
                 'credit': data['salaire_net_a_payer'],
                 'debit': 0,
-                'state': 'valid'
+                # # 'state': 'valid'
             }
             move_lines.append((0, 0, move_line_arrondi))
             move_lines.append((0, 0, move_line_credit))
@@ -375,7 +375,7 @@ class HrPayrollMa(models.Model):
                     'name': 'Arrondi',
                     'credit': round(diff, 2),
                     'debit': 0,
-                    'state': 'valid'
+                    # # 'state': 'valid'
                 }
                 move_lines.append((0, 0, move_line_arrondi))
             else:
@@ -389,7 +389,7 @@ class HrPayrollMa(models.Model):
                     'name': 'Arrondi',
                     'debit': round(diff, 2),
                     'credit': 0,
-                    'state': 'valid'
+                    # 'state': 'valid'
                 }
                 move_lines.append((0, 0, move_line_arrondi))
 
