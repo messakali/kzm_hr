@@ -362,8 +362,10 @@ class HrPayrollMa(models.Model):
             credit = 0
             debit = 0
             for e in move_lines:
-                credit += e[2]['credit']
-                debit += e[2]['debit']
+                c = e[2]['credit'] or 0
+                d = e[2]['debit'] or 0
+                credit += c
+                debit += d
             if credit < debit:
                 diff = debit - credit
                 move_line_arrondi = {
