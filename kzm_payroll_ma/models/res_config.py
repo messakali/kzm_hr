@@ -48,7 +48,7 @@ class ResConfigSettings(models.TransientModel):
     has_chart_of_accounts = fields.Boolean(string='Company has a chart of accounts')
     chart_template_id = fields.Many2one('account.chart.template', string='Template',
                                         domain="[('visible','=', True)]")
-    has_parametre = fields.Boolean(string='Has parametres', compute="compute_params")
+    has_parametre = fields.Boolean(string='Has parametres',)
     has_journal = fields.Boolean(string='Has journal', compute="compute_params")
 
     is_generated = fields.Boolean()
