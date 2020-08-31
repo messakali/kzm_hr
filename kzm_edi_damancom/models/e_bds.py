@@ -11,7 +11,7 @@ class EBdsSortant(models.Model):
                            domain="[('type_id.fiscal_period', '=', True)]", required=True)
     e_bds_sortant_line_ids = fields.One2many('e_bds.sortant.line', 'e_bds_sortant_id',
                                              string=u'e_bds_sortant_line')
-    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
+    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.company,
                                  string='Société', readonly=True, copy=False)
 
 

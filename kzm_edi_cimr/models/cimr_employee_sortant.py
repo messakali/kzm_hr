@@ -10,7 +10,7 @@ class CimrEmployeeSortant(models.Model):
     name = fields.Selection(string="Trimestre", selection='get_quarters', required=True)
     cimr_sortant_line_ids = fields.One2many('cimr.employee.sortant.line', 'cimr_sortant_id',
                                              string=u'e_bds_sortant_line')
-    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
+    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.company,
                                  string='Société', readonly=True, copy=False)
 
     def get_quarters(self):

@@ -483,7 +483,7 @@ class hrPayrollMaBulletin(models.Model):
     cumul_exo = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul exonéré', digits=(16, 2))
     cumul_indemnites_fp = fields.Float(strore=1, compute='get_cumuls', string='Cumul Indemn. frais professionnels')
     cumul_avantages = fields.Float(strore=1, compute='get_cumuls', string='Cumul Avantages')
-    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
+    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.company,
                                  string='Société', readonly=True, copy=False)
 
     @api.onchange('period_id')
@@ -1072,7 +1072,7 @@ class HrRubrique(models.Model):
     note = fields.Text(string='Commentaire')
     credit_account_id = fields.Many2one('account.account', string=u'Compte de crédit')
     debit_account_id = fields.Many2one('account.account', string=u'Compte de débit')
-    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
+    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.company,
                                  string='Société', readonly=True, copy=False)
     is_hourly = fields.Boolean(u'Par Heure?', default=False)
     pourcentage = fields.Float(u'Pourcentage')

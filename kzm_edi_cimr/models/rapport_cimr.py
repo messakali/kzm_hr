@@ -8,7 +8,7 @@ class RapportCimr(models.Model):
     _description = 'Rapport Cimr'
 
     name = fields.Char(string=u'Intitulé rapport', default="Etat CIMR")
-    company_id = fields.Many2one('res.company', u'Societé', default=lambda self: self.env.user.company_id,
+    company_id = fields.Many2one('res.company', u'Societé', default=lambda self: self.env.company,
                                  required=True)
     annee = fields.Integer(string=u'Année', required=True)
     trimestre = fields.Selection(string="Trimestre", selection='get_quarters', required=True)

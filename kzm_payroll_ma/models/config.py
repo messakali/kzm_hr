@@ -23,7 +23,7 @@ from odoo.exceptions import UserError
 #     salaire_max_logement_social = fields.Float("Salaire max", default=3000)
 #     superficie_max_logement_social = fields.Float(u"Superficie max (m²)", default=80)
 #     prix_achat_max_logement_social = fields.Float("Prix d'achat max", default=300000)
-#     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
+#     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.company,
 #                                  string='Société', readonly=True, copy=False)
 
 
@@ -61,7 +61,7 @@ class HrCotisation(models.Model):
     plafond = fields.Float(string=u"Plafond")
     credit_account_id = fields.Many2one('account.account', string=u'Compte de crédit')
     debit_account_id = fields.Many2one('account.account', string=u'Compte de débit')
-    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
+    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.company,
                                  string='Société', readonly=True, copy=False)
 
 
@@ -71,7 +71,7 @@ class HrCotisationType(models.Model):
     _description = 'Types de cotisation'
 
     name = fields.Char(string=u"Désignation", required=True)
-    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.user.company_id,
+    company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.company,
                                  string='Société', readonly=True, copy=False)
     cotisation_ids = fields.Many2many('hr.payroll_ma.cotisation', 'salary_cotisation',
                                       'cotisation_id', 'cotisation_type_id', string='Cotisations', copy=False)
