@@ -701,15 +701,21 @@ class hrPayrollMaBulletin(models.Model):
                 rec.get_cumuls()
                 count_days = rec.cumul_work_days
                 count_hours = rec.cumul_normal_hours
+                print("count_days:", count_days)
+                print("count_hours:", count_hours)
 
                 if bulletin.employee_contract_id.type == 'mensuel' and count_days:
                     coef = 312 / count_days
                 elif bulletin.employee_contract_id.type == 'horaire' and count_hours:
                     # coef = (dictionnaire.hour_month or 191) * 12 / count_hours // Ayoub
                     coef = (rec.company_id.hour_month or 191) * 12 / count_hours  # Ayoub
+                print("coef:", coef)
 
                 new_cumul_net_imp = bulletin.cumul_sni
                 cumul_coef = new_cumul_net_imp * coef
+                
+                print("new_cumul_net_imp:", new_cumul_net_imp)
+                print("cumul_coef:", cumul_coef)
 
                 # IR Brut
                 ir_bareme = self.env['hr.payroll_ma.ir']
