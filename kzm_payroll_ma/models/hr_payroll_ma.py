@@ -721,8 +721,10 @@ class hrPayrollMaBulletin(models.Model):
                         somme = coef and (tranche.somme / coef) or 0.0
 
                 ir_cumul_brut = ((new_cumul_net_imp) * taux / 100) - somme
-
+                print("ir_cumul_brut :", ir_cumul_brut)
+                print("rec.cumul_igr_n_1 :", rec.cumul_igr_n_1)
                 ir_brute = ir_cumul_brut - rec.cumul_igr_n_1
+                print("ir_brute :", ir_brute)
 
                 # IR Net
                 personnes = bulletin.employee_id.chargefam
