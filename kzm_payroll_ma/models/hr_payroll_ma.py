@@ -729,7 +729,7 @@ class hrPayrollMaBulletin(models.Model):
                 print("Pesonne :", personnes)
                 print("Charge :", rec.company_id.charge)
                 print("Pesonne*Charge :", personnes * rec.company_id.charge)
-                print("IR TEST :", ir_brute - (personnes * rec.company_id.charge)
+                print("IR TEST :", ir_brute - (personnes * rec.company_id.charge))
                 # if (ir_brute - (personnes * dictionnaire.charge)) < 0:// Ayoub
                 if (ir_brute - (personnes * rec.company_id.charge)) < 0:  # Ayoub
                     ir_net = 0
