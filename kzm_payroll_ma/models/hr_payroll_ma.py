@@ -726,13 +726,17 @@ class hrPayrollMaBulletin(models.Model):
 
                 # IR Net
                 personnes = bulletin.employee_id.chargefam
+                print("Pesonne :", personnes)
+                print("Charge :", rec.company_id.charge)
+                print("Pesonne*Charge :", personnes * rec.company_id.charge)
+                print("IR TEST :", ir_brute - (personnes * rec.company_id.charge)
                 # if (ir_brute - (personnes * dictionnaire.charge)) < 0:// Ayoub
                 if (ir_brute - (personnes * rec.company_id.charge)) < 0:  # Ayoub
                     ir_net = 0
                 else:
                     # ir_net = ir_brute - (personnes * dictionnaire.charge) // Ayoub
                     ir_net = ir_brute - (personnes * rec.company_id.charge)  # AYoub
-
+                print("IR :", ir_net)
                 res = {
                     'salaire_net_imposable': salaire_net_imposable,
                     'taux': taux,
