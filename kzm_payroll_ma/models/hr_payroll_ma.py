@@ -725,7 +725,9 @@ class hrPayrollMaBulletin(models.Model):
                     if (cumul_coef >= tranche.debuttranche) and (cumul_coef < tranche.fintranche):
                         taux = tranche.taux
                         somme = coef and (tranche.somme / coef) or 0.0
-
+                
+                print("taux :", taux)
+                print("somme :", somme)
                 ir_cumul_brut = ((new_cumul_net_imp) * taux / 100) - somme
                 print("ir_cumul_brut :", ir_cumul_brut)
                 print("rec.cumul_igr_n_1 :", rec.cumul_igr_n_1)
