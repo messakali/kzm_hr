@@ -121,6 +121,7 @@
                                                     <group>
                                                         <field name="hour_base"/>
                                                         <field name="normal_hours"/>
+                                                        <field name="taux_anciennete"/>
                                                     </group>
                                                     <group>
                                                         <field name="igr"/>
@@ -275,6 +276,7 @@
                                     <group>
                                         <field name="hour_base"/>
                                         <field name="normal_hours"/>
+                                        <field name="taux_anciennete"/>
                                     </group>
                                     <group>
                                         <field name="igr"/>

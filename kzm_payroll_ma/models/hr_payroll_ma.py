@@ -151,7 +151,8 @@ class HrPayrollMa(models.Model):
                         'period_id': rec.period_id.id,
                         'date_start': rec.date_start,
                         'date_end': rec.date_end,
-                        'date_salary': rec.date_salary
+                        'date_salary': rec.date_salary,
+                        'taux_anciennete': self.env['hr.payroll_ma.bulletin'].calc_seniority(employee.date, rec.date_end)
 
                     }
                     self.env['hr.payroll_ma.bulletin'].create(line)
@@ -460,6 +461,7 @@ class hrPayrollMaBulletin(models.Model):
     deduction = fields.Float(string=u'Déductions', readonly=True, digits=(16, 2))
     working_days = fields.Float(string=u'Jours travaillés', digits=(16, 2))
     prime_anciennete = fields.Float(string=u'Prime ancienneté', digits=(16, 2))
+    taux_anciennete = fields.Float(string=u'Taux ancienneté', digits=(16, 2))
     frais_pro = fields.Float(string='Frais professionnels', digits=(16, 2))
     personnes = fields.Integer(string='Personnes')
     absence = fields.Float(string='Absences', digits=(16, 2))
@@ -927,15 +929,14 @@ class hrPayrollMaBulletin(models.Model):
                     self.env['hr.payroll_ma.bulletin.line'].create(majoration_line)
 
             # Ancienneté
-            taux_anciennete = self.calc_seniority(rec.employee_id.date, fields.Date.today()) / 100
-            prime_anciennete = (salaire_base_worked + anciennete) * taux_anciennete
-            if taux_anciennete:
+            prime_anciennete = (salaire_base_worked + anciennete) * rec.taux_anciennete/100
+            if rec.taux_anciennete:
                 anciennete_line = {
                     'name': 'Prime anciennete',
                     'id_bulletin': id_bulletin,
                     'type': 'brute',
                     'base': (salaire_base_worked + anciennete),
-                    'rate_employee': taux_anciennete,
+                    'rate_employee': rec.taux_anciennete,
                     'subtotal_employee': prime_anciennete,
                     'deductible': False,
                 }
