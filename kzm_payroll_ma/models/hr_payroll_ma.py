@@ -881,12 +881,21 @@ class hrPayrollMaBulletin(models.Model):
                         taux = rubrique['taux']
                         montant = 0
                     if rubrique['absence'] and not rubrique['conge']:
-                        taux = bulletin.working_days / 26
-                        montant = rubrique['montant'] * taux
+                        if bulletin.employee_contract_id.type == "mensuel":
+                            taux = bulletin.working_days / 26
+                            montant = rubrique['montant'] * taux
+                        else:
+                            min = min(bulletin.normal_hours, 191)
+                            taux = min / 191
+                            montant = rubrique['montant'] * taux / 100
+
+
                         taux = taux * 100
                         absence += rubrique['montant'] - montant
                     if rubrique['anciennete'] and not rubrique['conge']:
                         anciennete += montant
+
+
                     # IR
                     if rubrique['ir'] and not rubrique['conge']:
                         if rubrique['plafond'] == 0:
