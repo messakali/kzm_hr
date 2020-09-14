@@ -711,21 +711,15 @@ class hrPayrollMaBulletin(models.Model):
                 rec.get_cumuls()
                 count_days = rec.cumul_work_days
                 count_hours = rec.cumul_normal_hours
-                print("count_days:", count_days)
-                print("count_hours:", count_hours)
 
                 if bulletin.employee_contract_id.type == 'mensuel' and count_days:
                     coef = 312 / count_days
                 elif bulletin.employee_contract_id.type == 'horaire' and count_hours:
                     # coef = (dictionnaire.hour_month or 191) * 12 / count_hours // Ayoub
                     coef = (rec.company_id.hour_month or 191) * 12 / count_hours  # Ayoub
-                print("coef:", coef)
 
                 new_cumul_net_imp = bulletin.cumul_sni
                 cumul_coef = new_cumul_net_imp * coef
-                
-                print("new_cumul_net_imp:", new_cumul_net_imp)
-                print("cumul_coef:", cumul_coef)
 
                 # IR Brut
                 ir_bareme = self.env['hr.payroll_ma.ir']
@@ -735,28 +729,19 @@ class hrPayrollMaBulletin(models.Model):
                     if (cumul_coef >= tranche.debuttranche) and (cumul_coef < tranche.fintranche):
                         taux = tranche.taux
                         somme = coef and (tranche.somme / coef) or 0.0
-                
-                print("taux :", taux)
-                print("somme :", somme)
+
                 ir_cumul_brut = ((new_cumul_net_imp) * taux / 100) - somme
-                print("ir_cumul_brut :", ir_cumul_brut)
-                print("rec.cumul_igr_brut_n_1 :", rec.cumul_igr_brut_n_1)
                 ir_brute = ir_cumul_brut - rec.cumul_igr_brut_n_1
-                print("ir_brute :", ir_brute)
 
                 # IR Net
                 personnes = bulletin.employee_id.chargefam
-                print("Pesonne :", personnes)
-                print("Charge :", rec.company_id.charge)
-                print("Pesonne*Charge :", personnes * rec.company_id.charge)
-                print("IR TEST :", ir_brute - (personnes * rec.company_id.charge))
                 # if (ir_brute - (personnes * dictionnaire.charge)) < 0:// Ayoub
                 if (ir_brute - (personnes * rec.company_id.charge)) < 0:  # Ayoub
                     ir_net = 0
                 else:
                     # ir_net = ir_brute - (personnes * dictionnaire.charge) // Ayoub
                     ir_net = ir_brute - (personnes * rec.company_id.charge)  # AYoub
-                print("IR :", ir_net)
+
                 res = {
                     'salaire_net_imposable': salaire_net_imposable,
                     'taux': taux,
