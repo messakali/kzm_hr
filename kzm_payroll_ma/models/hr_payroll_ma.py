@@ -454,6 +454,7 @@ class hrPayrollMaBulletin(models.Model):
     cotisations_employee = fields.Float(string=u'Cotisations Employé', readonly=True, digits=(16, 2))
     cotisations_employer = fields.Float(string='Cotisations Employeur', readonly=True, digits=(16, 2))
     igr = fields.Float(string=u'Impot sur le revenu', readonly=True, digits=(16, 2))
+    igr_brut = fields.Float(string=u'Impot sur le revenu brut', readonly=True, digits=(16, 2))
     prime = fields.Float(string='Primes', readonly=True, digits=(16, 2))
     indemnite = fields.Float(string=u'Indemnités', readonly=True, digits=(16, 2))
     avantage = fields.Float(string='Avantages', readonly=True, digits=(16, 2))
@@ -469,22 +470,23 @@ class hrPayrollMaBulletin(models.Model):
     logement = fields.Float(string='Logement', digits=(16, 2))
 
     # Ajout des champs de cumul
-    cumul_normal_hours = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul des HT', digits=(16, 2))
-    cumul_work_days = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul des JT', digits=(16, 2))
-    cumul_sbi = fields.Float(strore=1, compute='get_cumuls', string='Cumul SBI', digits=(16, 2))
-    cumul_base = fields.Float(strore=1, compute='get_cumuls', string='Cumul base', digits=(16, 2))
-    cumul_sb = fields.Float(strore=1, compute='get_cumuls', string='Cumul SB', digits=(16, 2))
-    cumul_sni = fields.Float(strore=1, compute='get_cumuls', string='Cumul SNI', digits=(16, 2))
-    cumul_sni_n_1 = fields.Float(strore=1, compute='get_cumuls_n_1', string=u'Cumul SNI N-1', digits=(16, 2))
-    cumul_igr = fields.Float(strore=1, compute='get_cumuls', string='Cumul IR', digits=(16, 2))
-    cumul_igr_n_1 = fields.Float(strore=1, compute='get_cumuls_n_1', string='Cumul IR N-1', digits=(16, 2))
-    cumul_ee_cotis = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul Cotis employé', digits=(16, 2))
-    cumul_er_cotis = fields.Float(strore=1, compute='get_cumuls', string='Cumul Cotis employeur', digits=(16, 2))
-    cumul_fp = fields.Float(strore=1, compute='get_cumuls', string='Cumul frais professionnels', digits=(16, 2))
-    cumul_avn = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul Avtg en nature', digits=(16, 2))
-    cumul_exo = fields.Float(strore=1, compute='get_cumuls', string=u'Cumul exonéré', digits=(16, 2))
-    cumul_indemnites_fp = fields.Float(strore=1, compute='get_cumuls', string='Cumul Indemn. frais professionnels')
-    cumul_avantages = fields.Float(strore=1, compute='get_cumuls', string='Cumul Avantages')
+    cumul_normal_hours = fields.Float(compute='get_cumuls', string=u'Cumul des HT', digits=(16, 2))
+    cumul_work_days = fields.Float(compute='get_cumuls', string=u'Cumul des JT', digits=(16, 2))
+    cumul_sbi = fields.Float(compute='get_cumuls', string='Cumul SBI', digits=(16, 2))
+    cumul_base = fields.Float(compute='get_cumuls', string='Cumul base', digits=(16, 2))
+    cumul_sb = fields.Float(compute='get_cumuls', string='Cumul SB', digits=(16, 2))
+    cumul_sni = fields.Float(compute='get_cumuls', string='Cumul SNI', digits=(16, 2))
+    cumul_sni_n_1 = fields.Float(compute='get_cumuls_n_1', string=u'Cumul SNI N-1', digits=(16, 2))
+    cumul_igr = fields.Float(compute='get_cumuls', string='Cumul IR', digits=(16, 2))
+    cumul_igr_n_1 = fields.Float(compute='get_cumuls_n_1', string='Cumul IR N-1', digits=(16, 2))
+    cumul_igr_brut_n_1 = fields.Float(compute='get_cumuls_n_1', string='Cumul IR Brut N-1', digits=(16, 2))
+    cumul_ee_cotis = fields.Float(compute='get_cumuls', string=u'Cumul Cotis employé', digits=(16, 2))
+    cumul_er_cotis = fields.Float(compute='get_cumuls', string='Cumul Cotis employeur', digits=(16, 2))
+    cumul_fp = fields.Float(compute='get_cumuls', string='Cumul frais professionnels', digits=(16, 2))
+    cumul_avn = fields.Float(compute='get_cumuls', string=u'Cumul Avtg en nature', digits=(16, 2))
+    cumul_exo = fields.Float(compute='get_cumuls', string=u'Cumul exonéré', digits=(16, 2))
+    cumul_indemnites_fp = fields.Float(compute='get_cumuls', string='Cumul Indemn. frais professionnels')
+    cumul_avantages = fields.Float(compute='get_cumuls', string='Cumul Avantages')
     company_id = fields.Many2one(comodel_name='res.company', default=lambda self: self.env.company,
                                  string='Société', readonly=True, copy=False)
 
@@ -513,6 +515,7 @@ class hrPayrollMaBulletin(models.Model):
                 cumuls['salaire_brut'] = bul.salaire_brute
                 cumuls['salaire_net_imposable'] = bul.salaire_net_imposable
                 cumuls['igr'] = bul.igr
+                cumuls['igr_brut'] = bul.igr_brut
                 cumuls['cotisations_employee'] = bul.cotisations_employee
                 cumuls['cotisations_employer'] = bul.cotisations_employer
                 cumuls['indemnites_frais_pro'] = bul.indemnites_frais_pro
@@ -599,15 +602,19 @@ class hrPayrollMaBulletin(models.Model):
             annee = periode[1]
             somme_sni = 0.0
             somme_igr = 0.0
+            somme_igr_brut = 0.0
             res.cumul_sni_n_1 = 0
             res.cumul_igr_n_1 = 0
+            res.cumul_igr_brut_n_1 = 0
             for j in range(1, int(mois), 1):
                 valeur_mois = res.get_bulletin_cumuls(j, annee, res.employee_id.id)
                 if valeur_mois:
                     somme_sni += valeur_mois['salaire_net_imposable']
                     somme_igr += valeur_mois['igr']
+                    somme_igr_brut += valeur_mois['igr_brut']
                 res.cumul_sni_n_1 = somme_sni
                 res.cumul_igr_n_1 = somme_igr
+                res.cumul_igr_brut_n_1 = somme_igr_brut
 
     @api.model
     def _name_get_default(self):
@@ -669,6 +676,7 @@ class hrPayrollMaBulletin(models.Model):
                     'salaire_net_imposable': salaire_net_imposable,
                     'taux': 0,
                     'ir_net': 0,
+                    'ir_brut': 0,
                     # 'credit_account_id': dictionnaire.credit_account_id.id,// Ayoub
                     'credit_account_id': rec.company_id.credit_account_id.id,  # Ayoub
                     'frais_pro': 0,
@@ -703,21 +711,15 @@ class hrPayrollMaBulletin(models.Model):
                 rec.get_cumuls()
                 count_days = rec.cumul_work_days
                 count_hours = rec.cumul_normal_hours
-                print("count_days:", count_days)
-                print("count_hours:", count_hours)
 
                 if bulletin.employee_contract_id.type == 'mensuel' and count_days:
                     coef = 312 / count_days
                 elif bulletin.employee_contract_id.type == 'horaire' and count_hours:
                     # coef = (dictionnaire.hour_month or 191) * 12 / count_hours // Ayoub
                     coef = (rec.company_id.hour_month or 191) * 12 / count_hours  # Ayoub
-                print("coef:", coef)
 
                 new_cumul_net_imp = bulletin.cumul_sni
                 cumul_coef = new_cumul_net_imp * coef
-                
-                print("new_cumul_net_imp:", new_cumul_net_imp)
-                print("cumul_coef:", cumul_coef)
 
                 # IR Brut
                 ir_bareme = self.env['hr.payroll_ma.ir']
@@ -727,32 +729,24 @@ class hrPayrollMaBulletin(models.Model):
                     if (cumul_coef >= tranche.debuttranche) and (cumul_coef < tranche.fintranche):
                         taux = tranche.taux
                         somme = coef and (tranche.somme / coef) or 0.0
-                
-                print("taux :", taux)
-                print("somme :", somme)
+
                 ir_cumul_brut = ((new_cumul_net_imp) * taux / 100) - somme
-                print("ir_cumul_brut :", ir_cumul_brut)
-                print("rec.cumul_igr_n_1 :", rec.cumul_igr_n_1)
-                ir_brute = ir_cumul_brut - rec.cumul_igr_n_1
-                print("ir_brute :", ir_brute)
+                ir_brute = ir_cumul_brut - rec.cumul_igr_brut_n_1
 
                 # IR Net
                 personnes = bulletin.employee_id.chargefam
-                print("Pesonne :", personnes)
-                print("Charge :", rec.company_id.charge)
-                print("Pesonne*Charge :", personnes * rec.company_id.charge)
-                print("IR TEST :", ir_brute - (personnes * rec.company_id.charge))
                 # if (ir_brute - (personnes * dictionnaire.charge)) < 0:// Ayoub
                 if (ir_brute - (personnes * rec.company_id.charge)) < 0:  # Ayoub
                     ir_net = 0
                 else:
                     # ir_net = ir_brute - (personnes * dictionnaire.charge) // Ayoub
                     ir_net = ir_brute - (personnes * rec.company_id.charge)  # AYoub
-                print("IR :", ir_net)
+
                 res = {
                     'salaire_net_imposable': salaire_net_imposable,
                     'taux': taux,
                     'ir_net': ir_net,
+                    'ir_brut': ir_brute,
                     # 'credit_account_id': dictionnaire.credit_account_id.id, // Ayoub
                     'credit_account_id': rec.company_id.credit_account_id.id,  # Ayoub
                     'frais_pro': fraispro,
@@ -979,6 +973,10 @@ class hrPayrollMaBulletin(models.Model):
                     self.env['hr.payroll_ma.bulletin.line'].create(cotisation_line)
 
             # Impot sur le revenu
+            print('ir   : ',ir)
+            print('prime_anciennete   : ',prime_anciennete)
+            print('cotisations_employee   : ',cotisations_employee)
+            print('logement   : ',logement)
             res = rec.get_ir(ir + prime_anciennete, cotisations_employee, logement)
             if not res['ir_net'] == 0:
                 ir_line = {
@@ -1053,6 +1051,7 @@ class hrPayrollMaBulletin(models.Model):
             rec.cotisations_employee = cotisations_employee
             rec.cotisations_employer = cotisations_employer
             rec.igr = res['ir_net']
+            rec.igr_brut = res['ir_brut']
             rec.prime = prime
             rec.indemnite = indemnite
             rec.avantage = avantage
