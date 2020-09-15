@@ -814,6 +814,7 @@ class hrPayrollMaBulletin(models.Model):
             personne = 0
             absence = 0
             arrondi = 0
+            min = 0
 
             # Salaire de base
             if salaire_base:
@@ -885,9 +886,19 @@ class hrPayrollMaBulletin(models.Model):
                             taux = bulletin.working_days / 26
                             montant = rubrique['montant'] * taux
                         else:
-                            min = min(bulletin.normal_hours, 191)
+                            if bulletin.normal_hours < 191:
+                                min = bulletin.normal_hours
+                            else:
+                                min = 191
+                            # min = min(int(bulletin.normal_hours), 191)
+                            print("*********************")
+                            print("*********************")
+                            print("*********************")
+                            print("*********************", bulletin.normal_hours)
+                            print("*********************", min)
                             taux = min / 191
-                            montant = rubrique['montant'] * taux / 100
+                            print("*********************", min)
+                            montant = rubrique['montant'] * taux
 
 
                         taux = taux * 100
