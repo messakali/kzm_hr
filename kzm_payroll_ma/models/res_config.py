@@ -57,8 +57,8 @@ class ResConfigSettings(models.TransientModel):
     def compute_params(self):
         if self.company_id:
             company = self.company_id
-            self.chart_template_id = company.chart_template_id
-            self.has_chart_of_accounts = len(company.chart_template_id) > 0 or False
+            # self.chart_template_id = company.chart_template_id
+            # self.has_chart_of_accounts = len(company.chart_template_id) > 0 or False
             count_rubrique = self.env['hr.payroll_ma.rubrique'].search_count([('company_id', '=', company.id)])
             count_cotisation = self.env['hr.payroll_ma.cotisation'].search_count([('company_id', '=', company.id)])
             # count_parametre = self.env['hr.payroll_ma.parametres'].search_count([('company_id', '=', company.id)])
