@@ -885,6 +885,7 @@ class hrPayrollMaBulletin(models.Model):
                         taux = (bulletin.working_days - bulletin.conges_payes) / 26
                         montant = rubrique['montant'] * taux
                         taux = taux * 100
+                        indemnite += montant
 
                     if rubrique['absence'] and not rubrique['conge']:
                         taux = bulletin.working_days / 26
