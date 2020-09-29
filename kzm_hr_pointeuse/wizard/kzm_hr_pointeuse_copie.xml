@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_kzm_hr_pointeuse_copie_wizard" model="ir.ui.view">
+            <field name="name">Copie les badges de la pointeuse en question dans les autres séléctionnées</field>
+            <field name="model">kzm.hr.pointeuse.copie</field>
+            <field name="arch" type="xml">
+                <form string="Copie des badges">
+                    <p class="oe_gray">
+                        Utiliser cet assistant pour copie les badges d'une pointeuse dans les autres pointeuses.
+                    </p>
+
+                    <group>
+                         <field name="company_id" groups="base.group_multi_company"/>
+
+                        <field name="pointeuse_id"/>
+                        <field name="pointeuse_ids" domain="[('id','!=',pointeuse_id)]"/>
+                    </group>
+                    <group>
+                        <field name="resultat"/>
+                        <field name="etat_traitement"  widget="progressbar"/>
+                    </group>
+                    <footer>
+                        <button name="copie_pointeuse" string="Lancer la copie" type="object"  class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_check_copie">
+            <field name="name">Copie les badges d'une pointeuse dans d'autres</field>
+            <field name="res_model">kzm.hr.pointeuse.copie</field>
+            <field name="binding_model_id"></field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="kzm_hr_pointeuse_check_copie_menuitem" name="Copie pointeuse"
+            parent="kzm_hr_pointeuse_menu" action="act_check_copie"
+            sequence="40"  />
+
+    </data>
+</odoo>

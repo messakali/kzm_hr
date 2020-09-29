@@ -1,0 +1,80 @@
+<odoo>
+
+
+     <record model="ir.ui.view" id="attendance_tree_view">
+        <field name="name">attendance.tree</field>
+        <field name="model">zk_attendance.attendance</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Tree">
+                <!--<field name="name"/>-->
+                <field name="matricule_pointeuse"/>
+                <field name="matricule"/>
+                <field name="employee_id"/>
+                <field name="date"/>
+                <field name="action"/>
+                <field name="machine_id"/>
+                <field name="company_id"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="attendance_form_view">
+        <field name="name">attendance.form</field>
+        <field name="model">zk_attendance.attendance</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Form">
+                <sheet>
+                    <group>
+                        <group>
+                             <field name="employee_id"/>
+                             <field name="company_id"/>
+                             <field name="matricule"/>
+                             <!--<field name="badge_id"/>-->
+                             <field name="machine_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="action"/>
+                            <field name="matricule_pointeuse"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="attendance_search_view">
+        <field name="name">attendance.search</field>
+        <field name="model">zk_attendance.attendance</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="date"/>
+                <!--<filter name="arriving" string="Arriving Only"-->
+                        <!--domain="[('status', '=', 10)]"/>-->
+                <!--<filter name="leaving" string="Leaving Only"-->
+                        <!--domain="[('status', '=', 1)]"/>-->
+                <group string="Group By">
+                    <filter name="by_employee" string="Employees" context="{'group_by': 'employee_id'}"/>
+                    <filter name="by_machine" string="Machines" context="{'group_by': 'machine_id'}"/>
+                    <filter string="Month" name="month" domain="[]" context="{'group_by': 'date'}" />
+                    <filter string="Week" name="week" domain="[]" context="{'group_by': 'date:week'}" />
+                    <filter string="Day" name="day" domain="[]" context="{'group_by': 'date:day'}" />
+
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="zk_attendance_list_action">
+        <field name="name">Attendancies</field>
+        <field name="res_model">zk_attendance.attendance</field>
+
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+</odoo>

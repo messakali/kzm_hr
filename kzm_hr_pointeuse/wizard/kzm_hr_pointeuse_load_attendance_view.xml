@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_kzm_hr_pointeuse_load_attendance_wizard" model="ir.ui.view">
+            <field name="name">Chargement des présence à partir d'une pointeuse</field>
+            <field name="model">kzm.hr.pointeuse.load.attendance</field>
+            <field name="arch" type="xml">
+                <form string="Charger les présences">
+                    <p class="oe_gray">
+                        Utiliser cet assistant pour charger les présences à partir d'une
+                        pointeuse.
+                    </p>
+                    <group>
+                        <field name="pointeuse_ids"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+
+                    </group>
+                    <footer>
+                        <button name="load_attendance" string="Lancer le chargement" type="object"  class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_load_attendance">
+            <field name="name">Charger les présences</field>
+            <field name="res_model">kzm.hr.pointeuse.load.attendance</field>
+            <field name="binding_model_id"></field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="kzm_hr_pointeuse_load_attendance_menuitem" name="Charger les présences"
+            parent="kzm_attendance_menu_hr_attendance" action="act_load_attendance"
+            sequence="0"  />
+
+
+    </data>
+</odoo>
