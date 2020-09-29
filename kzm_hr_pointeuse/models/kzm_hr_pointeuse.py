@@ -203,7 +203,8 @@ class machine(models.Model):
                     except:
                         continue
                 self.env.cr.commit()
-                r.clear_attendancies()
+                #TODO , clear attandance after load 
+                #r.clear_attendancies()
             else:
                 msg += r.name + '\n'
                 error = True
