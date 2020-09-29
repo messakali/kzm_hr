@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form2" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.hr.attendance.2</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="80"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='hr_attendance']" position="inside">
+                    <h2>Configuration Serveur</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" >
+                            <div class="col-6">
+                                <span class="o_form_label">Url</span>
+                            </div>
+                            <div class="col-6">
+                                <field name="url" placeholder="Server Url"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" >
+                            <div class="col-6">
+                                <span class="o_form_label">User</span>
+                            </div>
+                            <div class="col-6">
+                                <field name="user" placeholder="Server User"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" >
+                            <div class="col-6">
+                                <span class="o_form_label">Database</span>
+                            </div>
+                            <div class="col-6">
+                                <field name="bd" placeholder="Server Database"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" >
+                            <div class="col-6">
+                                <span class="o_form_label">Login</span>
+                            </div>
+                            <div class="col-6">
+                                <field name="login" placeholder="Server Login"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" >
+                            <div class="col-6">
+                                <span class="o_form_label">Password</span>
+                            </div>
+                            <div class="col-6">
+                                <field name="password" placeholder="Server Password"/>
+                            </div>
+                        </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

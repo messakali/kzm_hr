@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="kzm_hr_pointeuse_inherit_client" model="ir.ui.view">
+            <field name="name">kzm.hr.pointeuse.inherit.2</field>
+            <field name="model">kzm.hr.pointeuse</field>
+            <field name="inherit_id" ref="kzm_hr_pointeuse.kzm_hr_pointeuse_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='nettoyer_pointeuse']" position="after">
+                    <field name="id_pointeuse" groups="kzm_hr_pointeuse_client.grp_admin_serveur_pointage"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

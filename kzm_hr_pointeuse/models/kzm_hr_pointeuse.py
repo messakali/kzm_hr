@@ -82,6 +82,19 @@ class machine(models.Model):
             except Exception as e:
                 r.connection_state = False
 
+    def get_status_connection(self):
+        for r in self:
+            # self.load_attendance()
+            try:
+                zk = pyzk.ZK(r.ip, int(r.port), timeout=10)
+                conn = zk.connect()
+                r.connection_state = True
+                if conn:
+                    conn.disconnect()
+            except Exception as e:
+                r.connection_state = False
+        return self
+
     @api.depends('connection_state')
     def _compute_status_img(self):
         for rec in self:
