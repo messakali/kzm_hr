@@ -16,7 +16,7 @@ class kzm_import_attendance(models.Model):
     name = fields.Char(string=_("Référence"), required=False, readonly=True)
     company_id = fields.Many2one(comodel_name="res.company", ondelete='cascade', string=_("Ferme"), required=True,
                                  default=lambda self: self.env.company)
-    kzm_sous_ferme_id = fields.Many2one(comodel_name="sub.farm", default=lambda self: self.env.user.kzm_sous_ferme_ids and self.env.user.kzm_sous_ferme_ids[0] or False, string=_("Sous Ferme"), required=False, )
+    # kzm_sous_ferme_id = fields.Many2one(comodel_name="sub.farm", default=lambda self: self.env.user.kzm_sous_ferme_ids and self.env.user.kzm_sous_ferme_ids[0] or False, string=_("Sous Ferme"), required=False, )
 
     attendance_ids = fields.One2many(comodel_name="hr.attendance", inverse_name="import_attendance_id", string=_("Présences"), required=False, )
     file_path = fields.Binary(string=_("Fichier de pointage"),  filters="*.csv")
@@ -67,7 +67,7 @@ class kzm_import_attendance(models.Model):
                             search_count([('name','=', str(presence_date)),
                             ('employee_id','=',employee_id.id),
                             ('company_id', '=', self.company_id.id),
-                            ('kzm_sous_ferme_id', '=', self.kzm_sous_ferme_id and self.kzm_sous_ferme_id.id or False),
+
                             ])
 
                 if attendance_count:
@@ -80,7 +80,7 @@ class kzm_import_attendance(models.Model):
                 attendance_id = {
                         'employee_id' : employee_id.id,
                         'company_id' : self.company_id.id,
-                        'kzm_sous_ferme_id' : self.kzm_sous_ferme_id and self.kzm_sous_ferme_id.id or False,
+
                         'name' : str(presence_date),
                         'action' : 'sign_in',
                         'import_attendance_id' : self.id
@@ -98,7 +98,7 @@ class kzm_import_attendance(models.Model):
                         new_attendance_id = {
                                 'employee_id' : employee_id.id,
                                 'company_id' : self.company_id.id,
-                                'kzm_sous_ferme_id' : self.kzm_sous_ferme_id and self.kzm_sous_ferme_id.id or False,
+
                                 'name' : str(result[1] + timedelta(minutes=1)),
                                 'action' : 'sign_out',
                                 'note' : 'Présence ajoutée automatiquement.',
@@ -121,7 +121,7 @@ class kzm_import_attendance(models.Model):
                         employee_id.write(
                                 {
                                     'last_ferm_pointage':self.company_id.id,
-                                    'last_sous_ferm_pointage': self.kzm_sous_ferme_id and self.kzm_sous_ferme_id.id or False,
+
                                     'last_date_pointage':str(presence_date)
                                 }
                         )

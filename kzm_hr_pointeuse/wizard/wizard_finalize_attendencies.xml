@@ -9,9 +9,6 @@
                     <p class="oe_gray">
                         Utiliser cet assistant pour charger les reports d'attendences.
                     </p>
-                    <group>
-                        <field name="date"/>
-                    </group>
                     <footer>
                         <button name="load_to_hr_attendance" string="Lancer le chargement" type="object"  class="oe_highlight"  />
                         or

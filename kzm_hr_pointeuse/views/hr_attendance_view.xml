@@ -10,7 +10,7 @@
                 <field name="check_out" position="after">
                     <field name="pointeuse_id" />
                     <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"/>
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
                     <field name="note"/>
                 </field>
             </field>
@@ -29,7 +29,7 @@
                     <field name="worked_hours" widget="float_time"/>
                     <field name="pointeuse_id" />
                     <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"/>
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
                     <field name="note"/>
                     <field name="check_in_machine"/>
                     <field name="check_out_machine"/>
@@ -49,7 +49,7 @@
                     <field name="check_in_machine"/>
                     <field name="check_out_machine"/>
                     <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"/>
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
                 </xpath>
 
                 <xpath expr="//filter[@name='employee']" position="before">

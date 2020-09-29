@@ -6,27 +6,13 @@
             <field name="name">kzm.daily.attendance.graph</field>
             <field name="model">kzm.daily.attendance</field>
             <field name="arch" type="xml">
-                <graph string="Synthése des présences journaliers" type="bar" stacked="True" >
-                    <field name="company_id" groups="base.group_multi_company" type="row"/>
-                    <field name="employee_id" type="row"/>
+                <graph string="Synthése des présences journaliers" type="pivot" >
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="employee_id"/>
                     <field name="date" interval="day" type="col" />
                     <field name="heure_normal" type="measure"/>
                     <field name="heure_sup" type="measure"/>
                 </graph>
-            </field>
-        </record>
-
-        <record id="kzm_presences_journalieres_graph_pivot" model="ir.ui.view">
-            <field name="name">kzm.daily.attendance.pivot</field>
-            <field name="model">kzm.daily.attendance</field>
-            <field name="arch" type="xml">
-                <pivot string="Synthése des présences journaliers">
-                    <field name="company_id" groups="base.group_multi_company" type="row"/>
-                    <field name="employee_id" type="row"/>
-                    <field name="date" interval="day" type="col" />
-                    <field name="heure_normal" type="measure"/>
-                    <field name="heure_sup" type="measure"/>
-                </pivot>
             </field>
         </record>
 
@@ -40,16 +26,16 @@
                         <filter name="today" string="Aujourd'hui"
                                 domain="[('date','=',current_date)]" help="Line de pointage d'aujourd'hui"/>
 
-                        <filter string="Hier" name="yesterday" domain="[
-                        ('date','&gt;=',((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d'))),
-                        ('date','&lt;=',((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d')))]"/>
-                        <filter string="Hier-1" name="yesterday_1" domain="[
-                        ('date','&gt;=',((context_today()-datetime.timedelta(days=2)).strftime('%Y-%m-%d'))),
-                        ('date','&lt;=',((context_today()-datetime.timedelta(days=2)).strftime('%Y-%m-%d')))]"/>
-                        <filter string="Hier-2" name="yesterday_2" domain="[
-                        ('date','&gt;=',((context_today()-datetime.timedelta(days=3)).strftime('%Y-%m-%d'))),
-                        ('date','&lt;=',((context_today()-datetime.timedelta(days=3)).strftime('%Y-%m-%d')))]"/>
-                        <filter string="Hier-3" name="yesterday_3"  domain="[('date','&gt;=',((context_today()-datetime.timedelta(days=4)).strftime('%Y-%m-%d'))),('date','&lt;=',((context_today()-datetime.timedelta(days=4)).strftime('%Y-%m-%d')))]"/>
+<!--                        <filter string="Hier" name="yesterday" date="hier" domain="[-->
+<!--                        ('date','&gt;=',((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d'))),-->
+<!--                        ('date','&lt;=',((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d')))]"/>-->
+<!--                        <filter string="Hier-1" name="yesterday-1" date="hier_1" domain="[-->
+<!--                        ('date','&gt;=',((context_today()-datetime.timedelta(days=2)).strftime('%Y-%m-%d'))),-->
+<!--                        ('date','&lt;=',((context_today()-datetime.timedelta(days=2)).strftime('%Y-%m-%d')))]"/>-->
+<!--                        <filter string="Hier-2" name="yesterday-2" date="hier_2" domain="[-->
+<!--                        ('date','&gt;=',((context_today()-datetime.timedelta(days=3)).strftime('%Y-%m-%d'))),-->
+<!--                        ('date','&lt;=',((context_today()-datetime.timedelta(days=3)).strftime('%Y-%m-%d')))]"/>-->
+<!--                        <filter string="Hier-3" name="yesterday-3" date="hier_3" domain="[('date','&gt;=',((context_today()-datetime.timedelta(days=4)).strftime('%Y-%m-%d'))),('date','&lt;=',((context_today()-datetime.timedelta(days=4)).strftime('%Y-%m-%d')))]"/>-->
                     <separator/>
                         <filter string="Semaine courante"  name="this_week" separator="1"
                                 domain="[
@@ -97,12 +83,12 @@
                                 help="Liste des pointages de mois dernier"/>
                     <separator/>
                     <group string="Grouper par">
-                    	<filter name="group_by_company_id" string="Société" context="{'group_by':'company_id'}" groups="base.group_multi_company" domain="[]"/>
-                    	<filter name="group_by_kzm_sous_ferme_id" string="Ferme" context="{'group_by':'kzm_sous_ferme_id'}" groups="mrp_farm.group_sous_ferme"  domain="[]"/>
-                    	<filter name="group_by_matricule" string="Matricule" context="{'group_by':'matricule'}"  domain="[]"/>
-                    	<filter name="group_by_employee_id" string="Employé" context="{'group_by':'employee_id'}"  domain="[]"/>
-                    	<filter name="group_by_date" string="Date" context="{'group_by':'date:day'}"  domain="[]"/>
-                    	<filter name="group_by_mois" string="Mois" context="{'group_by':'date'}"  domain="[]"/>
+                    	<filter name="group_by_company_id" string="Société" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+<!--                    	<filter name="group_by_kzm_sous_ferme_id" string="Ferme" context="{'group_by':'kzm_sous_ferme_id'}" groups="kzm_type_contrat.group_sous_ferme"/>-->
+                    	<filter name="group_by_matricule" string="Matricule" context="{'group_by':'matricule'}"/>
+                    	<filter name="group_by_employee_id" string="Employé" context="{'group_by':'employee_id'}"/>
+                    	<filter name="group_by_date" string="Date" context="{'group_by':'date:day'}"/>
+                    	<filter name="group_by_mois" string="Mois" context="{'group_by':'date'}"/>
                         <separator/>
                     </group>
 
@@ -112,46 +98,47 @@
         <record model="ir.ui.view" id="kzm_daily_attendance_view_tree2">
             <field name="name">kzm.daily.attendance.view.tree2</field>
             <field name="model">kzm.daily.attendance</field>
+            <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="Ligne Pointage Journalier" create="false" decoration-danger="exception and 'Attention' in exception" decoration-info="loaded and loaded!='auto'">
-                    <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"/>
-                    <field name="date" readonly="1"/>
+                <tree string="Ligne Pointage Journalier" create="false" decoration-danger="'Attention' in exception" decoration-info="loaded!='auto'">
+                    <field name="company_id" groups="base.group_multi_company"
+                           />
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
+                    <field name="date" readonly="True"/>
                     <field name="is_free_day"/>
                     <field name="pause_djr"/>
-                    <field name="matricule" readonly="1" />
+                    <field name="matricule" readonly="True" />
                     <field name="employee_id" attrs="{'readonly':[('loaded','=','auto')]}"/>
                     <field name="type_contract_id"  domain="[('id','=',-1)]" options="{'no_open': True, 'no_create': True}" invisible='1'/>
                     <field name="duree" widget="float_time"/>
-                    <field name="heure_normal" widget="float_time" sum="hn"/>
-                    <field name="heure_sup" widget="float_time" sum="hs"/>
+                    <field name="heure_normal" widget="float_time" sum=""/>
+                    <field name="heure_sup" widget="float_time" sum=""/>
                     <field name="note"/>
                     <field name="exception" invisible="1"/>
-                    <field name="montant_heure_normal" sum="mhn"/>
-                    <field name="montant_heure_sup" sum="mhs"/>
-                    <field name="montant_total" sum="mt"/>
-                    <field name="loaded" readonly="1"/>
+                    <field name="montant_heure_normal" sum=""/>
+                    <field name="montant_heure_sup" sum=""/>
+                    <field name="montant_total" sum=""/>
+                    <field name="loaded" readonly="True"/>
                     <button name="details" icon="fa-info-circle" type="object" string="i"/>
                 </tree>
 
             </field>
         </record>
-
         <!--window actions -->
         <record id="kzm_presences_journalieres_action" model="ir.actions.act_window">
             <field name="name">Présences journaliers</field>
+            <field name="type">ir.actions.act_window</field>
             <field name="res_model">kzm.daily.attendance</field>
-            <field name="view_mode">tree,form</field>
-            <field name="context">{'search_default_this_2week': 1, 'tree_view_ref': 'kzm_hr_pointeuse.kzm_daily_attendance_view_tree2'} </field>
+            <field name="view_mode">tree,graph,pivot</field>
+            <field name="context">{'search_default_this_2week': 1,'tree_view_ref': 'kzm_hr_pointeuse.kzm_daily_attendance_view_tree2'} </field>
             <field name="help" type="html">
               <p >
                 Synthése des présences journaliers
-              </p>
+              </p><p>
+            </p>
             </field>
         </record>
-        <menuitem id="kzm_attendance_menu_hr_attendance" name="Pointage &amp; Présences" groups="kzm_hr_payroll_ma.group_kzm_hr_payroll_manager,kzm_hr_payroll_ma.group_kzm_hr_payroll_responsable,kzm_hr_payroll_ma.group_kzm_hr_payroll_assistant,kzm_hr_payroll_ma.group_kzm_hr_payroll_pointeur"
-            parent="hr.menu_hr_root" sequence="4"
-        />
+
         <menuitem id="kzm_presences_journalieres_menuitem"
                   name="Présences journaliers"
                   parent="kzm_attendance_menu_hr_attendance"

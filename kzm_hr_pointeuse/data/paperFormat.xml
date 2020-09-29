@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data  noupdate="1">
+    <data>
 
         <record id="badge_format_A3" model="report.paperformat">
             <field name="name">A3 format</field>

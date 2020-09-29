@@ -3,7 +3,7 @@ from odoo import fields, models, api, _
 
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
-    # matricule = fields.Char(string=_("Matricule"), required=False, )
+    matricule = fields.Char(string=_("Matricule"), required=False, )
     badge_ids = fields.One2many(comodel_name="kzm.hr.pointeuse.badge",
                                 inverse_name="employee_id", string=_("Badges"),
                                 required=False, readonly=False)
@@ -12,9 +12,9 @@ class HrEmployee(models.Model):
 
     def _attendance_access(self):
         # this function field use to hide attendance button to singin/singout from menu
-        #group = self.env['ir.model.data'].search([('module', '=', 'base'), ('name', '=', 'group_hr_manager')])
+        group = self.env['ir.model.data'].search([('module', '=', 'base'), ('name', '=', 'group_hr_manager')])
         visible = False
-        if self.env.user.has_group('hr.group_hr_manager'):
+        if self.env.user.id in [user.id for user in group.users]:
             visible = True
         return dict([(x, visible) for x in self.ids])
 
@@ -30,8 +30,8 @@ class HrEmployee(models.Model):
 
     def write(self, vals):
         for r in self:
-            # if len(r) == 1 and (not r.matricule or r.matricule == 'False' or len(r.matricule) < 5):
-            #     vals['matricule'] = self.env['ir.sequence'].next_by_code('hr.employee.matricule')
+            if len(r) == 1 and (not r.matricule or r.matricule == 'False'):
+                vals['matricule'] = self.env['ir.sequence'].next_by_code('hr.employee.matricule')
             super(HrEmployee, self).write(vals)
             return True
 
@@ -42,5 +42,5 @@ class HrContract(models.Model):
     badge_ids = fields.One2many(comodel_name="kzm.hr.pointeuse.badge",
                                 string=_("Badges"), related='employee_id.badge_ids')
 
-    sous_ferme_id = fields.Many2one(comodel_name="sub.farm",
-                                    default=False, string=_("Sub farm"), required=False)
+
+

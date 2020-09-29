@@ -153,13 +153,6 @@ msgstr ""
 
 #. module: kzm_hr_pointeuse
 #: code:addons/kzm_hr_pointeuse/models/kzm_hr_attendance.py:0
-#: model:ir.model.fields,field_description:kzm_hr_pointeuse.field_hr_attendance__active
-#, python-format
-msgid "Actif"
-msgstr ""
-
-#. module: kzm_hr_pointeuse
-#: code:addons/kzm_hr_pointeuse/models/kzm_hr_attendance.py:0
 #: model:ir.model.fields,field_description:kzm_hr_pointeuse.field_zk_attendance_attendance__action
 #, python-format
 msgid "Action"
@@ -225,9 +218,11 @@ msgid ""
 msgstr ""
 
 #. module: kzm_hr_pointeuse
-#: model_terms:ir.ui.view,arch_db:kzm_hr_pointeuse.kzm_hr_pointeuse_view_form
-msgid "Archived"
-msgstr "Archivé"
+#: code:addons/kzm_hr_pointeuse/models/kzm_hr_attendance.py:0
+#: model:ir.model.fields,field_description:kzm_hr_pointeuse.field_hr_attendance__active
+#, python-format
+msgid "Archivé"
+msgstr ""
 
 #. module: kzm_hr_pointeuse
 #: model:ir.model.fields,field_description:kzm_hr_pointeuse.field_kzm_all_attendances__message_attachment_count

@@ -10,46 +10,32 @@
             </field>
         </record>
 
-
-        <menuitem id="kzm_attendance_menu_hr_attendance" name="Pointage &amp; Présences" groups="kzm_hr_payroll_ma.group_kzm_hr_payroll_manager,kzm_hr_payroll_ma.group_kzm_hr_payroll_responsable,kzm_hr_payroll_ma.group_kzm_hr_payroll_assistant,kzm_hr_payroll_ma.group_kzm_hr_payroll_pointeur"
+        <!--<record id="hr_attendance.menu_hr_attendance" model="ir.ui.menu">-->
+            <!--<field name="name"></field>-->
+            <!--<field name="groups" eval="[-->
+            <!--(4,ref('kzm_hr_pointeuse.group_pointage_manager')),-->
+            <!--(4,ref('kzm_hr_payroll_ma.group_kzm_hr_payroll_responsable')),-->
+            <!--(4,ref('kzm_hr_payroll_ma.group_kzm_hr_payroll_assistant')),-->
+            <!--(4,ref('kzm_hr_pointeuse.group_kzm_pointage_pointeur')),-->
+             <!--]"/>-->
+        <!--</record>-->
+        <menuitem id="kzm_attendance_menu_hr_attendance" name="Pointage &amp; Présences" groups="kzm_hr_pointeuse.group_pointage_manager,kzm_hr_pointeuse.group_kzm_pointage_pointeur"
             parent="hr.menu_hr_root" sequence="4"
         />
+
+        <!--<record id="hr_attendance.menu_open_view_attendance" model="ir.ui.menu">-->
+            <!--<field name="name">Présences</field>-->
+            <!--<field name="groups" eval="[-->
+            <!--(4,ref('kzm_hr_pointeuse.group_pointage_manager')),-->
+            <!--(4,ref('kzm_hr_payroll_ma.group_kzm_hr_payroll_responsable')),-->
+            <!--(4,ref('kzm_hr_payroll_ma.group_kzm_hr_payroll_assistant')),-->
+             <!--]"/>-->
+        <!--</record>-->
 
 
         <menuitem id="zk_attendancies_menu" name="Temporary Attendance list" parent="kzm_attendance_menu_hr_attendance" action="zk_attendance_list_action" sequence="2"/>
         <menuitem id="zk_attendencies_reports_menu" name="Finalize Attendence list" parent="kzm_attendance_menu_hr_attendance" action="action_start_attendencies_report" sequence="3"  />
-        <menuitem id="hr_attendance_menu_open_view_attendance" name="Présences" groups="kzm_hr_payroll_ma.group_kzm_hr_payroll_manager,kzm_hr_payroll_ma.group_kzm_hr_payroll_responsable,kzm_hr_payroll_ma.group_kzm_hr_payroll_assistant"
+        <menuitem id="hr_attendance_menu_open_view_attendance" name="Présences" groups="kzm_hr_pointeuse.group_pointage_manager"
         parent="kzm_attendance_menu_hr_attendance" sequence="3" action="hr_attendance.hr_attendance_action"/>
-        <menuitem id="kzm_all_attendance_menuitem" name="Pointages Journaliers" parent="kzm_attendance_menu_hr_attendance"
-                  action="action_kzm_all_attendance" sequence="60"/>
-
-        <menuitem id="kzm_hr_pointeuse_menu" name="Pointeuses"
-            parent="hr.menu_hr_root"
-            sequence="5"  />
-
-        <menuitem id="kzm_hr_pointeuse_menuitem" name="Pointeuses"
-            parent="kzm_hr_pointeuse_menu" action="action_kzm_hr_pointeuse"
-            sequence="10"  />
-
-        <menuitem id="kzm_hr_pointeuse_badge_menuitem"
-                  name="Badges"
-                  parent="kzm_hr_pointeuse_menu"
-                  action="kzm_hr_pointeuse_badge_action"
-                  sequence="0"/>
-
-        <menuitem id="kzm_config_jrs_menuitem" name="Pause et jours fériés" sequence="52"
-                  parent="hr.menu_human_resources_configuration"
-                  groups="hr.group_hr_user"/>
-
-        <menuitem id="kzm_config_jrs_jours_menuitem" name="Jours fériés" sequence="52"
-                  parent="kzm_config_jrs_menuitem"
-                  groups="hr.group_hr_user"
-                  action="specific_holidays_action"
-        />
-
-        <menuitem id="kzm_config_jrs_pause_menuitem" name="Pause déjeuner" sequence="52"
-                  parent="kzm_config_jrs_menuitem"
-                  groups="hr.group_hr_user"
-                  action="specific_pause_action"/>
     </data>
 </odoo>

@@ -31,8 +31,7 @@ class kzm_hr_pointeuse_copie(models.Model):
     
     @api.depends('taux')
     def compute_etat_traitement(self):
-        for r in self:
-            r.etat_traitement=100.0 * r.taux
+        self.etat_traitement=100.0 * self.taux
 
     
     def copie_pointeuse(self):

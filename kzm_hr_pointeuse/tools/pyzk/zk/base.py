@@ -894,8 +894,12 @@ class ZK(object):
         response_size = 1024 #TODO check response?
         cmd_response = self.__send_command(command, command_string, response_size)
         if self.verbose: print("Response: %s" % cmd_response)
+
         if not cmd_response.get('status'):
             raise ZKErrorResponse("Can't set user")
+
+        print("XXXXXXXXXXXXXXXXXXXXXXXXX")
+        print(cmd_response.get('status'))
         self.refresh_data()
         if self.next_uid == uid:
             self.next_uid += 1 # better recalculate again
@@ -1016,6 +1020,12 @@ class ZK(object):
                 return False
             uid = users[0].uid
         command = const.CMD_DELETE_USER
+        print("======================")
+        print("======================")
+        print("======================")
+        print("======================")
+        print("UID>> ", uid)
+        print("USER_ID>> ", user_id)
         command_string = pack('h', uid)
         cmd_response = self.__send_command(command, command_string)
         if not cmd_response.get('status'):
@@ -1024,7 +1034,7 @@ class ZK(object):
         if uid == (self.next_uid - 1):
             self.next_uid = uid
 
-    def get_user_template(self, uid = '', temp_id=0, user_id=''):
+    def get_user_template(self, uid, temp_id=0, user_id=''):
         """
         :param uid: user ID that are generated from device
         :param user_id: your own user ID

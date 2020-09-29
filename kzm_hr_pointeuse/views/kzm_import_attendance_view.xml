@@ -8,17 +8,16 @@
             <field name="arch" type="xml">
                 <form string="Import des présences">
                     <sheet>
-                         <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                         <group col="2">
                             <group col="1">
                                 <group col="4">
                                     <field name="name"/>
                                     <field name="company_id" groups="base.group_multi_company" options="{'no_open': True, 'no_create': True}"/>
-                                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"
-                                       options="{'no_open': True, 'no_create': True}"
-                                       domain="[('company_id','=',company_id)]"
-                                    />
-                                    <field name="active" invisible="1"/>
+<!--                                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"-->
+<!--                                       options="{'no_open': True, 'no_create': True}"-->
+<!--                                       domain="[('company_id','=',company_id)]"-->
+<!--                                    />-->
+                                    <field name="active"/>
                                 </group>
                                 <group col="3">
                                     <field name="file_path" filename="file_name"/>
@@ -72,7 +71,7 @@
                 <tree string="Import des présences">
                     <field name="name"/>
                     <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"/>
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
                     <field name="file_name"/>
                     <field name="attendance_ids"/>
                 </tree>
@@ -85,7 +84,7 @@
             <field name="arch" type="xml">
                 <search string="Import des présences">
                     <field name="name"/>
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"/>
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
                     <field name="company_id" groups="base.group_multi_company"/>
                     <field name="attendance_ids"/>
 
@@ -104,6 +103,7 @@
 
         <record id="kzm_import_attendance_action" model="ir.actions.act_window">
             <field name="name">Import pointage</field>
+            <field name="type">ir.actions.act_window</field>
             <field name="res_model">kzm.import.attendance</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
@@ -117,7 +117,7 @@
 
         <!-- This Menu Item must have a parent and an action -->
         <!-- TODO CE MENU EST CACHÉ CAR ON A PAS UN EXEMPLE D'UN FICHER QU'ON PEUT TESTER (pointage.txt) -->
-        <!--menuitem groups="kzm_hr_payroll_ma.group_kzm_hr_payroll_manager,kzm_hr_payroll_ma.group_kzm_hr_payroll_responsable" id="kzm_import_attendance_menuitem" name="Importer présences" parent="kzm_attendance_menu_hr_attendance" action="kzm_import_attendance_action" sequence="55"/-->
+        <!--menuitem groups="kzm_hr_pointeuse.group_pointage_manager,kzm_hr_payroll_ma.group_kzm_hr_payroll_responsable" id="kzm_import_attendance_menuitem" name="Importer présences" parent="kzm_attendance_menu_hr_attendance" action="kzm_import_attendance_action" sequence="55"/-->
 
     </data>
 </odoo>

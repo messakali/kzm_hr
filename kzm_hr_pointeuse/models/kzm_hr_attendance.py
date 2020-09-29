@@ -6,7 +6,6 @@ from odoo.exceptions import UserError, ValidationError
 class attendance(models.Model):
     # _inherit = 'hr.attendance'
     _name = "zk_attendance.attendance"
-    _description = "zk_attendance.attendance"
     _order = "date desc"
     active = fields.Boolean(string=_("Active"), default=True)
     company_id = fields.Many2one(comodel_name="res.company",
@@ -21,7 +20,6 @@ class attendance(models.Model):
                                  ondelete='cascade',
                                  required=False)
     matricule = fields.Char(string=_("Matricule"), store=True, related='employee_id.matricule')
-    matricule_pointeuse = fields.Char(string=_("Matricule (P)"), required=False)
     note = fields.Char(string=_("Note"))
     # badge_id = fields.Many2one('kzm.hr.pointeuse.badge', string="Badge")
     date = fields.Datetime()
@@ -41,16 +39,15 @@ class HrAttendance(models.Model):
     check_out_machine = fields.Char(string=_('Check out machine'), )
 
     #== domaineDB
-    active = fields.Boolean(string=_("Actif"), default=True)
+    active = fields.Boolean(string=_("Archivé"), default=True)
     company_id = fields.Many2one(comodel_name="res.company",
                                  string=_("Ferme"), related='pointeuse_id.company_id', store=True)
 
-    kzm_sous_ferme_id = fields.Many2one(comodel_name="sub.farm",
-                                        related='pointeuse_id.kzm_sous_ferme_id', store=True)
 
-    type_employe = fields.Selection(string='Type employe', related='employee_id.type_employe',
-                                    # compute='compute_type_employe',
-                                    store=True)
+
+    # type_employe = fields.Selection(string='Type employe', related='employee_id.type_employe',
+    #                                 # compute='compute_type_employe',
+    #                                 store=True)
     pointeuse_id = fields.Many2one(comodel_name="kzm.hr.pointeuse", string=_("Pointeuse"),
                                    required=False, )
     matricule = fields.Char(string=_("Matricule"), store=True, related='employee_id.matricule')
@@ -58,7 +55,7 @@ class HrAttendance(models.Model):
     @api.constrains('employee_id')
     def check_contract(self):
         for r in self :
-            if not r.sudo().employee_id.contract_id:
+            if not r.employee_id.contract_id:
                 raise UserError(_("Vous n'avez pas de contract en cours!"))
 
 

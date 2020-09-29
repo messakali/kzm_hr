@@ -8,7 +8,7 @@ from odoo.exceptions import ValidationError
 
 
 class kzm_all_attendances(models.Model):
-    _inherit = ['mail.thread']
+    _inherit = 'mail.thread'
     _name = 'kzm.all.attendances'
     _description = 'Pointage Journalier'
     _order = "name desc"
@@ -24,10 +24,7 @@ class kzm_all_attendances(models.Model):
     name = fields.Date(string=_("Date Pointage Journalier"), index=True, required=True, default=fields.Date.today())
     company_id = fields.Many2one(comodel_name="res.company", ondelete='cascade', string=_("Société"), required=True,
                                  default=lambda self: self.env.company)
-    kzm_sous_ferme_id = fields.Many2one(comodel_name="sub.farm",
-                                        default=lambda self: self.env.user.kzm_sous_ferme_ids and
-                                                             self.env.user.kzm_sous_ferme_ids[0] or False,
-                                        string=_("Sous Ferme"), required=False, )
+
 
     state = fields.Selection(string=_("Etat"), selection=[('draft', 'Ouvert'), ('done', 'Fermé'), ], required=False,
                              default="draft")
@@ -59,7 +56,7 @@ class kzm_all_attendances(models.Model):
         action = self.env.ref('kzm_hr_pointeuse.action_kzm_daily_attendance_all')
         action = action.read()[0]
         action['domain'] = [
-            ('id', 'in', self.kzm_daily_attendance_ids.ids)]
+            ('id', 'in', [l.id for l in self.kzm_daily_attendance_ids])]
         action['context'] = {'default_kzm_all_attendances_id': self.id,
                              'search_default_kzm_all_attendances_id': self.id}
 
@@ -80,8 +77,7 @@ class kzm_all_attendances(models.Model):
     
     # @api.depends('kzm_daily_attendance_ids')
     def compute_total_employee(self):
-        for l in self:
-            l.total_employee = len(l.kzm_daily_attendance_ids)
+        self.total_employee = len(self.kzm_daily_attendance_ids)
 
 
     # @api.depends('kzm_daily_attendance_ids.heure_normal')
@@ -104,7 +100,7 @@ class kzm_all_attendances(models.Model):
             self.compute_total_employee()
         return True
 
-    _sql_constraints = [('all_attendance_date_uniq', 'UNIQUE (name, company_id,kzm_sous_ferme_id)',
+    _sql_constraints = [('all_attendance_date_uniq', 'UNIQUE (name, company_id)',
                          u'Un seul pointage journalier est possible par jour et par société.')]
 
     
@@ -123,7 +119,7 @@ class kzm_all_attendances(models.Model):
                 # "hr_attendance.worker_hours as worker_hours, " \
         req = "DELETE FROM kzm_daily_attendance where kzm_all_attendances_id is null; " \
               "SELECT DISTINCT hr_attendance.company_id as company_id,type_contract_id, " \
-              "hr_attendance.kzm_sous_ferme_id as kzm_sous_ferme_id, hr_attendance.employee_id as employee_id, " \
+              "hr_attendance.employee_id as employee_id, " \
               "date(hr_attendance.check_in) as date " \
               "FROM hr_attendance , hr_employee " \
               "WHERE hr_attendance.employee_id = hr_employee.id " \
@@ -136,8 +132,7 @@ class kzm_all_attendances(models.Model):
             str = str.replace('[', '(')
             str = str.replace(']', ')')
             req += " AND hr_attendance.employee_id not in {} ".format(str)
-        if self.kzm_sous_ferme_id:
-            req += " and hr_attendance.kzm_sous_ferme_id= %d " % self.kzm_sous_ferme_id.id
+
         self.env.cr.execute(req)
 
         kzm_daily_attendance_ids = self.env['kzm.daily.attendance']
@@ -156,11 +151,10 @@ class kzm_all_attendances(models.Model):
 
     
     def calculer_montants(self):
-        for rec in self:
-            rec.kzm_daily_attendance_ids.initialisation_valeur()
-            for daily in rec.kzm_daily_attendance_ids:
-                daily.compute_montant_heure_normal()
-                daily.compute_montant_heure_sup()
+        self.kzm_daily_attendance_ids.initialisation_valeur()
+        for daily in self.kzm_daily_attendance_ids:
+            daily.compute_montant_heure_normal()
+            daily.compute_montant_heure_sup()
 
     
     def action_cancel(self):
@@ -232,8 +226,7 @@ class kzm_daily_attendance(models.Model):
 
     company_id = fields.Many2one(comodel_name="res.company", ondelete='cascade', string=_("Société"),
                                  store=True, related="kzm_all_attendances_id.company_id", )
-    kzm_sous_ferme_id = fields.Many2one(comodel_name="sub.farm", string=_("Sous Ferme"),
-                                        store=True, related="kzm_all_attendances_id.kzm_sous_ferme_id", )
+
 
     employee_id = fields.Many2one(comodel_name="hr.employee", string=_("Employé"),
                                   required=True, ondelete='cascade', index=True)
@@ -252,11 +245,11 @@ class kzm_daily_attendance(models.Model):
                               required=False, default='manu')
 
     montant_heure_normal = fields.Float(string=_("M.H.N"), required=False,
-                                        compute='compute_montant_heure_normal', default=0.0,
+                                        default=0.0,
                                         store=True,
                                         help=u'Montant heures normales', digits=(8, 2))
     montant_heure_sup = fields.Float(string=_("M.H.S."), required=False,
-                                     compute='compute_montant_heure_sup',
+
                                      default=0.0,
                                      store=True,
                                      help=u'Montant des heures supplémentaires', digits=(8, 2))
@@ -276,35 +269,31 @@ class kzm_daily_attendance(models.Model):
     
     @api.depends('montant_heure_normal', 'montant_heure_sup')
     def compute_montant_total(self):
-        for rc in self:
-            rc.montant_total = rc.montant_heure_normal + rc.montant_heure_sup
+        self.montant_total = self.montant_heure_normal + self.montant_heure_sup
 
     
-    @api.depends('heure_normal')
-    def compute_montant_heure_normal(self):
-        for rec in self:
-            if rec.type_contract_id and rec.type_contract_id.nbr_heur_par_jour != 0:
-                taux_horaire = rec.type_contract_id.salaire_journalier / rec.type_contract_id.nbr_heur_par_jour
-                rec.montant_heure_normal = rec.heure_normal * taux_horaire
+    # @api.depends('heure_normal')
+    # def compute_montant_heure_normal(self):
+    #     if self.type_contract_id and self.type_contract_id.nbr_heur_par_jour != 0:
+    #         taux_horaire = self.type_contract_id.salaire_journalier / self.type_contract_id.nbr_heur_par_jour
+    #         self.montant_heure_normal = self.heure_normal * taux_horaire
 
     
     @api.depends('heure_sup')
     def compute_montant_heure_sup(self):
-        for rec in self:
-            if rec.type_contract_id:
-                taux_horaire = rec.type_contract_id.hour_salary
-                rec.montant_heure_sup = rec.heure_sup * taux_horaire
+        if self.type_contract_id:
+            taux_horaire = self.type_contract_id.hour_salary
+            self.montant_heure_sup = self.heure_sup * taux_horaire
 
     
     @api.constrains('heure_normal', 'heure_sup')
     def _check_value(self):
-        for rec in self:
-            if not rec.type_contract_id:
-                raise exceptions.Warning("L'employée ne posséde pas de type de contrat, Merci de le recruter")
-            nb_heure_jour = rec.type_contract_id.nbr_heur_par_jour
-            if rec.heure_normal > nb_heure_jour:  # or self.heure_sup > nb_heure_jour*2:
-                raise exceptions.Warning("Heures normales (respéctivement Heures supplémentaires)"
-                                         " ne peuvent pas dépasser 08 heurs/jour ")
+        if not self.type_contract_id:
+            raise exceptions.Warning("L'employée ne posséde pas de type de contrat, Merci de le recruter")
+        nb_heure_jour = self.type_contract_id.nbr_heur_par_jour
+        if self.heure_normal > nb_heure_jour:  # or self.heure_sup > nb_heure_jour*2:
+            raise exceptions.Warning("Heures normales (respéctivement Heures supplémentaires)"
+                                     " ne peuvent pas dépasser 08 heurs/jour ")
 
     @api.onchange('heure_normal')
     def compute_heures(self):
@@ -317,28 +306,25 @@ class kzm_daily_attendance(models.Model):
     @api.model
     def create(self, vals):
         try:
-            new_records = super(kzm_daily_attendance, self).create(vals)
-            for new_record in new_records:
-                new_record.heure_normal = new_record.type_contract_id.nbr_heur_par_jour
-                date1 = fields.Datetime.from_string(new_record.date).strftime('%Y-%m-%d 08:00:00')
-                date1 = fields.Datetime.from_string(date1)
-                date2 = new_record.employee_id.last_date_pointage \
-                        and fields.Datetime.from_string(new_record.employee_id.last_date_pointage) \
-                        or False
+            new_record = super(kzm_daily_attendance, self).create(vals)
+            new_record.heure_normal = new_record.type_contract_id.nbr_heur_par_jour
+            date1 = fields.Datetime.from_string(new_record.date).strftime('%Y-%m-%d 08:00:00')
+            date1 = fields.Datetime.from_string(date1)
+            date2 = new_record.employee_id.last_date_pointage \
+                    and fields.Datetime.from_string(new_record.employee_id.last_date_pointage) \
+                    or False
 
-                if not date2 or date1 > date2:
-                    new_record.employee_id.write(
-                        {'last_ferm_pointage': new_record.company_id.id,
-                         'last_sous_ferm_pointage': new_record.kzm_sous_ferme_id and new_record.kzm_sous_ferme_id.id or False,
+            if not date2 or date1 > date2:
+                new_record.employee_id.write(
+                    {'last_ferm_pointage': new_record.company_id.id,
 
-                         'last_date_pointage': date1})
 
-            return new_records
+                     'last_date_pointage': date1})
+
+            return new_record
         except Exception as ex:
             self.env.cr.rollback()
-            employee_id = False
-            if vals.get('employee_id', False):
-                employee_id = self.env['hr.employee'].search([('id', '=', vals['employee_id'])])
+            employee_id = self.env['hr.employee'].search([('id', '=', vals['employee_id'])])
             if employee_id:
                 if str(ex).find('kzm_daily_attendance_company_id_employee_id_uniq') > 0 and vals['loaded'] == 'auto':
 
@@ -348,7 +334,7 @@ class kzm_daily_attendance(models.Model):
                 else:
                     raise ValidationError(_(
                         "Erreur de creation de la presence de L'employé %s , matricule = %s \nUn seul pointage journalier est possible par jour et par ferme \n" %(
-                            employee_id.name, employee_id.matricule)) + "\n Odoo: %s"%(str(ex)))
+                            employee_id.name, employee_id.matricule)))
             else:
                 employee_id = self.env['hr.employee'].search([('id', '=', vals['employee_id']), ('active', '=', False)])
                 if employee_id:
@@ -362,26 +348,31 @@ class kzm_daily_attendance(models.Model):
 
     
     def calcule_duree(self):
-        for rec in self:
-            rec.duree = sum([att.worked_hours for att in rec.attendance_ids])
+        duree = 0.0
+        # for att in self.attendance_ids:
+        #     if not att.sign_in or not att.sign_out:
+        #         self.exception = u'Entrée (resp. Sortie) est manquante dans quelques présences.'
+        #         break
+        #     if att.sign_in and att.sign_out:
+        #         start_date = fields.Datetime.from_string(att.sign_in)
+        #         end_date = fields.Datetime.from_string(att.sign_out)
+        #         duree += (end_date - start_date).seconds / 3600.0
+        self.duree = sum([att.worked_hours for att in self.attendance_ids])
 
     
     def generate_attendances(self):
-        for rec in self:
-            if rec.kzm_all_attendances_id.name:
-                start_date = fields.Datetime.from_string(rec.kzm_all_attendances_id.name).strftime('%Y-%m-%d 00:00:00')
-                end_date = fields.Datetime.from_string(rec.kzm_all_attendances_id.name).strftime('%Y-%m-%d 23:59:59')
-                rec.attendance_ids = self.env['hr.attendance'].search(
-                    [
-                        ("check_in", '>=', start_date),
-                        ("check_in", '<=', end_date),
-                        ('company_id', '=', rec.kzm_all_attendances_id.company_id.id),
-                        ('kzm_sous_ferme_id', '=',
-                         rec.kzm_all_attendances_id.kzm_sous_ferme_id and rec.kzm_all_attendances_id.kzm_sous_ferme_id.id or False),
-                        ('employee_id', '=', rec.employee_id.id)
-                    ],
-                    order="id"
-                )
+        if self.kzm_all_attendances_id.name:
+            start_date = fields.Datetime.from_string(self.kzm_all_attendances_id.name).strftime('%Y-%m-%d 00:00:00')
+            end_date = fields.Datetime.from_string(self.kzm_all_attendances_id.name).strftime('%Y-%m-%d 23:59:59')
+            self.attendance_ids = self.env['hr.attendance'].search(
+                [
+                    ("check_in", '>=', start_date),
+                    ("check_in", '<=', end_date),
+                    ('company_id', '=', self.kzm_all_attendances_id.company_id.id),
+                    ('employee_id', '=', self.employee_id.id)
+                ],
+                order="id"
+            )
 
     @api.onchange('employee_id')
     def check_unique_employee(self):
@@ -444,12 +435,8 @@ class kzm_conf_categorie_ressource_humaine(models.Model):
 class hr_employee(models.Model):
     _inherit = 'hr.employee'
 
-    kzm_sous_ferme_id = fields.Many2one(comodel_name="sub.farm",
-                                        default=lambda self: self.env.user.kzm_sous_ferme_ids and
-                                                             self.env.user.kzm_sous_ferme_ids[0],
-                                        string=_("Sous Ferme"), required=False, )
+
     last_ferm_pointage = fields.Many2one(comodel_name="res.company",
                                          string=_("Ferme de dernier pointage"), required=False, )
-    last_sous_ferm_pointage = fields.Many2one(comodel_name="sub.farm",
-                                              string=_("Sous Ferme de dernier pointage"), required=False, )
+
     last_date_pointage = fields.Datetime(string=_("Date de dernier pointage"), required=False, )

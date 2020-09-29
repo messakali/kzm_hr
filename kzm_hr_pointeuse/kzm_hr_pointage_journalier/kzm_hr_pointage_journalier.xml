@@ -9,12 +9,12 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='company_id']" position="after">
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"
-                                   options="{'no_open': True, 'no_create': True}"
-                                   domain="[('company_id','=',company_id)]"
-                            />
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"-->
+<!--                                   options="{'no_open': True, 'no_create': True}"-->
+<!--                                   domain="[('company_id','=',company_id)]"-->
+<!--                            />-->
                     <field name="last_ferm_pointage" readonly="True"/>
-                    <field name="last_sous_ferm_pointage" readonly="True"/>
+<!--                    <field name="last_sous_ferm_pointage" readonly="True"/>-->
                     <field name="last_date_pointage" readonly="True"/>
                 </xpath>
 
@@ -24,12 +24,14 @@
         <record model="ir.ui.view" id="kzm_daily_attendance_view_tree">
             <field name="name">kzm.daily.attendance.view.tree</field>
             <field name="model">kzm.daily.attendance</field>
+            <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="Ligne Pointage Journalier" editable="bottom" decoration-danger="exception and 'Attention' in exception" decoration-info="loaded and loaded!='auto'">
-                    <field name="date" readonly="1"/>
+                <tree string="Ligne Pointage Journalier" editable="bottom"
+                      decoration-danger="exception and 'Attention' in exception" decoration-info="loaded and loaded!='auto'">
+                    <field name="date" readonly="True"/>
                     <field name="is_free_day"/>
                     <field name="pause_djr"/>
-                    <field name="matricule" readonly="1" />
+                    <field name="matricule" readonly="True" />
                     <field name="employee_id" attrs="{'readonly':[('loaded','=','auto')]}"/>
                     <field name="type_contract_id"  domain="[('id','=',-1)]" options="{'no_open': True, 'no_create': True}" invisible='1'/>
                     <field name="duree" widget="float_time" sum="total duree"/>
@@ -40,7 +42,7 @@
                     <field name="montant_heure_normal" sum="total mhn"/>
                     <field name="montant_heure_sup" sum="total mhs"/>
                     <field name="montant_total" sum="total mt"/>
-                    <field name="loaded" readonly="1"/>
+                    <field name="loaded" readonly="True"/>
                     <button name="details"  icon="fa-info-circle" type="object" string="i"/>
                 </tree>
 
@@ -55,10 +57,10 @@
                     <sheet>
                         <group>
                              <field name="company_id" groups="base.group_multi_company"/>
-                            <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"
-                                   options="{'no_open': True, 'no_create': True}"
-                                   domain="[('company_id','=',company_id)]"
-                            />
+<!--                            <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"-->
+<!--                                   options="{'no_open': True, 'no_create': True}"-->
+<!--                                   domain="[('company_id','=',company_id)]"-->
+<!--                            />-->
                             <field name="employee_id" readonly="1"/>
                             <field name="duree" widget="float_time" readonly="1"/>
                             <field name="heure_normal" widget="float_time" readonly="1"/>
@@ -75,19 +77,37 @@
             </field>
         </record>
 
+<!--        &lt;!&ndash;record id="kzm_daily_attendance_action" model="ir.actions.act_window">-->
+<!--            <field name="name">Ligne Pointage Journalier</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">kzm.daily.attendance</field>-->
+<!--            <field name="limit">2000</field>-->
+<!--            <field name="context">{'tree_view_ref': 'kzm_daily_attendance_view_tree'} </field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--            <field name="help" type="html">-->
+<!--              <p >-->
+
+<!--              </p><p>-->
+
+<!--              </p>-->
+<!--            </field>-->
+<!--        </record&ndash;&gt;-->
+
         <record model="ir.ui.view" id="kzm_all_attendances_view_tree">
             <field name="name">kzm.all.attendances.view.tree</field>
             <field name="model">kzm.all.attendances</field>
+            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Pointages Journaliers" decoration-danger="state=='draft'" decoration-info="state=='done'">
                     <field name="state" invisible="1"/>
                     <field name="reference"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"/>
+                    <field name="company_id" groups="base.group_multi_company"
+                           attrs=""/>
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
                     <field name="name"/>
                     <field name="is_free_day"/>
-                    <field name="total_jour" sum="sumMarg"/>
-                    <field name="total_employee" sum="sumPor"/>
+                    <field name="total_jour" sum=""/>
+                    <field name="total_employee" sum=""/>
                     <field name="kzm_daily_attendance_ids"/>
                 </tree>
             </field>
@@ -102,15 +122,13 @@
 
                         <button name="action_cancel"
                                 type="object" string="Ouvrir"
-                                groups="kzm_hr_payroll_ma.group_kzm_hr_payroll_manager,
-                                kzm_hr_payroll_ma.group_kzm_hr_payroll_assistant,
-                                kzm_hr_payroll_ma.group_kzm_hr_payroll_responsable"
+                                groups="kzm_hr_pointeuse.group_pointage_manager"
                                 class="oe_highlight"
                                 states="done"
                         />
                         <button name="action_terminer"
                                 type="object" string="Fermer"
-                                groups="kzm_hr_payroll_ma.group_kzm_hr_payroll_pointeur"
+                                groups="kzm_hr_pointeuse.group_kzm_pointage_pointeur"
                                 class="oe_highlight"
                                 states="draft"
                         />
@@ -118,18 +136,18 @@
 
                         <button name="generate_kzm_daily_attendance_ids"
                                 type="object" string="Charger Pointage"
-                                groups="kzm_hr_payroll_ma.group_kzm_hr_payroll_pointeur"
+                                groups="kzm_hr_pointeuse.group_kzm_pointage_pointeur"
                                 class="oe_highlight"
                                 states="draft"
                         />
                         <button name="calculer_montants"
                                 type="object" string="Actualiser"
                                 help="Recalcule les montants dans le cas de changement de salaire de quelque ouvriers"
-                                groups="kzm_hr_payroll_ma.group_kzm_hr_payroll_pointeur"
+                                groups="kzm_hr_pointeuse.group_kzm_pointage_pointeur"
                                 class="oe_highlight"
                                 states="draft"
                         />
-                        <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" statusbar_colors='{"draft":"blue","done":"red"}'/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
@@ -142,25 +160,25 @@
                             </button>
 
                         </div>
-                        <group>
-                            <group>
-                                <field name="company_id" groups="base.group_multi_company"
+                        <group col="6">
+                            <field name="company_id" groups="base.group_multi_company"
                                    options="{'no_open': True, 'no_create': True}"
                                    attrs="{'readonly':[('state','=','done')]}"
-                                />
-                                <field name="name" attrs="{'readonly':[('state','=','done')]}"/>
-                                <field name="total_jour" readonly="1"/>
-                                <field name="is_free_day"/>
-                            </group>
-                            <group>
-                                <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"
-                                   options="{'no_open': True, 'no_create': True}"
-                                   domain="[('company_id','=',company_id)]"
-                                   attrs="{'readonly':[('state','=','done')]}"
-                                />
-                                <field name="reference"/>
-                                <field name="total_employee" readonly="1"/>
-                            </group>
+                            />
+<!--                            <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"-->
+<!--                                   options="{'no_open': True, 'no_create': True}"-->
+<!--                                   domain="[('company_id','=',company_id)]"-->
+<!--                                   attrs="{'readonly':[('state','=','done')]}"-->
+<!--                                />-->
+                            <field name="name" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="reference"/>
+                            <!--field name="total_heurs_sup" readonly="1"/-->
+                            <field name="total_jour" readonly="1"/>
+                            <field name="total_employee" readonly="1"/>
+                            <field name="is_free_day"/>
+                            <!--field name="total_montant_heur_normal"/>
+                            <field name="total_montant_heur_sup"/>
+                            <field name="montant_total"/-->
                         </group>
 
                         <notebook>
@@ -190,7 +208,7 @@
                     <field name="reference"/>
                     <field name="name"/>
                     <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"/>
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
                     <field name="kzm_daily_attendance_ids"/>
 
                     <filter name="active" string="Désactivés"
@@ -257,9 +275,9 @@
 
 
                     <group string="Group By">
-                    	<filter name="group_by_company_id" string="Société" context="{'group_by':'company_id'}" domain="[]"/>
-                    	<filter name="group_by_date" string="Date" context="{'group_by':'name:day'}"  domain="[]"/>
-                    	<filter name="group_by_mois" string="Mois" context="{'group_by':'name'}"  domain="[]"/>
+                    	<filter name="group_by_company_id" string="Société" context="{'group_by':'company_id'}"/>
+                    	<filter name="group_by_date" string="Date" context="{'group_by':'name:day'}"/>
+                    	<filter name="group_by_mois" string="Mois" context="{'group_by':'name'}"/>
 
                     </group>
 
@@ -270,6 +288,7 @@
         <record id="action_kzm_all_attendance" model="ir.actions.act_window">
             <field name="name">Pointages journaliers</field>
             <field name="res_model">kzm.all.attendances</field>
+
             <field name="view_mode">tree,form,kanban</field>
             <field name="context">{"search_default_today":1}</field>
             <field name="domain">[]</field>
@@ -278,6 +297,7 @@
         <record id="action_kzm_daily_attendance_all" model="ir.actions.act_window">
             <field name="name">Pointages journaliers</field>
             <field name="res_model">kzm.daily.attendance</field>
+
             <field name="view_mode">tree,form,kanban</field>
             <field name="domain">[]</field>
         </record>
@@ -285,6 +305,7 @@
         <record id="action_kzm_poste_pointage_jrn_all" model="ir.actions.act_window">
             <field name="name">Statistiques</field>
             <field name="res_model">kzm.poste.pointage.journalier</field>
+
             <field name="view_mode">tree,form,kanban</field>
             <field name="domain">[]</field>
         </record>
@@ -292,11 +313,17 @@
         <record id="action_kzm_daily_attendances" model="ir.actions.act_window">
             <field name="name">Ligne Pointage Journalier</field>
             <field name="res_model">kzm.daily.attendance</field>
+
             <field name="view_mode">tree,form</field>
             <field name="context">{}</field>
             <field name="domain">[]</field>
         </record>
 
-        
+<!--        &lt;!&ndash;menuitem id="kzm_all_attendances_menuitem" name="Pointages Journaliers"-->
+<!--            parent="kzm_attendance_menu_hr_attendance" action="action_kzm_all_attendances"-->
+<!--            sequence="80"/&ndash;&gt;-->
+
+        <menuitem id="kzm_all_attendance_menuitem" name="Pointages Journaliers" parent="kzm_attendance_menu_hr_attendance"
+                  action="action_kzm_all_attendance" sequence="60"/>
     </data>
 </odoo>

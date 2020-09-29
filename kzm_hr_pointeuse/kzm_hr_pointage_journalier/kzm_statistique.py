@@ -13,8 +13,8 @@ class kzm_poste_pointage_journalier(models.Model):
                                             readonly=True, )
 
     type_contract_id = fields.Many2one(comodel_name="hr.contract.type", string=_("Poste HR"), readonly=True, )
-    salaire_journalier = fields.Float(related='type_contract_id.salaire_journalier')
-    hour_salary = fields.Float(related='type_contract_id.hour_salary')
+    # salaire_journalier = fields.Float(related='type_contract_id.salaire_journalier')
+    # hour_salary = fields.Float(related='type_contract_id.hour_salary')
 
     nombre_rh = fields.Float(string=_("Nombre de ressources"), readonly=True, )
     total = fields.Float(string=_("Montant Total"), readonly=True, )

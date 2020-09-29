@@ -12,7 +12,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='category_ids']" position="before">
                     <group>
-                        <!--field name="matricule"/-->
+                        <field name="matricule"/>
                         <field name="badge_ids" widget="many2many_tags" readonly="1"/>
                     </group>
                 </xpath>
@@ -108,7 +108,11 @@
         </record>
 
         <!-- This Menu Item must have a parent and an action -->
-        
+        <menuitem id="kzm_hr_pointeuse_badge_menuitem"
+                  name="Badges"
+                  parent="kzm_hr_pointeuse_menu"
+                  action="kzm_hr_pointeuse_badge_action"
+                  sequence="0"/>
 
     </data>
 </odoo>

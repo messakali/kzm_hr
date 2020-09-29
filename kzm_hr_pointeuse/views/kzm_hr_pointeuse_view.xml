@@ -7,19 +7,18 @@
             <field name="arch" type="xml">
                 <form string="Pointeuse">
                     <sheet>
-                         <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                         <group col="3">
-                            <group colspan="2">
+                            <group >
                                 <field name="name"/>
                                 <field name="company_id" groups="base.group_multi_company" options="{'no_open': True, 'no_create': True}"/>
-                                <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"
-                                   options="{'no_open': True, 'no_create': True}"
-                                   domain="[('company_id','=',company_id)]"
-                                />
+<!--                                <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"-->
+<!--                                   options="{'no_open': True, 'no_create': True}"-->
+<!--                                   domain="[('company_id','=',company_id)]"-->
+<!--                                />-->
                                 <field name="ip"/>
                                 <field name="port"/>
                                 <field name="connection_state" widget="many2onebutton"/>
-                                <field name="active" invisible="1"/>
+                                <field name="active"/>
                                 <field name="type"/>
                                 <button name="check_connection"
                                         type="object" string="Tester la connection" class="oe_highlight" />
@@ -46,7 +45,6 @@
                             </group>
                         </group>
                     </sheet>
-
                       <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>
                     <field name="message_ids" widget="mail_thread"/>
@@ -63,7 +61,7 @@
                 <tree string="Pointeuse">
                     <field name="name" />
                     <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="kzm_sous_ferme_id" groups="mrp_farm.group_sous_ferme"/>
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
                     <field name="ip"/>
                     <field name="type"/>
                     <field name="connection_state" widget="many2onebutton"/>
@@ -158,7 +156,14 @@
             <field name="domain">[]</field>
         </record>
 
-        
+        <menuitem id="kzm_hr_pointeuse_menu" name="Pointeuses"
+            parent="hr.menu_hr_root"
+            sequence="5"  />
+
+        <menuitem id="kzm_hr_pointeuse_menuitem" name="Pointeuses"
+            parent="kzm_hr_pointeuse_menu" action="action_kzm_hr_pointeuse"
+            sequence="10"  />
+
 
     </data>
 </odoo>

@@ -14,10 +14,10 @@
                 </xpath>
 
                 <xpath expr="//field[@name='work_email']" position="after">
-                    <field name="date" />
+<!--                    <field name="date" />-->
                     <field name="birthday" />
                     <field name="last_ferm_pointage" />
-                    <field name="last_sous_ferm_pointage" />
+<!--                    <field name="last_sous_ferm_pointage" />-->
                     <field name="last_date_pointage" />
                 </xpath>
 
@@ -37,22 +37,22 @@
             </field>
         </record>
 
-        <record id="kzm_hr_employee_view_inherit" model="ir.ui.view">
-            <field name="name">kzm.hr.employee.view.inherit</field>
-            <field name="model">hr.employee</field>
-            <field name="inherit_id" ref="hr.view_employee_filter"/>
-            <field name="arch" type="xml">
-<!--TODO DOUAE-->
-<!--                changer filtre[5] à filtre[3]-->
-                <xpath expr="//group/filter[3]" position="after">
-                    <filter name="last_ferme" string="Ferme Dernier Pointage" icon="terp-go-home" domain="[]"
-                            context="{'group_by':'last_ferm_pointage'}" />
-                     <filter name="type_employe" string="Type employé" icon="terp-go-home" domain="[]"
-                            context="{'group_by':'type_employe'}" />
-                </xpath>
+<!--        <record id="kzm_hr_employee_view_inherit" model="ir.ui.view">-->
+<!--            <field name="name">kzm.hr.employee.view.inherit</field>-->
+<!--            <field name="model">hr.employee</field>-->
+<!--            <field name="inherit_id" ref="hr.view_employee_filter"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--&lt;!&ndash;TODO DOUAE&ndash;&gt;-->
+<!--&lt;!&ndash;                changer filtre[5] à filtre[3]&ndash;&gt;-->
+<!--                <xpath expr="//group/filter[3]" position="after">-->
+<!--                    <filter name="last_ferme" string="Ferme Dernier Pointage" icon="terp-go-home" domain="[]"-->
+<!--                            context="{'group_by':'last_ferm_pointage'}" />-->
+<!--                     <filter name="type_employe" string="Type employé" icon="terp-go-home" domain="[]"-->
+<!--                            context="{'group_by':'type_employe'}" />-->
+<!--                </xpath>-->
 
-            </field>
-        </record>
+<!--            </field>-->
+<!--        </record>-->
 
     </data>
 </odoo>

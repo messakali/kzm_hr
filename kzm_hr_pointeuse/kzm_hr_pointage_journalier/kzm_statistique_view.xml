@@ -8,8 +8,8 @@
             <field name="arch" type="xml">
                 <tree string="" create="false" edit="false">
                     <field name="type_contract_id"/>
-                    <field name="salaire_journalier"/>
-                    <field name="hour_salary"/>
+<!--                    <field name="salaire_journalier"/>-->
+<!--                    <field name="hour_salary"/>-->
                     <field name="nombre_rh" sum="total nrh"/>
                     <field name="heure_normal" sum="total hn"/>
                     <field name="heure_sup" sum="total hs"/>

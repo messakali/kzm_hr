@@ -5,7 +5,6 @@ from datetime import datetime
 
 class Holidays(models.Model):
     _name = "specific.holidays"
-    _description = "specific.holidays"
 
     name = fields.Char(u"Description", required=True)
     start_date = fields.Date(u"Date début", required=True)
@@ -13,8 +12,7 @@ class Holidays(models.Model):
     company_id = fields.Many2one(comodel_name="res.company", ondelete='cascade', string=_("Society"),
                                  required=True,
                                  default=lambda self: self.env.company)
-    sous_ferme_id = fields.Many2one(comodel_name="sub.farm",
-                                    default=False, string=_("Sub farm"), required=False)
+
 
 
     def is_free_date(self, odoo_date):
@@ -28,7 +26,6 @@ class Holidays(models.Model):
 
 class Pause(models.Model):
     _name = "specific.pause"
-    _description = "specific.pause"
 
     def _compute_decs(self):
         for o in self:
@@ -48,8 +45,7 @@ class Pause(models.Model):
     company_id = fields.Many2one(comodel_name="res.company", ondelete='cascade', string=_("Society"),
                                  required=True,
                                  default=lambda self: self.env.company)
-    sous_ferme_id = fields.Many2one(comodel_name="sub.farm",
-                                    default=False, string=_("Sub farm"), required=False)
+
 
 
     def get_pause_text(self):

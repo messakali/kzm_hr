@@ -25,48 +25,42 @@
     'depends': [
         'hr_attendance',
         'hr_contract',
+        # 'kzm_hr_payroll_ma',
+        # 'kzm_type_contrat',
         'kzm_hr_contract_type'
     ],
 
     # always loaded
     'data': [
-
+        'security/ir_rule.xml',
+        'security/ir.model.access.csv',
         'data/kzm_hr_pointeuse_data.xml',
         'data/kzm_hr_employee_sequence.xml',
         'data/kzm_hr_pointeuse_sequence.xml',
         'data/paperFormat.xml',
         'data/crons.xml',
-
-        'security/ir.model.access.csv',
-        'security/ir_rule.xml',
         'kzm_hr_pointage_journalier/security/kzm_security.xml',
         'kzm_hr_pointage_journalier/security/ir.model.access.csv',
         'kzm_hr_pointage_journalier/security/ir_rule.xml',
-
         'wizard/wizard_finalize_attendencies.xml',
+        'views/kzm_hr_pointeuse_view.xml',
+        'views/kzm_hr_pointeuse_badge_view.xml',
+        'views/kzm_hr_pointeuse_badge_report.xml',
+        'views/zk_attendencies.xml',
+        'views/menus.xml',
+        'views/kzm_import_attendance_view.xml',
+        'views/hr_attendance_view.xml',
+        'views/specific_holidays.xml',
+
+        'wizard/kzm_hr_pointeuse_connection_view.xml',
+        'wizard/kzm_hr_pointeuse_load_attendance_view.xml',
+        'wizard/kzm_hr_pointeuse_copie.xml',
 
         'kzm_hr_pointage_journalier/kzm_hr_pointage_journalier.xml',
         'kzm_hr_pointage_journalier/kzm_sequence.xml',
         'kzm_hr_pointage_journalier/kzm_statistique_view.xml',
         'kzm_hr_pointage_journalier/hr_employee_view.xml',
         'kzm_hr_pointage_journalier/kzm_presences_journalieres.xml',
-        
-        'views/kzm_hr_pointeuse_view.xml',
-        'views/kzm_hr_pointeuse_badge_view.xml',
-        'views/kzm_hr_pointeuse_badge_report.xml',
-        'views/zk_attendencies.xml',
-        'views/kzm_import_attendance_view.xml',
-        'views/hr_attendance_view.xml',
-        'views/specific_holidays.xml',
-        'views/menus.xml',
-
-        'wizard/kzm_hr_pointeuse_connection_view.xml',
-        'wizard/kzm_hr_pointeuse_load_attendance_view.xml',
-        'wizard/kzm_hr_pointeuse_copie.xml',
-
-        
-
-
 
     ],
     # only loaded in demonstration mode

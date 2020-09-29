@@ -69,6 +69,7 @@
 
         <record id="specific_holidays_action" model="ir.actions.act_window">
             <field name="name">Jours fériés</field>
+            <field name="type">ir.actions.act_window</field>
             <field name="res_model">specific.holidays</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
@@ -80,6 +81,7 @@
 
         <record id="specific_pause_action" model="ir.actions.act_window">
             <field name="name">Pause déjeuner</field>
+            <field name="type">ir.actions.act_window</field>
             <field name="res_model">specific.pause</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
@@ -89,6 +91,20 @@
             </field>
         </record>
 
-        
+         <menuitem id="kzm_config_jrs_menuitem" name="Pause et jours fériés" sequence="52"
+                  parent="hr.menu_human_resources_configuration"
+                  groups="hr.group_hr_user"/>
+
+        <menuitem id="kzm_config_jrs_jours_menuitem" name="Jours fériés" sequence="52"
+                  parent="kzm_config_jrs_menuitem"
+                  groups="hr.group_hr_user"
+                  action="specific_holidays_action"
+        />
+
+        <menuitem id="kzm_config_jrs_pause_menuitem" name="Pause déjeuner" sequence="52"
+                  parent="kzm_config_jrs_menuitem"
+                  groups="hr.group_hr_user"
+                  action="specific_pause_action"
+        />
     </data>
 </odoo>

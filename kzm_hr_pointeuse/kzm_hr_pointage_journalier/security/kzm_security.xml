@@ -5,7 +5,7 @@
         <record id="hr_attendance.group_hr_attendance_manager" model="ir.rule">
             <field name="name">Pointeur attendace_manager</field>
             <field name="model_id" ref="model_hr_attendance"/>
-            <field name="groups" eval="[(4,ref('kzm_hr_payroll_ma.group_kzm_hr_payroll_pointeur'))]"/>
+            <field name="groups" eval="[(4,ref('kzm_hr_pointeuse.group_kzm_pointage_pointeur'))]"/>
         </record>
     </data>
 </odoo>
