@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 import xmlrpc.client
 from xmlrpc import client as xmlrpclib
 
@@ -13,18 +14,24 @@ class HrEmployee(models.Model):
     def get_status(self):
         # conf = self.env['res.config.settings'].set_config_pointeuse()
         # print(conf)
-        self.connect_xml_rpc_v13('http://51.210.186.95', 'POINTAGE', 'ICESCO', 'Isec@1715@?')
+        models_kw, db, username, password, uid = self.connect_xml_rpc_v13('http://51.210.186.95', 'POINTAGE', 'ICESCO', 'Isec@1715@?')
+        print("----", self.id_pointeuse,[[self.id_pointeuse,]])
+        records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'get_status_connection',
+                                    [[int(self.id_pointeuse),]])
+        print("-*-*-*",records)
+
+
+        msg = "; ".join([str(c) for c in records])
+        raise ValidationError(msg)
 
 
     def connect_xml_rpc_v13(self,url, db, username, password):
         common = xmlrpclib.ServerProxy('{}/xmlrpc/2/common'.format(url))
-        models = xmlrpclib.ServerProxy('{}/xmlrpc/2/object'.format(url))
-
+        models_kw = xmlrpclib.ServerProxy('{}/xmlrpc/2/object'.format(url))
         uid = common.login(db, username, password)
-        result2 = models.execute(db, uid, password, 'kzm.hr.pointeuse', 'get_status_connection', [['id', '=', self.id_pointeuse]])
-        print('Resultat: ' + str(result2))
 
-        return models, db, username, password, uid
+
+        return models_kw, db, username, password, uid
 
 
 
