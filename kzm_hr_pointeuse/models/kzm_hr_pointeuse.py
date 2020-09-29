@@ -85,6 +85,7 @@ class machine(models.Model):
     def get_status_connection(self):
         for r in self:
             # self.load_attendance()
+            print("---- start", self)
             try:
                 zk = pyzk.ZK(r.ip, int(r.port), timeout=10)
                 conn = zk.connect()
@@ -93,6 +94,7 @@ class machine(models.Model):
                     conn.disconnect()
             except Exception as e:
                 r.connection_state = False
+            print("---- end", self)
         return [c.connection_state for c in self]
 
     @api.depends('connection_state')
