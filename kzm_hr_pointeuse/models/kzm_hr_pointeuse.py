@@ -93,7 +93,7 @@ class machine(models.Model):
                     conn.disconnect()
             except Exception as e:
                 r.connection_state = False
-        return self
+        return [c.connection_state for c in self]
 
     @api.depends('connection_state')
     def _compute_status_img(self):
