@@ -23,10 +23,8 @@
 
     # any module necessary for this one to work correctly
     'depends': [
-        'mrp_farm',
         'hr_attendance',
-        'kzm_hr_payroll_ma',
-        'kzm_type_contrat',
+        'hr_contract',
         'kzm_hr_contract_type'
     ],
 
