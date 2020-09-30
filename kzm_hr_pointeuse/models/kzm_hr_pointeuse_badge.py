@@ -9,19 +9,17 @@ import time
 
 class KzmBadge(models.Model):
     _name = "kzm.hr.pointeuse.badge"
-    _inherit = 'mail.thread'
+    _inherit = ['mail.thread']
     _rec_name = 'name'
     _description = 'Badge'
     _order = 'date desc'
 
-
-    
     @api.depends('employee_id')
     def _compute_name(self):
         for r in self:
             r.name = "Badge_%s" % (r.employee_id.matricule or '')
 
-    @api.depends('employee_id','employee_id.matricule')
+    @api.depends('employee_id', 'employee_id.matricule')
     def compute_uid_userid_fields(self):
         for o in self:
             o.uid = int(o.matricule or 0)
@@ -39,10 +37,11 @@ class KzmBadge(models.Model):
                                      relation="kzm_r_hr_pointeuse_badge", column1="id_badge",
                                      column2="id_pointeuse", string=_("Pointeuses"), required=True)
     privilege = fields.Selection([
+        ('0', 'Normal'),
         ('1', _('User')),
         ('14', _('Admin')),
     ], string=_("Privilige"),
-        default='1',
+        default='0',
         required=True
     )
     password = fields.Char(string=_("Password"), required=False, default="123456")
@@ -275,8 +274,8 @@ class KzmBadge(models.Model):
         :param vals:
         :return:
         """
-        new_record = super(KzmBadge, self).create(vals)
-        new_record.ajouter_badge_pointeuse()
+        new_record = super(KzmBadge, self.with_context(ignorecode=True)).create(vals)
+        new_record.with_context(ignorecode=True).ajouter_badge_pointeuse()
         return new_record
 
     #
@@ -392,7 +391,11 @@ class KzmBadge(models.Model):
         res = super(KzmBadge, self).write(vals)
         if self.write_uid.id == 1 and 'pointeuse_ids' in vals:
             return res
-        if 'matricule' in vals or 'pointeuse_ids' in vals or 'password' in vals or 'cardnumber' in vals:
+        not_upadte_badge = self._context.get('ignorecode', False)
+        if not not_upadte_badge and (
+                vals.get('matricule', False) or vals.get('pointeuse_ids', False) or vals.get('password',
+                                                                                             False) or vals.get(
+                'cardnumber', False)):
             for this in self:
                 this.ajouter_badge_pointeuse()
         return res

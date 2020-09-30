@@ -16,7 +16,7 @@ _logger = logging.getLogger(__name__)
 
 
 class machine(models.Model):
-    _inherit = 'mail.thread'
+    _inherit = ['mail.thread']
     _name = 'kzm.hr.pointeuse'
     _rec_name = 'name'
     _description = 'Gestion des pointeuse'
@@ -297,16 +297,21 @@ class machine(models.Model):
 
     def clear_attendancies_from_one(self):
         """ KZM METHOD"""
-        self.get_status()
-        if self.connection_state:
+        zk, conn = False, False
+        try:
+            zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
+            conn = zk.connect()
+            self.connection_state = True
+        except:
+            self.connection_state = False
+
+        if self.connection_state and conn:
             try:
-                zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
-                conn = zk.connect()
                 time.sleep(0.5)
-                conn.clear_attendance()
-                time.sleep(1)
-                conn.disconnect()
-                return True
+                if conn:
+                    conn.clear_attendance()
+                    conn.disconnect()
+                    return True
             except:
                 return False
         return False
@@ -325,7 +330,7 @@ class machine(models.Model):
 
     
     def clear_attendance(self):
-        self.get_status()
+        # self.get_status()
         if self.connection_state:
             test = True
             _logger.warning(u"Début de nétoyage de la pointeuse %s " % self.name)
@@ -356,8 +361,8 @@ class machine(models.Model):
         if not badge_ids:
             return
         for pointeuse in self:
-            print('oooooooooooooooooooooooooooooooo')
-            pointeuse.get_status()
+            # pointeuse.get_status()
+            # time.sleep(1)
             if pointeuse.connection_state:
                 # zk.EnableDevice(iMachineNumber, False)
                 for badge_id in badge_ids:
@@ -397,14 +402,16 @@ class machine(models.Model):
                 _logger.warning(_("La pointeuse %s est hors connexion" % str(self.name)))
 
         if connect:
+            zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
+            conn = zk.connect()
+            time.sleep(0.5)
             try:
                 _logger.warning(u"Début de néttoyage de la pointeuse %s " % self.name)
                 test = True
                 try:
-                    zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
-                    conn = zk.connect()
-                    time.sleep(0.5)
-                    users = conn.get_users()
+                    users = None
+                    if conn:
+                        users = conn.get_users()
                     if not users:
                         _logger.warning(u"Pas d'utilisateurs au niveau de la pointeuse %s " % self.name)
                         raise Exception(_("Pas d'utilisateurs {}!".format(self.name)))
@@ -426,21 +433,20 @@ class machine(models.Model):
 
                 if test:
                     if user_a_supprimer:
-                        while 1:
-                            self.get_status()
+                        if True:  # MJID Says:here it was a while 1: i dont understand why ?
+                            # self.get_status()
                             isConnected = self.connection_state
                             if isConnected == True:
-                                zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
-                                conn = zk.connect()
-                                time.sleep(1)
+                                # zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
+                                # conn = zk.connect()
+                                time.sleep(0.5)
                                 deleted = []
                                 not_delted = []
                                 for user_att in user_a_supprimer:
-                                    ok = conn.delete_user(int(user_att))
-
-                                    if ok:
+                                    try:
+                                        conn.delete_user(int(user_att))
                                         deleted.append(user_att)
-                                    else:
+                                    except:
                                         not_delted.append(user_att)
                                 _logger.warning(
                                     u"Néttoyage de la pointeuse {} des matricules {} ".format(self.name,
@@ -457,19 +463,19 @@ class machine(models.Model):
                                         body=u"Néttoyage de la pointeuse {} des matricules non supprimés {} ".format(
                                             self.name,
                                             not_delted))
-                                if conn:
-                                    conn.disconnect()
                             else:
+                                if conn: conn.disconnect()
                                 raise ValidationError(_(
                                     "A la suppression des utilisateurs, La pointeuse %s est hors connexion" % str(
                                         self.name)))
 
 
                     else:
-                        self.message_post(
-                            body=u"Néttoyage de la pointeuse {} : aucun matricule".format(self.name))
+                        self.message_post(body=u"Néttoyage de la pointeuse {} : aucun matricule".format(self.name))
+
 
             except Exception as ex:
+                if conn: conn.disconnect()
                 _logger.warning(u"Erreur de chargement des utilisateurs de la pointeuse %s :\n%s " % (self.name, ex))
                 raise exceptions.Warning(ex)
         return test
@@ -503,20 +509,36 @@ class machine(models.Model):
                         pointeuse.name)))
 
     def sync_machine_odoo_one(self):
-        self.get_status()
-        if self.connection_state:
+        time.sleep(1)
+        zk, conn = False, False
+        try:
+            zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
+            conn = zk.connect()
+            rec.connection_state = True
+        except:
+            rec.connection_state = False
+
+        if self.connection_state and conn:
             try:
-                zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
-                conn = zk.connect()
+
                 time.sleep(0.5)
-                users = conn.get_users()
+                users = []
+                if conn:
+                    users = conn.get_users()
                 for user in users:
-                    odoouser = self.env['kzm.hr.pointeuse.badge'].search([('matricule', '=', str(user.uid).rjust(5, "0"))])
+                    odoouser = self.env['kzm.hr.pointeuse.badge'].search([('matricule', '=',
+                                                                           str(user.uid).rjust(5, "0"))])
                     if not odoouser:
-                        conn.delete_user(user.uid)
+                        conn.delete_user(int(user.uid))
+                if conn:
+                    conn.disconnect()
                 return True
             except:
+                if conn:
+                    conn.disconnect()
                 return False
+        if conn:
+            conn.disconnect()
         return False
 
 
@@ -595,10 +617,10 @@ class machine(models.Model):
         """
         # search and browse for first previous and first next records
         prev_att_ids = self.env['zk_attendance.attendance'].search(
-            [('employee_id', '=', att['employee_id']), ('date', '<', att['date']),
+            [('matricule_pointeuse', '=', att['matricule_pointeuse']), ('date', '<', att['date']),
              ('action', 'in', ('sign_in', 'sign_out'))], limit=1, order='date DESC')
         next_add_ids = self.env['zk_attendance.attendance'].search(
-            [('employee_id', '=', att['employee_id']), ('date', '>', att['date']),
+            [('matricule_pointeuse', '=', att['matricule_pointeuse']), ('date', '>', att['date']),
              ('action', 'in', ('sign_in', 'sign_out'))], limit=1, order='date ASC')
         # check for alternance, return False if at least one condition is not satisfied
 
@@ -648,7 +670,7 @@ class machine(models.Model):
                         for badge_id in badge_ids:
                             badge_id.sudo().pointeuse_ids += pointeuse
                         message = u"Fin d'insertion de %d badges dans la pointeuse:%s" % (
-                        len(badge_ids), pointeuse.name)
+                            len(badge_ids), pointeuse.name)
                         _logger.warning(message)
 
                     except Exception as exx:

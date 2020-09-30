@@ -143,7 +143,7 @@ class HrEmployee(models.Model):
         records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'nettoyer_pointeuse',
                                        [[l.id_pointeuse for l in self],])
         print("records",records)
-        msg = "; ".join([str(c) for c in records])
+        msg = str(records)
         raise ValidationError(msg)
 
 
@@ -156,7 +156,7 @@ class HrEmployee(models.Model):
         records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'nettoyer_pointeuse',
                                        [[l.id_pointeuse for l in self],])
         print("records",records)
-        msg = "; ".join([str(c) for c in records[1]])
+        msg = str(records)
         raise ValidationError(msg)
 
 
