@@ -470,6 +470,7 @@ class machine(models.Model):
             except Exception as ex:
                 _logger.warning(u"Erreur de chargement des utilisateurs de la pointeuse %s :\n%s " % (self.name, ex))
                 raise exceptions.Warning(ex)
+        return test
 
     def delete_badge(self, badge_ids):
         for pointeuse in self:

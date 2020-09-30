@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from datetime import timedelta
 import json
 
@@ -91,7 +92,9 @@ class HrEmployee(models.Model):
                         # 'status': action,
                         'machine_id': machine_id,
                     }
-                    print("presence date -----",presence_date)
+                    print("presence date -----",type(presence_date),presence_date)
+                    presence_date = datetime.strptime(presence_date, '%Y-%m-%d %H:%M:%S')
+                    print("presence date -----",type(presence_date),presence_date)
                     result = r.test_altern_si_so(attendance_id, presence_date)
                     try:
                         attendance_id['note'] = "{}".format(result[0])
@@ -131,5 +134,13 @@ class HrEmployee(models.Model):
         if error:
             raise ValidationError(msg)
 
-
+    def nettoyer_pointeuse(self, with_message=True):
+        url = self.env.company.url
+        user = self.env.company.user
+        password = self.env.company.password
+        bd = self.env.company.bd
+        models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
+        records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'nettoyer_pointeuse',
+                                       [[l.id_pointeuse for l in self],])
+        print("records",records)
 
