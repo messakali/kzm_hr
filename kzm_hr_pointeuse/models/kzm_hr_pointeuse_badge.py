@@ -86,47 +86,70 @@ class KzmBadge(models.Model):
                     verify_online.append(machine_id.name)
         return verify_online
 
+    # def add_user(self, machineid, uid, name, privilege, password, groupid, userid, card):
+    #     machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
+    #     machine_id.get_status()
+    #     isConnected = machine_id.connection_state
+    #
+    #     if isConnected == True:
+    #         try:
+    #             zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
+    #             conn = zk.connect()
+    #             time.sleep(1)
+    #             print("AAAAAAAAAAAAAAAAAAAAA")
+    #             # print(type(uid), type(name), type(privilege), type(password), type(groupid), str(int(userid)), type(card))
+    #             # print(uid, name, privilege, password, groupid, userid, card)
+    #             # conn.set_user(uid, name, privilege, password, groupid, str(int(userid)), card)
+    #             dict = {
+    #                 'uid' : uid,
+    #                 'name' : name,
+    #                  'privilege' : privilege,
+    #                  'password' : password,
+    #                 'group_id' : groupid,
+    #                'user_id' : str(int(userid)),
+    #                  'card' : card
+    #             }
+    #             # pprint(dict)
+    #             conn.set_user(
+    #                 uid=uid,
+    #                 name=name,
+    #                 privilege=privilege,
+    #                 password=password,
+    #                 group_id=groupid,
+    #                 user_id=str(int(userid)),
+    #                 card=card
+    #             )
+    #             # machineid, uid, name, privilege, password, groupid, userid, card
+    #             # (machine_id.id, record.uid, str(record.employee_id.name), int(record.privilege),
+    #             #  str(record.password), str(record.groupid), str(record.userid), int(record.cardnumber))
+    #
+    #             # conn.set_user(uid=uid, name=name, privilege=privilege,
+    #             #               password=password, group_id=groupid, user_id=str(int(userid)), card=card)
+    #
+    #             if conn: conn.disconnect()
+    #             return (_("User ") + name + _(" est ajouté au ") + machine_id.name + '\n'), True
+    #         except Exception as e:
+    #             return (_("Echec d'ajout d'utilisateur ") + name+_(" dans la pointeuse ") + machine_id.name + '\n Erreur:'+str(e)), False
+    #     else:
+    #         return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't add user ") + name + '\n'), False
+
     def add_user(self, machineid, uid, name, privilege, password, groupid, userid, card):
         machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
-        machine_id.get_status()
-        isConnected = machine_id.connection_state
+        #machine_id.get_status()
+        zk, conn = False, False
+        try:
+            zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
+            conn = zk.connect()
+            machine_id.connection_state = True
+        except:
+            machine_id.connection_state = False
 
-        if isConnected == True:
+        if machine_id.connection_state and conn:
             try:
-                zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
-                conn = zk.connect()
-                time.sleep(1)
-                print("AAAAAAAAAAAAAAAAAAAAA")
-                # print(type(uid), type(name), type(privilege), type(password), type(groupid), str(int(userid)), type(card))
-                # print(uid, name, privilege, password, groupid, userid, card)
-                # conn.set_user(uid, name, privilege, password, groupid, str(int(userid)), card)
-                dict = {
-                    'uid' : uid,
-                    'name' : name,
-                     'privilege' : privilege,
-                     'password' : password,
-                    'group_id' : groupid,
-                   'user_id' : str(int(userid)),
-                     'card' : card
-                }
-                # pprint(dict)
-                conn.set_user(
-                    uid=uid,
-                    name=name,
-                    privilege=privilege,
-                    password=password,
-                    group_id=groupid,
-                    user_id=str(int(userid)),
-                    card=card
-                )
-                # machineid, uid, name, privilege, password, groupid, userid, card
-                # (machine_id.id, record.uid, str(record.employee_id.name), int(record.privilege),
-                #  str(record.password), str(record.groupid), str(record.userid), int(record.cardnumber))
-
-                # conn.set_user(uid=uid, name=name, privilege=privilege,
-                #               password=password, group_id=groupid, user_id=str(int(userid)), card=card)
-
-                if conn: conn.disconnect()
+                #time.sleep(1)
+                conn.set_user(int(uid), name, privilege, password, groupid, str(int(userid)).zfill(5), int(card))
+                if conn:
+                    conn.disconnect()
                 return (_("User ") + name + _(" est ajouté au ") + machine_id.name + '\n'), True
             except Exception as e:
                 return (_("Echec d'ajout d'utilisateur ") + name+_(" dans la pointeuse ") + machine_id.name + '\n Erreur:'+str(e)), False
@@ -159,22 +182,45 @@ class KzmBadge(models.Model):
                     # except Exception as e:
                     #     raise Exception(e)
 
+    # def delete_user(self, machineid, uid):
+    #     machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
+    #     machine_id.get_status()
+    #     isConnected = machine_id.connection_state
+    #     if isConnected == True:
+    #         zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
+    #         conn = zk.connect()
+    #         time.sleep(1)
+    #         print("======================", int(uid))
+    #         ok = conn.delete_user(int(uid))
+    #         print("======================", ok)
+    #         if conn : conn.disconnect()
+    #         if ok:
+    #             return (_('User Deleted from ') + machine_id.name + '\n'), True
+    #         else:
+    #             return (_("User does not exist in ") + machine_id.name + '\n'), False
+    #     else:
+    #         return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't delete user") + '\n'), False
     def delete_user(self, machineid, uid):
         machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
-        machine_id.get_status()
-        isConnected = machine_id.connection_state
-        if isConnected == True:
+        zk, conn = False, False
+        try:
             zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
             conn = zk.connect()
+            machine_id.connection_state = True
+        except:
+            machine_id.connection_state = False
+
+        if machine_id.connection_state and conn:
+
             time.sleep(1)
-            print("======================", int(uid))
-            ok = conn.delete_user(int(uid))
-            print("======================", ok)
-            if conn : conn.disconnect()
-            if ok:
-                return (_('User Deleted from ') + machine_id.name + '\n'), True
-            else:
+            try:
+                conn.delete_user(int(uid))
+            except:
                 return (_("User does not exist in ") + machine_id.name + '\n'), False
+            if conn:
+                conn.disconnect()
+            return (_('User Deleted from ') + machine_id.name + '\n'), True
+
         else:
             return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't delete user") + '\n'), False
 
@@ -376,10 +422,31 @@ class KzmBadge(models.Model):
     #     if not flag:
     #         raise ValidationError(_("Not All machines are connected! :") + "\n%s" % "\n".join(not_connected))
 
+    # def unlink(self):
+    #     # res = super(KzmBadge, self).unlink()
+    #     badges_administration_ids = self.filtered(lambda l: l.employee_id != False)
+    #     for rec in badges_administration_ids:
+    #         for p in rec.sudo().pointeuse_ids:
+    #             try:
+    #                 p.delete_badge(rec)
+    #                 rec.message_post(body=_(u'%s est supprimé de la pointeuse %s.' % (rec.employee_id.name, p.name)))
+    #                 # squery = "delete from kzm_r_hr_pointeuse_badge where id_badge=%s and id_pointeuse=%s " % (rec.id, p.id)
+    #                 # self._cr.execute(squery)
+    #                 # self._cr.commit()
+    #             except Exception as ex:
+    #                 rec.message_post(
+    #                     body=_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
+    #                     rec.employee_id.name, p.name, str(ex))))
+    #                 if not "ErrorCode=" in str(ex):
+    #                     raise ValidationError(_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
+    #                     rec.employee_id.name, p.name, str(ex))))
+    #
+    #     # if len(rec.pointeuse_ids) == 0:
+    #     res = super(KzmBadge, self).unlink()
+    #     return res
 
     def unlink(self):
-        # res = super(KzmBadge, self).unlink()
-        badges_administration_ids = self.filtered(lambda l: l.employee_id != False)
+        badges_administration_ids = self#.filtered(lambda l: l.employee_id.type_employe == 'mensuel')
         for rec in badges_administration_ids:
             for p in rec.sudo().pointeuse_ids:
                 try:
@@ -391,10 +458,9 @@ class KzmBadge(models.Model):
                 except Exception as ex:
                     rec.message_post(
                         body=_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
-                        rec.employee_id.name, p.name, str(ex))))
-                    if not "ErrorCode=" in str(ex):
-                        raise ValidationError(_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
-                        rec.employee_id.name, p.name, str(ex))))
+                        rec.employee_id.name, p.name, ex.message)))
+                    raise ValidationError(_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
+                        rec.employee_id.name, p.name, ex.message)))
 
         # if len(rec.pointeuse_ids) == 0:
         res = super(KzmBadge, self).unlink()

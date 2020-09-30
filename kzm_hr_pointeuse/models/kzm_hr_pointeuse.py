@@ -128,38 +128,118 @@ class machine(models.Model):
                 return attendance_list, True
             except:
                 return attendance_list, False
+        print("attttttt",attendance_list)
         return attendance_list, False
 
 
+    # def load_attendance(self):
+    #     error = False
+    #     msg = _("These machines seem to be offline. Please verify if they are connected and try again :\n")
+    #     for r in self:
+    #         attendances_list, test = r.get_attendancies()
+    #         if test:
+    #             for att in attendances_list:
+    #                 # badge_id = self.env['kzm.hr.pointeuse.badge'].search([('matricule', '=', str(att.uid).rjust(5, "0"))])
+    #                 matricule = str(att.user_id).rjust(5, "0")
+    #                 presence_date = att.timestamp
+    #                 employee_id = self.env['hr.employee'].search([('matricule', '=', matricule)])
+    #                 if not employee_id:
+    #                     continue
+    #                 action = att.status or 10
+    #                 # If the attendance already imported
+    #                 attendance_count = self.env['zk_attendance.attendance'].search_count(
+    #                     [('date', '=', str(presence_date)),
+    #                      ('employee_id', '=', employee_id.id),
+    #                      ])
+    #                 if attendance_count:
+    #                     continue
+    #
+    #                 machine_id = r.id
+    #                 # self.env['zk_attendance.attendance'].create(
+    #                 attendance_id = {
+    #                     'employee_id': employee_id.id,
+    #                     'date': str(presence_date),
+    #                     'action': 'sign_in',
+    #                     'company_id': r.company_id.id,
+    #                     # 'status': action,
+    #                     'machine_id': machine_id,
+    #                 }
+    #                 result = r.test_altern_si_so(attendance_id, presence_date)
+    #                 try:
+    #                     attendance_id['note'] = "{}".format(result[0])
+    #                     if result[0] == 4:
+    #                         self.env['zk_attendance.attendance'].create(attendance_id)
+    #                     elif result[0] == 0:
+    #                         attendance_id['action'] = 'sign_out'
+    #                         self.env['zk_attendance.attendance'].create(attendance_id)
+    #                     elif result[0] == 1:
+    #                         new_attendance_id = {
+    #                             'employee_id': employee_id.id,
+    #                             'machine_id': result[1].machine_id.id,
+    #                             'company_id': r.company_id.id,
+    #                             # 'sous_ferme_id': self.sous_ferme_id and self.sous_ferme_id.id or False,
+    #                             # 'name': result[1] + timedelta(minutes=1),
+    #                             'date': fields.Datetime.from_string(result[1].date) + timedelta(minutes=1),
+    #                             'action': 'sign_out',
+    #                             'note': u'Présence ajoutée automatiquement.',
+    #                         }
+    #                         self.env['zk_attendance.attendance'].create(new_attendance_id)
+    #                         self.env['zk_attendance.attendance'].create(attendance_id)
+    #                     elif result[0] == 5:
+    #                         result[1].write({'date': result[2]})
+    #                         attendance_id['action'] = 'sign_out'
+    #                     elif result[0] == 3:
+    #                         continue
+    #                     else:
+    #                         continue
+    #                 except:
+    #                     continue
+    #             self.env.cr.commit()
+    #             #TODO, don't delete attendancies after load
+    #             #r.clear_attendancies()
+    #         else:
+    #             msg += r.name + '\n'
+    #             error = True
+    #     if error:
+    #         raise ValidationError(msg)
     def load_attendance(self):
         error = False
         msg = _("These machines seem to be offline. Please verify if they are connected and try again :\n")
         for r in self:
+            #print("before calling LEAD funct")
             attendances_list, test = r.get_attendancies()
+            #print("ret LEAD", attendances_list, test)
             if test:
+                if len(attendances_list) == 0:
+                    raise ValidationError("Pas de présences !")
                 for att in attendances_list:
                     # badge_id = self.env['kzm.hr.pointeuse.badge'].search([('matricule', '=', str(att.uid).rjust(5, "0"))])
-                    matricule = str(att.user_id).rjust(5, "0")
+                    matricule = str(att.user_id).zfill(5)
                     presence_date = att.timestamp
-                    employee_id = self.env['hr.employee'].search([('matricule', '=', matricule)])
-                    if not employee_id:
-                        continue
-                    action = att.status or 10
+                    employee_id = self.sudo().env['hr.employee'].search([
+                        ('matricule', '=', matricule),
+                        ])
+                    if len(employee_id) > 1:
+                        raise ValidationError("La matricule %s est attribuée à plusieurs employées"%matricule)
+                    if not employee_id or len(employee_id) == 0:
+                        employee_id = False
+                    #action = att.status or 10
                     # If the attendance already imported
-                    attendance_count = self.env['zk_attendance.attendance'].search_count(
-                        [('date', '=', str(presence_date)),
-                         ('employee_id', '=', employee_id.id),
-                         ])
-                    if attendance_count:
-                        continue
+                    attendance_count = self.sudo().env['zk_attendance.attendance'].search(
+                            [('date', '=', str(presence_date)),
+                             ('matricule_pointeuse', '=', matricule),
+                             ])
+                    if len(attendance_count) > 0:
+                            continue
 
                     machine_id = r.id
                     # self.env['zk_attendance.attendance'].create(
                     attendance_id = {
-                        'employee_id': employee_id.id,
+                        'employee_id': employee_id and employee_id.id or False,
                         'date': str(presence_date),
                         'action': 'sign_in',
                         'company_id': r.company_id.id,
+                        'matricule_pointeuse':  matricule,
                         # 'status': action,
                         'machine_id': machine_id,
                     }
@@ -173,9 +253,10 @@ class machine(models.Model):
                             self.env['zk_attendance.attendance'].create(attendance_id)
                         elif result[0] == 1:
                             new_attendance_id = {
-                                'employee_id': employee_id.id,
+                                'employee_id': employee_id and employee_id.id or False,
                                 'machine_id': result[1].machine_id.id,
                                 'company_id': r.company_id.id,
+                                'matricule_pointeuse':  matricule,
                                 # 'sous_ferme_id': self.sous_ferme_id and self.sous_ferme_id.id or False,
                                 # 'name': result[1] + timedelta(minutes=1),
                                 'date': fields.Datetime.from_string(result[1].date) + timedelta(minutes=1),
@@ -194,13 +275,49 @@ class machine(models.Model):
                     except:
                         continue
                 self.env.cr.commit()
-                #TODO, don't delete attendancies after load
                 #r.clear_attendancies()
             else:
                 msg += r.name + '\n'
                 error = True
         if error:
             raise ValidationError(msg)
+    def load_attendance_server(self):
+        error = False
+        msg = _("These machines seem to be offline. Please verify if they are connected and try again :\n")
+        attendance_id =[]
+        for r in self:
+            attendances_list, test = r.get_attendancies()
+            if test:
+                if len(attendances_list) == 0:
+                    raise ValidationError("Pas de présences !")
+                for att in attendances_list:
+                    matricule = str(att.user_id).zfill(5)
+                    presence_date = att.timestamp
+                    employee_id = self.sudo().env['hr.employee'].search([
+                        ('matricule', '=', matricule),
+                        ])
+                    if len(employee_id) > 1:
+                        raise ValidationError("La matricule %s est attribuée à plusieurs employées"%matricule)
+                    if not employee_id or len(employee_id) == 0:
+                        employee_id = False
+                    machine_id = r.id
+                    attendance_id.append({
+                        'employee_id': employee_id and employee_id.id or False,
+                        'date': str(presence_date),
+                        'action': 'sign_in',
+                        'company_id': r.company_id.id,
+                        'matricule_pointeuse':  matricule,
+                        # 'status': action,
+                        'machine_id': machine_id,
+                    })
+                self.env.cr.commit()
+            else:
+                msg += r.name + '\n'
+                error = True
+        if error:
+            raise ValidationError(msg)
+        print("l1111111111111",attendance_id)
+        return attendance_id
 
     def clear_attendancies_from_one(self):
         """ KZM METHOD"""

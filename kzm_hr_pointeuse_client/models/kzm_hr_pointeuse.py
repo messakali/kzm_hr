@@ -14,8 +14,11 @@ class HrEmployee(models.Model):
     def get_status(self):
         # conf = self.env['res.config.settings'].set_config_pointeuse()
         # print(conf)
-        models_kw, db, username, password, uid = self.connect_xml_rpc_v13('http://51.210.186.95', 'POINTAGE', 'ICESCO', 'Isec@1715@?')
-        print("----", self.id_pointeuse,[[self.id_pointeuse,]])
+        url = self.env.company.url
+        user =self.env.company.user
+        password = self.env.company.password
+        bd = self.env.company.bd
+        models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
         records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'get_status_connection',
                                     [[int(self.id_pointeuse),]])
         print("-*-*-*",records)
@@ -34,15 +37,12 @@ class HrEmployee(models.Model):
         return models_kw, db, username, password, uid
 
 
-
-
-#
-# def sych_matricule_8_vers_13():
-#         models, db, username, password, uid = connect_xml_rpc_v13(url='http://dbnord.karizma-conseil.com',
-#                                                                   db=settings.TO_DB,
-#                                                                   username='kadmin',
-#                                                                   password='Dbnord?@1715@'
-#                                                                   )
-#
-#         rec = models.execute_kw(db, uid, password, 'hr.employee', 'write',
-#                                      [[id_v13], {'matricule': matricule, }]):
+    def load_attendance(self):
+        url = self.env.company.url
+        user = self.env.company.user
+        password = self.env.company.password
+        bd = self.env.company.bd
+        models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
+        records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'load_attendance_server',
+                                       [[int(self.id_pointeuse), ]])
+        print("-*-*-*", records)
