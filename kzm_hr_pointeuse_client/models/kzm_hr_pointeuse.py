@@ -143,4 +143,21 @@ class HrEmployee(models.Model):
         records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'nettoyer_pointeuse',
                                        [[l.id_pointeuse for l in self],])
         print("records",records)
+        msg = "; ".join([str(c) for c in records])
+        raise ValidationError(msg)
+
+
+    def clear_attendance(self):
+        url = self.env.company.url
+        user = self.env.company.user
+        password = self.env.company.password
+        bd = self.env.company.bd
+        models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
+        records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'nettoyer_pointeuse',
+                                       [[l.id_pointeuse for l in self],])
+        print("records",records)
+        msg = "; ".join([str(c) for c in records[1]])
+        raise ValidationError(msg)
+
+
 

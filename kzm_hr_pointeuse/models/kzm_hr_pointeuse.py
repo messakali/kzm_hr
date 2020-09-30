@@ -327,6 +327,7 @@ class machine(models.Model):
     def clear_attendance(self):
         self.get_status()
         if self.connection_state:
+            test = True
             _logger.warning(u"Début de nétoyage de la pointeuse %s " % self.name)
             if self.clear_attendancies_from_one():
                 message = _(u"Toutes les présences de la pointeuse %s sont suprimées avec succés" % self.name)
@@ -335,10 +336,11 @@ class machine(models.Model):
                 message = _(u"Operation de netoyage pointeuse %s échouée" % self.name)
                 _logger.warning(message)
         else:
+            test = False
             message = _(u"La pointeuse %s est  hors service" % self.name)
             _logger.warning(message)
         _logger.warning(u"Fin de nétoyage de la pointeuse %s " % self.name)
-        return message
+        return message,test
 
     
     def clear_attendance_with_msg(self):
