@@ -138,7 +138,7 @@ class machine(models.Model):
             attendances_list, test = r.get_attendancies()
             attendance_res[r.id]= {
                 'test': test,
-                'attendances_list': [(att.user_id, att.timestamp) for att in attendances_list],
+                'attendances_list': [(str(att.user_id), str(att.timestamp)) for att in attendances_list],
             }
         attendance_res = json.dumps(attendance_res)
         print("attendance_res ----",attendance_res)

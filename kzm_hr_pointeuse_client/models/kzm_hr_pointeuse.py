@@ -91,6 +91,7 @@ class HrEmployee(models.Model):
                         # 'status': action,
                         'machine_id': machine_id,
                     }
+                    print("presence date -----",presence_date)
                     result = r.test_altern_si_so(attendance_id, presence_date)
                     try:
                         attendance_id['note'] = "{}".format(result[0])
