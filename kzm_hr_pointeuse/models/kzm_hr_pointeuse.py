@@ -139,6 +139,7 @@ class machine(models.Model):
                 'test': test,
                 'attendances_list': [(att.user_id, att.timestamp) for att in attendances_list],
             }
+        print("attendance_res ----",attendance_res)
         return attendance_res
 
 
@@ -291,51 +292,6 @@ class machine(models.Model):
                 error = True
         if error:
             raise ValidationError(msg)
-
-
-
-    def load_attendance_server2(self,attendance_id):
-
-        for r in self:
-            result = r.test_altern_si_so(attendance_id, presence_date)
-            try:
-                attendance_id['note'] = "{}".format(result[0])
-                if result[0] == 4:
-                    self.env['zk_attendance.attendance'].create(attendance_id)
-                elif result[0] == 0:
-                    attendance_id['action'] = 'sign_out'
-                    self.env['zk_attendance.attendance'].create(attendance_id)
-                elif result[0] == 1:
-                    new_attendance_id = {
-                        'employee_id': employee_id and employee_id.id or False,
-                        'machine_id': result[1].machine_id.id,
-                        'company_id': r.company_id.id,
-                        'matricule_pointeuse': matricule,
-                        # 'sous_ferme_id': self.sous_ferme_id and self.sous_ferme_id.id or False,
-                        # 'name': result[1] + timedelta(minutes=1),
-                        'date': fields.Datetime.from_string(result[1].date) + timedelta(minutes=1),
-                        'action': 'sign_out',
-                        'note': u'Présence ajoutée automatiquement.',
-                    }
-                    self.env['zk_attendance.attendance'].create(new_attendance_id)
-                    self.env['zk_attendance.attendance'].create(attendance_id)
-                elif result[0] == 5:
-                    result[1].write({'date': result[2]})
-                    attendance_id['action'] = 'sign_out'
-                elif result[0] == 3:
-                    continue
-                else:
-                    continue
-            except:
-                continue
-                self.env.cr.commit()
-            else:
-                msg += r.name + '\n'
-                error = True
-        if error:
-            raise ValidationError(msg)
-        print("l1111111111111",attendance_id)
-        return attendance_id
 
     def clear_attendancies_from_one(self):
         """ KZM METHOD"""

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
 
-from odoo import fields, models, api
+from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
 import xmlrpc.client
 from xmlrpc import client as xmlrpclib
@@ -45,13 +45,14 @@ class HrEmployee(models.Model):
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
         records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'get_attendancies_server',
                                        [[int(r.id_pointeuse) for r in self]])
-
+        print("records ------",records)
         error = False
         msg = _("These machines seem to be offline. Please verify if they are connected and try again :\n")
         for r in self:
             #print("before calling LEAD funct")
             r_return = records[r.id_pointeuse]
             attendances_list, test = r_return['attendances_list'], r_return['test']
+            print("attendances_list -----",attendances_list)
             #print("ret LEAD", attendances_list, test)
             if test:
                 if len(attendances_list) == 0:
