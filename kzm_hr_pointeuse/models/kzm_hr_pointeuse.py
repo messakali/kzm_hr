@@ -131,6 +131,16 @@ class machine(models.Model):
         print("attttttt",attendance_list)
         return attendance_list, False
 
+    def get_attendancies_server(self):
+        attendance_res = {}
+        for r in self:
+            attendances_list, test = r.get_attendancies()
+            attendance_res[r.id]= {
+                'test': test,
+                'attendances_list': [(att.user_id, att.timestamp) for att in attendances_list],
+            }
+        return attendance_res
+
 
     # def load_attendance(self):
     #     error = False
@@ -281,47 +291,7 @@ class machine(models.Model):
                 error = True
         if error:
             raise ValidationError(msg)
-    def load_attendance_server(self):
-        error = False
-        msg = _("These machines seem to be offline. Please verify if they are connected and try again :\n")
-        attendance_id =[]
-        for r in self:
-            attendances_list, test = r.get_attendancies()
-            if test:
-                if len(attendances_list) == 0:
-                    raise ValidationError("Pas de présences !")
-                print("-------666----",attendances_list)
 
-                for att in attendances_list:
-                    # print("att.user_id -----",att.user_id)
-                    matricule = str(att.user_id).zfill(5)
-                    presence_date = att.timestamp
-                    employee_id = self.sudo().env['hr.employee'].search([
-                        ('matricule', '=', matricule),
-                        ])
-                    if len(employee_id) > 1:
-                        raise ValidationError("La matricule %s est attribuée à plusieurs employées"%matricule)
-                    if not employee_id or len(employee_id) == 0:
-                        employee_id = False
-                    machine_id = r.id
-                    attendance_id.append({
-                        'att.user_id':att.user_id,
-                        'employee_id': employee_id and employee_id.id or False,
-                        'date': str(presence_date),
-                        'action': 'sign_in',
-                        'company_id': r.company_id.id,
-                        'matricule_pointeuse':  matricule,
-                        # 'status': action,
-                        'machine_id': machine_id,
-                    })
-                self.env.cr.commit()
-            else:
-                msg += r.name + '\n'
-                error = True
-        if error:
-            raise ValidationError(msg)
-        print("l1111111111111",attendance_id)
-        return attendance_id
 
 
     def load_attendance_server2(self,attendance_id):
