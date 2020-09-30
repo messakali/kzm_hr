@@ -20,6 +20,7 @@ class attendance(models.Model):
                                  ondelete='cascade',
                                  required=False)
     matricule = fields.Char(string=_("Matricule"), store=True, related='employee_id.matricule')
+    matricule_pointeuse = fields.Char(string=_("Matricule (P)"), required=False)
     note = fields.Char(string=_("Note"))
     # badge_id = fields.Many2one('kzm.hr.pointeuse.badge', string="Badge")
     date = fields.Datetime()

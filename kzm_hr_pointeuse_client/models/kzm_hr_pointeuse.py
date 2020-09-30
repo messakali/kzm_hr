@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
+import json
 
 from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
@@ -44,13 +45,15 @@ class HrEmployee(models.Model):
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
         records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'get_attendancies_server',
-                                       [[4,],])
-        print("records ------",records)
+                                       [[l.id_pointeuse for l in self],])
+        records = json.loads(records)
+        print("records ------",type(records),records)
         error = False
         msg = _("These machines seem to be offline. Please verify if they are connected and try again :\n")
         for r in self:
             #print("before calling LEAD funct")
-            r_return = records[r.id_pointeuse]
+            r_return = records[str(r.id_pointeuse)]
+            print(r_return, "----")
             attendances_list, test = r_return['attendances_list'], r_return['test']
             print("attendances_list -----",attendances_list)
             #print("ret LEAD", attendances_list, test)
@@ -71,7 +74,7 @@ class HrEmployee(models.Model):
                     #action = att.status or 10
                     # If the attendance already imported
                     attendance_count = self.sudo().env['zk_attendance.attendance'].search(
-                            [('date', '=', str(presence_date)),
+                            [('date', '=', presence_date),
                              ('matricule_pointeuse', '=', matricule),
                              ])
                     if len(attendance_count) > 0:
@@ -81,7 +84,7 @@ class HrEmployee(models.Model):
                     # self.env['zk_attendance.attendance'].create(
                     attendance_id = {
                         'employee_id': employee_id and employee_id.id or False,
-                        'date': str(presence_date),
+                        'date': presence_date,
                         'action': 'sign_in',
                         'company_id': r.company_id.id,
                         'matricule_pointeuse':  matricule,

@@ -7,6 +7,8 @@
         <field name="arch" type="xml">
             <tree string="Attendance Tree">
                 <!--<field name="name"/>-->
+                <field name="matricule_pointeuse"/>
+                <field name="matricule"/>
                 <field name="employee_id"/>
                 <field name="date"/>
                 <field name="action"/>
@@ -34,6 +36,7 @@
                         <group>
                             <field name="date"/>
                             <field name="action"/>
+                            <field name="matricule_pointeuse"/>
                         </group>
                     </group>
                 </sheet>
