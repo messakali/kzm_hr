@@ -6,6 +6,7 @@ from ..tools.pyzk import zk as pyzk
 from datetime import datetime, timedelta
 import time
 import socket
+import json
 from pprint import pprint
 import base64
 
@@ -139,6 +140,7 @@ class machine(models.Model):
                 'test': test,
                 'attendances_list': [(str(att.user_id), str(att.timestamp)) for att in attendances_list],
             }
+        attendance_res = json.dumps(attendance_res)
         print("attendance_res ----",attendance_res)
         return attendance_res
 

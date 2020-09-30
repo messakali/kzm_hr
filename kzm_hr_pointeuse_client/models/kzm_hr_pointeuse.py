@@ -44,7 +44,7 @@ class HrEmployee(models.Model):
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
         records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'get_attendancies_server',
-                                       [[int(r.id_pointeuse) for r in self]])
+                                       [[4,],])
         print("records ------",records)
         error = False
         msg = _("These machines seem to be offline. Please verify if they are connected and try again :\n")
