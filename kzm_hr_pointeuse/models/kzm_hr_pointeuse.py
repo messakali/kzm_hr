@@ -293,6 +293,7 @@ class machine(models.Model):
                 print("-------666----",attendances_list)
 
                 for att in attendances_list:
+                    # print("att.user_id -----",att.user_id)
                     matricule = str(att.user_id).zfill(5)
                     presence_date = att.timestamp
                     employee_id = self.sudo().env['hr.employee'].search([
@@ -304,6 +305,7 @@ class machine(models.Model):
                         employee_id = False
                     machine_id = r.id
                     attendance_id.append({
+                        'att.user_id':att.user_id,
                         'employee_id': employee_id and employee_id.id or False,
                         'date': str(presence_date),
                         'action': 'sign_in',
