@@ -84,6 +84,7 @@ class machine(models.Model):
                 r.connection_state = False
 
     def get_status_connection(self):
+        id_res = {}
         for r in self:
             # self.load_attendance()
             print("---- start", self)
@@ -96,7 +97,12 @@ class machine(models.Model):
             except Exception as e:
                 r.connection_state = False
             print("---- end", self)
-        return [c.connection_state for c in self]
+            id_res[r.id] = {
+                    'state': r.connection_state,
+                }
+            attendance_res = json.dumps(id_res)
+        print("attendance_res ----", id_res)
+        return id_res
 
     @api.depends('connection_state')
     def _compute_status_img(self):

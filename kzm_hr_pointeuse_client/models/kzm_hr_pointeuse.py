@@ -23,12 +23,29 @@ class HrEmployee(models.Model):
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
         records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'get_status_connection',
-                                    [[int(self.id_pointeuse),]])
+                                    [[l.id_pointeuse for l in self],])
+        records = json.loads(records)
         print("-*-*-*",records)
-
-
-        msg = "; ".join([str(c) for c in records])
-        raise ValidationError(msg)
+        print("records ------",type(records),records)
+        # messages = ""
+        # l_index = 0
+        # self.env.cr.savepoint()
+        # for this in self:
+        #     if not this.is_valid_ipv4_address(this.ip):
+        #         l_index += 1
+        #         messages += str(l_index) + ' - \t' + this.name + _(u' : Adresse IP invalide\n')
+        #         this.connection_state = False
+        #         continue
+        #     if msg == True:
+        #         l_index += 1
+        #         messages += str(l_index) + ' - \t' + this.name + _(u' : Connexion réussie\n')
+        #         this.message_post(body=this.name + _(u' : Connexion réussie\n'))
+        #     else:
+        #         l_index += 1
+        #         messages += str(l_index) + ' - \t' + this.name + _(u' : Connexion échouée\n')
+        #         this.message_post(body=this.name + _(u' : Connexion échouée\n'))
+        # # self.env.cr.commit()
+        # return messages
 
 
     def connect_xml_rpc_v13(self,url, db, username, password):
