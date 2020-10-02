@@ -155,6 +155,9 @@ class KzmBadge(models.Model):
         else:
             return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't add user ") + name + '\n'), False
 
+
+
+
     def add_user_to_machine(self, machineid):
         for record in self:
             machine_ids = self.env['kzm.hr.pointeuse'].browse(machineid)

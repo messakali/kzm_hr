@@ -22,39 +22,38 @@ class HrEmployee(models.Model):
         password = self.env.company.password
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
-        records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'get_status_connection',
+        try:
+            records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'get_status_connection',
                                     [[l.id_pointeuse for l in self],])
-        records = json.loads(records)
-        print("-*-*-*",records)
-        print("records ------",type(records),records)
-        messages = ""
-        l_index = 0
-        self.env.cr.savepoint()
-        for r in self:
-            r_client = records[str(r.id_pointeuse)]
-            print("id pointeuse ----", r.id_pointeuse)
-            state = r_client['state']
-            print("999999",state)
+        except Exception as e:
+            raise ValidationError("Error :"+str(e))
 
-            if not r.is_valid_ipv4_address(r.ip):
-                print("6666666")
-                l_index += 1
-                messages += str(l_index) + ' - \t' + r.name + _(u' : Adresse IP invalide\n')
-                r.connection_state = False
-                continue
-            if state:
-                print("555555")
-                l_index += 1
-                messages += str(l_index) + ' - \t' + r.name + _(u' : Connexion réussie \n')
-                r.message_post(body=r.name + _(u' : Connexion réussie 1\n'))
+        records = json.loads(records)
+        print("*-* get state client",records)
+        for r in self:
+            r.connection_state = records.get(str(r.id_pointeuse), False)
+
+    def add_user(self, machineid, uid, name, privilege, password_p, groupid, userid, card):
+        machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
+        url = self.env.company.url
+        user = self.env.company.user
+        password = self.env.company.password
+        bd = self.env.company.bd
+        models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
+        records = []
+        try:
+            # time.sleep(1)
+            records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'set_user_server',
+                                           [[machine_id.id_pointeuse], uid, name, privilege, password_p, groupid, userid,
+                                            card])
+            records = json.loads(records)
+            res = records.get(str(machine_id.id_pointeuse), False)
+            if res and res['return']:
+                return (_("User ") + name + _(" est ajouté au ") + machine_id.name + '\n'), True
             else:
-                print("7777777")
-                l_index += 1
-                l_index += 1
-                messages += str(l_index) + ' - \t' + r.name + _(u' : Connexion échouée 1 \n')
-                r.message_post(body=r.name + _(u' : Connexion échouée 1\n'))
-        self.env.cr.commit()
-        return messages
+                return  res['msg'], res['return']
+        except Exception as e:
+            return _(" Erreur d'insertion badge XmlRpc"), False
 
 
     def connect_xml_rpc_v13(self,url, db, username, password):

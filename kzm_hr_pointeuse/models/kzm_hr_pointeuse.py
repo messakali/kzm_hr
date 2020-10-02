@@ -150,6 +150,26 @@ class machine(models.Model):
         print("attendance_res ----",attendance_res)
         return attendance_res
 
+    def set_user_server(self,uid, name, privilege, password, groupid, userid, card):
+        res = {}
+        for machine_id in self:
+            zk, conn = False, False
+            try:
+                zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
+                conn = zk.connect()
+                machine_id.connection_state = True
+            except:
+                machine_id.connection_state = False
+            if not machine_id.connection_state or not conn:
+                res[machine_id.id] = {'return': False, 'msg': 'Machine non connecte'}
+            else:
+                try:
+                    conn.set_user(int(uid), name, privilege, password, groupid, str(int(userid)).zfill(5), int(card))
+                    res[machine_id.id] = {'return': True, 'msg': 'User has been succesuflly setted'}
+                except Exception as e:
+                    res[machine_id.id] = {'return': False, 'msg': str(e)}
+        return  json.dumps(res)
+
 
     # def load_attendance(self):
     #     error = False
