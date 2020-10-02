@@ -50,6 +50,7 @@ class HrEmployee(models.Model):
             else:
                 print("7777777")
                 l_index += 1
+                l_index += 1
                 messages += str(l_index) + ' - \t' + r.name + _(u' : Connexion échouée 1 \n')
                 r.message_post(body=r.name + _(u' : Connexion échouée 1\n'))
         self.env.cr.commit()
