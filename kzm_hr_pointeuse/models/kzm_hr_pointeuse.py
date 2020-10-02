@@ -165,7 +165,7 @@ class machine(models.Model):
             else:
                 try:
                     conn.set_user(int(uid), name, privilege, password, groupid, str(int(userid)).zfill(5), int(card))
-                    res[machine_id.id] = {'return': True, 'msg': 'User has been succesuflly setted'}
+                    res[machine_id.id] = {'return': True, 'msg': 'User has been successfully setted'}
                 except Exception as e:
                     res[machine_id.id] = {'return': False, 'msg': str(e)}
         return  json.dumps(res)

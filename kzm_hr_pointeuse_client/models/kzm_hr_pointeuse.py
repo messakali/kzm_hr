@@ -8,7 +8,7 @@ from odoo.exceptions import ValidationError
 import xmlrpc.client
 from xmlrpc import client as xmlrpclib
 
-class HrEmployee(models.Model):
+class HrPointeuse(models.Model):
     _inherit = 'kzm.hr.pointeuse'
 
     id_pointeuse = fields.Integer("ID", default=4)
@@ -33,27 +33,6 @@ class HrEmployee(models.Model):
         for r in self:
             r.connection_state = records.get(str(r.id_pointeuse), False)
 
-    def add_user(self, machineid, uid, name, privilege, password_p, groupid, userid, card):
-        machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
-        url = self.env.company.url
-        user = self.env.company.user
-        password = self.env.company.password
-        bd = self.env.company.bd
-        models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
-        records = []
-        try:
-            # time.sleep(1)
-            records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'set_user_server',
-                                           [[machine_id.id_pointeuse], uid, name, privilege, password_p, groupid, userid,
-                                            card])
-            records = json.loads(records)
-            res = records.get(str(machine_id.id_pointeuse), False)
-            if res and res['return']:
-                return (_("User ") + name + _(" est ajouté au ") + machine_id.name + '\n'), True
-            else:
-                return  res['msg'], res['return']
-        except Exception as e:
-            return _(" Erreur d'insertion badge XmlRpc"), False
 
 
     def connect_xml_rpc_v13(self,url, db, username, password):
@@ -184,5 +163,37 @@ class HrEmployee(models.Model):
         msg = str(records)
         raise ValidationError(msg)
 
+class HrPointeuse(models.Model):
+    _inherit = 'kzm.hr.pointeuse.badge'
+
+    def add_user(self, machineid, uid, name, privilege, password_p, groupid, userid, card):
+        print("llllllllllllllp")
+        machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
+        url = self.env.company.url
+        user = self.env.company.user
+        password = self.env.company.password
+        bd = self.env.company.bd
+        models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
+        records = []
+        try:
+            # time.sleep(1)
+            records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'set_user_server',
+                                           [[machine_id.id_pointeuse], uid, name, privilege, password_p, groupid, userid,
+                                            card])
+            records = json.loads(records)
+            res = records.get(str(machine_id.id_pointeuse), False)
+            if res and res['return']:
+                return (_("User ") + name + _(" est ajouté au ") + machine_id.name + '\n'), True
+            else:
+                return  res['msg'], res['return']
+        except Exception as e:
+            return _(" Erreur d'insertion badge XmlRpc"), False
 
 
+    def connect_xml_rpc_v13(self,url, db, username, password):
+        common = xmlrpclib.ServerProxy('{}/xmlrpc/2/common'.format(url))
+        models_kw = xmlrpclib.ServerProxy('{}/xmlrpc/2/object'.format(url))
+        uid = common.login(db, username, password)
+
+
+        return models_kw, db, username, password, uid
