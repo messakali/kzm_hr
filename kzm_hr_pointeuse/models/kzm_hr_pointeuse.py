@@ -181,7 +181,7 @@ class machine(models.Model):
             except:
                 machine_id.connection_state = False
 
-            if machine_id.connection_state or not conn:
+            if not machine_id.connection_state or not conn:
                 print("machine_id.connection_state ----",machine_id.connection_state)
                 print("conn ----",conn)
 
