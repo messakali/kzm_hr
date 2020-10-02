@@ -587,27 +587,27 @@ class machine(models.Model):
     ########################################################
 
 
-    def check_connection(self):
-        messages = ""
-        l_index = 0
-        self.env.cr.savepoint()
-        for this in self:
-            if not this.is_valid_ipv4_address(this.ip):
-                l_index += 1
-                messages += str(l_index) + ' - \t' + this.name + _(u' : Adresse IP invalide\n')
-                this.connection_state = False
-                continue
-            this.get_status()
-            if this.connection_state:
-                l_index += 1
-                messages += str(l_index) + ' - \t' + this.name + _(u' : Connexion réussie\n')
-                this.message_post(body=this.name + _(u' : Connexion réussie\n'))
-            else:
-                l_index += 1
-                messages += str(l_index) + ' - \t' + this.name + _(u' : Connexion échouée\n')
-                this.message_post(body=this.name + _(u' : Connexion échouée\n'))
-        # self.env.cr.commit()
-        return messages
+    # def check_connection(self):
+    #     messages = ""
+    #     l_index = 0
+    #     self.env.cr.savepoint()
+    #     for this in self:
+    #         if not this.is_valid_ipv4_address(this.ip):
+    #             l_index += 1
+    #             messages += str(l_index) + ' - \t' + this.name + _(u' : Adresse IP invalide\n')
+    #             this.connection_state = False
+    #             continue
+    #         this.get_status()
+    #         if this.connection_state:
+    #             l_index += 1
+    #             messages += str(l_index) + ' - \t' + this.name + _(u' : Connexion réussie\n')
+    #             this.message_post(body=this.name + _(u' : Connexion réussie\n'))
+    #         else:
+    #             l_index += 1
+    #             messages += str(l_index) + ' - \t' + this.name + _(u' : Connexion échouée\n')
+    #             this.message_post(body=this.name + _(u' : Connexion échouée\n'))
+    #     # self.env.cr.commit()
+    #     return messages
 
     ########################################################
     #                   Test Sing In/Off                   #

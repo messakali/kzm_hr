@@ -27,25 +27,33 @@ class HrEmployee(models.Model):
         records = json.loads(records)
         print("-*-*-*",records)
         print("records ------",type(records),records)
-        # messages = ""
-        # l_index = 0
-        # self.env.cr.savepoint()
-        # for this in self:
-        #     if not this.is_valid_ipv4_address(this.ip):
-        #         l_index += 1
-        #         messages += str(l_index) + ' - \t' + this.name + _(u' : Adresse IP invalide\n')
-        #         this.connection_state = False
-        #         continue
-        #     if msg == True:
-        #         l_index += 1
-        #         messages += str(l_index) + ' - \t' + this.name + _(u' : Connexion réussie\n')
-        #         this.message_post(body=this.name + _(u' : Connexion réussie\n'))
-        #     else:
-        #         l_index += 1
-        #         messages += str(l_index) + ' - \t' + this.name + _(u' : Connexion échouée\n')
-        #         this.message_post(body=this.name + _(u' : Connexion échouée\n'))
-        # # self.env.cr.commit()
-        # return messages
+        messages = ""
+        l_index = 0
+        self.env.cr.savepoint()
+        for r in self:
+            r_client = records[str(r.id_pointeuse)]
+            print("id pointeuse ----", r.id_pointeuse)
+            state = r_client['state']
+            print("999999",state)
+
+            if not r.is_valid_ipv4_address(r.ip):
+                print("6666666")
+                l_index += 1
+                messages += str(l_index) + ' - \t' + r.name + _(u' : Adresse IP invalide\n')
+                r.connection_state = False
+                continue
+            if state:
+                print("555555")
+                l_index += 1
+                messages += str(l_index) + ' - \t' + r.name + _(u' : Connexion réussie \n')
+                r.message_post(body=r.name + _(u' : Connexion réussie 1\n'))
+            else:
+                print("7777777")
+                l_index += 1
+                messages += str(l_index) + ' - \t' + r.name + _(u' : Connexion échouée 1 \n')
+                r.message_post(body=r.name + _(u' : Connexion échouée 1\n'))
+        self.env.cr.commit()
+        return messages
 
 
     def connect_xml_rpc_v13(self,url, db, username, password):
