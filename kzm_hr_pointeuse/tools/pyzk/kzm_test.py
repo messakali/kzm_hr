@@ -7,7 +7,7 @@ signal(SIGPIPE,SIG_DFL)
 from zk import ZK, const
 
 conn = None
-zk = ZK('51.210.186.95', port=4370, timeout=20)
+zk = ZK('51.210.186.95', port=4370, timeout=20, password=0, force_udp=True, ommit_ping=False)
 try:
     print ('Connecting to device ...')
     conn = zk.connect()

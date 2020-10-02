@@ -4,7 +4,7 @@ from datetime import timedelta
 import json
 
 from odoo import fields, models, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, _logger
 import xmlrpc.client
 from xmlrpc import client as xmlrpclib
 
@@ -163,6 +163,34 @@ class HrPointeuse(models.Model):
         msg = str(records)
         raise ValidationError(msg)
 
+    def delete_badge(self, badge_ids):
+        for pointeuse in self:
+            pointeuse.get_status()
+            connect = pointeuse.connection_state
+            if connect:
+                # zk.EnableDevice(iMachineNumber, False)
+                for badge_id in badge_ids:
+                    sUserID = str(int(badge_id.employee_id.matricule))
+                    msg, result = badge_id.delete_user(pointeuse.id, sUserID)
+                    if not result:
+                        _logger.warning(_(
+                            u"Delete_badge:Operation de suppression de l'utilisateur %s a échouée, Pointeuse : %s" % (
+                                badge_id.employee_id.matricule, pointeuse.name)))
+                        raise Exception(_(u"Operation de suppression de l'utilisateur %s a échouée, Pointeuse : %s" % (
+                            badge_id.employee_id.matricule, pointeuse.name)))
+                    else:
+                        _logger.warning(_(
+                            u"Delete_badge:Operation de suppression de l'utilisateur %s, Pointeuse : %s " % (
+                                badge_id.employee_id.matricule, pointeuse.name)))
+                # zk.EnableDevice(iMachineNumber, True)
+            else:
+                _logger.warning(_(
+                    u"delete_badge:Operation de suppression des utilisateurs a échouée,Echec de connexion, Pointeuse : %s" % (
+                        pointeuse.name)))
+                raise Exception(
+                    _(u"Operation de suppression des utilisateurs a échouée,Echec de connexion à la pointeuse : %s" % (
+                        pointeuse.name)))
+
 class HrPointeuse(models.Model):
     _inherit = 'kzm.hr.pointeuse.badge'
 
@@ -197,3 +225,24 @@ class HrPointeuse(models.Model):
 
 
         return models_kw, db, username, password, uid
+
+    def delete_user(self, machineid, uid):
+        machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
+        url = self.env.company.url
+        user = self.env.company.user
+        password = self.env.company.password
+        bd = self.env.company.bd
+        models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
+        records = []
+        try:
+            records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'set_delete_user',
+                                           [[machine_id.id_pointeuse], uid])
+
+            records = json.loads(records)
+            res = records.get(str(machine_id.id_pointeuse), False)
+            if res and res['return']:
+                return (_("User does not exist or deleted from") + machine_id.name + '\n'), False
+            else:
+                return res['msg'], res['return']
+        except Exception as e:
+            return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't delete user") + '\n'), False

@@ -170,6 +170,27 @@ class machine(models.Model):
                     res[machine_id.id] = {'return': False, 'msg': str(e)}
         return  json.dumps(res)
 
+    def set_delete_user(self,uid):
+        res = {}
+        for machine_id in self:
+            zk, conn = False, False
+            try:
+                zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
+                conn = zk.connect()
+                machine_id.connection_state = True
+            except:
+                machine_id.connection_state = False
+
+            if machine_id.connection_state or not conn:
+                res[machine_id.id] = {'return': False, 'msg': 'Machine non connecte'}
+            else:
+                try:
+                    conn.delete_user(int(uid))
+                    res[machine_id.id] = {'return': True, 'msg': 'User has been successfully deleted'}
+                except Exception as e:
+                    res[machine_id.id] = {'return': False, 'msg': str(e)}
+        return json.dumps(res)
+
 
     # def load_attendance(self):
     #     error = False
