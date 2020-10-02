@@ -182,6 +182,9 @@ class machine(models.Model):
                 machine_id.connection_state = False
 
             if machine_id.connection_state or not conn:
+                print("machine_id.connection_state ----",machine_id.connection_state)
+                print("conn ----",conn)
+
                 res[machine_id.id] = {'return': False, 'msg': 'Machine non connecte'}
             else:
                 try:

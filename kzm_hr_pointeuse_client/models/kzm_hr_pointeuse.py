@@ -234,10 +234,11 @@ class HrPointeuse(models.Model):
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
         records = []
+        print("------- beforetry")
         try:
             records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'set_delete_user',
                                            [[machine_id.id_pointeuse], uid])
-
+            print("reco",records)
             records = json.loads(records)
             res = records.get(str(machine_id.id_pointeuse), False)
             if res and res['return']:
@@ -245,4 +246,5 @@ class HrPointeuse(models.Model):
             else:
                 return res['msg'], res['return']
         except Exception as e:
+            print("expection")
             return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't delete user") + '\n'), False

@@ -465,9 +465,9 @@ class KzmBadge(models.Model):
                 except Exception as ex:
                     rec.message_post(
                         body=_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
-                        rec.employee_id.name, p.name, ex.message)))
+                        rec.employee_id.name, p.name, ex)))
                     raise ValidationError(_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
-                        rec.employee_id.name, p.name, ex.message)))
+                        rec.employee_id.name, p.name, ex)))
 
         # if len(rec.pointeuse_ids) == 0:
         res = super(KzmBadge, self).unlink()
