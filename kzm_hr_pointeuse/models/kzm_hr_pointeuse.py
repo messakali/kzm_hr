@@ -100,8 +100,8 @@ class machine(models.Model):
             id_res[r.id] = {
                     'state': r.connection_state,
                 }
-            attendance_res = json.dumps(id_res)
-        print("attendance_res ----", id_res)
+            id_res = json.dumps(id_res)
+        print("id_res ----", id_res)
         return id_res
 
     @api.depends('connection_state')
