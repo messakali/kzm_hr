@@ -188,7 +188,7 @@ class machine(models.Model):
                 res[machine_id.id] = {'return': False, 'msg': 'Machine non connecte'}
             else:
                 try:
-                    conn.delete_user(int(uid))
+                    conn.delete_user(uid=int(uid))
                     res[machine_id.id] = {'return': True, 'msg': 'User has been successfully deleted'}
                 except Exception as e:
                     res[machine_id.id] = {'return': False, 'msg': str(e)}

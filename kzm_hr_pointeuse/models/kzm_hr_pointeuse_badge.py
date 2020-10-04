@@ -458,7 +458,6 @@ class KzmBadge(models.Model):
             for p in rec.sudo().pointeuse_ids:
                 try:
                     p.delete_badge(rec)
-                    rec.message_post(body=_(u'%s est supprimé de la pointeuse %s.' % (rec.employee_id.name, p.name)))
                     # squery = "delete from kzm_r_hr_pointeuse_badge where id_badge=%s and id_pointeuse=%s " % (rec.id, p.id)
                     # self._cr.execute(squery)
                     # self._cr.commit()

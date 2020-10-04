@@ -191,7 +191,7 @@ class HrPointeuse(models.Model):
                     _(u"Operation de suppression des utilisateurs a échouée,Echec de connexion à la pointeuse : %s" % (
                         pointeuse.name)))
 
-class HrPointeuse(models.Model):
+class HrPointeuseBadge(models.Model):
     _inherit = 'kzm.hr.pointeuse.badge'
 
     def add_user(self, machineid, uid, name, privilege, password_p, groupid, userid, card):
@@ -248,3 +248,19 @@ class HrPointeuse(models.Model):
         except Exception as e:
             print("expection")
             return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't delete user") + '\n'), False
+
+    def unlink(self):
+        badges_administration_ids = self#.filtered(lambda l: l.employee_id.type_employe == 'mensuel')
+        for rec in badges_administration_ids:
+            for p in rec.sudo().pointeuse_ids:
+                try:
+                    p.delete_badge(rec)
+                except Exception as ex:
+                    rec.message_post(
+                        body=_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
+                        rec.employee_id.name, p.name, ex)))
+                    raise ValidationError(_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
+                        rec.employee_id.name, p.name, ex)))
+
+        res = super(HrPointeuseBadge, self).unlink()
+        return res
