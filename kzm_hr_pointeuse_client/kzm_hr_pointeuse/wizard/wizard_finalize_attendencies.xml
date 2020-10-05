@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_attendencies_report_wizard" model="ir.ui.view">
+            <field name="name">Load attendencies reports</field>
+            <field name="model">zk_attendance.wizardattendenciesreports</field>
+            <field name="arch" type="xml">
+                <form string="Load Attendencies Reports">
+                    <p class="oe_gray">
+                        Utiliser cet assistant pour charger les reports d'attendences.
+                    </p>
+                    <footer>
+                        <button name="load_to_hr_attendance" string="Lancer le chargement" type="object"  class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_start_attendencies_report">
+            <field name="name">Load attendencies reports</field>
+            <field name="res_model">zk_attendance.wizardattendenciesreports</field>
+            <field name="binding_model_id"></field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

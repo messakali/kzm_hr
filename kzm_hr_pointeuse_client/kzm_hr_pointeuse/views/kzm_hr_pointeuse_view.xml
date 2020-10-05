@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="kzm_hr_pointeuse_view_form" model="ir.ui.view">
+            <field name="name">kzm.hr.pointeuse.view.form</field>
+            <field name="model">kzm.hr.pointeuse</field>
+            <field name="arch" type="xml">
+                <form string="Pointeuse">
+                    <sheet>
+                        <group col="3">
+                            <group >
+                                <field name="name"/>
+                                <field name="company_id" groups="base.group_multi_company" options="{'no_open': True, 'no_create': True}"/>
+<!--                                <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"-->
+<!--                                   options="{'no_open': True, 'no_create': True}"-->
+<!--                                   domain="[('company_id','=',company_id)]"-->
+<!--                                />-->
+                                <field name="ip"/>
+                                <field name="port"/>
+                                <field name="connection_state" widget="many2onebutton"/>
+                                <field name="active"/>
+                                <field name="type"/>
+                                <button name="check_connection"
+                                        type="object" string="Tester la connection" class="oe_highlight" />
+                            </group>
+                            <group col="1">
+                                <field name="image" widget="image" class="oe_avatar" nolabel="1"/>
+                                <span>  <b attrs="{'invisible':[('connection_state','=',False)] }">Online </b>
+                                        <b attrs="{'invisible':[('connection_state','=',True)] }">Offline </b>
+<!--                                    TODO DOUAE-->
+<!--                                    <img attrs="{'invisible':[('connection_state','=',False)] }"-->
+<!--                                         src="/kzm_hr_pointeuse/static/img/yes.png" style="height: 25px; width: 25px;"/>-->
+<!--                                  <img src="/kzm_hr_pointeuse/static/img/no.png" style="height: 25px; width: 25px;" attrs="{'invisible':[('connection_state','=',True)] }" />-->
+                                </span>
+                                <br/>
+                                <br/>
+                                <group col="3">
+                                    <button name="clear_attendance_with_msg" string="Effacer" class="oe_stat_button" icon="fa-eraser " confirm="Etes-vous sûr de vouloir effacer toutes les présences?" type="object"/>
+                                    <button name="load_attendance"  string="Charger" class="oe_stat_button" icon="fa-download " type="object" confirm="Etes-vous sûr de vouloir télécharger toutes les présences?" />
+                                    <button name="nettoyer_pointeuse"  string="Néttoyer" class="oe_stat_button" icon="fa-hand-rock-o" type="object"
+                                            confirm="Etes-vous sûr de vouloir néttoyer la pointeuse de toutes les utilisateurs qui n'existent pas dans le système?"
+                                        help="Néttoyer la pointeuse de toutes les utilisateurs qui n'existent pas dans le système"
+                                    />
+                                </group>
+                            </group>
+                        </group>
+                    </sheet>
+                      <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="kzm_hr_pointeuse_view_tree">
+            <field name="name">kzm.hr.pointeuse.view.tree</field>
+            <field name="model">kzm.hr.pointeuse</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Pointeuse">
+                    <field name="name" />
+                    <field name="company_id" groups="base.group_multi_company"/>
+<!--                    <field name="kzm_sous_ferme_id" groups="kzm_type_contrat.group_sous_ferme"/>-->
+                    <field name="ip"/>
+                    <field name="type"/>
+                    <field name="connection_state" widget="many2onebutton"/>
+                </tree>
+            </field>
+        </record>
+
+        <template id="assets_backend" name="kzm_hr_pointeuse assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/kzm_hr_pointeuse/static/src/css/kzm_hr_pointeuse.css"/>
+            </xpath>
+        </template>
+
+<!--        <record model="ir.ui.view" id="kzm_hr_pointeuse_view_kanban">-->
+<!--            <field name="name">kzm.hr.pointeuse.view.kanban</field>-->
+<!--            <field name="model">kzm.hr.pointeuse</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <kanban>-->
+<!--                    <field name="connection_state" />-->
+<!--                    <templates>-->
+<!--                        <t t-name="kanban-box">-->
+<!--                            <div class="oe_pointeuse_vignette">-->
+<!--                                <div class="oe_pointeuse_image">-->
+<!--                                    <a type="open"><img t-att-src="kanban_image('kzm.hr.pointeuse', 'image', record.id.value)" class="oe_pointeuse_picture"/></a>-->
+<!--                                </div>-->
+<!--                                <div class="oe_pointeuse_details">-->
+<!--                                    <h4>-->
+<!--                                        <a type="open"><field name="name"/></a>-->
+<!--                                    </h4>-->
+<!--                                    <ul>-->
+<!--                                        <li>-->
+<!--                                            <field name="company_id"/>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <field name="ip"/>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <field name="port"/>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <img t-if="record.connection_state.raw_value === true" src="/kzm_hr_pointeuse/static/img/yes.png" style="max-height: 30px;" />-->
+<!--                                            <img t-if="record.connection_state.raw_value === false" src="/kzm_hr_pointeuse/static/img/no.png" style="max-height: 30px;" />-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </t>-->
+<!--                    </templates>-->
+<!--                </kanban>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="kzm_hr_pointeuse_view_searsh" model="ir.ui.view">
+            <field name="name">kzm.hr.pointeuse.view.searsh</field>
+            <field name="model">kzm.hr.pointeuse</field>
+            <field name="arch" type="xml">
+                <search string="Pointeuse">
+                    <field name="name"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="connection_state"/>
+                    <field name="port" />
+                    <field name="ip" />
+                    <field name="badge_ids" />
+
+                    <filter name="active" string="Désactivés"
+                            domain ="[('active','=', False)]"/>
+
+                    <filter name="active" string="Connectés"
+                            domain ="[('connection_state','=', True)]"/>
+
+                    <filter name="active" string="Déconnectés"
+                            domain ="[('connection_state','=', False)]"/>
+
+                    <group string="Grouper par">
+
+                        <filter name="group_by_company" string="Ferme"
+                                context="{'group_by': 'company_id'}"/>
+                        <filter name="group_by_company" string="Etat de connexion"
+                                context="{'group_by': 'connection_state'}"/>
+                    </group>
+
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kzm_hr_pointeuse" model="ir.actions.act_window">
+            <field name="name">Pointeuses</field>
+            <field name="res_model">kzm.hr.pointeuse</field>
+
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <menuitem id="kzm_hr_pointeuse_menu" name="Pointeuses"
+            parent="hr.menu_hr_root"
+            sequence="5"  />
+
+        <menuitem id="kzm_hr_pointeuse_menuitem" name="Pointeuses"
+            parent="kzm_hr_pointeuse_menu" action="action_kzm_hr_pointeuse"
+            sequence="10"  />
+
+
+    </data>
+</odoo>

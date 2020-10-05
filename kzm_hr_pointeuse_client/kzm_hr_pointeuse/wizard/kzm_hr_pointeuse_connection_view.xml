@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_kzm_hr_pointeuse_connection_wizard" model="ir.ui.view">
+            <field name="name">Vérifier l'état des connexions des pointeuses</field>
+            <field name="model">kzm.hr.pointeuse.connection</field>
+            <field name="arch" type="xml">
+                <form string="Etat des connexions">
+                    <p class="oe_gray">
+                        Utiliser cet assistant pour vérifier les états de connexion des
+                        pointeuses.
+                    </p>
+                    <group>
+                        <field name="date"/>
+                         <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <footer>
+                        <button name="check_connection" string="Lancer le vérificateur" type="object"  class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_check_connection">
+            <field name="name">Vérifier l'état des connexions des pointeuses</field>
+            <field name="res_model">kzm.hr.pointeuse.connection</field>
+            <field name="binding_model_id"></field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="kzm_hr_pointeuse_check_connection_menuitem" name="Vérifier les connexions"
+            parent="kzm_hr_pointeuse_menu" action="act_check_connection"
+            sequence="30"  />
+
+    </data>
+</odoo>

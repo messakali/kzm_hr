@@ -514,10 +514,10 @@ class KzmBadge(models.Model):
     @api.constrains('employee_id')
     def insertion_pointeuses(self):
         contract_id = self.employee_id.contract_id
-        # if not contract_id or contract_id.date_end:
-        #     raise ValidationError(
-        #             u"L'employé : %s matricule : %s ne posséde pas de contrat active \n il faut l'embaucher avant de lui créer le badge!" % (
-        #             self.employee_id.name, self.employee_id.matricule))
+        if not contract_id or contract_id.date_end:
+            raise ValidationError(
+                    u"L'employé : %s matricule : %s ne posséde pas de contrat active \n il faut l'embaucher avant de lui créer le badge!" % (
+                    self.employee_id.name, self.employee_id.matricule))
 
     def is_valid_cardnumber(self, cardnumber):
         try:
@@ -534,7 +534,7 @@ class KzmBadge(models.Model):
     @api.constrains('cardnumber')
     def check_cardnumber(self):
         if not self.is_valid_cardnumber(self.cardnumber):
-            raise ValidationError(u'Numéro de badge saisi est invalide.\n il doit être sur 7 ou 8 numéros !')
+            raise ValidationError(u'Numéro de badge saisi est invalide.\n il doit être sur 7 numéros !')
 
 
 

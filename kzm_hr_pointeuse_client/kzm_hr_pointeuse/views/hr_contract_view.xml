@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="kzm_hr_contrat_embauche_form_inherit_2" model="ir.ui.view">
+            <field name="name">kzm.hr.contrat.embauche.form.inherit.2</field>
+            <field name="model">kzm.hr.contrat.embauche</field>
+            <field name="inherit_id" ref="kzm_hr_contact.kzm_form_view_hr_contrat_embauche"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='contract_ids']//field[@name='type_id']" position="after">
+                    <field name="badge_ids"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

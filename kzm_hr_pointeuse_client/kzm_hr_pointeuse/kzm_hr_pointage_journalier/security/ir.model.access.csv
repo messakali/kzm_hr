@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+
+access_hr_employee_manager,hr.employee,hr.model_hr_employee,kzm_hr_pointeuse.group_pointage_manager,1,1,1,1
+access_kzm_daily_attendance_manager,kzm.daily.attendance,model_kzm_daily_attendance,kzm_hr_pointeuse.group_pointage_manager,1,1,1,1
+access_kzm_all_attendances_manager,kzm.all.attendances,model_kzm_all_attendances,kzm_hr_pointeuse.group_pointage_manager,1,1,1,1
+access_kzm_poste_pointage_journalier_manager,kzm.poste.pointage.journalier,model_kzm_poste_pointage_journalier,kzm_hr_pointeuse.group_pointage_manager,1,1,1,1

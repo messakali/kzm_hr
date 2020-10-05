@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="kzm_kzm_pointage_journalier_rule" model="ir.rule">
+            <field name="name">Multi-company Pointage Journalier</field>
+            <field name="model_id" ref="model_kzm_all_attendances"/>
+            <field name="domain_force">
+                [
+
+                '|',
+               ('company_id','in',company_ids),
+                ('company_id','=',False)
+                ]
+            </field>
+            <field name="global" eval="1"/>
+        </record>
+
+
+    </data>
+</odoo>

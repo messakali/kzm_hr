@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="kzm_hr_employe_form_tree" model="ir.ui.view">
+            <field name="name">kzm.hr.employe.form.tree.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='company_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='work_email']" position="after">
+<!--                    <field name="date" />-->
+                    <field name="birthday" />
+                    <field name="last_ferm_pointage" />
+<!--                    <field name="last_sous_ferm_pointage" />-->
+                    <field name="last_date_pointage" />
+                </xpath>
+
+
+                <xpath expr="//field[@name='work_email']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='work_phone']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="company_id" groups="base.group_multi_company" />
+                </xpath>
+
+            </field>
+        </record>
+
+<!--        <record id="kzm_hr_employee_view_inherit" model="ir.ui.view">-->
+<!--            <field name="name">kzm.hr.employee.view.inherit</field>-->
+<!--            <field name="model">hr.employee</field>-->
+<!--            <field name="inherit_id" ref="hr.view_employee_filter"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--&lt;!&ndash;TODO DOUAE&ndash;&gt;-->
+<!--&lt;!&ndash;                changer filtre[5] à filtre[3]&ndash;&gt;-->
+<!--                <xpath expr="//group/filter[3]" position="after">-->
+<!--                    <filter name="last_ferme" string="Ferme Dernier Pointage" icon="terp-go-home" domain="[]"-->
+<!--                            context="{'group_by':'last_ferm_pointage'}" />-->
+<!--                     <filter name="type_employe" string="Type employé" icon="terp-go-home" domain="[]"-->
+<!--                            context="{'group_by':'type_employe'}" />-->
+<!--                </xpath>-->
+
+<!--            </field>-->
+<!--        </record>-->
+
+    </data>
+</odoo>
