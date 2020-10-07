@@ -27,17 +27,7 @@
             </field>
             <field name="groups" eval="[(4,ref('base.group_user'))]"/>
         </record>
-<!--        <record id="kzm_hr_attendance_journalier_rule" model="ir.rule">-->
-<!--            <field name="name">Présences des employés journaliers</field>-->
-<!--            <field name="model_id" ref="model_hr_attendance"/>-->
-<!--            <field name="domain_force">[('employee_id.type_employe','=','journalier')]</field>-->
-<!--            <field name="groups" eval="[-->
 
-<!--                (4,ref('kzm_hr_pointeuse.group_kzm_pointage_pointeur'))-->
-
-<!--                ]"-->
-<!--            />-->
-<!--        </record>-->
         <record id="kzm_hr_attendance_mensuel_rule" model="ir.rule">
             <field name="name">Présences des employés mensuels</field>
             <field name="model_id" ref="model_hr_attendance"/>
@@ -72,23 +62,13 @@
                 ]"
             />
         </record>
-<!--        <record id="kzm_hr_pointeuse_badge_mensuel_rule" model="ir.rule">-->
-<!--            <field name="name">Badge des employés mensuels</field>-->
-<!--            <field name="model_id" ref="model_kzm_hr_pointeuse_badge"/>-->
-<!--            <field name="domain_force">[('employee_id.type_employe','=','mensuel')]</field>-->
-<!--            <field name="groups" eval="[-->
-<!--                (4,ref('kzm_hr_pointeuse.group_pointage_manager')),-->
-<!--                ]"-->
-<!--            />-->
-<!--        </record>-->
+
 
         <record id="model_kzm_hr_pointeuse_rule" model="ir.rule">
             <field name="name">Multi-company Pointeuse</field>
             <field name="model_id" ref="model_kzm_hr_pointeuse"/>
             <field name="domain_force">
                 [
-                ('type','=','ouvrier'),
-                '|',
                ('company_id','in',company_ids),
                 ('company_id','=',False)
                 ]
@@ -113,7 +93,7 @@
         </record>
 
          <record model="ir.rule" id="hr_employee_rule">
-            <field name="name">employee company sub farm rule</field>
+            <field name="name">employee company </field>
             <field name="model_id" ref="model_hr_employee"/>
             <field name="global" eval="True"/>
             <field name="domain_force">[
@@ -138,7 +118,7 @@
         </record>
 
         <record model="ir.rule" id="specific_pause_rule">
-            <field name="name">pause company sub farm rule</field>
+            <field name="name">pause company societe rule</field>
             <field name="model_id" ref="model_specific_pause"/>
             <field name="global" eval="True"/>
             <field name="domain_force">[
@@ -149,23 +129,10 @@
             </field>
         </record>
 
-<!--         <record model="ir.rule" id="hr_contract_rule">-->
-<!--            <field name="name">contract sub farm rule</field>-->
-<!--            <field name="model_id" ref="model_hr_contract"/>-->
-<!--            <field name="global" eval="True"/>-->
-<!--            <field name="domain_force">[-->
-<!--                '|',-->
-<!--                ('sous_ferme_id','in',[sous_ferme_id.id for sous_ferme_id in user.sous_ferme_ids]),-->
-<!--                ('sous_ferme_id','=',False),-->
-<!--                '|',-->
-<!--                ('company_id','in',company_ids),-->
-<!--                ('company_id','=',False)-->
-<!--                ]-->
-<!--            </field>-->
-<!--        </record>-->
+
 
         <record model="ir.rule" id="zk_attendance_attendance_rule">
-            <field name="name">pointeuse company sub farm rule</field>
+            <field name="name">pointeuse company company rule</field>
             <field name="model_id" ref="model_zk_attendance_attendance"/>
             <field name="global" eval="True"/>
             <field name="domain_force">[
@@ -212,20 +179,6 @@
             </field>
         </record>
 
-<!--         <record model="ir.rule" id="kzm_hr_pointeuse_badge_rule">-->
-<!--            <field name="name">pointeuse badge company sub farm rule</field>-->
-<!--            <field name="model_id" ref="model_kzm_hr_pointeuse_badge"/>-->
-<!--            <field name="global" eval="True"/>-->
-<!--            <field name="domain_force">[-->
-<!--                '|',-->
-<!--                ('sous_ferme_id','in',[sous_ferme_id.id for sous_ferme_id in user.sous_ferme_ids]),-->
-<!--                ('sous_ferme_id','=',False),-->
-<!--                '|',-->
-<!--                ('company_id','in',company_ids),-->
-<!--                ('company_id','=',False)-->
-<!--                ]-->
-<!--            </field>-->
-<!--        </record>-->
 
 
 
