@@ -19,6 +19,7 @@ class HrEmployee(models.Model):
         return dict([(x, visible) for x in self.ids])
 
 
+    @api.model
     def create(slef, vals):
         res = super(HrEmployee, self).create(vals)
         for r in res:
