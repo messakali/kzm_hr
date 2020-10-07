@@ -20,7 +20,7 @@ class HrEmployee(models.Model):
 
 
     @api.model
-    def create(slef, vals):
+    def create(self, vals):
         res = super(HrEmployee, self).create(vals)
         for r in res:
             if r.matricule:
