@@ -1,9 +1,8 @@
-[![Build Status](https://travis-ci.org/karizmaconseil/kzm_hr.svg?branch=13.0)](https://travis-ci.org/karizmaconseil/kzm_hr)
-
+[![Build Status](https://travis-ci.com/karizmaconseil/kzm_hr.svg?token=3rLzMkGSCCyiQHepEdQM&branch=13.0)](https://travis-ci.com/karizmaconseil/kzm_hr)
 
 KZM HR
 =============
-Odoo version: 13.0
+Odoo version: 14.0
 This project aim to deal with modules related to Odoo hr and contract.
 
 
