@@ -3,12 +3,15 @@ cache:
   directories:
     - $HOME/.cache/pip
     - $HOME/.cache/pre-commit
-
+os:
+  - linux
+    dist: trusty
+  
 python:
-  - "3.6"
+  - "3.9"
 
 addons:
-  postgresql: "9.6"
+  postgresql: "12.4"
   apt:
     packages:
       - expect-dev # provides unbuffer utility
@@ -34,7 +37,7 @@ jobs:
 
 env:
   global:
-    - VERSION="13.0" TESTS="0" LINT_CHECK="0" MAKEPOT="0"
+    - VERSION="14.0" TESTS="0" LINT_CHECK="0" MAKEPOT="0"
 
 install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git
@@ -55,3 +58,5 @@ notifications:
       - r.rouichi@karizma.ma
     on_success: never # never, change, always
     on_failure: always # default: always
+    
+#MOR DETAILS: https://docs.travis-ci.com/user/installing-dependencies/
