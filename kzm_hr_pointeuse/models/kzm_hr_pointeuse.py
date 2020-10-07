@@ -14,6 +14,16 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+def convert_TZ_UTC(self, TZ_datetime):
+    fmt = "%Y-%m-%d %H:%M:%S"
+    # Current time in UTC
+    now_utc = datetime.now(timezone('UTC'))
+    # Convert to current user time zone
+    now_timezone = now_utc.astimezone(timezone(self.env.user.tz))
+    UTC_OFFSET_TIMEDELTA = datetime.strptime(now_utc.strftime(fmt), fmt) - datetime.strptime(now_timezone.strftime(fmt), fmt)
+    local_datetime = datetime.strptime(TZ_datetime, fmt)
+    result_utc_datetime = local_datetime + UTC_OFFSET_TIMEDELTA
+    return result_utc_datetime.strftime(fmt)
 
 class machine(models.Model):
     _inherit = ['mail.thread']
@@ -135,7 +145,6 @@ class machine(models.Model):
                 return attendance_list, True
             except:
                 return attendance_list, False
-        print("attttttt",attendance_list)
         return attendance_list, False
 
     def get_attendancies_server(self):
@@ -147,7 +156,6 @@ class machine(models.Model):
                 'attendances_list': [(str(att.user_id), str(att.timestamp)) for att in attendances_list],
             }
         attendance_res = json.dumps(attendance_res)
-        print("attendance_res ----",attendance_res)
         return attendance_res
 
     def set_user_server(self,uid, name, privilege, password, groupid, userid, card):
@@ -182,9 +190,8 @@ class machine(models.Model):
                 machine_id.connection_state = False
 
             if not machine_id.connection_state or not conn:
-                print("machine_id.connection_state ----",machine_id.connection_state)
-                print("conn ----",conn)
-
+                if conn:
+                    conn.disconnect()
                 res[machine_id.id] = {'return': False, 'msg': 'Machine non connecte'}
             else:
                 try:
@@ -203,7 +210,7 @@ class machine(models.Model):
     #         if test:
     #             for att in attendances_list:
     #                 # badge_id = self.env['kzm.hr.pointeuse.badge'].search([('matricule', '=', str(att.uid).rjust(5, "0"))])
-    #                 matricule = str(att.user_id).rjust(5, "0")
+    #                 matricule = str(att.user_id).zfill(5)
     #                 presence_date = att.timestamp
     #                 employee_id = self.env['hr.employee'].search([('matricule', '=', matricule)])
     #                 if not employee_id:
@@ -279,6 +286,7 @@ class machine(models.Model):
                     # badge_id = self.env['kzm.hr.pointeuse.badge'].search([('matricule', '=', str(att.uid).rjust(5, "0"))])
                     matricule = str(att.user_id).zfill(5)
                     presence_date = att.timestamp
+                    presence_date = convert_TZ_UTC(self, str(presence_date))
                     employee_id = self.sudo().env['hr.employee'].search([
                         ('matricule', '=', matricule),
                         ])

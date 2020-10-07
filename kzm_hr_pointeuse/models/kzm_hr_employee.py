@@ -18,22 +18,21 @@ class HrEmployee(models.Model):
             visible = True
         return dict([(x, visible) for x in self.ids])
 
-    # @api.model
-    # def create(self, vals):
-    #     new_record = super(HrEmployee, self).create(vals)
-    #     if not new_record.matricule:
-    #         #new_record.matricule=self.env['ir.sequence'].next_by_code('hr.employee.matricule')
-    #         new_record.write({})
-    #     return new_record
 
-
-
+    def create(slef, vals):
+        res = super(HrEmployee, self).create(vals)
+        for r in res:
+            if r.matricule:
+                r.matricule = r.matricule.zfill(5)
+        return res
+        
     def write(self, vals):
-        for r in self:
-            if len(r) == 1 and (not r.matricule or r.matricule == 'False'):
-                vals['matricule'] = self.env['ir.sequence'].next_by_code('hr.employee.matricule')
-            super(HrEmployee, self).write(vals)
-            return True
+        if vals.get("matricule", False):
+            vals['matricule'] = vals['matricule'].zfill(5)
+        # for r in self:
+        #     if len(r) == 1 and (not r.matricule or r.matricule == 'False'):
+        #         vals['matricule'] = self.env['ir.sequence'].next_by_code('hr.employee.matricule')
+        return super(HrEmployee, self).write(vals)
 
 
 class HrContract(models.Model):

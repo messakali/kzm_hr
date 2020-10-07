@@ -8,6 +8,18 @@ from odoo.exceptions import ValidationError, _logger
 import xmlrpc.client
 from xmlrpc import client as xmlrpclib
 
+def convert_TZ_UTC(self, TZ_datetime):
+    fmt = "%Y-%m-%d %H:%M:%S"
+    # Current time in UTC
+    now_utc = datetime.now(timezone('UTC'))
+    # Convert to current user time zone
+    now_timezone = now_utc.astimezone(timezone(self.env.user.tz))
+    UTC_OFFSET_TIMEDELTA = datetime.strptime(now_utc.strftime(fmt), fmt) - datetime.strptime(now_timezone.strftime(fmt), fmt)
+    local_datetime = datetime.strptime(TZ_datetime, fmt)
+    result_utc_datetime = local_datetime + UTC_OFFSET_TIMEDELTA
+    return result_utc_datetime.strftime(fmt)
+
+
 class HrPointeuse(models.Model):
     _inherit = 'kzm.hr.pointeuse'
 
@@ -29,7 +41,6 @@ class HrPointeuse(models.Model):
             raise ValidationError("Error :"+str(e))
 
         records = json.loads(records)
-        print("*-* get state client",records)
         for r in self:
             r.connection_state = records.get(str(r.id_pointeuse), False)
 
@@ -52,15 +63,12 @@ class HrPointeuse(models.Model):
         records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'get_attendancies_server',
                                        [[l.id_pointeuse for l in self],])
         records = json.loads(records)
-        print("records ------",type(records),records)
         error = False
         msg = _("These machines seem to be offline. Please verify if they are connected and try again :\n")
         for r in self:
             #print("before calling LEAD funct")
             r_return = records[str(r.id_pointeuse)]
-            print(r_return, "----")
             attendances_list, test = r_return['attendances_list'], r_return['test']
-            print("attendances_list -----",attendances_list)
             #print("ret LEAD", attendances_list, test)
             if test:
                 if len(attendances_list) == 0:
@@ -69,6 +77,7 @@ class HrPointeuse(models.Model):
                     # badge_id = self.env['kzm.hr.pointeuse.badge'].search([('matricule', '=', str(att.uid).rjust(5, "0"))])
                     matricule = str(att[0]).zfill(5)
                     presence_date = att[1]
+                    presence_date = convert_TZ_UTC(self, str(presence_date))
                     employee_id = self.sudo().env['hr.employee'].search([
                         ('matricule', '=', matricule),
                         ])
@@ -96,9 +105,7 @@ class HrPointeuse(models.Model):
                         # 'status': action,
                         'machine_id': machine_id,
                     }
-                    print("presence date -----",type(presence_date),presence_date)
                     presence_date = datetime.strptime(presence_date, '%Y-%m-%d %H:%M:%S')
-                    print("presence date -----",type(presence_date),presence_date)
                     result = r.test_altern_si_so(attendance_id, presence_date)
                     try:
                         attendance_id['note'] = "{}".format(result[0])
@@ -234,11 +241,9 @@ class HrPointeuseBadge(models.Model):
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
         records = []
-        print("------- beforetry")
         try:
             records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'set_delete_user',
                                            [[machine_id.id_pointeuse], uid])
-            print("reco",records)
             records = json.loads(records)
             res = records.get(str(machine_id.id_pointeuse), False)
             if res and res['return']:
@@ -246,7 +251,6 @@ class HrPointeuseBadge(models.Model):
             else:
                 return res['msg'], res['return']
         except Exception as e:
-            print("expection")
             return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't delete user") + '\n'), False
 
     def unlink(self):
@@ -259,8 +263,7 @@ class HrPointeuseBadge(models.Model):
                     rec.message_post(
                         body=_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
                         rec.employee_id.name, p.name, ex)))
-                    raise ValidationError(_(u"Echec de suppression de %s de la pointeuse %s.\n%s" % (
-                        rec.employee_id.name, p.name, ex)))
+                    #
 
         res = super(HrPointeuseBadge, self).unlink()
         return res
