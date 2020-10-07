@@ -346,7 +346,7 @@ class machine(models.Model):
                     except:
                         continue
                 self.env.cr.commit()
-                #r.clear_attendancies()
+                r.clear_attendancies()
             else:
                 msg += r.name + '\n'
                 error = True
