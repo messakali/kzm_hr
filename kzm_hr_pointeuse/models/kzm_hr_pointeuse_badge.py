@@ -93,6 +93,7 @@ class KzmBadge(models.Model):
         try:
             zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
             conn = zk.connect()
+            conn.disable_device()
             machine_id.connection_state = True
         except:
             machine_id.connection_state = False
@@ -102,11 +103,18 @@ class KzmBadge(models.Model):
                 #time.sleep(1)
                 conn.set_user(int(uid), name, privilege, password, groupid, str(int(userid)).zfill(5), int(card))
                 if conn:
+                    conn.enable_device()
                     conn.disconnect()
                 return (_("User ") + name + _(" est ajouté au ") + machine_id.name + '\n'), True
             except Exception as e:
+                if conn:
+                    conn.enable_device()
+                    conn.disconnect()
                 return (_("Echec d'ajout d'utilisateur ") + name+_(" dans la pointeuse ") + machine_id.name + '\n Erreur:'+str(e)), False
         else:
+            if conn:
+                conn.enable_device()
+                conn.disconnect()
             return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't add user ") + name + '\n'), False
 
 
@@ -136,6 +144,7 @@ class KzmBadge(models.Model):
         try:
             zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
             conn = zk.connect()
+            conn.disable_device()
             machine_id.connection_state = True
         except:
             machine_id.connection_state = False
@@ -146,12 +155,19 @@ class KzmBadge(models.Model):
             try:
                 conn.delete_user(int(uid))
             except:
+                if conn:
+                    conn.enable_device()
+                    conn.disconnect()
                 return (_("User does not exist in ") + machine_id.name + '\n'), False
             if conn:
+                conn.enable_device()
                 conn.disconnect()
             return (_('User Deleted from ') + machine_id.name + '\n'), True
 
         else:
+            if conn:
+                conn.enable_device()
+                conn.disconnect()
             return (_("Connection to ") + machine_id.name + _(" has been lost, couldn't delete user") + '\n'), False
 
 

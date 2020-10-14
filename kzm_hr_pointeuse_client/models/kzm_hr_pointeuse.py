@@ -175,7 +175,6 @@ class HrPointeuse(models.Model):
             pointeuse.get_status()
             connect = pointeuse.connection_state
             if connect:
-                # zk.EnableDevice(iMachineNumber, False)
                 for badge_id in badge_ids:
                     sUserID = str(int(badge_id.employee_id.matricule))
                     msg, result = badge_id.delete_user(pointeuse.id, sUserID)
@@ -189,7 +188,6 @@ class HrPointeuse(models.Model):
                         _logger.warning(_(
                             u"Delete_badge:Operation de suppression de l'utilisateur %s, Pointeuse : %s " % (
                                 badge_id.employee_id.matricule, pointeuse.name)))
-                # zk.EnableDevice(iMachineNumber, True)
             else:
                 _logger.warning(_(
                     u"delete_badge:Operation de suppression des utilisateurs a échouée,Echec de connexion, Pointeuse : %s" % (
@@ -201,7 +199,7 @@ class HrPointeuse(models.Model):
 class HrPointeuseBadge(models.Model):
     _inherit = 'kzm.hr.pointeuse.badge'
 
-    def add_user(self, machineid, uid, name, privilege, password_p, groupid, userid, card):
+    def add_user(self, machineid, user_uid, name, privilege, password_p, groupid, userid, card):
         print("llllllllllllllp")
         machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
         url = self.env.company.url
@@ -213,7 +211,7 @@ class HrPointeuseBadge(models.Model):
         try:
             # time.sleep(1)
             records = models_kw.execute_kw(db, uid, password, 'kzm.hr.pointeuse', 'set_user_server',
-                                           [[machine_id.id_pointeuse], uid, name, privilege, password_p, groupid, userid,
+                                           [[machine_id.id_pointeuse], user_uid, name, privilege, password_p, groupid, userid,
                                             card])
             records = json.loads(records)
             res = records.get(str(machine_id.id_pointeuse), False)

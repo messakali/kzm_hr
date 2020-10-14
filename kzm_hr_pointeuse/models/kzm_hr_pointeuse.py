@@ -78,41 +78,51 @@ class machine(models.Model):
         # 		print("Records :::::", rec_machine)
         record = super(machine, self).create(values)
 
-        record.get_status()
+        #record.get_status()
         return record
 
     @api.depends('ip', 'port')
     def get_status(self):
         for r in self:
             # self.load_attendance()
+            zk, conn = False, False
             try:
                 zk = pyzk.ZK(r.ip, int(r.port), timeout=10)
                 conn = zk.connect()
+                conn.disable_device()
                 r.connection_state = True
                 if conn:
+                    conn.enable_device()
                     conn.disconnect()
             except Exception as e:
+                if conn:
+                    conn.enable_device()
+                    conn.disconnect()
                 r.connection_state = False
 
     def get_status_connection(self):
         id_res = {}
         for r in self:
             # self.load_attendance()
-            print("---- start", self)
+            #print("---- start", self)
+            zk, conn = False, False
             try:
                 zk = pyzk.ZK(r.ip, int(r.port), timeout=10)
                 conn = zk.connect()
+                conn.disable_device()
                 r.connection_state = True
                 if conn:
+                    conn.enable_device()
                     conn.disconnect()
             except Exception as e:
+                if conn:
+                    conn.enable_device()
+                    conn.disconnect()
                 r.connection_state = False
-            print("---- end", self)
             id_res[r.id] = {
                     'state': r.connection_state,
                 }
             id_res = json.dumps(id_res)
-        print("id_res ----", id_res)
         return id_res
 
     @api.depends('connection_state')
@@ -138,13 +148,21 @@ class machine(models.Model):
         attendance_list = []
 
         if self.connection_state:
+            zk, conn = False, False
             try:
                 zk = pyzk.ZK(self.ip, int(self.port), password=0, timeout=10)
                 conn = zk.connect()
+                conn.disable_device()
                 time.sleep(1)
                 attendance_list = conn.get_attendance()
+                if conn:
+                    conn.enable_device()
+                    conn.disconnect()
                 return attendance_list, True
             except:
+                if conn:
+                    conn.enable_device()
+                    conn.disconnect()
                 return attendance_list, False
         return attendance_list, False
 
@@ -166,6 +184,7 @@ class machine(models.Model):
             try:
                 zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
                 conn = zk.connect()
+                conn.disable_device()
                 machine_id.connection_state = True
             except:
                 machine_id.connection_state = False
@@ -177,6 +196,9 @@ class machine(models.Model):
                     res[machine_id.id] = {'return': True, 'msg': 'User has been successfully setted'}
                 except Exception as e:
                     res[machine_id.id] = {'return': False, 'msg': str(e)}
+            if conn:
+                conn.enable_device()
+                conn.disconnect()
         return  json.dumps(res)
 
     def set_delete_user(self,uid):
@@ -186,20 +208,23 @@ class machine(models.Model):
             try:
                 zk = pyzk.ZK(machine_id.ip, int(machine_id.port), timeout=10)
                 conn = zk.connect()
+                conn.disable_device()
                 machine_id.connection_state = True
             except:
                 machine_id.connection_state = False
 
             if not machine_id.connection_state or not conn:
-                if conn:
-                    conn.disconnect()
                 res[machine_id.id] = {'return': False, 'msg': 'Machine non connecte'}
             else:
                 try:
                     conn.delete_user(uid=int(uid))
                     res[machine_id.id] = {'return': True, 'msg': 'User has been successfully deleted'}
+                    
                 except Exception as e:
                     res[machine_id.id] = {'return': False, 'msg': str(e)}
+            if conn:
+                conn.enable_device()
+                conn.disconnect()
         return json.dumps(res)
 
 
@@ -360,6 +385,7 @@ class machine(models.Model):
         try:
             zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
             conn = zk.connect()
+            conn.disable_device()
             self.connection_state = True
         except:
             self.connection_state = False
@@ -369,10 +395,17 @@ class machine(models.Model):
                 time.sleep(0.5)
                 if conn:
                     conn.clear_attendance()
+                    conn.enable_device()
                     conn.disconnect()
                     return True
             except:
+                if conn:
+                    conn.enable_device()
+                    conn.disconnect()
                 return False
+        if conn:
+            conn.enable_device()
+            conn.disconnect()
         return False
 
 
@@ -459,10 +492,11 @@ class machine(models.Model):
                 raise ValidationError(_("La pointeuse %s est hors connexion" % str(self.name)))
             else:
                 _logger.warning(_("La pointeuse %s est hors connexion" % str(self.name)))
-
+        time.sleep(1)
         if connect:
             zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
             conn = zk.connect()
+            conn.disable_device()
             time.sleep(0.5)
             try:
                 _logger.warning(u"Début de néttoyage de la pointeuse %s " % self.name)
@@ -523,7 +557,9 @@ class machine(models.Model):
                                             self.name,
                                             not_delted))
                             else:
-                                if conn: conn.disconnect()
+                                if conn: 
+                                    conn.enable_device()
+                                    conn.disconnect()
                                 raise ValidationError(_(
                                     "A la suppression des utilisateurs, La pointeuse %s est hors connexion" % str(
                                         self.name)))
@@ -534,9 +570,14 @@ class machine(models.Model):
 
 
             except Exception as ex:
-                if conn: conn.disconnect()
+                if conn:
+                    conn.enable_device()
+                    conn.disconnect()
                 _logger.warning(u"Erreur de chargement des utilisateurs de la pointeuse %s :\n%s " % (self.name, ex))
                 raise exceptions.Warning(ex)
+        if conn:
+            conn.enable_device()
+            conn.disconnect()
         return test
 
     def delete_badge(self, badge_ids):
@@ -573,6 +614,7 @@ class machine(models.Model):
         try:
             zk = pyzk.ZK(self.ip, int(self.port), timeout=10)
             conn = zk.connect()
+            conn.disable_device()
             rec.connection_state = True
         except:
             rec.connection_state = False
@@ -590,13 +632,16 @@ class machine(models.Model):
                     if not odoouser:
                         conn.delete_user(int(user.uid))
                 if conn:
+                    conn.enable_device()
                     conn.disconnect()
                 return True
             except:
                 if conn:
+                    conn.enable_device()
                     conn.disconnect()
                 return False
         if conn:
+            conn.enable_device()
             conn.disconnect()
         return False
 
