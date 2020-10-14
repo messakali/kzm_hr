@@ -7,8 +7,8 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//div[@data-key='hr_attendance']" position="inside">
-                    <h2>Configuration Serveur</h2>
-                    <div class="row mt16 o_settings_container">
+                    <h2 groups="kzm_hr_pointeuse_client.grp_admin_serveur_pointage">Configuration Serveur</h2>
+                    <div class="row mt16 o_settings_container" groups="kzm_hr_pointeuse_client.grp_admin_serveur_pointage">
                         <div class="col-12 col-lg-6 o_setting_box" >
                             <div class="col-6">
                                 <span class="o_form_label">Url</span>

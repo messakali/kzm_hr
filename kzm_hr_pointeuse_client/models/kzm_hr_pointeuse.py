@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime,timedelta
+from pytz import timezone
 import json
 
 from odoo import fields, models, api, _
@@ -30,7 +30,7 @@ class HrPointeuse(models.Model):
         # conf = self.env['res.config.settings'].set_config_pointeuse()
         # print(conf)
         url = self.env.company.url
-        user =self.env.company.user
+        user =self.env.company.login
         password = self.env.company.password
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
@@ -49,14 +49,14 @@ class HrPointeuse(models.Model):
     def connect_xml_rpc_v13(self,url, db, username, password):
         common = xmlrpclib.ServerProxy('{}/xmlrpc/2/common'.format(url))
         models_kw = xmlrpclib.ServerProxy('{}/xmlrpc/2/object'.format(url))
-        uid = common.login(db, username, password)
-
+        #uid = common.login(db, username, password)
+        uid = common.authenticate(db, username, password, {})
 
         return models_kw, db, username, password, uid
 
     def load_attendance(self):
         url = self.env.company.url
-        user = self.env.company.user
+        user = self.env.company.login
         password = self.env.company.password
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
@@ -147,7 +147,7 @@ class HrPointeuse(models.Model):
 
     def nettoyer_pointeuse(self, with_message=True):
         url = self.env.company.url
-        user = self.env.company.user
+        user = self.env.company.login
         password = self.env.company.password
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
@@ -160,7 +160,7 @@ class HrPointeuse(models.Model):
 
     def clear_attendance(self):
         url = self.env.company.url
-        user = self.env.company.user
+        user = self.env.company.login
         password = self.env.company.password
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
@@ -205,7 +205,7 @@ class HrPointeuseBadge(models.Model):
         print("llllllllllllllp")
         machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
         url = self.env.company.url
-        user = self.env.company.user
+        user = self.env.company.login
         password = self.env.company.password
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)
@@ -236,7 +236,7 @@ class HrPointeuseBadge(models.Model):
     def delete_user(self, machineid, uid):
         machine_id = self.env['kzm.hr.pointeuse'].browse(machineid)
         url = self.env.company.url
-        user = self.env.company.user
+        user = self.env.company.login
         password = self.env.company.password
         bd = self.env.company.bd
         models_kw, db, username, password, uid = self.connect_xml_rpc_v13(url, bd, user, password)

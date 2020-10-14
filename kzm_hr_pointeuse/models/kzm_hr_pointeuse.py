@@ -4,6 +4,7 @@ from odoo import models, fields, api, modules, exceptions, _
 from odoo.exceptions import ValidationError
 from ..tools.pyzk import zk as pyzk
 from datetime import datetime, timedelta
+from pytz import timezone
 import time
 import socket
 import json
@@ -346,7 +347,7 @@ class machine(models.Model):
                     except:
                         continue
                 self.env.cr.commit()
-                r.clear_attendancies()
+                #r.clear_attendancies()
             else:
                 msg += r.name + '\n'
                 error = True
